@@ -8,10 +8,11 @@ import java.sql.SQLException;
  *
  * @author Minh
  */
-
 public class DBContext {
     
-    private Connection conn;
+    private String url;
+    private String user;
+    private String pass;
 
     public DBContext() {
         this("jdbc:sqlserver://localhost:1433;databaseName=SoftSkillsOnlineLearningSystem;trustServerCertificate=true",
@@ -19,6 +20,13 @@ public class DBContext {
     }
     
     public DBContext(String url, String user, String pass) {
+        this.url = url;
+        this.user = user;
+        this.pass = pass;
+    }
+
+    public Connection getConn() {
+        Connection conn = null;
         try {
             //Driver
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -30,10 +38,6 @@ public class DBContext {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-    }
-
-    public Connection getConn() {
         return conn;
     }
-
 }
