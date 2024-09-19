@@ -3,21 +3,21 @@ package view;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
  * @author Minh
  */
+public abstract class DBContext<E> {
 
-public class DBContext {
-    
     private Connection conn;
 
     public DBContext() {
         this("jdbc:sqlserver://localhost:1433;databaseName=SoftSkillsOnlineLearningSystem;trustServerCertificate=true",
                 "sa", "123");
     }
-    
+
     public DBContext(String url, String user, String pass) {
         try {
             //Driver
@@ -31,6 +31,16 @@ public class DBContext {
             ex.printStackTrace();
         }
     }
+
+    public abstract List<E> select();
+
+    public abstract E select(int... id);
+
+    public abstract int insert(E oj);
+
+    public abstract int update(E oj);
+
+    public abstract int delete(int... id);
 
     public Connection getConn() {
         return conn;
