@@ -6,7 +6,7 @@ public class BlogPost {
     private int id;
     private String title;
     private String thumbnailUrl;
-    private int categoryId;
+    private String category;
     private String content;
     private int authorId;
     private String status;
@@ -23,8 +23,8 @@ public class BlogPost {
     public String getThumbnailUrl() { return thumbnailUrl; }
     public void setThumbnailUrl(String thumbnailUrl) { this.thumbnailUrl = thumbnailUrl; }
 
-    public int getCategoryId() { return categoryId; }
-    public void setCategoryId(int categoryId) { this.categoryId = categoryId; }
+    public String getCategoryName() { return category; }
+    public void setCategoryName(String categoryId) { this.category = categoryId; }
 
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
