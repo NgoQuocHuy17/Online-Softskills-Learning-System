@@ -18,11 +18,11 @@
     </servlet>
     <servlet>
         <servlet-name>login</servlet-name>
-        <servlet-class>controller.login</servlet-class>
+        <servlet-class>controller.LoginController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>register</servlet-name>
-        <servlet-class>controller.register</servlet-class>
+        <servlet-class>controller.RegisterController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DemoController</servlet-name>

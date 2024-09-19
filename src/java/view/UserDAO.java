@@ -15,58 +15,82 @@ import java.util.logging.Level;
  */
 public class UserDAO extends DBContext<User> {
 
+    public User login(String email, String password) {
+        User user = null;
+        String query = "SELECT * FROM users WHERE email = ? AND password = ?"; // Ensure column name is consistent
+        try (PreparedStatement ps = super.getConn().prepareStatement(query)) {
+            ps.setString(1, email);
+            ps.setString(2, password);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    user = new User(
+                            rs.getInt(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getString(4),
+                            rs.getString(5),
+                            rs.getString(6),
+                            rs.getString(7),
+                            rs.getString(8),
+                            rs.getDate(9),
+                            rs.getDate(10)
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
     @Override
     public List<User> select() {
-        String sql = "Select * from users";
-        List<User> users = new Vector();
-        User user = new User();
-        try {
-            PreparedStatement pre = super.getConn().prepareStatement(sql);
-            ResultSet rs = pre.executeQuery();
+        String sql = "SELECT * FROM users";
+        List<User> users = new Vector<>();
+        try (PreparedStatement pre = super.getConn().prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
             while (rs.next()) {
-                user.setId(rs.getInt(1));
-                user.setFullName(rs.getString(2));
-                user.setGender(rs.getString(3));
-                user.setEmail(rs.getString(4));
-                user.setPasswordHash(rs.getString(5));
-                user.setRole(rs.getString(6));
-                user.setAvatarUrl(rs.getString(7));
-                user.setCreatedAt(rs.getDate(8));
-                user.setUpdatedAt(rs.getDate(9));
+                // Create a new User object inside the loop
+                User user = new User(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getString(8),
+                        rs.getDate(9),
+                        rs.getDate(10)
+                );
                 users.add(user);
             }
         } catch (Exception e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
         }
         return users;
     }
 
     @Override
     public User select(int... id) {
-        String sql = "SELECT TOP (1000) [id]\n"
-                + "      ,[full_name]\n"
-                + "      ,[gender]\n"
-                + "      ,[email]\n"
-                + "      ,[password_hash]\n"
-                + "      ,[role]\n"
-                + "      ,[avatar_url]\n"
-                + "      ,[created_at]\n"
-                + "      ,[updated_at]\n"
-                + "  FROM [SoftSkillsOnlineLearningSystem].[dbo].[users] where id = ?";
-        User user = new User();
-        try {
-            PreparedStatement pre = super.getConn().prepareStatement(sql);
+        String sql = "SELECT * FROM users WHERE id = ?";
+        User user = null;
+        try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
             pre.setInt(1, id[0]);
-            ResultSet rs = pre.executeQuery();
-            while (rs.next()) {
-                user.setId(id[0]);
-                user.setFullName(rs.getString(1));
-                user.setGender(rs.getString(2));
-                user.setEmail(rs.getString(4));
-                user.setPasswordHash(rs.getString(5));
-                user.setRole(rs.getString(6));
-                user.setAvatarUrl(rs.getString(7));
-                user.setCreatedAt(rs.getDate(8));
-                user.setUpdatedAt(rs.getDate(9));
+            try (ResultSet rs = pre.executeQuery()) {
+                if (rs.next()) {
+                    user = new User(
+                            rs.getInt(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getString(4),
+                            rs.getString(5),
+                            rs.getString(6),
+                            rs.getString(7),
+                            rs.getString(8),
+                            rs.getDate(9),
+                            rs.getDate(10)
+                    );
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -76,29 +100,18 @@ public class UserDAO extends DBContext<User> {
 
     @Override
     public int insert(User user) {
-
-        String sql = "INSERT INTO [dbo].[users]\n"
-                + "           ([full_name]\n"
-                + "           ,[gender]\n"
-                + "           ,[email]\n"
-                + "           ,[password_hash]\n"
-                + "           ,[role]\n"
-                + "           ,[avatar_url]\n"
-                + "           ,[created_at]\n"
-                + "           ,[updated_at])\n"
-                + "     VALUES\n"
-                + "           (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (full_name, gender, email, password, mobile, role, avatar_url, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         int result = 0;
-        try {
-            PreparedStatement pre = super.getConn().prepareStatement(sql);
+        try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
             pre.setString(1, user.getFullName());
             pre.setString(2, user.getGender());
             pre.setString(3, user.getEmail());
-            pre.setString(4, user.getPasswordHash());
-            pre.setString(5, user.getRole());
-            pre.setString(6, user.getAvatarUrl());
-            pre.setDate(7, (java.sql.Date) user.getCreatedAt());
-            pre.setDate(8, (java.sql.Date) user.getUpdatedAt());
+            pre.setString(4, user.getPassword());
+            pre.setString(5, user.getMobile());
+            pre.setString(6, user.getRole());
+            pre.setString(7, user.getAvatarUrl());
+            pre.setDate(8, (java.sql.Date) user.getCreatedAt());
+            pre.setDate(9, (java.sql.Date) user.getUpdatedAt());
             result = pre.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -108,28 +121,19 @@ public class UserDAO extends DBContext<User> {
 
     @Override
     public int update(User user) {
-        String sql = "UPDATE [dbo].[users]\n"
-                + "   SET [full_name] = ?\n"
-                + "      ,[gender] = ?\n"
-                + "      ,[email] = ?\n"
-                + "      ,[password_hash] = ?\n"
-                + "      ,[role] = ?\n"
-                + "      ,[avatar_url] = ?\n"
-                + "      ,[created_at] = ?\n"
-                + "      ,[updated_at] = ?\n"
-                + " WHERE id = ?";
+        String sql = "UPDATE users SET full_name = ?, gender = ?, email = ?, password = ?, mobile = ?, role = ?, avatar_url = ?, created_at = ?, updated_at = ? WHERE id = ?";
         int result = 0;
-        try {
-            PreparedStatement pre = super.getConn().prepareStatement(sql);
-            pre.setInt(9, user.getId());
+        try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
             pre.setString(1, user.getFullName());
             pre.setString(2, user.getGender());
             pre.setString(3, user.getEmail());
-            pre.setString(4, user.getPasswordHash());
-            pre.setString(5, user.getRole());
-            pre.setString(6, user.getAvatarUrl());
-            pre.setDate(7, (java.sql.Date) user.getCreatedAt());
-            pre.setDate(8, (java.sql.Date) user.getUpdatedAt());
+            pre.setString(4, user.getPassword());
+            pre.setString(5, user.getMobile());
+            pre.setString(6, user.getRole());
+            pre.setString(7, user.getAvatarUrl());
+            pre.setDate(8, (java.sql.Date) user.getCreatedAt());
+            pre.setDate(9, (java.sql.Date) user.getUpdatedAt());
+            pre.setInt(10, user.getId());
             result = pre.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -139,11 +143,9 @@ public class UserDAO extends DBContext<User> {
 
     @Override
     public int delete(int... id) {
-        String sql = "DELETE FROM [dbo].[users]\n"
-                + "      WHERE id = ?";
+        String sql = "DELETE FROM users WHERE id = ?";
         int result = 0;
-        try {
-            PreparedStatement pre = super.getConn().prepareStatement(sql);
+        try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
             pre.setInt(1, id[0]);
             result = pre.executeUpdate();
         } catch (SQLException ex) {

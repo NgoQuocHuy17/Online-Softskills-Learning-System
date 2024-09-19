@@ -6,21 +6,29 @@ import java.util.Date;
  *
  * @author Minh
  */
-
 public class User {
+
     private int id;
-    private String fullName, gender, email, passwordHash, role, avatarUrl;
-    private Date createdAt, updatedAt;
+    private String fullName;
+    private String gender;
+    private String email;
+    private String password;
+    private String mobile;
+    private String role;
+    private String avatarUrl;
+    private Date createdAt;
+    private Date updatedAt;
 
     public User() {
     }
 
-    public User(int id, String fullName, String gender, String email, String passwordHash, String role, String avatarUrl, Date createdAt, Date updatedAt) {
+    public User(int id, String fullName, String gender, String email, String password, String mobile, String role, String avatarUrl, Date createdAt, Date updatedAt) {
         this.id = id;
         this.fullName = fullName;
         this.gender = gender;
         this.email = email;
-        this.passwordHash = passwordHash;
+        this.password = password;
+        this.mobile = mobile;
         this.role = role;
         this.avatarUrl = avatarUrl;
         this.createdAt = createdAt;
@@ -59,12 +67,20 @@ public class User {
         this.email = email;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public String getRole() {
