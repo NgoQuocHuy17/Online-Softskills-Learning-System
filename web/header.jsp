@@ -5,6 +5,12 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="model.User" %>
+<%
+    // Lấy đối tượng User từ session
+    User loggedInUser = (User) session.getAttribute("user");
+%>
+
 <header class="header  header-four">
     <div class="header-fixed">
         <nav class="navbar navbar-expand-lg header-nav scroll-sticky">
@@ -35,7 +41,7 @@
                             <a href="home">Home</a>
                         </li>
                         <li class="has-submenu">
-                            <a href>Mentor <i class="fas fa-chevron-down"></i></a>
+                            <a href="#">Mentor <i class="fas fa-chevron-down"></i></a>
                             <ul class="submenu">
                                 <li><a href="dashboard.html">Mentor Dashboard</a></li>
                                 <li><a href="bookings.html">Bookings</a></li>
@@ -59,7 +65,7 @@
                             </ul>
                         </li>
                         <li class="has-submenu">
-                            <a href>Mentee <i class="fas fa-chevron-down"></i></a>
+                            <a href="#">Mentee <i class="fas fa-chevron-down"></i></a>
                             <ul class="submenu">
                                 <li class="has-submenu">
                                     <a href="#">Mentors</a>
@@ -81,7 +87,7 @@
                             </ul>
                         </li>
                         <li class="has-submenu">
-                            <a href>Pages <i class="fas fa-chevron-down"></i></a>
+                            <a href="#">Pages <i class="fas fa-chevron-down"></i></a>
                             <ul class="submenu">
                                 <li><a href="voice-call.html">Voice Call</a></li>
                                 <li><a href="video-call.html">Video Call</a></li>
@@ -101,7 +107,7 @@
                             </ul>
                         </li>
                         <li class="has-submenu">
-                            <a href>Blog <i class="fas fa-chevron-down"></i></a>
+                            <a href="#">Blog <i class="fas fa-chevron-down"></i></a>
                             <ul class="submenu">
                                 <li><a href="bloglist">Blog List</a></li>
                                 <li><a href="blog-grid.html">Blog Grid</a></li>
@@ -111,18 +117,33 @@
                         <li>
                             <a href="admin/index.html" target="_blank">Admin</a>
                         </li>
-                        <li class="login-link">
-                            <a href="login.html">Login / Signup</a>
-                        </li>
                     </ul>
                 </div>
+
+                <!-- Phần bên phải header -->
                 <ul class="nav header-navbar-rht">
+                    <% if (loggedInUser != null) {%>
+                    <!-- Nếu người dùng đã đăng nhập, hiển thị avatar -->
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="<%= loggedInUser.getAvatarUrl() != null ? loggedInUser.getAvatarUrl() : "assets/img/default-avatar.jpg"%>" 
+                                 alt="User Avatar" style="width:40px; height:40px; border-radius:50%;">
+                            <span><%= loggedInUser.getFullName()%></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="profile-settings.jsp">Profile Settings</a>
+                            <a class="dropdown-item" href="logout.jsp">Logout</a>
+                        </div>
+                    </li>
+                    <% } else { %>
+                    <!-- Nếu chưa đăng nhập, hiển thị nút Login/Signup -->
                     <li class="nav-item">
-                        <a class="nav-link header-login-two" href="login.html">Login</a>
+                        <a class="nav-link header-login-two" href="login.jsp">Login</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link header-login" href="register.html">Sign up</a>
                     </li>
+                    <% }%>
                 </ul>
             </div>
         </nav>
