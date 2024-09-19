@@ -1,9 +1,3 @@
-<%-- 
-    Document   : register
-    Created on : May 19, 2024, 10:34:35 PM
-    Author     : asus
---%>
-
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -43,7 +37,7 @@
                                 <h4 style="color: red; align-content: center;">
                                     ${requestScope.error}
                                 </h4>
-                                <form id="myForm" action="account" method="Post" onsubmit="return validateForm()" > 
+                                <form id="myForm" action="register" method="Post" onsubmit="return validateForm()" > 
                                     <input type="hidden" name="action" value="checkregister"/>
                                     <div class="row">
                                         <div class="col-lg-6">

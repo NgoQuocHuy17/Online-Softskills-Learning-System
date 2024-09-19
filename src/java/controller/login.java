@@ -31,7 +31,7 @@ public class login extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             session.setMaxInactiveInterval(300); // Session expires after 5 minutes
-            response.sendRedirect("index.html");
+            response.sendRedirect("index.jsp");
         }
     }
 
