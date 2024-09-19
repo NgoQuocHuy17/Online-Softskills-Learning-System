@@ -1,9 +1,3 @@
-<%-- 
-    Document   : register
-    Created on : May 19, 2024, 10:34:35 PM
-    Author     : asus
---%>
-
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -43,14 +37,14 @@
                                 <h4 style="color: red; align-content: center;">
                                     ${requestScope.error}
                                 </h4>
-                                <form id="myForm" action="account" method="Post" onsubmit="return validateForm()" > 
+                                <form id="myForm" action="register" method="Post" onsubmit="return validateForm()" > 
                                     <input type="hidden" name="action" value="checkregister"/>
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-control-label">Account Name</label>
-                                                <input id="first-name" value="${requestScope.account_name}" oninvalid="CheckAccountName(this);" oninput="CheckAccountName(this);" type="text" class="form-control" name="account_name" autofocus>
-                                                <span id="span_accountName"></span>
+                                                <label class="form-control-label">FullName</label>
+                                                <input id="password" type="text" value="${requestScope.full_name}" oninvalid="CheckFullName(this);" oninput="CheckFullName(this);" class="form-control" name="full_name">
+                                                <span id="span_fullname"></span>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
@@ -85,30 +79,13 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label class="form-control-label">FullName</label>
-                                                <input id="password" type="text" value="${requestScope.full_name}" oninvalid="CheckFullName(this);" oninput="CheckFullName(this);" class="form-control" name="full_name">
-                                                <span id="span_fullname"></span>
-                                            </div>
-                                        </div>
+
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-control-label">PhoneNumber</label>
                                                 <input id="password-confirm" value="${requestScope.phone_number}" type="text" oninvalid="CheckPhoneNumber(this);" oninput="CheckPhoneNumber(this);" class="form-control" name="phone">
                                                 <span id="span_phoneNumber"></span>
                                             </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label class="form-control-label">Date Of Birth</label>
-                                                <input id="password" type="date" oninvalid="CheckDate(this);" oninput="CheckDate(this);" value="${requestScope.dob}" class="form-control" name="birthday">
-                                                <span id="span_date"></span>
-                                            </div>
-                                            
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
@@ -126,35 +103,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label class="form-control-label">Address</label>
-                                                <input id="password" value="${requestScope.address}" type="text" oninvalid="CheckAddress(this);" oninput="CheckAddress(this);" class="form-control" name="address">
-                                                <span id="span_address"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label class="form-control-label">Role</label>
-                                                <select name="role" id="roleSelect" class="form-select form-control" aria-label="Default select example">
-                                                    <option disabled="disabled" selected>Choose option</option>
-                                                    <option value="1">Mentee</option>
-                                                    <option value="2">Mentor</option>
-
-                                                </select>
-                                                <span id="error-message" class="error-message"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!--                                    <div class="form-group">
-                                                                            <div class="form-check form-check-xs custom-checkbox">
-                                                                                <input type="checkbox" class="form-check-input" name="agreeCheckboxUser" id="agree_checkbox_user">
-                                                                                <label class="form-check-label" for="agree_checkbox_user">I agree to Mentoring</label> <a tabindex="-1" href="javascript:void(0);">Privacy Policy</a> &amp; <a tabindex="-1" href="javascript:void(0);"> Terms.</a>
-                                                                            </div>
-                                                                        </div>-->
                                     <button class="btn btn-primary login-btn" id="submit" type="submit">Sign Up</button>
                                     <div class="account-footer text-center mt-3">
                                         Already have an account? <a class="forgot-link mb-0" href="login.jsp">Login</a>
