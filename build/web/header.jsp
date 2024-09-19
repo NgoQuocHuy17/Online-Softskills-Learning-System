@@ -1,17 +1,17 @@
 <%-- 
-    Document   : header
+    Document   : header.jsp
     Created on : May 21, 2024, 11:29:08 PM
     Author     : asus
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="model.User" %>
 <%
     // Lấy đối tượng User từ session
     User loggedInUser = (User) session.getAttribute("user");
 %>
 
-<header class="header  header-four">
+<header class="header header-four">
     <div class="header-fixed">
         <nav class="navbar navbar-expand-lg header-nav scroll-sticky">
             <div class="container">
@@ -40,6 +40,10 @@
                         <li class="home">
                             <a href="home">Home</a>
                         </li>
+
+                        <% if (loggedInUser != null) { %>
+                        <% if (loggedInUser.getRole().equals("Teacher")) { %>
+                        <!-- Chỉ hiện phần Mentor nếu role là Teacher -->
                         <li class="has-submenu">
                             <a href="#">Mentor <i class="fas fa-chevron-down"></i></a>
                             <ul class="submenu">
@@ -64,6 +68,8 @@
                                 <li><a href="mentor-register.html">Mentor Register</a></li>
                             </ul>
                         </li>
+                        <% } else if (loggedInUser.getRole().equals("Student")) { %>
+                        <!-- Chỉ hiện phần Mentee nếu role là Student -->
                         <li class="has-submenu">
                             <a href="#">Mentee <i class="fas fa-chevron-down"></i></a>
                             <ul class="submenu">
@@ -86,6 +92,15 @@
                                 <li><a href="change-password.html">Change Password</a></li>
                             </ul>
                         </li>
+                        <% } else if (loggedInUser.getRole().equals("Admin")) { %>
+                        <!-- Chỉ hiện phần Admin nếu role là Admin -->
+                        <li>
+                            <a href="admin/index.html" target="_blank">Admin</a>
+                        </li>
+                        <% } %>
+                        <% } %>
+
+                        <!-- Phần Pages và Blog vẫn giữ nguyên cho mọi người -->
                         <li class="has-submenu">
                             <a href="#">Pages <i class="fas fa-chevron-down"></i></a>
                             <ul class="submenu">
@@ -114,9 +129,6 @@
                                 <li><a href="blog-details.html">Blog Details</a></li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="admin/index.html" target="_blank">Admin</a>
-                        </li>
                     </ul>
                 </div>
 
@@ -125,15 +137,16 @@
                     <% if (loggedInUser != null) {%>
                     <!-- Nếu người dùng đã đăng nhập, hiển thị avatar -->
                     <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a href="#" class="nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="<%= loggedInUser.getAvatarUrl() != null ? loggedInUser.getAvatarUrl() : "assets/img/default-avatar.jpg"%>" 
-                                 alt="User Avatar" style="width:40px; height:40px; border-radius:50%;">
+                                 class="rounded-circle" style="width: 30px; height: 30px;">
+
                             <span><%= loggedInUser.getFullName()%></span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="profile-settings.jsp">Profile Settings</a>
-                            <a class="dropdown-item" href="logout.jsp">Logout</a>
-                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="profile-settings.jsp">Profile Settings</a></li>
+                            <li><a class="dropdown-item" href="logout.jsp">Logout</a></li>
+                        </ul>
                     </li>
                     <% } else { %>
                     <!-- Nếu chưa đăng nhập, hiển thị nút Login/Signup -->

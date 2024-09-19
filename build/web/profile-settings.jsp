@@ -1,4 +1,24 @@
+<%-- 
+    Document   : profile-settings-mentee
+    Created on : May 26, 2024, 5:20:36 PM
+    Author     : asus
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="model.User" %>
+
 <!DOCTYPE html>
+<%
+    User loggedInUser = (User) session.getAttribute("user");
+
+    String fullName = loggedInUser.getFullName();
+    String role = loggedInUser.getRole();
+    String gender = loggedInUser.getGender();
+    String email = loggedInUser.getEmail();
+    String mobile = loggedInUser.getMobile();
+%>
+
 <html lang="en">
 
     <!-- Mirrored from mentoring.dreamguystech.com/html/template/profile-settings.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 May 2023 10:32:21 GMT -->
@@ -40,13 +60,11 @@
                                 </a>
                             </div>
                             <ul class="main-nav">
-                                <li class="has-submenu">
-                                    <a href="index.html">Home <i class="fas fa-chevron-down"></i></a>
-                                    <ul class="submenu">
-                                        <li><a href="index.html">Home</a></li>
-                                    </ul>
+                                <li>
+                                    <a href="home">Home</a>
                                 </li>
                             </ul>
+
                         </div>
                         <ul class="nav header-navbar-rht">
 
@@ -64,12 +82,13 @@
                                                  class="avatar-img rounded-circle">
                                         </div>
                                         <div class="user-text">
-                                            <h6>Jonathan Doe</h6>
-                                            <p class="text-muted mb-0">Mentor</p>
+                                            <h6><%= fullName%></h6> <!-- Lấy fullName từ session -->
+                                            <p><%= role%></p> <!-- Lấy role từ session -->
                                         </div>
+
                                     </div>
-                                    <a class="dropdown-item" href="profile-settings.html">Profile Settings</a>
-                                    <a class="dropdown-item" href="login.html">Logout</a>
+                                    <a class="dropdown-item" href="profile-settings.jsp">Profile Settings</a>
+                                    <a class="dropdown-item" href="login.jsp">Logout</a>
                                 </div>
                             </li>
 
@@ -93,8 +112,17 @@
                     <div class="row">
                         <div class="card">
                             <div class="card-body">
-                                <form>
+                                <form action="updateProfile" method="post">
                                     <div class="row form-row">
+                                        <%
+                                            String message = (String) request.getAttribute("message");
+                                            if (message != null) {
+                                                String alertType = message.startsWith("Failed") ? "alert-danger" : "alert-success";
+                                        %>
+                                        <div class="alert <%= alertType%>">
+                                            <%= message%>
+                                        </div>
+                                        <% }%>
                                         <div class="col-12 col-md-12">
                                             <div class="form-group">
                                                 <div class="change-avatar">
@@ -104,7 +132,7 @@
                                                     <div class="upload-img">
                                                         <div class="change-photo-btn">
                                                             <span><i class="fa fa-upload"></i> Upload Photo</span>
-                                                            <input type="file" class="upload">
+                                                            <input type="file" class="upload" name="avatar">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -113,26 +141,29 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Full Name</label>
-                                                <input type="text" class="form-control" value="Jonathan">
+                                                <input type="text" class="form-control" name="fullName" value="<%= fullName%>">
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Gender</label>
-                                                <input type="text" class="form-control" value="Doe">
+                                                <select class="form-control" name="gender">
+                                                    <option value="Male" <%= "Male".equals(gender) ? "selected" : ""%>>Male</option>
+                                                    <option value="Female" <%= "Female".equals(gender) ? "selected" : ""%>>Female</option>
+                                                    <option value="Other" <%= "Other".equals(gender) ? "selected" : ""%>>Other</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Email</label>
-                                                <input type="email" class="form-control"
-                                                       value="jonathandoe@example.com">
+                                                <input type="email" class="form-control" name="email" value="<%= email%>" readonly>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Mobile</label>
-                                                <input type="text" value="+1 202-555-0125" class="form-control">
+                                                <input type="text" name="mobile" value="<%= mobile%>" class="form-control">
                                             </div>
                                         </div>
                                     </div>
@@ -140,6 +171,7 @@
                                         <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
                                     </div>
                                 </form>
+
                             </div>
                         </div>
                     </div>

@@ -4,30 +4,37 @@
  */
 package model;
 
+import java.util.Date;
+
 public class User {
+
     private int id;
     private String fullName;
     private String gender;
     private String email;
     private String password;
+    private String mobile;
     private String role;
     private String avatarUrl;
     private String createdAt;
     private String updatedAt;
 
-    // Constructors
-    public User() {}
-
-    public User(int id, String fullName, String gender, String email, String password, String role, String avatarUrl, String createdAt, String updatedAt) {
+    // Constructor
+    public User(int id, String fullName, String gender, String email, String password, String mobile, String role, String avatarUrl, String createdAt, String updatedAt) {
         this.id = id;
         this.fullName = fullName;
         this.gender = gender;
         this.email = email;
         this.password = password;
+        this.mobile = mobile;
         this.role = role;
         this.avatarUrl = avatarUrl;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    // Default constructor
+    public User() {
     }
 
     // Getters and Setters
@@ -71,6 +78,14 @@ public class User {
         this.password = password;
     }
 
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
     public String getRole() {
         return role;
     }
@@ -101,5 +116,21 @@ public class User {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", gender='" + gender + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", role='" + role + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }
