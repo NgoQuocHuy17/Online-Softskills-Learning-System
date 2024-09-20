@@ -17,7 +17,7 @@ public class UserDAO extends DBContext<User> {
 
     public User login(String email, String password) {
         User user = null;
-        String query = "SELECT * FROM users WHERE email = ? AND password = ?"; // Ensure column name is consistent
+        String query = "SELECT * FROM users WHERE email = ? AND password = ?";
         try (PreparedStatement ps = super.getConn().prepareStatement(query)) {
             ps.setString(1, email);
             ps.setString(2, password);
