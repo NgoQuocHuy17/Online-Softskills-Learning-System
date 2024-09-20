@@ -15,8 +15,7 @@ import java.io.IOException;
  *
  * @author Minh
  */
-
-@WebFilter("/*")
+@WebFilter({"/admin/*"})
 public class RoleFilter implements Filter {
 
     @Override
@@ -29,26 +28,27 @@ public class RoleFilter implements Filter {
         HttpSession session = httpRequest.getSession(false);
 
         String path = httpRequest.getRequestURI();
+        System.out.println(path);
         
-        if (path.equals("/login.jsp") || path.equals("/login")) {
+        if (path.equals(httpRequest.getContextPath() + "/login.jsp") || path.equals(httpRequest.getContextPath() + "/login")) {
             chain.doFilter(request, response);
             return;
         }
 
         if (session == null || session.getAttribute("email") == null) {
-            httpResponse.sendRedirect("login.jsp");
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
             return;
         }
 
         String role = (String) session.getAttribute("role");
 
-        if (path.startsWith("/admin") && !"ADMIN".equals(role)) {
-            httpResponse.sendRedirect("user");
+        if (path.startsWith(httpRequest.getContextPath() + "/admin") && !"ADMIN".equals(role)) {
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "/user");
             return;
         }
 
-        if (path.startsWith("/user") && !("USER".equals(role) || "ADMIN".equals(role))) {
-            httpResponse.sendRedirect("login.jsp");
+        if (path.startsWith(httpRequest.getContextPath() + "/user") && !("USER".equals(role) || "ADMIN".equals(role))) {
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
             return;
         }
 
