@@ -518,18 +518,18 @@ function CheckPassword(text) {
     return true;
 }
 
-function CheckConfirmPassword(text) {
-    var password = document.getElementById('password').value;
-    var spanRePassword = document.getElementById('span_rePassword');
-    if (password != text.value) {
-        spanRePassword.innerHTML = 'Mật khẩu không khớp!';
-        spanRePassword.style.color = 'red';
-        return false;
-    }
-    spanRePassword.innerHTML = '';
-    return true;
-
-}
+//function CheckConfirmPassword(text) {
+//    var password = document.getElementById('password').value;
+//    var spanRePassword = document.getElementById('span_rePassword');
+//    if (password != text.value) {
+//        spanRePassword.innerHTML = 'Mật khẩu không khớp!';
+//        spanRePassword.style.color = 'red';
+//        return false;
+//    }
+//    spanRePassword.innerHTML = '';
+//    return true;
+//
+//}
 
 function CheckAccountName(text) {
     var accountname = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{5,29}$/;
