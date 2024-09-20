@@ -1,6 +1,5 @@
 package controller;
 
-import dao.BlogPostDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -9,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.*;
 import java.io.IOException;
 import java.util.List;
+import view.BlogPostDAO;
 
 @WebServlet("/bloglist")
 public class BlogListServlet extends HttpServlet {

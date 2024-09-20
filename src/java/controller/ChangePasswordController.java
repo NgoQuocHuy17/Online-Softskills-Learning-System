@@ -1,7 +1,5 @@
 package controller;
 
-
-import dao.UserDAO;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.PrintWriter;
+import view.UserDAO;
 
 
 @WebServlet("/changepass")

@@ -19,10 +19,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import dao.UserDAO;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import view.UserDAO;
 
 @WebServlet("/forgotPassword")
 public class ForgotPasswordController extends HttpServlet {

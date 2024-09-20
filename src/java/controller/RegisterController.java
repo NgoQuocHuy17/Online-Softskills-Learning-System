@@ -9,19 +9,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Random;
 import model.User;
-import dao.UserDAO;
 import org.apache.commons.codec.digest.DigestUtils;
+import view.UserDAO;
 
-<<<<<<< HEAD:src/java/controller/RegisterController.java
 /**
  *
  * @author hung6
  */
 public class RegisterController extends HttpServlet {
-=======
 @WebServlet(name = "register", urlPatterns = "/register")
 public class register extends HttpServlet {
->>>>>>> Phạm-Huy-Hùng:src/java/controller/register.java
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
