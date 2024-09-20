@@ -41,7 +41,6 @@ public class AdminFilter implements Filter {
             return;
         }
 
-//        String role = (String) session.getAttribute("role");
         User user = (User) session.getAttribute("user");
         String role = user.getRole();
 
