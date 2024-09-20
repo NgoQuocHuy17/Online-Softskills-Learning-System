@@ -1,5 +1,7 @@
 package view;
 
+import controller.SendingEmail;
+import controller.registerBean;
 import model.User;
 import java.util.List;
 import java.util.Vector;
@@ -15,6 +17,56 @@ import java.util.logging.Level;
  */
 public class UserDAO extends DBContext<User> {
 
+    public boolean updateProfile(User user) {
+        String query = "UPDATE users SET full_name = ?, gender = ?, mobile = ? WHERE id = ?";
+
+        try (PreparedStatement ps = super.getConn().prepareStatement(query)) {
+            ps.setString(1, user.getFullName());
+            ps.setString(2, user.getGender());
+            ps.setString(3, user.getMobile());
+            ps.setInt(4, user.getId());
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public String register(registerBean rb) {
+        String fullName = rb.getFullName();
+        String email = rb.getEmail();
+        String mobile = rb.getMobile();
+        String gender = rb.getGender();
+        String password = rb.getPassword();
+        String myHash = rb.getMyHash();
+
+        try {
+            String sqlQuery = "INSERT INTO users (full_name, gender, email, password, mobile, hash) values (?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = super.getConn().prepareStatement(sqlQuery);
+            ps.setString(1, fullName);
+            ps.setString(2, gender);
+            ps.setString(3, email);
+            ps.setString(4, password);
+            ps.setString(5, mobile);
+            ps.setString(6, myHash);
+
+            int i = ps.executeUpdate();
+            if (i != 0) {
+                SendingEmail se = new SendingEmail(email, myHash);
+                se.sendMail();
+                return "SUCCESS";
+            }
+
+        } catch (Exception e) {
+
+            System.out.println("RegisterDAO error!");
+        }
+        return "ERROR";
+
+    }
+    
     public User login(String email, String password) {
         User user = null;
         String query = "SELECT * FROM users WHERE email = ? AND password = ?";
