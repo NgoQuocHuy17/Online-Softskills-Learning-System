@@ -173,10 +173,10 @@ public class UserDAO extends DBContext {
             PreparedStatement ps = connection.prepareStatement(sqlQuery);
             ps.setString(1, fullName);
             ps.setString(2, gender);
-            ps.setString(1, email);
-            ps.setString(1, password);
-            ps.setString(1, mobile);
-            ps.setString(1, myHash);
+            ps.setString(3, email);
+            ps.setString(4, password);
+            ps.setString(5, mobile);
+            ps.setString(6, myHash);
             
             int i = ps.executeUpdate();
             if(i != 0){

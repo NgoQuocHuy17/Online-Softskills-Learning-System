@@ -77,9 +77,9 @@
                                                 <label class="form-control-label">Gender</label>
 
                                                 <div class="form-inline">
-                                                    <input class="form-check-input" ${(requestScope.gender) ? "checked=\"checked\"" : ""}  type="radio" name="gender" id="inlineRadio1" value="true">
+                                                    <input class="form-check-input" ${(requestScope.gender) ? "checked=\"checked\"" : ""}  type="radio" name="gender" id="inlineRadio1" value="Male">
                                                     <label class="form-check-label" for="inlineRadio1">Male</label>
-                                                    <input class="form-check-input" ${(!requestScope.gender) ? "checked=\"checked\"" : ""} type="radio" name="gender" id="inlineRadio2" value="false">
+                                                    <input class="form-check-input" ${(!requestScope.gender) ? "checked=\"checked\"" : ""} type="radio" name="gender" id="inlineRadio2" value="Female">
                                                     <label class="form-check-label" for="inlineRadio2">Female</label>
                                                 </div>
                                             </div>
