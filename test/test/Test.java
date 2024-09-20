@@ -15,6 +15,5 @@ import view.DBContext;
 public class Test {
 
     public static void main(String[] args) {
-        new DBContext();
     }
 }
