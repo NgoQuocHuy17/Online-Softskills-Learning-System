@@ -13,21 +13,19 @@ public class UserDAO extends DBContext {
     public List<User> getAllUsers() {
         List<User> list = new ArrayList<>();
         String query = "SELECT * FROM users";
-        try (Connection connection = getConn();
-             PreparedStatement ps = connection.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 User user = new User(
-                    rs.getInt("id"),
-                    rs.getString("full_name"),
-                    rs.getString("gender"),
-                    rs.getString("email"),
-                    rs.getString("password"),
-                    rs.getString("role"),
-                    rs.getString("avatar_url"),
-                    rs.getString("created_at"),
-                    rs.getString("updated_at")
+                        rs.getInt("id"),
+                        rs.getString("full_name"),
+                        rs.getString("gender"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("role"),
+                        rs.getString("avatar_url"),
+                        rs.getString("created_at"),
+                        rs.getString("updated_at")
                 );
                 list.add(user);
             }
@@ -40,8 +38,7 @@ public class UserDAO extends DBContext {
 
     public boolean insertUser(User user) {
         String query = "INSERT INTO users (full_name, gender, email, password, role, avatar_url, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection connection = getConn();
-             PreparedStatement ps = connection.prepareStatement(query)) {
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setString(1, user.getFullName());
             ps.setString(2, user.getGender());
@@ -61,8 +58,7 @@ public class UserDAO extends DBContext {
 
     public boolean deleteUser(int userId) {
         String query = "DELETE FROM users WHERE id = ?";
-        try (Connection connection = getConn();
-             PreparedStatement ps = connection.prepareStatement(query)) {
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setInt(1, userId);
             return ps.executeUpdate() > 0;
@@ -75,8 +71,7 @@ public class UserDAO extends DBContext {
 
     public boolean updateUser(User user) {
         String query = "UPDATE users SET full_name = ?, gender = ?, email = ?, password = ?, role = ?, avatar_url = ?, updated_at = ? WHERE id = ?";
-        try (Connection connection = getConn();
-             PreparedStatement ps = connection.prepareStatement(query)) {
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setString(1, user.getFullName());
             ps.setString(2, user.getGender());
@@ -97,22 +92,21 @@ public class UserDAO extends DBContext {
     public User getUserById(int userId) {
         User user = null;
         String query = "SELECT * FROM users WHERE id = ?";
-        try (Connection connection = getConn();
-             PreparedStatement ps = connection.prepareStatement(query)) {
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     user = new User(
-                        rs.getInt("id"),
-                        rs.getString("full_name"),
-                        rs.getString("gender"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getString("role"),
-                        rs.getString("avatar_url"),
-                        rs.getString("created_at"),
-                        rs.getString("updated_at")
+                            rs.getInt("id"),
+                            rs.getString("full_name"),
+                            rs.getString("gender"),
+                            rs.getString("email"),
+                            rs.getString("password"),
+                            rs.getString("role"),
+                            rs.getString("avatar_url"),
+                            rs.getString("created_at"),
+                            rs.getString("updated_at")
                     );
                 }
             }
@@ -123,26 +117,46 @@ public class UserDAO extends DBContext {
         return user;
     }
 
+    public boolean isEmailExist(String email) throws SQLException {
+        String sql = "Select email from users where email = ?";
+        PreparedStatement ps = super.getConn().prepareStatement(sql);
+        ps.setString(1, email);
+        ResultSet rs = ps.executeQuery();
+        return rs.next();
+
+    }
+
+    public void updatePassword(String email, String newPassword) {
+        String sql = "UPDATE Account SET password = ? WHERE email = ?";
+        try {
+            PreparedStatement ps = super.getConn().prepareStatement(sql);
+            ps.setString(1, newPassword);
+            ps.setString(2, email);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("updatePassword: " + e.getMessage());
+        }
+    }
+
     public User login(String email, String password) {
         User user = null;
         String query = "SELECT * FROM users WHERE email = ? AND password = ?";
-        try (Connection connection = getConn();
-             PreparedStatement ps = connection.prepareStatement(query)) {
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setString(1, email);
             ps.setString(2, password);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     user = new User(
-                        rs.getInt("id"),
-                        rs.getString("full_name"),
-                        rs.getString("gender"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getString("role"),
-                        rs.getString("avatar_url"),
-                        rs.getString("created_at"),
-                        rs.getString("updated_at")
+                            rs.getInt("id"),
+                            rs.getString("full_name"),
+                            rs.getString("gender"),
+                            rs.getString("email"),
+                            rs.getString("password"),
+                            rs.getString("role"),
+                            rs.getString("avatar_url"),
+                            rs.getString("created_at"),
+                            rs.getString("updated_at")
                     );
                 }
             }
@@ -151,6 +165,7 @@ public class UserDAO extends DBContext {
             e.printStackTrace();
         }
         return user;
+
     }
 
 }
