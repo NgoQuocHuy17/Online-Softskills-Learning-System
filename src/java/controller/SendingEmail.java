@@ -1,5 +1,7 @@
 package controller;
 
+import jakarta.websocket.Session;
+import java.net.PasswordAuthentication;
 import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
