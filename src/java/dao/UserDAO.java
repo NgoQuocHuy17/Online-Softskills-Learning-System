@@ -126,11 +126,25 @@ public class UserDAO extends DBContext {
     public User login(String email, String password) {
         User user = null;
         String query = "SELECT * FROM users WHERE email = ? AND password = ?";
-        String isValid = "SELECT isValid FROM users WHERE email = ? AND password = ?";
-        if(isValid.equals('0')){
+//        String isValid = "SELECT isValid FROM users WHERE email = ? AND password = ?";
+        int isValid = -1;
+
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement("SELECT isValid FROM users WHERE email = ? AND password = ?")) {
+            ps.setString(1, email);
+            ps.setString(2, password);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    isValid = rs.getInt("isValid"); // Lấy giá trị cột isValid
+                }
+            }
+        } catch (Exception e) {
+
+        }
+
+        if (isValid == 0) {
             return null;
         }
-        
+
         try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setString(1, email);
@@ -177,16 +191,16 @@ public class UserDAO extends DBContext {
             ps.setString(4, password);
             ps.setString(5, mobile);
             ps.setString(6, myHash);
-            
+
             int i = ps.executeUpdate();
-            if(i != 0){
+            if (i != 0) {
                 SendingEmail se = new SendingEmail(email, myHash);
                 se.sendMail();
                 return "SUCCESS";
             }
 
         } catch (Exception e) {
-            
+
             System.out.println("RegisterDAO error!");
         }
         return "ERROR";
