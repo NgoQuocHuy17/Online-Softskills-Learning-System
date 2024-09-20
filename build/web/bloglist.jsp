@@ -37,11 +37,17 @@
                 <c:forEach var="post" items="${blogPosts}">
                     <div class="col-12 mb-4">
                         <div class="card">
-                            <img src="${post.thumbnailUrl}" class="card-img-top" alt="${post.title}" style="max-height: 400px; object-fit: cover;">
+                            <!-- Make the image clickable as well, if desired -->
+                            <a href="blog-details.jsp?id=${post.id}">
+                                <img src="${post.thumbnailUrl}" class="card-img-top" alt="${post.title}" style="max-height: 400px; object-fit: cover;">
+                            </a>
                             <div class="card-body">
-                                <h2 class="card-title">${post.title}</h2>
+                                <!-- Wrap the blog title in a link to blog-details.jsp -->
+                                <h2 class="card-title">
+                                    <a href="blog-details.jsp?id=${post.id}">${post.title}</a>
+                                </h2>
                                 <p class="card-text">${post.content}</p>
-                                <p class="card-text"><strong>Category: </strong>${post.categoryName}</p> <!-- Thêm dòng này để hiển thị tên danh mục -->
+                                <p class="card-text"><strong>Category: </strong>${post.categoryName}</p>
                                 <p class="card-text"><small class="text-muted">Posted on: ${post.createdAt}</small></p>
                             </div>
                         </div>
@@ -83,15 +89,10 @@
         </div>
 
         <script src="assets/js/jquery-3.6.0.min.js"></script>
-
         <script src="assets/js/bootstrap.bundle.min.js"></script>
-
         <script src="assets/js/owl.carousel.min.js"></script>
-
         <script src="assets/plugins/slick/slick.js"></script>
-
         <script src="assets/plugins/aos/aos.js"></script>
-
         <script src="assets/js/script.js"></script>   
     </body>
 </html>
