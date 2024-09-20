@@ -8,6 +8,15 @@ import java.util.Date;
  */
 
 public class BlogPost {
+    private String categoryName;
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
     private int id;
     private String title;
     private String thumbnailUrl;

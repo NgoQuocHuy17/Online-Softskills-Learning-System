@@ -40,3 +40,4 @@ build/
 java/build/**
 
 nbproject/build-impl.xml
+/dist/
