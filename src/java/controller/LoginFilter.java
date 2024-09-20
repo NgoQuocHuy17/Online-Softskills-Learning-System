@@ -15,8 +15,8 @@ import java.io.IOException;
  *
  * @author Minh
  */
-@WebFilter({"/login.jsp"})
-public class LoggedInFilter implements Filter{
+@WebFilter({"/login.jsp", "/login"})
+public class LoginFilter implements Filter{
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -25,7 +25,7 @@ public class LoggedInFilter implements Filter{
 
         HttpSession session = httpRequest.getSession(false);
 
-        if (session != null && session.getAttribute("email") != null) {
+        if (session != null && session.getAttribute("user") != null) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/home.jsp");
         } else {
             chain.doFilter(request, response);

@@ -10,13 +10,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import model.User;
 
 /**
  *
  * @author Minh
  */
 @WebFilter({"/admin/*"})
-public class RoleFilter implements Filter {
+public class AdminFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -40,7 +41,9 @@ public class RoleFilter implements Filter {
             return;
         }
 
-        String role = (String) session.getAttribute("role");
+//        String role = (String) session.getAttribute("role");
+        User user = (User) session.getAttribute("user");
+        String role = user.getRole();
 
         if (path.startsWith(httpRequest.getContextPath() + "/admin") && !"ADMIN".equals(role)) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/user");
