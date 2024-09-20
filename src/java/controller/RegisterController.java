@@ -16,9 +16,9 @@ import view.UserDAO;
  *
  * @author hung6
  */
-public class RegisterController extends HttpServlet {
 @WebServlet(name = "register", urlPatterns = "/register")
-public class register extends HttpServlet {
+public class RegisterController extends HttpServlet {
+
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
