@@ -45,13 +45,13 @@
                         <% if (loggedInUser.getRole().equals("Teacher")) { %>
                         <!-- Chỉ hiện phần Mentor nếu role là Teacher -->
                         <li class="has-submenu">
-                            <a href="#">Mentor <i class="fas fa-chevron-down"></i></a>
+                            <a href="#">Expert<i class="fas fa-chevron-down"></i></a>
                             <ul class="submenu">
-                                <li><a href="dashboard.html">Mentor Dashboard</a></li>
+                                <li><a href="dashboard.html">Expert Dashboard</a></li>
                                 <li><a href="bookings.html">Bookings</a></li>
                                 <li><a href="schedule-timings.html">Schedule Timing</a></li>
-                                <li><a href="mentee-list.html">Mentee List</a></li>
-                                <li><a href="profile-mentee.html">Mentee Profile</a></li>
+                                <li><a href="mentee-list.html">Student List</a></li>
+                                <li><a href="profile-mentee.html">Student Profile</a></li>
                                 <li class="has-submenu">
                                     <a href="blog.html">Blog</a>
                                     <ul class="submenu">
@@ -71,21 +71,21 @@
                         <% } else if (loggedInUser.getRole().equals("Student")) { %>
                         <!-- Chỉ hiện phần Mentee nếu role là Student -->
                         <li class="has-submenu">
-                            <a href="#">Mentee <i class="fas fa-chevron-down"></i></a>
+                            <a href="#">Student <i class="fas fa-chevron-down"></i></a>
                             <ul class="submenu">
                                 <li class="has-submenu">
-                                    <a href="#">Mentors</a>
+                                    <a href="#">Experts</a>
                                     <ul class="submenu">
                                         <li><a href="map-grid.html">Map Grid</a></li>
                                         <li><a href="map-list.html">Map List</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="search.html">Search Mentor</a></li>
-                                <li><a href="profile.html">Mentor Profile</a></li>
+                                <li><a href="search.html">Search Expert</a></li>
+                                <li><a href="profile.html">Expert Profile</a></li>
                                 <li><a href="bookings-mentee.html">Bookings</a></li>
                                 <li><a href="checkout.html">Checkout</a></li>
                                 <li><a href="booking-success.html">Booking Success</a></li>
-                                <li><a href="dashboard-mentee.html">Mentee Dashboard</a></li>
+                                <li><a href="dashboard-mentee.html">Student Dashboard</a></li>
                                 <li><a href="favourites.html">Favourites</a></li>
                                 <li><a href="chat-mentee.html">Chat</a></li>
                                 <li><a href="profile-settings-mentee.html">Profile Settings</a></li>

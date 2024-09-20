@@ -13,7 +13,7 @@ public class PostDAO extends DBContext {
     // Method to fetch hot posts (existing)
     public List<Post> getHotPosts() {
         List<Post> posts = new ArrayList<>();
-        String sql = "SELECT id, title, thumbnail_url, created_at FROM blog_posts WHERE status = 'Published' ORDER BY created_at DESC";
+        String sql = "SELECT TOP 6 id, title, thumbnail_url, created_at FROM blog_posts WHERE status = 'Published' ORDER BY created_at DESC";
         
         try (Connection conn = getConn();
              PreparedStatement stmt = conn.prepareStatement(sql);

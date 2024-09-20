@@ -17,7 +17,7 @@ public class CourseDAO {
     // Assuming a category named "Featured" represents featured courses
     public List<Course> getFeaturedCourses() {
         List<Course> courses = new ArrayList<>();
-        String sql = "SELECT id, title, tag_line, description, category, list_price, sale_price, status " +
+        String sql = "SELECT TOP 6 id, title, tag_line, description, category, list_price, sale_price, status " +
                      "FROM courses WHERE category = 'Soft Skills'";
 
         try (PreparedStatement pst = connection.prepareStatement(sql);
