@@ -16,8 +16,8 @@ import model.User;
  *
  * @author Minh
  */
-@WebFilter({"/admin/*"})
-public class AdminFilter implements Filter {
+@WebFilter({"/blog-list.html", "/profile.jsp", "/profile.html", "/changepass"})
+public class GuestFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -28,6 +28,9 @@ public class AdminFilter implements Filter {
 
         HttpSession session = httpRequest.getSession(false);
 
+        User user = (User) session.getAttribute("user");
+        String role = user.getRole();
+        
         String path = httpRequest.getRequestURI();
         System.out.println(path);
         
@@ -36,20 +39,12 @@ public class AdminFilter implements Filter {
             return;
         }
 
-        if (session == null || session.getAttribute("email") == null) {
+        if (session == null || session.getAttribute("user") == null) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
             return;
         }
 
-        User user = (User) session.getAttribute("user");
-        String role = user.getRole();
-
-        if (path.startsWith(httpRequest.getContextPath() + "/admin") && !"ADMIN".equals(role)) {
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/user");
-            return;
-        }
-
-        if (path.startsWith(httpRequest.getContextPath() + "/user") && !("USER".equals(role) || "ADMIN".equals(role))) {
+        if (path.startsWith(httpRequest.getContextPath() + "/blog-list.html") && !("USER".equals(role) || !"ADMIN".equals(role))) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
             return;
         }

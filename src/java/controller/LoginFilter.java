@@ -15,7 +15,7 @@ import java.io.IOException;
  *
  * @author Minh
  */
-@WebFilter({"/login.jsp", "/login"})
+@WebFilter({"/login.jsp", "/login", "/register"})
 public class LoginFilter implements Filter{
 
     @Override
