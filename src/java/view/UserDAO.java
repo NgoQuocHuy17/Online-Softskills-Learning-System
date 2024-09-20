@@ -17,6 +17,27 @@ import java.util.logging.Level;
  */
 public class UserDAO extends DBContext<User> {
 
+    public boolean isEmailExist(String email) throws SQLException {
+        String sql = "Select email from users where email = ?";
+        PreparedStatement ps = super.getConn().prepareStatement(sql);
+        ps.setString(1, email);
+        ResultSet rs = ps.executeQuery();
+        return rs.next();
+
+    }
+
+    public void updatePassword(String email, String newPassword) {
+        String sql = "UPDATE Account SET password = ? WHERE email = ?";
+        try {
+            PreparedStatement ps = super.getConn().prepareStatement(sql);
+            ps.setString(1, newPassword);
+            ps.setString(2, email);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("updatePassword: " + e.getMessage());
+        }
+    }
+    
     public boolean updateProfile(User user) {
         String query = "UPDATE users SET full_name = ?, gender = ?, mobile = ? WHERE id = ?";
 

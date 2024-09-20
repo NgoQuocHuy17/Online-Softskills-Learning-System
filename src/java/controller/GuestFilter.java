@@ -16,7 +16,7 @@ import model.User;
  *
  * @author Minh
  */
-@WebFilter({"/blog-list.html", "/profile.jsp", "/profile.html", "/changepass"})
+@WebFilter({"/blog-list.html", "/profile.jsp", "/profile.html", "/changepass", "/bloglist", "/home"})
 public class GuestFilter implements Filter {
 
     @Override
@@ -28,21 +28,25 @@ public class GuestFilter implements Filter {
 
         HttpSession session = httpRequest.getSession(false);
 
-        User user = (User) session.getAttribute("user");
-        String role = user.getRole();
         
         String path = httpRequest.getRequestURI();
         System.out.println(path);
+        
+        if (session == null || session.getAttribute("user") == null) {
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
+            return;
+        }
+        
+        User user = (User) session.getAttribute("user");
+        String role = user.getRole();
+        
         
         if (path.equals(httpRequest.getContextPath() + "/login.jsp") || path.equals(httpRequest.getContextPath() + "/login")) {
             chain.doFilter(request, response);
             return;
         }
 
-        if (session == null || session.getAttribute("user") == null) {
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
-            return;
-        }
+        
 
         if (path.startsWith(httpRequest.getContextPath() + "/blog-list.html") && !("USER".equals(role) || !"ADMIN".equals(role))) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
