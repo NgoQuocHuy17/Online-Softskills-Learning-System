@@ -7,7 +7,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Mentoring</title>
+        <title>Register</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
         <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -35,7 +35,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-control-label">FullName</label>
-                                                <input id="password" type="text" value="${requestScope.full_name}" oninvalid="CheckFullName(this);" oninput="CheckFullName(this);" class="form-control" name="full_name">
+                                                <input id="password" type="text" value="${requestScope.fullname}" oninvalid="CheckFullName(this);" oninput="CheckFullName(this);" class="form-control" name="fullname">
                                                 <span id="span_fullname"></span>
                                             </div>
                                         </div>
@@ -59,7 +59,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-control-label">Confirm Password</label>
-                                                <input id="password-confirm" value="${requestScope.confirm_password}" type="password" oninvalid="CheckConfirmPassword(this);" oninput="CheckConfirmPassword(this);" class="form-control" name="confirm_password">
+                                                <input id="password-confirm" value="" type="password" <%--oninvalid="CheckConfirmPassword(this);" oninput="CheckConfirmPassword(this);"--%> class="form-control" name="confirm_password">
                                                 <span id="span_rePassword"></span>
                                             </div>
                                         </div>
@@ -68,7 +68,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-control-label">PhoneNumber</label>
-                                                <input id="phone_number" value="${requestScope.phone_number}" type="text" oninvalid="CheckPhoneNumber(this);" oninput="CheckPhoneNumber(this);" class="form-control" name="phone">
+                                                <input id="phone_number" value="${requestScope.mobile}" type="text" oninvalid="CheckPhoneNumber(this);" oninput="CheckPhoneNumber(this);" class="form-control" name="mobile">
                                                 <span id="span_phoneNumber"></span>
                                             </div>
                                         </div>
@@ -77,9 +77,9 @@
                                                 <label class="form-control-label">Gender</label>
 
                                                 <div class="form-inline">
-                                                    <input class="form-check-input" ${(requestScope.sex) ? "checked=\"checked\"" : ""}  type="radio" name="gender" id="inlineRadio1" value="true">
+                                                    <input class="form-check-input" ${(requestScope.gender) ? "checked=\"checked\"" : ""}  type="radio" name="gender" id="inlineRadio1" value="true">
                                                     <label class="form-check-label" for="inlineRadio1">Male</label>
-                                                    <input class="form-check-input" ${(!requestScope.sex) ? "checked=\"checked\"" : ""} type="radio" name="gender" id="inlineRadio2" value="false">
+                                                    <input class="form-check-input" ${(!requestScope.gender) ? "checked=\"checked\"" : ""} type="radio" name="gender" id="inlineRadio2" value="false">
                                                     <label class="form-check-label" for="inlineRadio2">Female</label>
                                                 </div>
                                             </div>

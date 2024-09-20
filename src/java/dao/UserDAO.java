@@ -1,5 +1,6 @@
 package dao;
 
+import controller.SendingEmail;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import model.User;
+import controller.registerBean;
 
 public class UserDAO extends DBContext {
 
@@ -26,7 +28,7 @@ public class UserDAO extends DBContext {
                         rs.getString("role"),
                         rs.getString("avatar_url"),
                         rs.getString("created_at"), // Giữ nguyên là String
-                        rs.getString("updated_at")  // Giữ nguyên là String
+                        rs.getString("updated_at") // Giữ nguyên là String
                 );
                 list.add(user);
             }
@@ -110,7 +112,7 @@ public class UserDAO extends DBContext {
                             rs.getString("role"),
                             rs.getString("avatar_url"),
                             rs.getString("created_at"), // Giữ nguyên là String
-                            rs.getString("updated_at")  // Giữ nguyên là String
+                            rs.getString("updated_at") // Giữ nguyên là String
                     );
                 }
             }
@@ -124,6 +126,11 @@ public class UserDAO extends DBContext {
     public User login(String email, String password) {
         User user = null;
         String query = "SELECT * FROM users WHERE email = ? AND password = ?";
+        String isValid = "SELECT isValid FROM users WHERE email = ? AND password = ?";
+        if(isValid.equals('0')){
+            return null;
+        }
+        
         try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setString(1, email);
@@ -140,7 +147,7 @@ public class UserDAO extends DBContext {
                             rs.getString("role"),
                             rs.getString("avatar_url"),
                             rs.getString("created_at"), // Giữ nguyên là String
-                            rs.getString("updated_at")  // Giữ nguyên là String
+                            rs.getString("updated_at") // Giữ nguyên là String
                     );
                 }
             }
@@ -150,25 +157,60 @@ public class UserDAO extends DBContext {
         }
         return user;
     }
-    
-public boolean updateProfile(User user) {
-    // Query để cập nhật thông tin người dùng
-    String query = "UPDATE users SET full_name = ?, gender = ?, mobile = ? WHERE id = ?";
-    
-    try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
-        // Gán giá trị cho các tham số trong câu lệnh SQL
-        ps.setString(1, user.getFullName());
-        ps.setString(2, user.getGender());
-        ps.setString(3, user.getMobile());
-        ps.setInt(4, user.getId());
-        
-        // Thực hiện cập nhật
-        return ps.executeUpdate() > 0;
 
-    } catch (SQLException e) {
-        e.printStackTrace();
+    public String register(registerBean rb) {
+        String fullName = rb.getFullName();
+        String email = rb.getEmail();
+        String mobile = rb.getMobile();
+        String gender = rb.getGender();
+        String password = rb.getPassword();
+        String myHash = rb.getMyHash();
+
+        Connection connection = getConn();
+
+        try {
+            String sqlQuery = "INSERT INTO users (full_name, gender, email, password, mobile, hash) values (?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = connection.prepareStatement(sqlQuery);
+            ps.setString(1, fullName);
+            ps.setString(2, gender);
+            ps.setString(1, email);
+            ps.setString(1, password);
+            ps.setString(1, mobile);
+            ps.setString(1, myHash);
+            
+            int i = ps.executeUpdate();
+            if(i != 0){
+                SendingEmail se = new SendingEmail(email, myHash);
+                se.sendMail();
+                return "SUCCESS";
+            }
+
+        } catch (Exception e) {
+            
+            System.out.println("RegisterDAO error!");
+        }
+        return "ERROR";
+
     }
-    return false;
-}
+
+    public boolean updateProfile(User user) {
+        // Query để cập nhật thông tin người dùng
+        String query = "UPDATE users SET full_name = ?, gender = ?, mobile = ? WHERE id = ?";
+
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
+            // Gán giá trị cho các tham số trong câu lệnh SQL
+            ps.setString(1, user.getFullName());
+            ps.setString(2, user.getGender());
+            ps.setString(3, user.getMobile());
+            ps.setInt(4, user.getId());
+
+            // Thực hiện cập nhật
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 }
