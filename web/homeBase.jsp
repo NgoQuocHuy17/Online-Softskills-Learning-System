@@ -13,6 +13,7 @@
 
         <!-- Main content with Sidebar -->
         <div class="container">
+            <jsp:include page="header.jsp"/>
 
             <!-- Nội dung chính -->
             <div class="main-content">
@@ -59,8 +60,6 @@
             </div>
 
         </div>
-
-
 
     </body>
 </html>
