@@ -25,7 +25,7 @@ public class LoginController extends HttpServlet {
 
         if (user == null) {
             // Login failed, show error message
-            request.setAttribute("error", "Invalid email or password");
+            request.setAttribute("error", "Invalid email or password or account not activated");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
             // Login successful, create session and redirect to home

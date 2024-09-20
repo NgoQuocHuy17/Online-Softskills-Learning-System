@@ -5,28 +5,20 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <!-- Mirrored from mentoring.dreamguystech.com/html/template/register.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 May 2023 10:32:30 GMT -->
     <head>
         <meta charset="utf-8">
-        <title>Mentoring</title>
+        <title>Register</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
-
         <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-
         <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
         <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
-
         <link rel="stylesheet" href="assets/css/style.css">
     </head>
     <body class="account-page">
-
         <div class="main-wrapper">
-
             <div class="bg-pattern-style bg-pattern-style-register">
                 <div class="content">
-
                     <div class="account-content">
                         <div class="account-box">
                             <div class="login-right">
@@ -43,7 +35,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-control-label">FullName</label>
-                                                <input id="password" type="text" value="${requestScope.full_name}" oninvalid="CheckFullName(this);" oninput="CheckFullName(this);" class="form-control" name="full_name">
+                                                <input id="password" type="text" value="${requestScope.fullname}" oninvalid="CheckFullName(this);" oninput="CheckFullName(this);" class="form-control" name="fullname">
                                                 <span id="span_fullname"></span>
                                             </div>
                                         </div>
@@ -55,10 +47,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!--                                    <div class="form-group">
-                                                                            <label class="form-control-label">Email Address</label>
-                                                                            <input id="email" type="email" class="form-control">
-                                                                        </div>-->
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
@@ -71,19 +59,16 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-control-label">Confirm Password</label>
-                                                <input id="password-confirm" value="${requestScope.confirm_password}" type="password" oninvalid="CheckConfirmPassword(this);" oninput="CheckConfirmPassword(this);" class="form-control" name="confirm_password">
-
+                                                <input id="password-confirm" value="" type="password" <%--oninvalid="CheckConfirmPassword(this);" oninput="CheckConfirmPassword(this);"--%> class="form-control" name="confirm_password">
                                                 <span id="span_rePassword"></span>
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="row">
-
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-control-label">PhoneNumber</label>
-                                                <input id="password-confirm" value="${requestScope.phone_number}" type="text" oninvalid="CheckPhoneNumber(this);" oninput="CheckPhoneNumber(this);" class="form-control" name="phone">
+                                                <input id="phone_number" value="${requestScope.mobile}" type="text" oninvalid="CheckPhoneNumber(this);" oninput="CheckPhoneNumber(this);" class="form-control" name="mobile">
                                                 <span id="span_phoneNumber"></span>
                                             </div>
                                         </div>
@@ -92,14 +77,11 @@
                                                 <label class="form-control-label">Gender</label>
 
                                                 <div class="form-inline">
-                                                    <input class="form-check-input" ${(requestScope.sex) ? "checked=\"checked\"" : ""}  type="radio" name="gender" id="inlineRadio1" value="true">
+                                                    <input class="form-check-input" ${(requestScope.gender) ? "checked=\"checked\"" : ""}  type="radio" name="gender" id="inlineRadio1" value="Male">
                                                     <label class="form-check-label" for="inlineRadio1">Male</label>
-
-
-                                                    <input class="form-check-input" ${(!requestScope.sex) ? "checked=\"checked\"" : ""} type="radio" name="gender" id="inlineRadio2" value="false">
+                                                    <input class="form-check-input" ${(!requestScope.gender) ? "checked=\"checked\"" : ""} type="radio" name="gender" id="inlineRadio2" value="Female">
                                                     <label class="form-check-label" for="inlineRadio2">Female</label>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -112,19 +94,12 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-
         </div>
 
-
         <script src="assets/js/jquery-3.6.0.min.js"></script>
-
         <script src="assets/js/bootstrap.bundle.min.js"></script>
-
         <script src="assets/js/script.js"></script>
     </body>
-
-    <!-- Mirrored from mentoring.dreamguystech.com/html/template/register.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 May 2023 10:32:30 GMT -->
 </html>
