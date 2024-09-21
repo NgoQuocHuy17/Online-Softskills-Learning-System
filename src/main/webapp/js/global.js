@@ -88,10 +88,9 @@ function CheckEmail(text) {
 }
 
 function CheckPassword(text) {
-    var passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+    var password = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
     var spanPassword = document.getElementById('span_password');
-    
-    if (!passwordPattern.test(text.value)) {
+    if (!password.test(text.value)) {
         spanPassword.innerHTML = 'Mật khẩu không hợp lệ (Cần có ít nhất 8 ký tự bao gồm viết hoa và ký tự đặc biệt)!';
         spanPassword.style.color = 'red';
         return false;
@@ -100,19 +99,18 @@ function CheckPassword(text) {
     return true;
 }
 
-//function CheckConfirmPassword(text) {
-//    var password = document.getElementById('password').value;
-//    var spanRePassword = document.getElementById('span_rePassword');
-//    
-//    if (password !== text.value) {
-//        spanRePassword.innerHTML = 'Mật khẩu không khớp!';
-//        spanRePassword.style.color = 'red';
-//        return false;
-//    }
-//    spanRePassword.innerHTML = '';
-//    return true;
-//}
+function CheckConfirmPassword(text) {
+    var password = document.getElementById('password').value;
+    var spanRePassword = document.getElementById('span_rePassword');
+    if (password != text.value) {
+        spanRePassword.innerHTML = 'Mật khẩu không khớp!';
+        spanRePassword.style.color = 'red';
+        return false;
+    }
+    spanRePassword.innerHTML = '';
+    return true;
 
+}
 
 function CheckAccountName(text) {
     var accountname = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{5,29}$/;
