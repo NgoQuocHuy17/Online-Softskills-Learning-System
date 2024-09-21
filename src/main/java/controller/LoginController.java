@@ -31,7 +31,7 @@ public class LoginController extends HttpServlet {
             // Login successful, create session and redirect to home
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            session.setMaxInactiveInterval(60*60); // Session expires after 5 minutes
+            session.setMaxInactiveInterval(60*60);
             response.sendRedirect("home");
         }
     }
