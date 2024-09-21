@@ -6,6 +6,7 @@ import java.util.Vector;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -15,6 +16,33 @@ import java.util.logging.Level;
  */
 public class CourseDAO extends DBContext<Course> {
 
+    public List<Course> getFeaturedCourses() {
+        List<Course> courses = new Vector();
+        String sql = "SELECT TOP 6 id, title, tag_line, description, category, list_price, sale_price, status " +
+                     "FROM courses WHERE category = 'Soft Skills'";
+
+        try (PreparedStatement pst = super.getConn().prepareStatement(sql);
+             ResultSet rs = pst.executeQuery()) {
+
+            while (rs.next()) {
+                Course course = new Course();
+                course.setId(rs.getInt("id"));
+                course.setTitle(rs.getString("title"));
+                course.setTagLine(rs.getString("tag_line"));
+                course.setDescription(rs.getString("description"));
+                course.setCategory(rs.getString("category"));
+                course.setListPrice(rs.getDouble("list_price"));
+                course.setSalePrice(rs.getDouble("sale_price"));
+                course.setStatus(rs.getString("status"));
+                courses.add(course);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return courses;
+    }
+    
     @Override
     public List<Course> select() {
         String sql = "SELECT [id], [title], [tag_line], [description], [category], [list_price], [sale_price], [owner_id], [status], [created_at], [updated_at] "
