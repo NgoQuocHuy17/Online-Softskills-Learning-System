@@ -46,6 +46,7 @@
                             ${requestScope.error}
                         </h4>
                         <form id="myForm" action="account" method="Post" onsubmit="return validateForm()">
+<<<<<<< Updated upstream:src/main/webapp/SignUp.jsp
                             <!--                            <input type="hidden" name="action" value="checkregister"/>-->
                             <div class="row row-space">
                                 <div class="col-2">
@@ -54,6 +55,17 @@
                                         <input class="input--style-4" value="${requestScope.full_name}" oninvalid="CheckFullName(this);" oninput="CheckFullName(this);" type="text" name="fullname">
                                         <span id="span_fullname"></span>
                                     </div>
+=======
+<!--                            <input type="hidden" name="action" value="checkregister"/>-->
+                            <div class="row row-space">
+                                <div class="col-2">
+                                    <div class="input-group">
+                                        <label class="label">Account Name</label>
+                                        <input class="input--style-4" value="${requestScope.account_name}" type="text" oninvalid="CheckAccountName(this);" oninput="CheckAccountName(this);" name="account_name">
+                                        <span id="span_accountName"></span>
+                                    </div>
+
+>>>>>>> Stashed changes:build/web/SignUp.jsp
                                 </div>
                                 <div class="col-2">
                                     <div class="input-group">
@@ -80,6 +92,7 @@
                                 </div>
                             </div>
                             <div class="row row-space">
+<<<<<<< Updated upstream:src/main/webapp/SignUp.jsp
 
                                 <div class="col-2">
                                     <div class="input-group">
@@ -88,6 +101,35 @@
                                         <span id="span_phoneNumber"></span>
                                     </div>
                                 </div>
+=======
+                                <div class="col-2">
+                                    <div class="input-group">
+                                        <label class="label">Full Name</label>
+                                        <input class="input--style-4" value="${requestScope.full_name}" oninvalid="CheckFullName(this);" oninput="CheckFullName(this);" type="text" name="full_name">
+                                        <span id="span_fullname"></span>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="input-group">
+                                        <label class="label">Phone Number</label>
+                                        <input class="input--style-4" value="${requestScope.phone_number}" oninvalid="CheckPhoneNumber(this);" oninput="CheckPhoneNumber(this);" type="text" name="phone">
+                                        <span id="span_phoneNumber"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row row-space">
+                                <div class="col-2">
+                                    <div class="input-group">
+                                        <label class="label">Date Of Birth</label>
+                                        <div class="input-group-icon">
+                                            <input class="input--style-4 js-datepicker" value="${requestScope.dob}" type="text" name="birthday">
+                                            <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+
+                                        </div>
+                                        <span id="span_date"></span>
+                                    </div>
+                                </div>
+>>>>>>> Stashed changes:build/web/SignUp.jsp
                                 <div class="col-2">
                                     <div class="input-group">
                                         <label class="label">Gender</label>
@@ -104,7 +146,39 @@
                                     </div>
                                 </div>
                             </div>
+<<<<<<< Updated upstream:src/main/webapp/SignUp.jsp
 
+=======
+                            <div class="row row-space">
+                                <div class="col-2">
+                                    <div class="input-group">
+                                        <label class="label">Address</label>
+                                        <input class="input--style-4" value="${requestScope.address}" oninvalid="CheckAddress(this);" oninput="CheckAddress(this);" type="text" name="address">
+                                        <span id="span_address"></span>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="input-group">
+                                        <label class="label">Role</label>
+                                        <div class="rs-select2 js-select-simple select--no-search">
+                                            <select name="role" id="roleSelect">
+                                                <option disabled="disabled" selected="selected">Choose option</option>
+                                                <option value="1" > Mentee </option>
+                                                <option value="2" > Mentor </option>
+
+                                            </select>
+                                            <div class="select-dropdown"></div>
+                                            <span id="error-message" class="error-message"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--                            <div class="input-group">
+                                                            <label class="label">Address</label>
+                                                            <input class="input--style-4" type="text" name="email">
+                                                        </div>-->
+>>>>>>> Stashed changes:build/web/SignUp.jsp
                             <div class="p-t-15">
                                 <button class="btn btn--radius-2 btn--blue" id="submit" type="submit">Submit</button>
                             </div>
