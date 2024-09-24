@@ -33,7 +33,7 @@ public class ActivateAccount extends HttpServlet {
         try {
             Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=SoftSkillsOnlineLearningSystem;trustServerCertificate=true",
                     "sa",
-                    "88888888");
+                    "123");
 
             PreparedStatement ps = conn.prepareStatement("Select email, hash, isValid FROM users WHERE email=? AND hash=? AND isValid='0'");
             ps.setString(1, email);

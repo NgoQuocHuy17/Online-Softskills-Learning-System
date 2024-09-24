@@ -38,7 +38,7 @@ public class RegisterController extends HttpServlet {
                 myHash = DigestUtils.md5Hex("" + random);
 
                 //Tạo Data Bean
-                registerBean rb = new registerBean();
+                RegisterBean rb = new RegisterBean();
                 rb.setFullName(fullname);
                 rb.setEmail(email);
                 rb.setMobile(mobile);
