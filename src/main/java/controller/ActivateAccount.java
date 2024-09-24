@@ -5,15 +5,12 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @WebServlet(name = "ActivateAccount", urlPatterns = "/ActivateAccount")
 public class ActivateAccount extends HttpServlet {
@@ -63,10 +60,10 @@ public class ActivateAccount extends HttpServlet {
                 PreparedStatement pst = conn.prepareStatement("UPDATE users SET isValid='1' WHERE email=? AND hash=?");
                 pst.setString(1, email);
                 pst.setString(2, hash);
-                int i=pst.executeUpdate();
-                if(i==1){
+                int i = pst.executeUpdate();
+                if (i == 1) {
                     response.sendRedirect("login.jsp");
-                }else{
+                } else {
                     response.sendRedirect("home");
                 }
             }
