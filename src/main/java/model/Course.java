@@ -1,41 +1,18 @@
 package model;
 
-import java.util.Date;
+import java.math.BigDecimal;
 
-/**
- *
- * @author Minh
- */
 public class Course {
-
     private int id;
     private String title;
     private String tagLine;
     private String description;
     private String category;
-    private double listPrice;
-    private double salePrice;
-    private int ownerId;
+    private BigDecimal listPrice;
+    private BigDecimal salePrice;
     private String status;
-    private Date createdAt;
-    private Date updatedAt;
 
-    public Course() {
-    }
-
-    public Course(int id, String title, String tagLine, String description, String category, double listPrice, double salePrice, int ownerId, String status, Date createdAt, Date updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.tagLine = tagLine;
-        this.description = description;
-        this.category = category;
-        this.listPrice = listPrice;
-        this.salePrice = salePrice;
-        this.ownerId = ownerId;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    // Getters and Setters
 
     public int getId() {
         return id;
@@ -77,28 +54,20 @@ public class Course {
         this.category = category;
     }
 
-    public double getListPrice() {
+    public BigDecimal getListPrice() {
         return listPrice;
     }
 
-    public void setListPrice(double listPrice) {
+    public void setListPrice(BigDecimal listPrice) {
         this.listPrice = listPrice;
     }
 
-    public double getSalePrice() {
+    public BigDecimal getSalePrice() {
         return salePrice;
     }
 
-    public void setSalePrice(double salePrice) {
+    public void setSalePrice(BigDecimal salePrice) {
         this.salePrice = salePrice;
-    }
-
-    public int getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
     }
 
     public String getStatus() {
@@ -107,21 +76,5 @@ public class Course {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

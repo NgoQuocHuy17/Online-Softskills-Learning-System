@@ -1,31 +1,56 @@
 package view;
 
-import controller.SendingEmail;
-import controller.registerBean;
-import model.User;
-import java.util.List;
-import java.util.Vector;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Logger;
-import java.util.logging.Level;
+import java.util.ArrayList;
+import java.util.List;
+import model.User;
 
-/**
- *
- * @author Minh
- */
-public class UserDAO extends DBContext<User> {
+public class UserDAO extends DBContext {
 
-    public boolean updateProfile(User user) {
-        String query = "UPDATE users SET full_name = ?, gender = ?, mobile = ? WHERE id = ?";
+    public List<User> getAllUsers() {
+        List<User> list = new ArrayList<>();
+        String query = "SELECT * FROM users";
+        try (Connection connection = getConn();
+             PreparedStatement ps = connection.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
 
-        try (PreparedStatement ps = super.getConn().prepareStatement(query)) {
+            while (rs.next()) {
+                User user = new User(
+                    rs.getInt("id"),
+                    rs.getString("full_name"),
+                    rs.getString("gender"),
+                    rs.getString("email"),
+                    rs.getString("password"),
+                    rs.getString("role"),
+                    rs.getString("avatar_url"),
+                    rs.getString("created_at"),
+                    rs.getString("updated_at")
+                );
+                list.add(user);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public boolean insertUser(User user) {
+        String query = "INSERT INTO users (full_name, gender, email, password, role, avatar_url, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection connection = getConn();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+
             ps.setString(1, user.getFullName());
             ps.setString(2, user.getGender());
-            ps.setString(3, user.getMobile());
-            ps.setInt(4, user.getId());
-
+            ps.setString(3, user.getEmail());
+            ps.setString(4, user.getPassword());
+            ps.setString(5, user.getRole());
+            ps.setString(6, user.getAvatarUrl());
+            ps.setString(7, user.getCreatedAt());
+            ps.setString(8, user.getUpdatedAt());
             return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
@@ -33,176 +58,99 @@ public class UserDAO extends DBContext<User> {
         }
         return false;
     }
-    
-    public String register(registerBean rb) {
-        String fullName = rb.getFullName();
-        String email = rb.getEmail();
-        String mobile = rb.getMobile();
-        String gender = rb.getGender();
-        String password = rb.getPassword();
-        String myHash = rb.getMyHash();
 
-        try {
-            String sqlQuery = "INSERT INTO users (full_name, gender, email, password, mobile, hash) values (?, ?, ?, ?, ?, ?)";
-            PreparedStatement ps = super.getConn().prepareStatement(sqlQuery);
-            ps.setString(1, fullName);
-            ps.setString(2, gender);
-            ps.setString(3, email);
-            ps.setString(4, password);
-            ps.setString(5, mobile);
-            ps.setString(6, myHash);
+    public boolean deleteUser(int userId) {
+        String query = "DELETE FROM users WHERE id = ?";
+        try (Connection connection = getConn();
+             PreparedStatement ps = connection.prepareStatement(query)) {
 
-            int i = ps.executeUpdate();
-            if (i != 0) {
-                SendingEmail se = new SendingEmail(email, myHash);
-                se.sendMail();
-                return "SUCCESS";
-            }
+            ps.setInt(1, userId);
+            return ps.executeUpdate() > 0;
 
-        } catch (Exception e) {
-
-            System.out.println("RegisterDAO error!");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return "ERROR";
-
+        return false;
     }
-    
-    public User login(String email, String password) {
+
+    public boolean updateUser(User user) {
+        String query = "UPDATE users SET full_name = ?, gender = ?, email = ?, password = ?, role = ?, avatar_url = ?, updated_at = ? WHERE id = ?";
+        try (Connection connection = getConn();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+
+            ps.setString(1, user.getFullName());
+            ps.setString(2, user.getGender());
+            ps.setString(3, user.getEmail());
+            ps.setString(4, user.getPassword());
+            ps.setString(5, user.getRole());
+            ps.setString(6, user.getAvatarUrl());
+            ps.setString(7, user.getUpdatedAt());
+            ps.setInt(8, user.getId());
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public User getUserById(int userId) {
         User user = null;
-        String query = "SELECT * FROM users WHERE email = ? AND password = ?";
-        try (PreparedStatement ps = super.getConn().prepareStatement(query)) {
-            ps.setString(1, email);
-            ps.setString(2, password);
+        String query = "SELECT * FROM users WHERE id = ?";
+        try (Connection connection = getConn();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+
+            ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     user = new User(
-                            rs.getInt(1),
-                            rs.getString(2),
-                            rs.getString(3),
-                            rs.getString(4),
-                            rs.getString(5),
-                            rs.getString(6),
-                            rs.getString(7),
-                            rs.getString(8),
-                            rs.getDate(9),
-                            rs.getDate(10)
+                        rs.getInt("id"),
+                        rs.getString("full_name"),
+                        rs.getString("gender"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("role"),
+                        rs.getString("avatar_url"),
+                        rs.getString("created_at"),
+                        rs.getString("updated_at")
                     );
                 }
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return user;
     }
 
-    @Override
-    public List<User> select() {
-        String sql = "SELECT * FROM users";
-        List<User> users = new Vector<>();
-        try (PreparedStatement pre = super.getConn().prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
-            while (rs.next()) {
-                // Create a new User object inside the loop
-                User user = new User(
-                        rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getString(6),
-                        rs.getString(7),
-                        rs.getString(8),
-                        rs.getDate(9),
-                        rs.getDate(10)
-                );
-                users.add(user);
-            }
-        } catch (Exception e) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
-        }
-        return users;
-    }
-
-    @Override
-    public User select(int... id) {
-        String sql = "SELECT * FROM users WHERE id = ?";
+    public User login(String email, String password) {
         User user = null;
-        try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
-            pre.setInt(1, id[0]);
-            try (ResultSet rs = pre.executeQuery()) {
+        String query = "SELECT * FROM users WHERE email = ? AND password = ?";
+        try (Connection connection = getConn();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+
+            ps.setString(1, email);
+            ps.setString(2, password);
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     user = new User(
-                            rs.getInt(1),
-                            rs.getString(2),
-                            rs.getString(3),
-                            rs.getString(4),
-                            rs.getString(5),
-                            rs.getString(6),
-                            rs.getString(7),
-                            rs.getString(8),
-                            rs.getDate(9),
-                            rs.getDate(10)
+                        rs.getInt("id"),
+                        rs.getString("full_name"),
+                        rs.getString("gender"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("role"),
+                        rs.getString("avatar_url"),
+                        rs.getString("created_at"),
+                        rs.getString("updated_at")
                     );
                 }
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return user;
     }
 
-    @Override
-    public int insert(User user) {
-        String sql = "INSERT INTO users (full_name, gender, email, password, mobile, role, avatar_url, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        int result = 0;
-        try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
-            pre.setString(1, user.getFullName());
-            pre.setString(2, user.getGender());
-            pre.setString(3, user.getEmail());
-            pre.setString(4, user.getPassword());
-            pre.setString(5, user.getMobile());
-            pre.setString(6, user.getRole());
-            pre.setString(7, user.getAvatarUrl());
-            pre.setDate(8, (java.sql.Date) user.getCreatedAt());
-            pre.setDate(9, (java.sql.Date) user.getUpdatedAt());
-            result = pre.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return result;
-    }
-
-    @Override
-    public int update(User user) {
-        String sql = "UPDATE users SET full_name = ?, gender = ?, email = ?, password = ?, mobile = ?, role = ?, avatar_url = ?, created_at = ?, updated_at = ? WHERE id = ?";
-        int result = 0;
-        try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
-            pre.setString(1, user.getFullName());
-            pre.setString(2, user.getGender());
-            pre.setString(3, user.getEmail());
-            pre.setString(4, user.getPassword());
-            pre.setString(5, user.getMobile());
-            pre.setString(6, user.getRole());
-            pre.setString(7, user.getAvatarUrl());
-            pre.setDate(8, (java.sql.Date) user.getCreatedAt());
-            pre.setDate(9, (java.sql.Date) user.getUpdatedAt());
-            pre.setInt(10, user.getId());
-            result = pre.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return result;
-    }
-
-    @Override
-    public int delete(int... id) {
-        String sql = "DELETE FROM users WHERE id = ?";
-        int result = 0;
-        try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
-            pre.setInt(1, id[0]);
-            result = pre.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return result;
-    }
 }

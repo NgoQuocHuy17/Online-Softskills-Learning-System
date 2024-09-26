@@ -1,40 +1,36 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package model;
 
-import java.util.Date;
-
-/**
- *
- * @author Minh
- */
 public class User {
-
     private int id;
     private String fullName;
     private String gender;
     private String email;
     private String password;
-    private String mobile;
     private String role;
     private String avatarUrl;
-    private Date createdAt;
-    private Date updatedAt;
+    private String createdAt;
+    private String updatedAt;
 
-    public User() {
-    }
+    // Constructors
+    public User() {}
 
-    public User(int id, String fullName, String gender, String email, String password, String mobile, String role, String avatarUrl, Date createdAt, Date updatedAt) {
+    public User(int id, String fullName, String gender, String email, String password, String role, String avatarUrl, String createdAt, String updatedAt) {
         this.id = id;
         this.fullName = fullName;
         this.gender = gender;
         this.email = email;
         this.password = password;
-        this.mobile = mobile;
         this.role = role;
         this.avatarUrl = avatarUrl;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -75,14 +71,6 @@ public class User {
         this.password = password;
     }
 
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
     public String getRole() {
         return role;
     }
@@ -99,19 +87,19 @@ public class User {
         this.avatarUrl = avatarUrl;
     }
 
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
 }
