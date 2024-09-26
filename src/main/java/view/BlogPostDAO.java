@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.*;
 
-public class BlogPostDAO extends DBContext {
+public class BlogPostDAO extends DBContext<BlogPost> {
 
     public String getCategoryNameById(int categoryId) {
         String name = "";

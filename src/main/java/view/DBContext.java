@@ -3,30 +3,22 @@ package view;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
  * @author Minh
  */
-public class DBContext {
-    
-    private String url;
-    private String user;
-    private String pass;
+public abstract class DBContext<E> {
+
+    private Connection conn;
 
     public DBContext() {
         this("jdbc:sqlserver://localhost:1433;databaseName=SoftSkillsOnlineLearningSystem;trustServerCertificate=true",
                 "sa", "123");
     }
-    
-    public DBContext(String url, String user, String pass) {
-        this.url = url;
-        this.user = user;
-        this.pass = pass;
-    }
 
-    public Connection getConn() {
-        Connection conn = null;
+    public DBContext(String url, String user, String pass) {
         try {
             //Driver
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -38,6 +30,20 @@ public class DBContext {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public abstract List<E> select();
+
+    public abstract E select(int... id);
+
+    public abstract int insert(E oj);
+
+    public abstract int update(E oj);
+
+    public abstract int delete(int... id);
+
+    public Connection getConn() {
         return conn;
     }
+
 }
