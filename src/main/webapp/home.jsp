@@ -4,7 +4,7 @@
 <html lang="vi">
     <head>
         <meta charset="UTF-8">
-        <title>Homepage</title>
+        <title>Online Softskills Learning</title>
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
@@ -34,7 +34,7 @@
                         <ol class="carousel-indicators">
                             <c:forEach var="slider" items="${sliders}" varStatus="status">
                                 <li data-bs-target="#carouselSliders" data-bs-slide-to="${status.index}" class="${status.first ? 'active' : ''}"></li>
-                            </c:forEach>
+                                </c:forEach>
                         </ol>
 
                         <!-- Sliders Items -->
@@ -106,12 +106,12 @@
                     <div class="row">
                         <c:forEach var="course" items="${featuredCourses}">
                             <div class="col-md-4 mb-4">
-                                <div class="card h-100">
-                                    <img src="default-image.jpg" class="card-img-top" alt="${course.title}">
+                                <div class="card h-100 shadow-sm">
+                                    <img src="default-image.jpg" class="card-img-top rounded" alt="${course.title}">
                                     <div class="card-body">
                                         <h5 class="card-title">${course.title}</h5>
                                         <p class="card-text">${course.description}</p>
-                                        <a href="course-details.jsp?id=${course.id}" class="btn btn-primary">View Course</a>
+                                        <a href="course-details.jsp?id=${course.id}" class="btn btn-primary btn-block">View Course</a>
                                     </div>
                                 </div>
                             </div>
@@ -124,7 +124,14 @@
                     </div>
                 </c:otherwise>
             </c:choose>
+
+            <!-- See More Interesting Courses Section -->
+            <div class="text-center mt-5 mb-5">
+                <a href="course" class="btn btn-outline-primary btn-lg px-5 py-2">See More Interesting Courses</a>
+            </div>
         </div>
+
+        <jsp:include page="footer.jsp"/>
 
         <script src="assets/js/jquery-3.6.0.min.js"></script>
         <script src="assets/js/bootstrap.bundle.min.js"></script>

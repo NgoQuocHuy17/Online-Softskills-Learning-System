@@ -26,14 +26,12 @@ public class BlogPostDAO extends DBContext<BlogPost> {
         return name;
     }
 
-    // BlogPostDAO.java
     public List<BlogPost> getBlogPostsByPage(int pageNumber, int pageSize) {
         List<BlogPost> blogPosts = new ArrayList<>();
         int offset = (pageNumber - 1) * pageSize;
         String sql = "SELECT * FROM blog_posts ORDER BY created_at DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
-        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
-
+        try (PreparedStatement ps = getConn().prepareStatement(sql)) {
             ps.setInt(1, offset);
             ps.setInt(2, pageSize);
 
@@ -138,6 +136,33 @@ public class BlogPostDAO extends DBContext<BlogPost> {
             e.printStackTrace();
         }
         return blogPosts;
+    }
+
+
+
+    @Override
+    public List<BlogPost> select() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public BlogPost select(int... id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public int insert(BlogPost oj) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public int update(BlogPost oj) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public int delete(int... id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

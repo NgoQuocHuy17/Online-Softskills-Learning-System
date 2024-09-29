@@ -122,6 +122,9 @@
                             </ul>
                         </li>
                         <li class="has-submenu">
+                            <a href="course">Courses</a>
+                        </li>
+                        <li class="has-submenu">
                             <a href="#">Blog <i class="fas fa-chevron-down"></i></a>
                             <ul class="submenu">
                                 <li><a href="bloglist">Blog List</a></li>
