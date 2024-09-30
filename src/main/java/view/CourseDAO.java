@@ -122,6 +122,56 @@ public class CourseDAO extends DBContext<Course> {
         return categories;
     }
 
+    public Course getCourseById(int id) {
+        Course course = null;
+        String sql = "SELECT id, title, tag_line, description, category, list_price, sale_price, status "
+                + "FROM courses WHERE id = ?";
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, id);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    course = new Course();
+                    course.setId(rs.getInt("id"));
+                    course.setTitle(rs.getString("title"));
+                    course.setTagLine(rs.getString("tag_line"));
+                    course.setDescription(rs.getString("description"));
+                    course.setCategory(rs.getString("category"));
+                    course.setListPrice(rs.getBigDecimal("list_price"));
+                    course.setSalePrice(rs.getBigDecimal("sale_price"));
+                    course.setStatus(rs.getString("status"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return course;
+    }
+
+    // Method to search courses by title for autocomplete (returns Course objects)
+    public List<Course> searchCoursesByTitle(String query) {
+        List<Course> courses = new ArrayList<>();
+
+        String sql = "SELECT TOP 10 id, title FROM [SoftSkillsOnlineLearningSystem].[dbo].[courses] "
+                + "WHERE title LIKE ?";
+
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setString(1, "%" + query + "%");  // Wildcard search
+
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Course course = new Course();
+                    course.setId(rs.getInt("id"));
+                    course.setTitle(rs.getString("title"));
+                    courses.add(course);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return courses;
+    }
+
     // Ghi đè phương thức select từ DBContext nhưng chưa hỗ trợ
     @Override
     public List<Course> select() {

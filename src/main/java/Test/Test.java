@@ -1,54 +1,40 @@
 package Test;
 
-import model.Course;
-import view.CourseDAO;
-
+import model.CourseDetail;
 import java.util.List;
+import view.*;
 
 public class Test {
-
     public static void main(String[] args) {
-        CourseDAO courseDAO = new CourseDAO();
+        CourseDetailDAO dao = new CourseDetailDAO();
 
-        // Test fetching all categories
-        testGetAllCategories(courseDAO);
+        // Test select all course details
+        System.out.println("=== All Course Details ===");
+        List<CourseDetail> courseDetails = dao.select();
+        for (CourseDetail detail : courseDetails) {
+            printCourseDetail(detail);
+        }
 
-        // Test fetching courses by category with pagination
-        testGetCoursesByCategory(courseDAO, "Soft Skills", 1, 5);
-        
-        // Test fetching total number of courses in a specific category
-        testGetTotalCoursesByCategory(courseDAO, "Soft Skills");
-
-        // Test fetching courses with no category filter (all courses)
-        testGetCoursesByCategory(courseDAO, "All", 1, 5);
-    }
-
-    // Test fetching all categories
-    private static void testGetAllCategories(CourseDAO courseDAO) {
-        System.out.println("Testing getAllCategories...");
-        List<String> categories = courseDAO.getAllCategories();
-        if (categories.isEmpty()) {
-            System.out.println("No categories found.");
+        // Test select course detail by courseId
+        int courseIdToTest = 14; // Change this to the courseId you want to test
+        System.out.println("\n=== Course Detail with courseId: " + courseIdToTest + " ===");
+        CourseDetail courseDetail = dao.select(courseIdToTest);
+        if (courseDetail != null) {
+            printCourseDetail(courseDetail);
         } else {
-            categories.forEach(category -> System.out.println("Category: " + category));
+            System.out.println("No course detail found with courseId: " + courseIdToTest);
         }
     }
 
-    // Test fetching courses by category and pagination
-    private static void testGetCoursesByCategory(CourseDAO courseDAO, String category, int page, int pageSize) {
-        System.out.println("\nTesting getCoursesByCategory for category: " + category);
-        List<Course> courses = courseDAO.getCoursesByCategory(category, page, pageSize);
-        if (courses.isEmpty()) {
-            System.out.println("No courses found for category: " + category);
-        } else {
-            courses.forEach(course -> System.out.println("Course: " + course.getTitle() + ", Category: " + course.getCategory() + ", Price: " + course.getSalePrice()));
-        }
-    }
-
-    // Test fetching total number of courses by category
-    private static void testGetTotalCoursesByCategory(CourseDAO courseDAO, String category) {
-        System.out.println("\nTesting getTotalCoursesByCategory for category: " + category);
-        int totalCourses = courseDAO.getTotalCoursesByCategory(category);
-        System.out.println("Total courses in category '" + category + "': " + totalCourses);
+    // Utility method to print course detail information
+    private static void printCourseDetail(CourseDetail detail) {
+        System.out.println("Course ID: " + detail.getCourseId());
+        System.out.println("Section Title: " + detail.getSectionTitle());
+        System.out.println("Content: " + detail.getContent());
+        System.out.println("Image Path: " + detail.getImagePath());
+        System.out.println("Video URL: " + (detail.getVideoUrl() != null ? detail.getVideoUrl() : "N/A"));
+        System.out.println("Created At: " + detail.getCreatedAt());
+        System.out.println("Updated At: " + detail.getUpdatedAt());
+        System.out.println("-----------------------------");
     }
 }

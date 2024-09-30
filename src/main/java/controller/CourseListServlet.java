@@ -63,4 +63,4 @@ public class CourseListServlet extends HttpServlet {
         // Forward to JSP
         request.getRequestDispatcher("/course.jsp").forward(request, response);
     }
-}
+} 
