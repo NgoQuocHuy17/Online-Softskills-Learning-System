@@ -1,0 +1,15 @@
+view\CourseTranslationDAO.class
+model\CourseTranslation.class
+view\DBContext.class
+view\QuestionDAO.class
+view\SettingDAO.class
+model\Setting.class
+model\Post.class
+model\BlogPost.class
+model\UserCourse.class
+view\PostDAO.class
+model\UserContact.class
+model\Question.class
+model\Slider.class
+model\User.class
+view\SliderDAO.class
