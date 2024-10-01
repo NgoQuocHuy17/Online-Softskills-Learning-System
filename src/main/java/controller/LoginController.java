@@ -32,7 +32,7 @@ public class LoginController extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             session.setMaxInactiveInterval(60*60);
-            response.sendRedirect("home.jsp");
+            response.sendRedirect("home");
         }
     }
 

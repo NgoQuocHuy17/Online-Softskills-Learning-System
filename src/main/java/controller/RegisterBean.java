@@ -4,7 +4,7 @@
  */
 package controller;
 
-public class RegisterBean {
+public class registerBean {
 
     private String fullName;
     private String email;
@@ -60,4 +60,5 @@ public class RegisterBean {
     public String getMyHash() {
         return myHash;
     }
+
 }
