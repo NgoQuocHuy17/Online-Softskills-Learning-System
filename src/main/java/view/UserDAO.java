@@ -1,7 +1,7 @@
 package view;
 
 import controller.SendingEmail;
-import controller.registerBean;
+import controller.RegisterBean;
 import model.User;
 import java.util.List;
 import java.util.Vector;
@@ -34,7 +34,7 @@ public class UserDAO extends DBContext<User> {
         return false;
     }
     
-    public String register(registerBean rb) {
+    public String register(RegisterBean rb) {
         String fullName = rb.getFullName();
         String email = rb.getEmail();
         String mobile = rb.getMobile();
