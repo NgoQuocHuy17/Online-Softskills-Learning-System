@@ -135,6 +135,59 @@ public class CourseDAO extends DBContext<Course> {
         return totalCourses;
     }
 
+    // Phương thức tìm kiếm khóa học theo tiêu đề
+    public List<Course> getCoursesByTitle(String title) {
+        List<Course> courses = new ArrayList<>();
+        String sql = "SELECT id, title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, is_sponsored, status, created_at, updated_at "
+                + "FROM courses WHERE title LIKE ? AND status = 'Published'"
+                + "ORDER BY is_sponsored DESC, updated_at DESC";
+
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setString(1, "%" + title + "%");
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Course course = new Course();
+                    course.setId(rs.getInt("id"));
+                    course.setTitle(rs.getString("title"));
+                    course.setTagLine(rs.getString("tag_line"));
+                    course.setDescription(rs.getString("description"));
+                    course.setCategory(rs.getString("category"));
+                    course.setBasicPackagePrice(rs.getBigDecimal("basic_package_price"));
+                    course.setAdvancedPackagePrice(rs.getBigDecimal("advanced_package_price"));
+                    course.setOwnerId(rs.getInt("owner_id"));
+                    course.setSponsored(rs.getBoolean("is_sponsored"));
+                    course.setStatus(rs.getString("status"));
+                    course.setCreatedAt(rs.getTimestamp("created_at"));
+                    course.setUpdatedAt(rs.getTimestamp("updated_at"));
+                    courses.add(course);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return courses;
+    }
+
+    // Phương thức trả về danh sách tiêu đề khóa học cho autocomplete
+    public List<String> getCourseTitlesByTerm(String term) {
+        List<String> titles = new ArrayList<>();
+        String sql = "SELECT title FROM courses WHERE title LIKE ? AND status = 'Published'"
+                + "ORDER BY is_sponsored DESC, updated_at DESC";
+                
+
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setString(1, "%" + term + "%");
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    titles.add(rs.getString("title"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return titles;
+    }
+
     public Course getCourseById(int id) {
         Course course = null;
         String sql = "SELECT id, title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, is_sponsored, status, created_at, updated_at "

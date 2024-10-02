@@ -10,6 +10,8 @@ import model.Course;
 import java.io.IOException;
 import java.util.List;
 
+// File: CourseListServlet.java
+
 @WebServlet("/course")
 public class CourseListServlet extends HttpServlet {
 
@@ -23,8 +25,10 @@ public class CourseListServlet extends HttpServlet {
         List<String> categories = courseDAO.getAllCategories();
         request.setAttribute("categories", categories);
 
-        // Get selected category from request
+        // Get searchTitle and category from request
+        String searchTitle = request.getParameter("searchTitle");
         String category = request.getParameter("category");
+
         if (category == null || category.isEmpty()) {
             category = "All"; // Default category is 'All'
         }
@@ -32,7 +36,6 @@ public class CourseListServlet extends HttpServlet {
         // Handle pagination
         int page = 1;
         int pageSize = 5;
-
         String pageParam = request.getParameter("page");
         if (pageParam != null) {
             try {
@@ -42,35 +45,34 @@ public class CourseListServlet extends HttpServlet {
             }
         }
 
-        // Fetch courses based on category and pagination
-        List<Course> courses = courseDAO.getCoursesByCategory(category, page, pageSize);
-        int totalCourses = courseDAO.getTotalCoursesByCategory(category);
+        List<Course> courses;
+        int totalCourses;
 
-        // Log to check what is being retrieved
-        System.out.println("Category: " + category);
-        System.out.println("Total Courses: " + totalCourses);
-        if (courses.isEmpty()) {
-            System.out.println("No courses found for category: " + category);
+        // Nếu searchTitle tồn tại, thực hiện tìm kiếm theo tiêu đề
+        if (searchTitle != null && !searchTitle.isEmpty()) {
+            courses = courseDAO.getCoursesByTitle(searchTitle);
+            totalCourses = courses.size(); // Kết quả tìm kiếm không cần phân trang
         } else {
-            courses.forEach(course -> System.out.println("Course: " + course.getTitle()));
+            // Nếu không tìm kiếm, lọc theo category và phân trang
+            courses = courseDAO.getCoursesByCategory(category, page, pageSize);
+            totalCourses = courseDAO.getTotalCoursesByCategory(category);
         }
 
-        // Calculate total pages
+        // Tính toán số trang
         int totalPages = (int) Math.ceil((double) totalCourses / pageSize);
-
-        // Ensure totalPages is at least 1
         if (totalPages < 1) {
             totalPages = 1;
         }
 
-        // Set attributes to forward to JSP
+        // Set attributes
         request.setAttribute("courses", courses);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("category", category);
+        request.setAttribute("searchTitle", searchTitle);
 
         // Forward to JSP
         request.getRequestDispatcher("/course.jsp").forward(request, response);
     }
-
 }
+
