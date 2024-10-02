@@ -49,10 +49,19 @@ public class CourseListServlet extends HttpServlet {
         // Log to check what is being retrieved
         System.out.println("Category: " + category);
         System.out.println("Total Courses: " + totalCourses);
-        courses.forEach(course -> System.out.println("Course: " + course.getTitle()));
+        if (courses.isEmpty()) {
+            System.out.println("No courses found for category: " + category);
+        } else {
+            courses.forEach(course -> System.out.println("Course: " + course.getTitle()));
+        }
 
         // Calculate total pages
         int totalPages = (int) Math.ceil((double) totalCourses / pageSize);
+
+        // Ensure totalPages is at least 1
+        if (totalPages < 1) {
+            totalPages = 1;
+        }
 
         // Set attributes to forward to JSP
         request.setAttribute("courses", courses);
@@ -63,4 +72,5 @@ public class CourseListServlet extends HttpServlet {
         // Forward to JSP
         request.getRequestDispatcher("/course.jsp").forward(request, response);
     }
-} 
+
+}

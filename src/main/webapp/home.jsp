@@ -7,9 +7,7 @@
         <title>Online Softskills Learning</title>
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
-
         <link rel="stylesheet" href="assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
         <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
@@ -22,7 +20,6 @@
     </head>
 
     <body>
-
         <jsp:include page="header.jsp"/>
 
         <div class="container sliders my-5">
@@ -34,7 +31,7 @@
                         <ol class="carousel-indicators">
                             <c:forEach var="slider" items="${sliders}" varStatus="status">
                                 <li data-bs-target="#carouselSliders" data-bs-slide-to="${status.index}" class="${status.first ? 'active' : ''}"></li>
-                                </c:forEach>
+                            </c:forEach>
                         </ol>
 
                         <!-- Sliders Items -->
@@ -98,7 +95,7 @@
             </c:choose>
         </div>
 
-        <!-- Feature Course Section -->
+        <!-- Featured Course Section -->
         <div class="container featured-courses my-5">
             <h2 class="text-center mb-4">Featured Courses</h2>
             <c:choose>
@@ -110,8 +107,10 @@
                                     <img src="default-image.jpg" class="card-img-top rounded" alt="${course.title}">
                                     <div class="card-body">
                                         <h5 class="card-title">${course.title}</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">${course.tagLine}</h6> <!-- Added tagline -->
                                         <p class="card-text">${course.description}</p>
-                                        <a href="course-details.jsp?id=${course.id}" class="btn btn-primary btn-block">View Course</a>
+                                        <p class="card-text"><strong>Price:</strong> ${course.basicPackagePrice} - ${course.advancedPackagePrice}</p> <!-- Added price -->
+                                        <a href="course-detail?courseId=${course.id}" class="btn btn-primary btn-block">View Course</a>
                                     </div>
                                 </div>
                             </div>

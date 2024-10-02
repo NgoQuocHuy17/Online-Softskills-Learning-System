@@ -25,7 +25,7 @@ public class HomeController extends HttpServlet {
         // Get sliders, hot posts, and featured courses
         List<Slider> sliders = sliderDAO.getVisibleSliders();
         List<Post> hotPosts = postDAO.getHotPosts();
-        List<Course> featuredCourses = courseDAO.getFeaturedCourses();
+        List<Course> featuredCourses = courseDAO.getFeaturedCourses(6); // Get featured courses with limit
 
         // Set attributes to forward to JSP
         request.setAttribute("sliders", sliders);
@@ -37,5 +37,3 @@ public class HomeController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 }
-
-

@@ -1,3 +1,4 @@
+// File: CourseDAO.java
 package view;
 
 import model.Course;
@@ -7,36 +8,57 @@ import java.util.List;
 
 public class CourseDAO extends DBContext<Course> {
 
-    // Kết nối đến cơ sở dữ liệu
     public CourseDAO() {
         super();
     }
 
-    // Lấy các khóa học nổi bật (ví dụ: lấy 6 khóa học thuộc category 'Soft Skills')
-    public List<Course> getFeaturedCourses() {
+    public List<Course> getFeaturedCourses(int size) {
         List<Course> courses = new ArrayList<>();
-        String sql = "SELECT TOP 6 id, title, tag_line, description, category, list_price, sale_price, status "
-                + "FROM courses WHERE category = 'Soft Skills'";
+        String sql = "SELECT TOP (?) id, title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, is_sponsored, status, created_at, updated_at "
+                + "FROM courses WHERE is_sponsored = '1'";
 
-        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
 
-            while (rs.next()) {
-                Course course = new Course();
-                course.setId(rs.getInt("id"));
-                course.setTitle(rs.getString("title"));
-                course.setTagLine(rs.getString("tag_line"));
-                course.setDescription(rs.getString("description"));
-                course.setCategory(rs.getString("category"));
-                course.setListPrice(rs.getBigDecimal("list_price"));
-                course.setSalePrice(rs.getBigDecimal("sale_price"));
-                course.setStatus(rs.getString("status"));
-                courses.add(course);
+            pst.setInt(1, size);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Course course = new Course();
+                    course.setId(rs.getInt("id"));
+                    course.setTitle(rs.getString("title"));
+                    course.setTagLine(rs.getString("tag_line"));
+                    course.setDescription(rs.getString("description"));
+                    course.setCategory(rs.getString("category"));
+                    course.setBasicPackagePrice(rs.getBigDecimal("basic_package_price"));
+                    course.setAdvancedPackagePrice(rs.getBigDecimal("advanced_package_price"));
+                    course.setOwnerId(rs.getInt("owner_id"));
+                    course.setSponsored(rs.getBoolean("is_sponsored"));
+                    course.setStatus(rs.getString("status"));
+                    course.setCreatedAt(rs.getTimestamp("created_at"));
+                    course.setUpdatedAt(rs.getTimestamp("updated_at"));
+                    courses.add(course);
+                }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return courses;
+    }
+
+    public List<String> getAllCategories() {
+        List<String> categories = new ArrayList<>();
+        String sql = "SELECT DISTINCT category FROM courses";
+
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
+            while (rs.next()) {
+                String category = rs.getString("category");
+                categories.add(category);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return categories;
     }
 
     public List<Course> getCoursesByCategory(String category, int page, int pageSize) {
@@ -44,11 +66,15 @@ public class CourseDAO extends DBContext<Course> {
         String sql;
 
         if ("All".equalsIgnoreCase(category)) {
-            sql = "SELECT id, title, tag_line, description, category, list_price, sale_price, status "
-                    + "FROM courses ORDER BY id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+            sql = "SELECT id, title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, is_sponsored, status, created_at, updated_at "
+                    + "FROM courses WHERE status = 'Published' "
+                    + "ORDER BY is_sponsored DESC, updated_at DESC "
+                    + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
         } else {
-            sql = "SELECT id, title, tag_line, description, category, list_price, sale_price, status "
-                    + "FROM courses WHERE category = ? ORDER BY id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+            sql = "SELECT id, title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, is_sponsored, status, created_at, updated_at "
+                    + "FROM courses WHERE status = 'Published' AND category = ? "
+                    + "ORDER BY is_sponsored DESC, updated_at DESC "
+                    + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
         }
 
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
@@ -69,9 +95,13 @@ public class CourseDAO extends DBContext<Course> {
                     course.setTagLine(rs.getString("tag_line"));
                     course.setDescription(rs.getString("description"));
                     course.setCategory(rs.getString("category"));
-                    course.setListPrice(rs.getBigDecimal("list_price"));
-                    course.setSalePrice(rs.getBigDecimal("sale_price"));
+                    course.setBasicPackagePrice(rs.getBigDecimal("basic_package_price"));
+                    course.setAdvancedPackagePrice(rs.getBigDecimal("advanced_package_price"));
+                    course.setOwnerId(rs.getInt("owner_id"));
+                    course.setSponsored(rs.getBoolean("is_sponsored"));
                     course.setStatus(rs.getString("status"));
+                    course.setCreatedAt(rs.getTimestamp("created_at"));
+                    course.setUpdatedAt(rs.getTimestamp("updated_at"));
                     courses.add(course);
                 }
             }
@@ -82,24 +112,21 @@ public class CourseDAO extends DBContext<Course> {
     }
 
     public int getTotalCoursesByCategory(String category) {
-        String sql;
-
-        if ("All".equalsIgnoreCase(category)) {
-            sql = "SELECT COUNT(*) FROM courses";
-        } else {
-            sql = "SELECT COUNT(*) FROM courses WHERE category = ?";
-        }
-
         int totalCourses = 0;
+        String sql;
+        if ("All".equalsIgnoreCase(category)) {
+            sql = "SELECT COUNT(*) AS total FROM courses WHERE status = 'Published'";
+        } else {
+            sql = "SELECT COUNT(*) AS total FROM courses WHERE status = 'Published' AND category = ?";
+        }
 
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
             if (!"All".equalsIgnoreCase(category)) {
                 pst.setString(1, category);
             }
-
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
-                    totalCourses = rs.getInt(1);
+                    totalCourses = rs.getInt("total");
                 }
             }
         } catch (SQLException e) {
@@ -108,23 +135,9 @@ public class CourseDAO extends DBContext<Course> {
         return totalCourses;
     }
 
-    public List<String> getAllCategories() {
-        List<String> categories = new ArrayList<>();
-        String sql = "SELECT DISTINCT category FROM courses";
-
-        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
-            while (rs.next()) {
-                categories.add(rs.getString("category"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return categories;
-    }
-
     public Course getCourseById(int id) {
         Course course = null;
-        String sql = "SELECT id, title, tag_line, description, category, list_price, sale_price, status "
+        String sql = "SELECT id, title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, is_sponsored, status, created_at, updated_at "
                 + "FROM courses WHERE id = ?";
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, id);
@@ -136,9 +149,13 @@ public class CourseDAO extends DBContext<Course> {
                     course.setTagLine(rs.getString("tag_line"));
                     course.setDescription(rs.getString("description"));
                     course.setCategory(rs.getString("category"));
-                    course.setListPrice(rs.getBigDecimal("list_price"));
-                    course.setSalePrice(rs.getBigDecimal("sale_price"));
+                    course.setBasicPackagePrice(rs.getBigDecimal("basic_package_price"));
+                    course.setAdvancedPackagePrice(rs.getBigDecimal("advanced_package_price"));
+                    course.setOwnerId(rs.getInt("owner_id"));
+                    course.setSponsored(rs.getBoolean("is_sponsored"));
                     course.setStatus(rs.getString("status"));
+                    course.setCreatedAt(rs.getTimestamp("created_at"));
+                    course.setUpdatedAt(rs.getTimestamp("updated_at"));
                 }
             }
         } catch (SQLException e) {
@@ -147,58 +164,28 @@ public class CourseDAO extends DBContext<Course> {
         return course;
     }
 
-    // Method to search courses by title for autocomplete (returns Course objects)
-    public List<Course> searchCoursesByTitle(String query) {
-        List<Course> courses = new ArrayList<>();
-
-        String sql = "SELECT TOP 10 id, title FROM [SoftSkillsOnlineLearningSystem].[dbo].[courses] "
-                + "WHERE title LIKE ?";
-
-        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
-            pst.setString(1, "%" + query + "%");  // Wildcard search
-
-            try (ResultSet rs = pst.executeQuery()) {
-                while (rs.next()) {
-                    Course course = new Course();
-                    course.setId(rs.getInt("id"));
-                    course.setTitle(rs.getString("title"));
-                    courses.add(course);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return courses;
-    }
-
-    // Ghi đè phương thức select từ DBContext nhưng chưa hỗ trợ
     @Override
     public List<Course> select() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    // Ghi đè phương thức select theo id nhưng chưa hỗ trợ
     @Override
     public Course select(int... id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    // Ghi đè phương thức insert nhưng chưa hỗ trợ
     @Override
-    public int insert(Course course) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public int insert(Course obj) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    // Ghi đè phương thức update nhưng chưa hỗ trợ
     @Override
-    public int update(Course course) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public int update(Course obj) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    // Ghi đè phương thức delete nhưng chưa hỗ trợ
     @Override
     public int delete(int... id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
