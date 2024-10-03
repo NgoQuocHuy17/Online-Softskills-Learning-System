@@ -173,7 +173,6 @@ public class CourseDAO extends DBContext<Course> {
         List<String> titles = new ArrayList<>();
         String sql = "SELECT title FROM courses WHERE title LIKE ? AND status = 'Published'"
                 + "ORDER BY is_sponsored DESC, updated_at DESC";
-                
 
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setString(1, "%" + term + "%");
@@ -215,6 +214,88 @@ public class CourseDAO extends DBContext<Course> {
             e.printStackTrace();
         }
         return course;
+    }
+
+    public List<Course> getCoursesByTitleAndCategory(String title, String category, int page, int pageSize) {
+        List<Course> courses = new ArrayList<>();
+        String sql;
+
+        if ("All".equalsIgnoreCase(category)) {
+            sql = "SELECT id, title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, is_sponsored, status, created_at, updated_at "
+                    + "FROM courses WHERE title LIKE ? AND status = 'Published' "
+                    + "ORDER BY is_sponsored DESC, updated_at DESC "
+                    + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        } else {
+            sql = "SELECT id, title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, is_sponsored, status, created_at, updated_at "
+                    + "FROM courses WHERE title LIKE ? AND category = ? AND status = 'Published' "
+                    + "ORDER BY is_sponsored DESC, updated_at DESC "
+                    + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        }
+
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setString(1, "%" + title + "%");
+
+            if ("All".equalsIgnoreCase(category)) {
+                pst.setInt(2, (page - 1) * pageSize);
+                pst.setInt(3, pageSize);
+            } else {
+                pst.setString(2, category);
+                pst.setInt(3, (page - 1) * pageSize);
+                pst.setInt(4, pageSize);
+            }
+
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Course course = new Course();
+                    course.setId(rs.getInt("id"));
+                    course.setTitle(rs.getString("title"));
+                    course.setTagLine(rs.getString("tag_line"));
+                    course.setDescription(rs.getString("description"));
+                    course.setCategory(rs.getString("category"));
+                    course.setBasicPackagePrice(rs.getBigDecimal("basic_package_price"));
+                    course.setAdvancedPackagePrice(rs.getBigDecimal("advanced_package_price"));
+                    course.setOwnerId(rs.getInt("owner_id"));
+                    course.setSponsored(rs.getBoolean("is_sponsored"));
+                    course.setStatus(rs.getString("status"));
+                    course.setCreatedAt(rs.getTimestamp("created_at"));
+                    course.setUpdatedAt(rs.getTimestamp("updated_at"));
+                    courses.add(course);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return courses;
+    }
+
+    public int getTotalCoursesByTitleAndCategory(String title, String category) {
+        int totalCourses = 0;
+        String sql;
+
+        if ("All".equalsIgnoreCase(category)) {
+            sql = "SELECT COUNT(*) AS total FROM courses WHERE title LIKE ? AND status = 'Published'";
+        } else {
+            sql = "SELECT COUNT(*) AS total FROM courses WHERE title LIKE ? AND category = ? AND status = 'Published'";
+        }
+
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setString(1, "%" + title + "%");
+
+            if (!"All".equalsIgnoreCase(category)) {
+                pst.setString(2, category);
+            }
+
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    totalCourses = rs.getInt("total");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return totalCourses;
     }
 
     @Override

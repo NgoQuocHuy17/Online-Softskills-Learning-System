@@ -48,12 +48,17 @@ public class CourseListServlet extends HttpServlet {
         List<Course> courses;
         int totalCourses;
 
-        // Nếu searchTitle tồn tại, thực hiện tìm kiếm theo tiêu đề
-        if (searchTitle != null && !searchTitle.isEmpty()) {
+        // Nếu cả searchTitle và category đều tồn tại
+        if ((searchTitle != null && !searchTitle.isEmpty()) && !"All".equals(category)) {
+            // Lọc theo tiêu đề và category
+            courses = courseDAO.getCoursesByTitleAndCategory(searchTitle, category, page, pageSize);
+            totalCourses = courseDAO.getTotalCoursesByTitleAndCategory(searchTitle, category);
+        } else if (searchTitle != null && !searchTitle.isEmpty()) {
+            // Nếu chỉ tìm kiếm theo tiêu đề
             courses = courseDAO.getCoursesByTitle(searchTitle);
             totalCourses = courses.size(); // Kết quả tìm kiếm không cần phân trang
         } else {
-            // Nếu không tìm kiếm, lọc theo category và phân trang
+            // Nếu chỉ lọc theo category
             courses = courseDAO.getCoursesByCategory(category, page, pageSize);
             totalCourses = courseDAO.getTotalCoursesByCategory(category);
         }
@@ -75,4 +80,3 @@ public class CourseListServlet extends HttpServlet {
         request.getRequestDispatcher("/course.jsp").forward(request, response);
     }
 }
-
