@@ -1,6 +1,10 @@
 package controller;
 
-import jakarta.mail.*;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import java.io.IOException;
@@ -35,7 +39,7 @@ public class ForgotPasswordController extends HttpServlet {
         long generationTime = System.currentTimeMillis();
         String email = request.getParameter("input");
         UserDAO dao = new UserDAO();
-        
+
         try {
             if (!dao.isEmailExist(email)) {
                 throw new Exception();
@@ -67,11 +71,11 @@ public class ForgotPasswordController extends HttpServlet {
             props.put("mail.smtp.auth", "true");
             props.put("mail.smtp.port", "465");
             Session session = Session.getInstance(props, new jakarta.mail.Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("ngoquochuyvn2004@gmail.com", "neqv kair sjxa ccxb");
-            }
-        });
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication("ngoquochuyvn2004@gmail.com", "neqv kair sjxa ccxb");
+                }
+            });
             // compose message
             try {
                 MimeMessage message = new MimeMessage(session);
