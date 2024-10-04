@@ -1,6 +1,7 @@
 package model;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -13,17 +14,18 @@ public class Course {
     private String tagLine;
     private String description;
     private String category;
-    private double listPrice;
-    private double salePrice;
+    private BigDecimal listPrice;
+    private BigDecimal salePrice;
     private int ownerId;
     private String status;
-    private Date createdAt;
-    private Date updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public Course() {
     }
 
-    public Course(int id, String title, String tagLine, String description, String category, double listPrice, double salePrice, int ownerId, String status, Date createdAt, Date updatedAt) {
+    public Course(int id, String title, String tagLine, String description, String category, BigDecimal listPrice,
+            BigDecimal salePrice, int ownerId, String status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
         this.tagLine = tagLine;
@@ -77,19 +79,19 @@ public class Course {
         this.category = category;
     }
 
-    public double getListPrice() {
+    public BigDecimal getListPrice() {
         return listPrice;
     }
 
-    public void setListPrice(double listPrice) {
+    public void setListPrice(BigDecimal listPrice) {
         this.listPrice = listPrice;
     }
 
-    public double getSalePrice() {
+    public BigDecimal getSalePrice() {
         return salePrice;
     }
 
-    public void setSalePrice(double salePrice) {
+    public void setSalePrice(BigDecimal salePrice) {
         this.salePrice = salePrice;
     }
 
@@ -109,19 +111,19 @@ public class Course {
         this.status = status;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

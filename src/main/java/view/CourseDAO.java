@@ -2,10 +2,11 @@ package view;
 
 import model.Course;
 import java.util.List;
-import java.util.Vector;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -17,12 +18,11 @@ import java.util.logging.Level;
 public class CourseDAO extends DBContext<Course> {
 
     public List<Course> getFeaturedCourses() {
-        List<Course> courses = new Vector();
-        String sql = "SELECT TOP 6 id, title, tag_line, description, category, list_price, sale_price, status " +
-                     "FROM courses WHERE category = 'Soft Skills'";
+        List<Course> courses = new ArrayList<>();
+        String sql = "SELECT TOP 6 id, title, tag_line, description, category, list_price, sale_price, status "
+                + "FROM courses WHERE category = 'Soft Skills'";
 
-        try (PreparedStatement pst = super.getConn().prepareStatement(sql);
-             ResultSet rs = pst.executeQuery()) {
+        try (PreparedStatement pst = super.getConn().prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
 
             while (rs.next()) {
                 Course course = new Course();
@@ -31,23 +31,23 @@ public class CourseDAO extends DBContext<Course> {
                 course.setTagLine(rs.getString("tag_line"));
                 course.setDescription(rs.getString("description"));
                 course.setCategory(rs.getString("category"));
-                course.setListPrice(rs.getDouble("list_price"));
-                course.setSalePrice(rs.getDouble("sale_price"));
+                course.setListPrice(rs.getBigDecimal("list_price"));
+                course.setSalePrice(rs.getBigDecimal("sale_price"));
                 course.setStatus(rs.getString("status"));
                 courses.add(course);
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(CourseDAO.class.getName()).log(Level.SEVERE, "Error fetching featured courses", e);
         }
         return courses;
     }
-    
+
     @Override
     public List<Course> select() {
         String sql = "SELECT [id], [title], [tag_line], [description], [category], [list_price], [sale_price], [owner_id], [status], [created_at], [updated_at] "
                 + "FROM [dbo].[courses]";
-        List<Course> courses = new Vector();
+        List<Course> courses = new ArrayList<>();
         try (PreparedStatement pre = super.getConn().prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
             while (rs.next()) {
                 Course course = new Course();
@@ -56,12 +56,12 @@ public class CourseDAO extends DBContext<Course> {
                 course.setTagLine(rs.getString(3));
                 course.setDescription(rs.getString(4));
                 course.setCategory(rs.getString(5));
-                course.setListPrice(rs.getDouble(6));
-                course.setSalePrice(rs.getDouble(7));
+                course.setListPrice(rs.getBigDecimal(6));
+                course.setSalePrice(rs.getBigDecimal(7));
                 course.setOwnerId(rs.getInt(8));
                 course.setStatus(rs.getString(9));
-                course.setCreatedAt(rs.getTimestamp(10));
-                course.setUpdatedAt(rs.getTimestamp(11));
+                course.setCreatedAt(rs.getTimestamp(10).toLocalDateTime());
+                course.setUpdatedAt(rs.getTimestamp(11).toLocalDateTime());
                 courses.add(course);
             }
         } catch (SQLException ex) {
@@ -85,16 +85,16 @@ public class CourseDAO extends DBContext<Course> {
                     course.setTagLine(rs.getString(3));
                     course.setDescription(rs.getString(4));
                     course.setCategory(rs.getString(5));
-                    course.setListPrice(rs.getDouble(6));
-                    course.setSalePrice(rs.getDouble(7));
+                    course.setListPrice(rs.getBigDecimal(6));
+                    course.setSalePrice(rs.getBigDecimal(7));
                     course.setOwnerId(rs.getInt(8));
                     course.setStatus(rs.getString(9));
-                    course.setCreatedAt(rs.getTimestamp(10));
-                    course.setUpdatedAt(rs.getTimestamp(11));
+                    course.setCreatedAt(rs.getTimestamp(10).toLocalDateTime());
+                    course.setUpdatedAt(rs.getTimestamp(11).toLocalDateTime());
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(CourseDAO.class.getName()).log(Level.SEVERE, "Error selecting course with id " + id, ex);
+            Logger.getLogger(CourseDAO.class.getName()).log(Level.SEVERE, "Error selecting course with id " + id[0], ex);
         }
         return course;
     }
@@ -103,23 +103,28 @@ public class CourseDAO extends DBContext<Course> {
     public int insert(Course course) {
         String sql = "INSERT INTO [dbo].[courses] ([title], [tag_line], [description], [category], [list_price], [sale_price], [owner_id], [status], [created_at], [updated_at]) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        int result = 0;
-        try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
+        int generatedId = -1;
+        try (PreparedStatement pre = super.getConn().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pre.setString(1, course.getTitle());
             pre.setString(2, course.getTagLine());
             pre.setString(3, course.getDescription());
             pre.setString(4, course.getCategory());
-            pre.setDouble(5, course.getListPrice());
-            pre.setDouble(6, course.getSalePrice());
+            pre.setBigDecimal(5, course.getListPrice());
+            pre.setBigDecimal(6, course.getSalePrice());
             pre.setInt(7, course.getOwnerId());
             pre.setString(8, course.getStatus());
-            pre.setTimestamp(9, new java.sql.Timestamp(course.getCreatedAt().getTime()));
-            pre.setTimestamp(10, new java.sql.Timestamp(course.getUpdatedAt().getTime()));
-            result = pre.executeUpdate();
+            pre.setTimestamp(9, Timestamp.valueOf(course.getCreatedAt()));
+            pre.setTimestamp(10, Timestamp.valueOf(course.getUpdatedAt()));
+            pre.executeUpdate();
+            try (ResultSet generatedKeys = pre.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    generatedId = generatedKeys.getInt(1);
+                }
+            }
         } catch (SQLException ex) {
             Logger.getLogger(CourseDAO.class.getName()).log(Level.SEVERE, "Error inserting course", ex);
         }
-        return result;
+        return generatedId;
     }
 
     @Override
@@ -132,12 +137,12 @@ public class CourseDAO extends DBContext<Course> {
             pre.setString(2, course.getTagLine());
             pre.setString(3, course.getDescription());
             pre.setString(4, course.getCategory());
-            pre.setDouble(5, course.getListPrice());
-            pre.setDouble(6, course.getSalePrice());
+            pre.setBigDecimal(5, course.getListPrice());
+            pre.setBigDecimal(6, course.getSalePrice());
             pre.setInt(7, course.getOwnerId());
             pre.setString(8, course.getStatus());
-            pre.setTimestamp(9, new java.sql.Timestamp(course.getCreatedAt().getTime()));
-            pre.setTimestamp(10, new java.sql.Timestamp(course.getUpdatedAt().getTime()));
+            pre.setTimestamp(9, Timestamp.valueOf(course.getCreatedAt()));
+            pre.setTimestamp(10, Timestamp.valueOf(course.getUpdatedAt()));
             pre.setInt(11, course.getId());
             result = pre.executeUpdate();
         } catch (SQLException ex) {
@@ -154,7 +159,7 @@ public class CourseDAO extends DBContext<Course> {
             pre.setInt(1, id[0]);
             result = pre.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(CourseDAO.class.getName()).log(Level.SEVERE, "Error deleting course with id " + id, ex);
+            Logger.getLogger(CourseDAO.class.getName()).log(Level.SEVERE, "Error deleting course with id " + id[0], ex);
         }
         return result;
     }
