@@ -5,15 +5,19 @@
 package controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.*;
 
-@WebServlet(name = "ActivateAccount", urlPatterns = "/ActivateAccount")
-public class ActivateAccount extends HttpServlet {
+/**
+ *
+ * @author Minh
+ */
+@WebServlet(name = "BlogDetailsController", urlPatterns = {"/BlogDetailsController"})
+public class BlogDetailsController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -27,6 +31,18 @@ public class ActivateAccount extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet BlogDetailsController</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet BlogDetailsController at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -42,35 +58,6 @@ public class ActivateAccount extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-
-        String email = request.getParameter("key1");
-        String hash = request.getParameter("key2");
-
-        try {
-            Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=SoftSkillsOnlineLearningSystem;trustServerCertificate=true",
-                    "sa",
-                    "88888888");
-
-            PreparedStatement ps = conn.prepareStatement("Select email, hash, isValid FROM users WHERE email=? AND hash=? AND isValid='0'");
-            ps.setString(1, email);
-            ps.setString(2, hash);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                PreparedStatement pst = conn.prepareStatement("UPDATE users SET isValid='1' WHERE email=? AND hash=?");
-                pst.setString(1, email);
-                pst.setString(2, hash);
-                int i = pst.executeUpdate();
-                if (i == 1) {
-                    response.sendRedirect("login.jsp");
-                } else {
-                    response.sendRedirect("home");
-                }
-            }
-
-        } catch (SQLException ex) {
-            System.out.println("ActivateAccount Servlet File!");
-        }
-
     }
 
     /**

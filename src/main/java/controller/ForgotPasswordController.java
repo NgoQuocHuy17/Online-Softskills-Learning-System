@@ -1,6 +1,10 @@
 package controller;
 
-import jakarta.mail.*;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import java.io.IOException;
@@ -25,13 +29,8 @@ public class ForgotPasswordController extends HttpServlet {
 
     private static final long OTP_VALIDITY_PERIOD = 15 * 60 * 1000;
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         long generationTime = System.currentTimeMillis();
         String email = request.getParameter("input");
         UserDAO dao = new UserDAO();
@@ -55,10 +54,9 @@ public class ForgotPasswordController extends HttpServlet {
         if (email != null && !email.equals("")) {
             // sending otp
             Random rand = new Random();
-            otpvalue = rand.nextInt(999999);
+            otpvalue = rand.nextInt(900000) + 100000;
 
-            String to = email; // change accordingly
-            // Get the session object
+            String to = email;
             Properties props = new Properties();
             props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP host, e.g., smtp.gmail.com
             props.put("mail.smtp.port", "587");              // SMTP port
@@ -92,5 +90,15 @@ public class ForgotPasswordController extends HttpServlet {
             dispatcher.forward(request, response);
 
         }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        processRequest(request, response);
     }
 }
