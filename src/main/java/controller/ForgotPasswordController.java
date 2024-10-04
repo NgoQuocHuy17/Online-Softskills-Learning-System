@@ -29,13 +29,8 @@ public class ForgotPasswordController extends HttpServlet {
 
     private static final long OTP_VALIDITY_PERIOD = 15 * 60 * 1000;
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         long generationTime = System.currentTimeMillis();
         String email = request.getParameter("input");
         UserDAO dao = new UserDAO();
@@ -60,10 +55,9 @@ public class ForgotPasswordController extends HttpServlet {
         if (email != null && !email.equals("")) {
             // sending otp
             Random rand = new Random();
-            otpvalue = rand.nextInt(999999);
+            otpvalue = rand.nextInt(900000) + 100000;
 
-            String to = email; // change accordingly
-            // Get the session object
+            String to = email;
             Properties props = new Properties();
             props.put("mail.smtp.host", "smtp.gmail.com");
             props.put("mail.smtp.socketFactory.port", "465");
@@ -98,5 +92,15 @@ public class ForgotPasswordController extends HttpServlet {
             mySession.setAttribute("otpGenerationTime", generationTime);
             dispatcher.forward(request, response);
         }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        processRequest(request, response);
     }
 }
