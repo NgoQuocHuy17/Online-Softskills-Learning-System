@@ -35,7 +35,6 @@ public class ForgotPasswordController extends HttpServlet {
         long generationTime = System.currentTimeMillis();
         String email = request.getParameter("input");
         UserDAO dao = new UserDAO();
-        
         try {
             if (!dao.isEmailExist(email)) {
                 throw new Exception();
@@ -61,17 +60,15 @@ public class ForgotPasswordController extends HttpServlet {
             String to = email; // change accordingly
             // Get the session object
             Properties props = new Properties();
-            props.put("mail.smtp.host", "smtp.gmail.com");
-            props.put("mail.smtp.socketFactory.port", "465");
-            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP host, e.g., smtp.gmail.com
+            props.put("mail.smtp.port", "587");              // SMTP port
             props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.port", "465");
-            Session session = Session.getInstance(props, new jakarta.mail.Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("ngoquochuyvn2004@gmail.com", "neqv kair sjxa ccxb");
-            }
-        });
+            props.put("mail.smtp.starttls.enable", "true");
+            Session session = Session.getInstance(props, new Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication("ngoquochuyvn2004@gmail.com", "neqv kair sjxa ccxb");
+                }
+            });
             // compose message
             try {
                 MimeMessage message = new MimeMessage(session);
@@ -93,6 +90,7 @@ public class ForgotPasswordController extends HttpServlet {
             mySession.setAttribute("email", email);
             mySession.setAttribute("otpGenerationTime", generationTime);
             dispatcher.forward(request, response);
+
         }
     }
 }
