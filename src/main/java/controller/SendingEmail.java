@@ -50,7 +50,12 @@
 //}
 package controller;
 
-import jakarta.mail.*;
+
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import java.util.Properties;
@@ -69,7 +74,7 @@ public class SendingEmail {
     public void sendMail() {
         // Replace with your sender email and password
         String email = "emailsender1124@gmail.com";
-        String pword = "PHH01012004";  // Externalize this in a config file/environment variables in a production setup
+        String pword = "PHH01012004";
 
         // Set mail server properties
         Properties properties = new Properties();
@@ -87,17 +92,16 @@ public class SendingEmail {
         });
 
         try {
-            // Create a new email message
+            
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(email));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(userEmail));
             message.setSubject("Email verification link");
 
-            // Corrected URL in the email body
+            
             String verificationLink = "http://localhost:9999/OnlineSoftSkillsLearningSystem/ActivateAccount?key1=" + userEmail + "&key2=" + myHash;
             message.setText("Your Verification Link: " + verificationLink);
 
-            // Send the email
             Transport.send(message);
             System.out.println("Verification email sent successfully!");
 
