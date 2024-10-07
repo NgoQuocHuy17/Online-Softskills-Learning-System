@@ -2,6 +2,7 @@ package view;
 
 import controller.SendingEmail;
 import controller.RegisterBean;
+import java.sql.Connection;
 import model.User;
 import java.util.List;
 import java.util.Vector;
@@ -70,25 +71,46 @@ public class UserDAO extends DBContext<User> {
     public User login(String email, String password) {
         User user = null;
         String query = "SELECT * FROM users WHERE email = ? AND password = ?";
-        try (PreparedStatement ps = super.getConn().prepareStatement(query)) {
+//        String isValid = "SELECT isValid FROM users WHERE email = ? AND password = ?";
+        int isValid = -1;
+
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement("SELECT isValid FROM users WHERE email = ? AND password = ?")) {
+            ps.setString(1, email);
+            ps.setString(2, password);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    isValid = rs.getInt("isValid"); // Lấy giá trị cột isValid
+                }
+            }
+        } catch (Exception e) {
+
+        }
+
+        if (isValid == 0) {
+            return null;
+        }
+
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
+
             ps.setString(1, email);
             ps.setString(2, password);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     user = new User(
-                            rs.getInt(1),
-                            rs.getString(2),
-                            rs.getString(3),
-                            rs.getString(4),
-                            rs.getString(5),
-                            rs.getString(6),
-                            rs.getString(7),
-                            rs.getString(8),
-                            rs.getDate(9),
-                            rs.getDate(10)
+                            rs.getInt("id"),
+                            rs.getString("full_name"),
+                            rs.getString("gender"),
+                            rs.getString("email"),
+                            rs.getString("password"),
+                            rs.getString("mobile"),
+                            rs.getString("role"),
+                            rs.getString("avatar_url"),
+                            rs.getDate("created_at"), // Giữ nguyên là String
+                            rs.getDate("updated_at") // Giữ nguyên là String
                     );
                 }
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
