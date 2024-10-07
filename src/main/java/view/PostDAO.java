@@ -1,15 +1,15 @@
 package view;
 
+import model.Post;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import model.Post;
+import model.BlogPost;
 
-public class PostDAO extends DBContext {
+public class PostDAO extends DBContext<BlogPost> {
 
     // Method to fetch hot posts (existing)
     public List<Post> getHotPosts() {
@@ -35,27 +35,29 @@ public class PostDAO extends DBContext {
     }
 
     @Override
-    public List select() {
+    public List<BlogPost> select() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Object select(int... id) {
+    public BlogPost select(int... id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public int insert(Object oj) {
+    public int insert(BlogPost oj) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public int update(Object oj) {
+    public int update(BlogPost oj) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public int delete(int... id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }   
+    }
+
+    
 }

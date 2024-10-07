@@ -19,14 +19,14 @@ import java.io.IOException;
 public class LoginFilter implements Filter{
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
+    public void doFilter(ServletRequest sr, ServletResponse sr1, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) sr;
+        HttpServletResponse response = (HttpServletResponse) sr1;
 
-        HttpSession session = httpRequest.getSession(false);
+        HttpSession session = request.getSession(false);
 
         if (session != null && session.getAttribute("user") != null) {
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/home.jsp");
+            response.sendRedirect(request.getContextPath() + "/home.jsp");
         } else {
             chain.doFilter(request, response);
         }

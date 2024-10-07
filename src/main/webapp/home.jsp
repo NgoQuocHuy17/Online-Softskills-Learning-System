@@ -4,12 +4,10 @@
 <html lang="vi">
     <head>
         <meta charset="UTF-8">
-        <title>Homepage</title>
+        <title>Online Softskills Learning</title>
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
-
         <link rel="stylesheet" href="assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
         <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
@@ -22,7 +20,6 @@
     </head>
 
     <body>
-
         <jsp:include page="header.jsp"/>
 
         <div class="container sliders my-5">
@@ -98,7 +95,7 @@
             </c:choose>
         </div>
 
-        <!-- Feature Course Section -->
+        <!-- Featured Course Section -->
         <div class="container featured-courses my-5">
             <h2 class="text-center mb-4">Featured Courses</h2>
             <c:choose>
@@ -106,12 +103,14 @@
                     <div class="row">
                         <c:forEach var="course" items="${featuredCourses}">
                             <div class="col-md-4 mb-4">
-                                <div class="card h-100">
-                                    <img src="default-image.jpg" class="card-img-top" alt="${course.title}">
+                                <div class="card h-100 shadow-sm">
+                                    <img src="default-image.jpg" class="card-img-top rounded" alt="${course.title}">
                                     <div class="card-body">
                                         <h5 class="card-title">${course.title}</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">${course.tagLine}</h6> <!-- Added tagline -->
                                         <p class="card-text">${course.description}</p>
-                                        <a href="course-details.jsp?id=${course.id}" class="btn btn-primary">View Course</a>
+                                        <p class="card-text"><strong>Price:</strong> ${course.basicPackagePrice} - ${course.advancedPackagePrice}</p> <!-- Added price -->
+                                        <a href="course-detail?courseId=${course.id}" class="btn btn-primary btn-block">View Course</a>
                                     </div>
                                 </div>
                             </div>
@@ -124,7 +123,14 @@
                     </div>
                 </c:otherwise>
             </c:choose>
+
+            <!-- See More Interesting Courses Section -->
+            <div class="text-center mt-5 mb-5">
+                <a href="course" class="btn btn-outline-primary btn-lg px-5 py-2">See More Interesting Courses</a>
+            </div>
         </div>
+
+        <jsp:include page="footer.jsp"/>
 
         <script src="assets/js/jquery-3.6.0.min.js"></script>
         <script src="assets/js/bootstrap.bundle.min.js"></script>

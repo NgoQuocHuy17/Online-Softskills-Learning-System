@@ -1,32 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-import java.sql.Date;
+import java.util.Date;
 
-/**
- *
- * @author Minh
- */
 public class Post {
-
     private int id;
     private String title;
     private String thumbnailUrl;
     private Date createdAt;
 
-    public Post() {
-    }
-
-    public Post(int id, String title, String thumbnailUrl, Date createdAt) {
-        this.id = id;
-        this.title = title;
-        this.thumbnailUrl = thumbnailUrl;
-        this.createdAt = createdAt;
-    }
-
+    // Getters and setters
     public int getId() {
         return id;
     }
@@ -58,5 +40,4 @@ public class Post {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-
 }

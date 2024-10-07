@@ -1,41 +1,24 @@
+// File: Course.java
 package model;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 
-/**
- *
- * @author Minh
- */
 public class Course {
-
     private int id;
     private String title;
     private String tagLine;
     private String description;
     private String category;
-    private double listPrice;
-    private double salePrice;
+    private BigDecimal basicPackagePrice;
+    private BigDecimal advancedPackagePrice;
     private int ownerId;
+    private boolean isSponsored;
     private String status;
-    private Date createdAt;
-    private Date updatedAt;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
-    public Course() {
-    }
-
-    public Course(int id, String title, String tagLine, String description, String category, double listPrice, double salePrice, int ownerId, String status, Date createdAt, Date updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.tagLine = tagLine;
-        this.description = description;
-        this.category = category;
-        this.listPrice = listPrice;
-        this.salePrice = salePrice;
-        this.ownerId = ownerId;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    // Getters and Setters
 
     public int getId() {
         return id;
@@ -77,20 +60,20 @@ public class Course {
         this.category = category;
     }
 
-    public double getListPrice() {
-        return listPrice;
+    public BigDecimal getBasicPackagePrice() {
+        return basicPackagePrice;
     }
 
-    public void setListPrice(double listPrice) {
-        this.listPrice = listPrice;
+    public void setBasicPackagePrice(BigDecimal basicPackagePrice) {
+        this.basicPackagePrice = basicPackagePrice;
     }
 
-    public double getSalePrice() {
-        return salePrice;
+    public BigDecimal getAdvancedPackagePrice() {
+        return advancedPackagePrice;
     }
 
-    public void setSalePrice(double salePrice) {
-        this.salePrice = salePrice;
+    public void setAdvancedPackagePrice(BigDecimal advancedPackagePrice) {
+        this.advancedPackagePrice = advancedPackagePrice;
     }
 
     public int getOwnerId() {
@@ -101,6 +84,14 @@ public class Course {
         this.ownerId = ownerId;
     }
 
+    public boolean isSponsored() {
+        return isSponsored;
+    }
+
+    public void setSponsored(boolean isSponsored) {
+        this.isSponsored = isSponsored;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -109,19 +100,19 @@ public class Course {
         this.status = status;
     }
 
-    public Date getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public Timestamp getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

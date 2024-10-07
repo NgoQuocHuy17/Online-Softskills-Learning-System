@@ -45,11 +45,7 @@
                         <% if (loggedInUser.getRole().equals("Teacher")) { %>
                         <!-- Chỉ hiện phần Mentor nếu role là Teacher -->
                         <li class="has-submenu">
-<<<<<<< Updated upstream:src/main/webapp/header.jsp
                             <a href="#">Expert<i class="fas fa-chevron-down"></i></a>
-=======
-                            <a href="#">Mentor <i class="fas fa-chevron-down"></i></a>
->>>>>>> Stashed changes:build/web/header.jsp
                             <ul class="submenu">
                                 <li><a href="dashboard.html">Expert Dashboard</a></li>
                                 <li><a href="bookings.html">Bookings</a></li>
@@ -75,11 +71,7 @@
                         <% } else if (loggedInUser.getRole().equals("Student")) { %>
                         <!-- Chỉ hiện phần Mentee nếu role là Student -->
                         <li class="has-submenu">
-<<<<<<< Updated upstream:src/main/webapp/header.jsp
                             <a href="#">Student <i class="fas fa-chevron-down"></i></a>
-=======
-                            <a href="#">Mentee <i class="fas fa-chevron-down"></i></a>
->>>>>>> Stashed changes:build/web/header.jsp
                             <ul class="submenu">
                                 <li class="has-submenu">
                                     <a href="#">Experts</a>
@@ -128,6 +120,9 @@
                                 <li><a href="register.jsp">Register</a></li>
                                 <li><a href="forgot-password.html">Forgot Password</a></li>
                             </ul>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="course">Courses</a>
                         </li>
                         <li class="has-submenu">
                             <a href="#">Blog <i class="fas fa-chevron-down"></i></a>
