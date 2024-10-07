@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import model.User;
 import view.UserDAO;
 
-@WebServlet(name = "login", urlPatterns = "/login")
+@WebServlet(name = "login", urlPatterns = "/loginn")
 public class LoginController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
