@@ -193,8 +193,6 @@
                     </div>
                 </div>
             </section>
-
-
             <section class="section featured-course-four">
                 <div class="container">
                     <div class="side-four-right">
@@ -705,8 +703,6 @@
                     </div>
                 </div>
             </section>
-
-
             <section class="new-course new-course-four">
                 <div class="container">
                     <div class="new-course-background">
