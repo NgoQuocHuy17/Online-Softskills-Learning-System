@@ -5,11 +5,8 @@
     <head>
         <meta charset="UTF-8">
         <title>Homepage</title>
-
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
-
         <link rel="stylesheet" href="assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
         <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
@@ -20,11 +17,8 @@
         <link rel="stylesheet" href="assets/plugins/aos/aos.css">
         <link rel="stylesheet" href="assets/css/style.css">
     </head>
-
     <body>
-
         <jsp:include page="header.jsp"/>
-
         <div class="container sliders my-5">
             <h2 class="text-center mb-4">Sliders</h2>
             <c:choose>
@@ -36,7 +30,6 @@
                                 <li data-bs-target="#carouselSliders" data-bs-slide-to="${status.index}" class="${status.first ? 'active' : ''}"></li>
                             </c:forEach>
                         </ol>
-
                         <!-- Sliders Items -->
                         <div class="carousel-inner">
                             <c:forEach var="slider" items="${sliders}" varStatus="status">
@@ -50,7 +43,6 @@
                                 </div>
                             </c:forEach>
                         </div>
-
                         <!-- Controls (Next & Prev) -->
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselSliders" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -69,7 +61,6 @@
                 </c:otherwise>
             </c:choose>
         </div>
-
         <!-- Hot Posts Section -->
         <div class="container hot-posts my-5">
             <h2 class="text-center mb-4">Hot Posts</h2>
@@ -97,7 +88,6 @@
                 </c:otherwise>
             </c:choose>
         </div>
-
         <!-- Feature Course Section -->
         <div class="container featured-courses my-5">
             <h2 class="text-center mb-4">Featured Courses</h2>
@@ -125,7 +115,6 @@
                 </c:otherwise>
             </c:choose>
         </div>
-
         <script src="assets/js/jquery-3.6.0.min.js"></script>
         <script src="assets/js/bootstrap.bundle.min.js"></script>
         <script src="assets/js/owl.carousel.min.js"></script>
