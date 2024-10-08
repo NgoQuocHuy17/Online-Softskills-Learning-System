@@ -6,27 +6,20 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="zxx">
-
+<html lang="en">
     <!-- Mirrored from mentoring.dreamguystech.com/html/template/blog-details.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 May 2023 10:32:14 GMT -->
     <head>
         <meta charset="utf-8">
         <title>Mentoring</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
-
         <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-
         <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
         <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
-
         <link rel="stylesheet" href="assets/css/style.css">
     </head>
     <body>
-
         <div class="main-wrapper">
-
             <header class="header">
                 <div class="header-fixed">
                     <nav class="navbar navbar-expand-lg header-nav">
@@ -147,7 +140,6 @@
                             </ul>
                         </div>
                         <ul class="nav header-navbar-rht">
-
                             <li class="nav-item dropdown has-arrow logged-item">
                                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                                     <span class="user-img">
@@ -174,8 +166,6 @@
                     </nav>
                 </div>
             </header>
-
-
             <div class="breadcrumb-bar">
                 <div class="container-fluid">
                     <div class="row align-items-center">
@@ -191,8 +181,6 @@
                     </div>
                 </div>
             </div>
-
-
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
@@ -374,9 +362,7 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
-
                             <div class="card search-widget">
                                 <div class="card-body">
                                     <form class="search-form">
@@ -387,8 +373,6 @@
                                     </form>
                                 </div>
                             </div>
-
-
                             <div class="card post-widget">
                                 <div class="card-header">
                                     <h4 class="card-title">Latest Posts</h4>
@@ -463,8 +447,6 @@
                                     </ul>
                                 </div>
                             </div>
-
-
                             <div class="card category-widget">
                                 <div class="card-header">
                                     <h4 class="card-title">Blog Categories</h4>
@@ -480,8 +462,6 @@
                                     </ul>
                                 </div>
                             </div>
-
-
                             <div class="card tags-widget">
                                 <div class="card-header">
                                     <h4 class="card-title">Tags</h4>
@@ -514,10 +494,7 @@
                     </div>
                 </div>
             </div>
-
-
             <footer class="footer">
-
                 <div class="footer-top">
                     <div class="container-fluid">
                         <div class="row">
@@ -550,10 +527,8 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                             <div class="col-lg-3 col-md-6">
-
                                 <div class="footer-widget footer-menu">
                                     <h2 class="footer-title">For Mentee</h2>
                                     <ul>
@@ -564,10 +539,8 @@
                                         <li><a href="dashboard-mentee.html">Mentee Dashboard</a></li>
                                     </ul>
                                 </div>
-
                             </div>
                             <div class="col-lg-3 col-md-6">
-
                                 <div class="footer-widget footer-menu">
                                     <h2 class="footer-title">For Mentors</h2>
                                     <ul>
@@ -578,10 +551,8 @@
                                         <li><a href="dashboard.html">Mentor Dashboard</a></li>
                                     </ul>
                                 </div>
-
                             </div>
                             <div class="col-lg-3 col-md-6">
-
                                 <div class="footer-widget footer-contact">
                                     <h2 class="footer-title">Contact Us</h2>
                                     <div class="footer-contact-info">
@@ -599,16 +570,12 @@
                                         </p>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
-
-
                 <div class="footer-bottom">
                     <div class="container-fluid">
-
                         <div class="copyright">
                             <div class="row">
                                 <div class="col-12 text-center">
@@ -618,24 +585,14 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
             </footer>
-
         </div>
-
-
         <script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="assets/js/jquery-3.6.0.min.js"></script>
-
         <script src="assets/js/bootstrap.bundle.min.js"></script>
-
         <script src="assets/plugins/theia-sticky-sidebar/ResizeSensor.js"></script>
         <script src="assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js"></script>
-
         <script src="assets/js/script.js"></script>
     </body>
-
-    <!-- Mirrored from mentoring.dreamguystech.com/html/template/blog-details.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 May 2023 10:32:18 GMT -->
 </html>
