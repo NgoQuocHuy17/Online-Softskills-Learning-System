@@ -16,7 +16,6 @@
     String role = loggedInUser.getRole();
     String gender = loggedInUser.getGender();
     String email = loggedInUser.getEmail();
-    String mobile = loggedInUser.getMobile();
 %>
 
 <html lang="en">
@@ -163,7 +162,7 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Mobile</label>
-                                                <input type="text" name="mobile" value="<%= mobile%>" class="form-control">
+                                                <input type="text" name="mobile" value="mobile?" class="form-control">
                                             </div>
                                         </div>
                                     </div>

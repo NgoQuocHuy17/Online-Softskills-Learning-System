@@ -1,24 +1,22 @@
 package model;
 
-/**
- *
- * @author Minh
- */
 public class UserContact {
 
     private int id;
     private int userId;
     private String contactType;
     private String contactValue;
+    private boolean isPreferred; // Cột mới để lưu trạng thái phương thức liên hệ yêu thích
 
     public UserContact() {
     }
 
-    public UserContact(int id, int userId, String contactType, String contactValue) {
+    public UserContact(int id, int userId, String contactType, String contactValue, boolean isPreferred) {
         this.id = id;
         this.userId = userId;
         this.contactType = contactType;
         this.contactValue = contactValue;
+        this.isPreferred = isPreferred; // Khởi tạo trạng thái yêu thích
     }
 
     public int getId() {
@@ -51,5 +49,13 @@ public class UserContact {
 
     public void setContactValue(String contactValue) {
         this.contactValue = contactValue;
+    }
+
+    public boolean isPreferred() { // Phương thức để kiểm tra trạng thái yêu thích
+        return isPreferred;
+    }
+
+    public void setPreferred(boolean isPreferred) { // Phương thức để cập nhật trạng thái yêu thích
+        this.isPreferred = isPreferred;
     }
 }

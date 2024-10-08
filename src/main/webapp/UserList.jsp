@@ -132,7 +132,7 @@
                                         <td>${user.email}</td>
                                         <td>${user.mobile}</td>
                                         <td>${user.role}</td>
-                                        <td>${user.status}</td>
+                                        <td>user.status</td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
@@ -140,26 +140,25 @@
                     </div>
 
                     <div class="row">
-                        <!-- Blog Pagination -->
+                        <!-- Phân trang -->
                         <div class="blog-pagination mt-4">
                             <nav>
                                 <ul class="pagination justify-content-center">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" tabindex="-1">
+                                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                        <a class="page-link" href="?page=${currentPage - 1}" tabindex="-1">
                                             <i class="fas fa-angle-double-left"></i>
                                         </a>
                                     </li>
-                                    <li class="page-item active">
-                                        <a class="page-link" href="#">1 <span class="sr-only">(current)</span></a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">2</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">3</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">
+
+                                    <!-- Hiển thị các số trang -->
+                                    <c:forEach var="i" begin="1" end="${totalPages}">
+                                        <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                            <a class="page-link" href="?page=${i}">${i}</a>
+                                        </li>
+                                    </c:forEach>
+
+                                    <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                        <a class="page-link" href="?page=${currentPage + 1}">
                                             <i class="fas fa-angle-double-right"></i>
                                         </a>
                                     </li>

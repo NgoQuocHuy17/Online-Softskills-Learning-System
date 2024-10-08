@@ -2,10 +2,6 @@ package model;
 
 import java.util.Date;
 
-/**
- *
- * @author Minh
- */
 public class User {
 
     private int id;
@@ -13,26 +9,28 @@ public class User {
     private String gender;
     private String email;
     private String password;
-    private String mobile;
     private String role;
     private String avatarUrl;
     private Date createdAt;
     private Date updatedAt;
+    private String hash;          // Thêm thuộc tính hash
+    private boolean isValid;      // Thay đổi kiểu thành boolean
 
     public User() {
     }
 
-    public User(int id, String fullName, String gender, String email, String password, String mobile, String role, String avatarUrl, Date createdAt, Date updatedAt) {
+    public User(int id, String fullName, String gender, String email, String password, String role, String avatarUrl, Date createdAt, Date updatedAt, String hash, boolean isValid) {
         this.id = id;
         this.fullName = fullName;
         this.gender = gender;
         this.email = email;
         this.password = password;
-        this.mobile = mobile;
         this.role = role;
         this.avatarUrl = avatarUrl;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.hash = hash;
+        this.isValid = isValid;
     }
 
     public int getId() {
@@ -75,14 +73,6 @@ public class User {
         this.password = password;
     }
 
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
     public String getRole() {
         return role;
     }
@@ -113,5 +103,21 @@ public class User {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+    public boolean isValid() {
+        return isValid;
+    }
+
+    public void setIsValid(boolean isValid) {
+        this.isValid = isValid;
     }
 }

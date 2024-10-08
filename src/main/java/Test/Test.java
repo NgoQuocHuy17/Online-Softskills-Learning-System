@@ -1,38 +1,32 @@
 package Test;
-import view.*;
+
+import view.UserDAO;
+import model.User;
 import java.util.List;
-import model.Course;
 
 public class Test {
     public static void main(String[] args) {
-        try {
-            // Create an instance of CourseDAO
-            CourseDAO courseDAO = new CourseDAO();
-            
-            // Call the method with size = 6
-            List<Course> featuredCourses = courseDAO.getFeaturedCourses(6);
-            
-            // Check and print the results
-            if (featuredCourses != null && !featuredCourses.isEmpty()) {
-                System.out.println("Featured Courses (size = 6):");
-                for (Course course : featuredCourses) {
-                    System.out.println("ID: " + course.getId());
-                    System.out.println("Title: " + course.getTitle());
-                    System.out.println("Tag Line: " + course.getTagLine());
-                    System.out.println("Category: " + course.getCategory());
-                    System.out.println("Is Sponsored: " + course.isSponsored());
-                    System.out.println("------------------------------------------------");
-                }
-                System.out.println("Total featured courses found: " + featuredCourses.size());
-            } else {
-                System.out.println("No featured courses found. This could be due to:");
-                System.out.println("1. No courses marked as sponsored in the database.");
-                System.out.println("2. Database connection issues.");
-                System.out.println("3. Unexpected query results.");
-            }
-        } catch (Exception e) {
-            System.out.println("An error occurred while running the test:");
-            e.printStackTrace();
+        // Tạo đối tượng UserDAO để gọi phương thức lấy danh sách user
+        UserDAO userDAO = new UserDAO();
+        
+        // Giả sử muốn thử lấy danh sách users ở trang 1, mỗi trang có 5 users
+        int page = 1;
+        int pageSize = 5;
+
+        // Lấy danh sách user theo trang
+        List<User> userList = userDAO.getUsersByPage(page, pageSize);
+
+        // In ra danh sách user
+        System.out.println("User List for page " + page + ":");
+        for (User user : userList) {
+            System.out.println("ID: " + user.getId() + ", Name: " + user.getFullName());
         }
+
+        // Kiểm tra tổng số users và số trang
+        int totalUsers = userDAO.getTotalUsers();
+        int totalPages = (int) Math.ceil(totalUsers / (double) pageSize);
+
+        System.out.println("Total Users: " + totalUsers);
+        System.out.println("Total Pages: " + totalPages);
     }
 }

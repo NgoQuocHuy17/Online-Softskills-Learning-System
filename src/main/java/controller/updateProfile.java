@@ -27,13 +27,13 @@ public class updateProfile extends HttpServlet {
             // Lấy dữ liệu từ form
             String fullName = request.getParameter("fullName");
             String gender = request.getParameter("gender");
-            String mobile = request.getParameter("mobile");
+//            String mobile = request.getParameter("mobile");
 
             // Cập nhật thông tin người dùng
             UserDAO userDAO = new UserDAO();
             loggedInUser.setFullName(fullName);
             loggedInUser.setGender(gender);
-            loggedInUser.setMobile(mobile);
+//            loggedInUser.setMobile(mobile);
             boolean success = userDAO.updateProfile(loggedInUser);
 
             // Xử lý kết quả cập nhật
