@@ -68,15 +68,15 @@ public class SendingEmail {
 
     public void sendMail() {
         // Replace with your sender email and password
-        String email = "emailsender1124@gmail.com";
-        String pword = "PHH01012004";  // Externalize this in a config file/environment variables in a production setup
+        String email = "ngoquochuyvn2004@gmail.com";
+        String pword = "neqv kair sjxa ccxb";  // Externalize this in a config file/environment variables in a production setup
 
         // Set mail server properties
         Properties properties = new Properties();
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "587");
+      properties.put("mail.smtp.host", "smtp.gmail.com"); // SMTP host, e.g., smtp.gmail.com
+            properties.put("mail.smtp.port", "587");              // SMTP port
+            properties.put("mail.smtp.auth", "true");
+            properties.put("mail.smtp.starttls.enable", "true");
 
         // Create session with authentication
         Session session = Session.getInstance(properties, new jakarta.mail.Authenticator() {
