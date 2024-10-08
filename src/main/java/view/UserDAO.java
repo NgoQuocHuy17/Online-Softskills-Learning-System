@@ -36,38 +36,38 @@ public class UserDAO extends DBContext<User> {
         return false;
     }
 
-    public String register(RegisterBean rb) {
-        String fullName = rb.getFullName();
-        String email = rb.getEmail();
-        String mobile = rb.getMobile();
-        String gender = rb.getGender();
-        String password = rb.getPassword();
-        String myHash = rb.getMyHash();
-
-        try {
-            String sqlQuery = "INSERT INTO users (full_name, gender, email, password, mobile, hash) values (?, ?, ?, ?, ?, ?)";
-            PreparedStatement ps = super.getConn().prepareStatement(sqlQuery);
-            ps.setString(1, fullName);
-            ps.setString(2, gender);
-            ps.setString(3, email);
-            ps.setString(4, password);
-            ps.setString(5, mobile);
-            ps.setString(6, myHash);
-
-            int i = ps.executeUpdate();
-            if (i != 0) {
-                SendingEmail se = new SendingEmail(email, myHash);
-                se.sendMail();
-                return "SUCCESS";
-            }
-
-        } catch (Exception e) {
-
-            System.out.println("RegisterDAO error!");
-        }
-        return "ERROR";
-
-    }
+//    public String register(RegisterBean rb) {
+//        String fullName = rb.getFullName();
+//        String email = rb.getEmail();
+//        String mobile = rb.getMobile();
+//        String gender = rb.getGender();
+//        String password = rb.getPassword();
+//        String myHash = rb.getMyHash();
+//
+//        try {
+//            String sqlQuery = "INSERT INTO users (full_name, gender, email, password, mobile, hash) values (?, ?, ?, ?, ?, ?)";
+//            PreparedStatement ps = super.getConn().prepareStatement(sqlQuery);
+//            ps.setString(1, fullName);
+//            ps.setString(2, gender);
+//            ps.setString(3, email);
+//            ps.setString(4, password);
+//            ps.setString(5, mobile);
+//            ps.setString(6, myHash);
+//
+//            int i = ps.executeUpdate();
+//            if (i != 0) {
+//                SendingEmail se = new SendingEmail(email, myHash);
+//                se.sendMail();
+//                return "SUCCESS";
+//            }
+//
+//        } catch (Exception e) {
+//
+//            System.out.println("RegisterDAO error!");
+//        }
+//        return "ERROR";
+//
+//    }
 
     public User login(String email, String password) {
         User user = null;
@@ -235,7 +235,7 @@ public class UserDAO extends DBContext<User> {
         return result;
     }
 
-<<<<<<< HEAD
+
      public String getEmailByUser(String user) throws SQLException {
         String sql = "Select email from users where name = ?";
         String email = "";
@@ -272,7 +272,7 @@ public class UserDAO extends DBContext<User> {
         return false;
     }
 
-=======
+
     public List<User> getUsersByPage(int pageNumber, int pageSize) {
         List<User> list = new ArrayList<>();
         String query = "SELECT * FROM users ORDER BY id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
@@ -322,5 +322,5 @@ public class UserDAO extends DBContext<User> {
 
         return totalUsers;
     }
->>>>>>> 3ce8f9f2fd699999706df803b01f6386f9c73ab4
+
 }

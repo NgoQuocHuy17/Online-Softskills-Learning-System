@@ -166,12 +166,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="submit-section">
+                                    <div class="submit-section d-flex justify-content-between">
                                         <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
+                                        <button href="change-password.jsp" class="btn btn-primary submit-btn">Change Password</button>
                                     </div>
-                                            
                                 </form>
-                                 <a href="change-password.jsp" class="btn btn-primary">Change Password</a>
+
 
                             </div>
                         </div>
