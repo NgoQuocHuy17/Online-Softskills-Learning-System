@@ -1,4 +1,6 @@
-﻿-- Create the SoftSkillsOnlineLearningSystem database
+﻿drop DATABASE SoftSkillsOnlineLearningSystem;
+
+-- Create the SoftSkillsOnlineLearningSystem database
 CREATE DATABASE SoftSkillsOnlineLearningSystem;
 GO
 USE SoftSkillsOnlineLearningSystem;
@@ -10,21 +12,25 @@ CREATE TABLE users (
     full_name VARCHAR(255) NOT NULL,           
     gender NVARCHAR(10) DEFAULT 'Other',       
     email VARCHAR(255) UNIQUE NOT NULL,        
-    password_hash VARCHAR(255) NOT NULL,       
+    password VARCHAR(255) NOT NULL,
     role NVARCHAR(50) DEFAULT 'Guest',         
     avatar_url VARCHAR(255),                   
     created_at DATETIME DEFAULT GETDATE(),     
-    updated_at DATETIME DEFAULT GETDATE()      
+    updated_at DATETIME DEFAULT GETDATE(),
+	hash VARCHAR(255),
+	isValid bit DEFAULT 1
 );
 
 -- Table: user_contacts
 CREATE TABLE user_contacts (
     id INT IDENTITY(1,1) PRIMARY KEY,           
     user_id INT NOT NULL,                       
-    contact_type NVARCHAR(50) NOT NULL,         
+    contact_type NVARCHAR(50) NOT NULL,  -- 'Phone' hoặc 'Email'
     contact_value VARCHAR(255) NOT NULL,        
+    is_preferred bit DEFAULT 0,  -- Cột mới để đánh dấu phương thức liên hệ yêu thích
     CONSTRAINT FK_UserContacts_Users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
 
 -- Table: login_history
 CREATE TABLE login_history (
