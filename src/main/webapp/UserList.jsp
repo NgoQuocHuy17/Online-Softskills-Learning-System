@@ -96,12 +96,40 @@
                     <div class="row align-items-center">
 
                         <div class="col-md-4 col-12">
-                            <form class="search-form custom-search-form">
+                            <form class="search-form custom-search-form" action="UserList" method="get">
                                 <div class="input-group">
-                                    <input type="text" placeholder="Search user..." class="form-control">
+                                    <input type="text" name="searchTerm" placeholder="Search user..." class="form-control">
                                     <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                                 </div>
                             </form>
+                        </div>
+
+                        <div class="col-md-4 col-12">
+                            <form class="filter-form" action="UserList" method="get">
+                                <div class="input-group">
+                                    <select name="gender" class="form-control">
+                                        <option value="">All Genders</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                    <select name="role" class="form-control">
+                                        <option value="">All Roles</option>
+                                        <option value="Admin">Admin</option>
+                                        <option value="User">User</option>
+                                    </select>
+                                    <select name="status" class="form-control">
+                                        <option value="">All Statuses</option>
+                                        <option value="Valid">Valid</option>
+                                        <option value="Invalid">Invalid</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </div>
+                            </form>
+
+                        </div>
+
+                        <div class="col-md-4 col-12 text-right">
+                            <a href="AddUser" class="btn btn-success">Add User</a>
                         </div>
                     </div>
                 </div>
@@ -115,13 +143,13 @@
                         <table class="table table-bordered table-hover">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th>User ID</th>
-                                    <th>Full Name</th>
-                                    <th>Gender</th>
-                                    <th>Email</th>
-                                    <th>Mobile</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
+                                    <th><a href="?sort=id&page=${currentPage}">User ID</a></th>
+                                    <th><a href="?sort=fullName&page=${currentPage}">Full Name</a></th>
+                                    <th><a href="?sort=gender&page=${currentPage}">Gender</a></th>
+                                    <th><a href="?sort=email&page=${currentPage}">Email</a></th>
+                                    <th><a href="?sort=mobile&page=${currentPage}">Mobile</a></th>
+                                    <th><a href="?sort=role&page=${currentPage}">Role</a></th>
+                                    <th><a href="?sort=status&page=${currentPage}">Status</a></th>
                                     <th>Action</th> <!-- Thêm cột để hiển thị nút chi tiết -->
                                 </tr>
                             </thead>
@@ -150,7 +178,7 @@
                                         <td>${user.role}</td>
                                         <td>
                                             <c:choose>
-                                                <c:when test="${user.getIsValid() == 1}">
+                                                <c:when test="${user.isValid == 1}">
                                                     Valid
                                                 </c:when>
                                                 <c:otherwise>
@@ -159,21 +187,18 @@
                                             </c:choose>
                                         </td>
 
-
                                         <td>
                                             <!-- Nút chi tiết gửi id của user -->
-                                            <form action="/UserDetails" method="post">
+                                            <form action="UserDetails" method="post">
                                                 <input type="hidden" name="userId" value="${user.id}"/>
                                                 <button type="submit" class="btn btn-primary">Details</button>
                                             </form>
                                         </td>
                                     </tr>
                                 </c:forEach>
-
                             </tbody>
                         </table>
                     </div>
-
 
                     <div class="row">
                         <!-- Phân trang -->
@@ -181,7 +206,7 @@
                             <nav>
                                 <ul class="pagination justify-content-center">
                                     <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                        <a class="page-link" href="?page=${currentPage - 1}" tabindex="-1">
+                                        <a class="page-link" href="?page=${currentPage - 1}&sort=${param.sort}" tabindex="-1">
                                             <i class="fas fa-angle-double-left"></i>
                                         </a>
                                     </li>
@@ -189,12 +214,12 @@
                                     <!-- Hiển thị các số trang -->
                                     <c:forEach var="i" begin="1" end="${totalPages}">
                                         <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                            <a class="page-link" href="?page=${i}">${i}</a>
+                                            <a class="page-link" href="?page=${i}&sort=${param.sort}">${i}</a>
                                         </li>
                                     </c:forEach>
 
                                     <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                        <a class="page-link" href="?page=${currentPage + 1}">
+                                        <a class="page-link" href="?page=${currentPage + 1}&sort=${param.sort}">
                                             <i class="fas fa-angle-double-right"></i>
                                         </a>
                                     </li>
@@ -204,6 +229,7 @@
                     </div>
                 </div>
             </div>
+
 
             <footer class="footer">
                 <div class="footer-top">

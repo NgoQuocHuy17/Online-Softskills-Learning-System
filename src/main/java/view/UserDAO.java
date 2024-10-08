@@ -273,54 +273,134 @@ public class UserDAO extends DBContext<User> {
     }
 
 
-    public List<User> getUsersByPage(int pageNumber, int pageSize) {
-        List<User> list = new ArrayList<>();
-        String query = "SELECT * FROM users ORDER BY id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-        int offset = (pageNumber - 1) * pageSize;
-
-        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, offset);   // Bắt đầu từ vị trí offset
-            ps.setInt(2, pageSize); // Số lượng users mỗi trang
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    User user = new User(
-                            rs.getInt("id"),
-                            rs.getString("full_name"),
-                            rs.getString("gender"),
-                            rs.getString("email"),
-                            rs.getString("password"),
-                            rs.getString("role"),
-                            rs.getString("avatar_url"),
-                            rs.getDate("created_at"),
-                            rs.getDate("updated_at"),
-                            rs.getString("hash"), // Thêm thuộc tính hash
-                            rs.getInt("isValid") // Thêm thuộc tính isValid
-                    );
-                    list.add(user);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return list;
+public List<User> getUsersByPage(int pageNumber, int pageSize, String genderFilter, String roleFilter, String statusFilter, String searchTerm, String sortBy, String sortOrder) {
+    List<User> list = new ArrayList<>();
+    StringBuilder query = new StringBuilder("SELECT * FROM users WHERE 1=1");
+    
+    // Thêm điều kiện lọc
+    if (genderFilter != null && !genderFilter.isEmpty()) {
+        query.append(" AND gender = ?");
+    }
+    if (roleFilter != null && !roleFilter.isEmpty()) {
+        query.append(" AND role = ?");
+    }
+    if (statusFilter != null && !statusFilter.isEmpty()) {
+        query.append(" AND isValid = ?");
+    }
+    if (searchTerm != null && !searchTerm.isEmpty()) {
+        query.append(" AND (full_name LIKE ? OR email LIKE ? OR id IN (SELECT user_id FROM user_contacts WHERE contact_value LIKE ?))");
     }
 
-    // Phương thức đếm tổng số lượng users
-    public int getTotalUsers() {
-        int totalUsers = 0;
-        String query = "SELECT COUNT(*) AS total FROM users";
+    // Thêm điều kiện sắp xếp
+    if (sortBy != null && !sortBy.isEmpty()) {
+        query.append(" ORDER BY ").append(sortBy).append(" ").append(sortOrder);
+    } else {
+        query.append(" ORDER BY id"); // Sắp xếp mặc định theo id nếu không có tham số
+    }
 
-        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+    // Thêm phân trang
+    query.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+    
+    int offset = (pageNumber - 1) * pageSize;
+
+    try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query.toString())) {
+        int index = 1;
+        
+        // Thiết lập các tham số lọc
+        if (genderFilter != null && !genderFilter.isEmpty()) {
+            ps.setString(index++, genderFilter);
+        }
+        if (roleFilter != null && !roleFilter.isEmpty()) {
+            ps.setString(index++, roleFilter);
+        }
+        if (statusFilter != null && !statusFilter.isEmpty()) {
+            ps.setBoolean(index++, statusFilter.equals("Valid"));
+        }
+        if (searchTerm != null && !searchTerm.isEmpty()) {
+            String searchPattern = "%" + searchTerm + "%";
+            ps.setString(index++, searchPattern);
+            ps.setString(index++, searchPattern);
+            ps.setString(index++, searchPattern);
+        }
+
+        // Thiết lập tham số offset và pageSize
+        ps.setInt(index++, offset);
+        ps.setInt(index++, pageSize);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                User user = new User(
+                        rs.getInt("id"),
+                        rs.getString("full_name"),
+                        rs.getString("gender"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("role"),
+                        rs.getString("avatar_url"),
+                        rs.getDate("created_at"),
+                        rs.getDate("updated_at"),
+                        rs.getString("hash"), // Thêm thuộc tính hash
+                        rs.getInt("isValid") // Thêm thuộc tính isValid
+                );
+                list.add(user);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return list;
+}
+
+
+    // Phương thức đếm tổng số lượng users
+public int getTotalUsers(String genderFilter, String roleFilter, String statusFilter, String searchTerm) {
+    int totalUsers = 0;
+    StringBuilder query = new StringBuilder("SELECT COUNT(*) AS total FROM users WHERE 1=1");
+    
+    if (genderFilter != null && !genderFilter.isEmpty()) {
+        query.append(" AND gender = ?");
+    }
+    if (roleFilter != null && !roleFilter.isEmpty()) {
+        query.append(" AND role = ?");
+    }
+    if (statusFilter != null) {
+        query.append(" AND isValid = ?");
+    }
+    if (searchTerm != null && !searchTerm.isEmpty()) {
+        query.append(" AND (full_name LIKE ? OR email LIKE ? OR id IN (SELECT user_id FROM user_contacts WHERE contact_value LIKE ?))");
+    }
+
+    try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query.toString())) {
+        int paramIndex = 1;
+
+        if (genderFilter != null && !genderFilter.isEmpty()) {
+            ps.setString(paramIndex++, genderFilter);
+        }
+        if (roleFilter != null && !roleFilter.isEmpty()) {
+            ps.setString(paramIndex++, roleFilter);
+        }
+        if (statusFilter != null) {
+            ps.setBoolean(paramIndex++, statusFilter.equals("Valid"));
+        }
+        if (searchTerm != null && !searchTerm.isEmpty()) {
+            String likeTerm = "%" + searchTerm + "%";
+            ps.setString(paramIndex++, likeTerm);
+            ps.setString(paramIndex++, likeTerm);
+            ps.setString(paramIndex++, likeTerm);
+        }
+
+        try (ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 totalUsers = rs.getInt("total");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-
-        return totalUsers;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+
+    return totalUsers;
+}
+
 
 }

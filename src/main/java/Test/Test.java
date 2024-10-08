@@ -1,28 +1,35 @@
 package Test;
 
-import view.UserContactDAO;
-import model.UserContact;
-
 import java.util.List;
+import model.User;
+import view.UserDAO;
 
 public class Test {
     public static void main(String[] args) {
-        UserContactDAO userContactDAO = new UserContactDAO();
+        UserDAO userDAO = new UserDAO();
 
-        // Giả sử bạn muốn kiểm tra số điện thoại của người dùng với userId = 1
-        int userId = 2;
+        // Tham số cho phương thức getUsersByPage
+        int pageNumber = 1;      // Số trang
+        int pageSize = 5;        // Số lượng người dùng mỗi trang
+        String genderFilter = "Male";  // Lọc theo giới tính (null nếu không lọc)
+        String roleFilter = null;     // Lọc theo vai trò (null nếu không lọc)
+        String statusFilter = null;   // Lọc theo trạng thái (null nếu không lọc)
+        String searchTerm = null;     // Tìm kiếm (null nếu không tìm kiếm)
+        String sortBy = null;         // Sắp xếp theo cột nào
+        String sortOrder = null;     // Thứ tự sắp xếp (ASC hoặc DESC)
 
-        // Gọi phương thức để lấy danh sách số điện thoại
-        List<UserContact> phones = userContactDAO.getUserPhones(userId);
+        // Gọi phương thức getUsersByPage
+        List<User> userList = userDAO.getUsersByPage(pageNumber, pageSize, genderFilter, roleFilter, statusFilter, searchTerm, sortBy, sortOrder);
 
-        // In ra danh sách số điện thoại
-        System.out.println("Phones for User ID " + userId + ":");
-        for (UserContact contact : phones) {
-            System.out.println("ID: " + contact.getId() +
-                               ", User ID: " + contact.getUserId() +
-                               ", Contact Type: " + contact.getContactType() +
-                               ", Contact Value: " + contact.getContactValue() +
-                               ", Is Preferred: " + contact.isPreferred());
+        // In danh sách người dùng
+        for (User user : userList) {
+            System.out.println("User ID: " + user.getId());
+            System.out.println("Full Name: " + user.getFullName());
+            System.out.println("Gender: " + user.getGender());
+            System.out.println("Email: " + user.getEmail());
+            System.out.println("Role: " + user.getRole());
+            System.out.println("Status: " + (user.getIsValid() == 1 ? "Valid" : "Invalid"));
+            System.out.println("---------------------------");
         }
     }
 }

@@ -25,11 +25,19 @@ public class UserList extends HttpServlet {
             page = Integer.parseInt(request.getParameter("page"));
         }
 
-        // Lấy danh sách users theo trang
-        List<User> userList = userDAO.getUsersByPage(page, pageSize);
+        // Lấy các tham số lọc và tìm kiếm từ request
+        String genderFilter = request.getParameter("gender");
+        String roleFilter = request.getParameter("role");
+        String statusFilter = request.getParameter("status");
+        String searchTerm = request.getParameter("searchTerm");
+        String sortBy = request.getParameter("sortBy");
+        String sortOrder = request.getParameter("sortOrder");
+
+        // Lấy danh sách users theo trang với các tham số lọc và tìm kiếm
+        List<User> userList = userDAO.getUsersByPage(page, pageSize, genderFilter, roleFilter, statusFilter, searchTerm, sortBy, sortOrder);
 
         // Tính tổng số users và số trang
-        int totalUsers = userDAO.getTotalUsers();
+        int totalUsers = userDAO.getTotalUsers(genderFilter, roleFilter, statusFilter, searchTerm); // Cập nhật để tính tổng với các tham số
         int totalPages = (int) Math.ceil(totalUsers / (double) pageSize);
         
         // Lưu trữ danh sách số điện thoại và email
@@ -44,6 +52,12 @@ public class UserList extends HttpServlet {
         request.setAttribute("userList", userList);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("genderFilter", genderFilter);
+        request.setAttribute("roleFilter", roleFilter);
+        request.setAttribute("statusFilter", statusFilter);
+        request.setAttribute("searchTerm", searchTerm);
+        request.setAttribute("sortBy", sortBy);
+        request.setAttribute("sortOrder", sortOrder);
 
         // Forward đến trang JSP
         request.getRequestDispatcher("/UserList.jsp").forward(request, response);
