@@ -120,6 +120,7 @@
                                     <th>Mobile</th>
                                     <th>Role</th>
                                     <th>Status</th>
+                                    <th>Action</th> <!-- Thêm cột để hiển thị nút chi tiết -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -129,15 +130,34 @@
                                         <td>${user.id}</td>
                                         <td>${user.fullName}</td>
                                         <td>${user.gender}</td>
-                                        <td>${user.email}</td>
-                                        <td>${user.mobile}</td>
+                                        <td>
+                                            ${user.email} <br/>
+                                            <c:forEach var="email" items="${requestScope['emails_' + user.id]}">
+                                                ${email.contact_value}<br/>
+                                            </c:forEach>
+                                        </td>
+                                        <td>
+                                            <c:forEach var="phone" items="${requestScope['phones_' + user.id]}">
+                                                ${phone.contact_value}<br/>
+                                            </c:forEach>
+                                        </td>
                                         <td>${user.role}</td>
-                                        <td>user.status</td>
+                                        <td>
+                                            ? <!-- Hiển thị trạng thái -->
+                                        </td>
+                                        <td>
+                                            <!-- Nút chi tiết gửi id của user -->
+                                            <form action="/UserDetails" method="post">
+                                                <input type="hidden" name="userId" value="${user.id}"/>
+                                                <button type="submit" class="btn btn-primary">Details</button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
                         </table>
                     </div>
+
 
                     <div class="row">
                         <!-- Phân trang -->

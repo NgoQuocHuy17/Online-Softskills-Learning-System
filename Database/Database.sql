@@ -18,7 +18,7 @@ CREATE TABLE users (
     created_at DATETIME DEFAULT GETDATE(),     
     updated_at DATETIME DEFAULT GETDATE(),
 	hash VARCHAR(255),
-	isValid int DEFAULT 1
+	isValid bit DEFAULT 1
 );
 
 -- Table: user_contacts
@@ -27,7 +27,7 @@ CREATE TABLE user_contacts (
     user_id INT NOT NULL,                       
     contact_type NVARCHAR(50) NOT NULL,  -- 'Phone' hoặc 'Email'
     contact_value VARCHAR(255) NOT NULL,        
-    is_preferred int DEFAULT 0,  -- Cột mới để đánh dấu phương thức liên hệ yêu thích
+    is_preferred bit DEFAULT 0,  -- Cột mới để đánh dấu phương thức liên hệ yêu thích
     CONSTRAINT FK_UserContacts_Users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
