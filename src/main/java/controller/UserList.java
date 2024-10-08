@@ -34,7 +34,7 @@ public class UserList extends HttpServlet {
         
         // Lưu trữ danh sách số điện thoại và email
         for (User user : userList) {
-            List<UserContact> phones = userContactDAO.getUserPhones(user.getId()); // Sử dụng thể hiện của UserContactDAO
+            List<UserContact> phones = userContactDAO.getUserPhones(user.getId());
             List<UserContact> emails = userContactDAO.getUserEmails(user.getId());
             request.setAttribute("phones_" + user.getId(), phones);
             request.setAttribute("emails_" + user.getId(), emails);

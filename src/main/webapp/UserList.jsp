@@ -4,6 +4,8 @@
     Author     : hung6
 --%>
 
+<%@page import="model.UserContact"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -131,20 +133,33 @@
                                         <td>${user.fullName}</td>
                                         <td>${user.gender}</td>
                                         <td>
-                                            ${user.email} <br/>
-                                            <c:forEach var="email" items="${requestScope['emails_' + user.id]}">
-                                                ${email.contact_value}<br/>
+                                            <strong>${user.email}</strong> <br/>
+                                            <c:set var="emailKey" value="emails_${user.id}" />
+                                            <c:set var="userEmails" value="${requestScope[emailKey]}" />
+                                            <c:forEach var="email" items="${userEmails}">
+                                                ${email.contactValue} <br/>
                                             </c:forEach>
                                         </td>
                                         <td>
-                                            <c:forEach var="phone" items="${requestScope['phones_' + user.id]}">
-                                                ${phone.contact_value}<br/>
+                                            <c:set var="phoneKey" value="phones_${user.id}" />
+                                            <c:set var="userPhones" value="${requestScope[phoneKey]}" />
+                                            <c:forEach var="phone" items="${userPhones}">
+                                                ${phone.contactValue} <br/>
                                             </c:forEach>
                                         </td>
                                         <td>${user.role}</td>
                                         <td>
-                                            ? <!-- Hiển thị trạng thái -->
+                                            <c:choose>
+                                                <c:when test="${user.getIsValid() == 1}">
+                                                    Valid
+                                                </c:when>
+                                                <c:otherwise>
+                                                    Invalid
+                                                </c:otherwise>
+                                            </c:choose>
                                         </td>
+
+
                                         <td>
                                             <!-- Nút chi tiết gửi id của user -->
                                             <form action="/UserDetails" method="post">
@@ -154,6 +169,7 @@
                                         </td>
                                     </tr>
                                 </c:forEach>
+
                             </tbody>
                         </table>
                     </div>

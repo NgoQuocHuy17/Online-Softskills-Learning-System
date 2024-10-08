@@ -108,7 +108,7 @@ public class UserDAO extends DBContext<User> {
                             rs.getDate("created_at"),
                             rs.getDate("updated_at"),
                             rs.getString("hash"), // Thêm thuộc tính hash
-                            rs.getBoolean("isValid") // Thêm thuộc tính isValid
+                            rs.getInt("isValid") // Thêm thuộc tính isValid
                     );
                 }
             }
@@ -137,7 +137,7 @@ public class UserDAO extends DBContext<User> {
                         rs.getDate("created_at"), // Lấy created_at
                         rs.getDate("updated_at"), // Lấy updated_at
                         rs.getString("hash"), // Lấy hash
-                        rs.getBoolean("isValid") // Lấy isValid
+                        rs.getInt("isValid") // Lấy isValid
                 );
                 users.add(user);
             }
@@ -167,7 +167,7 @@ public class UserDAO extends DBContext<User> {
                             rs.getDate("created_at"), // Lấy created_at
                             rs.getDate("updated_at"), // Lấy updated_at
                             rs.getString("hash"), // Lấy hash
-                            rs.getBoolean("isValid") // Lấy isValid
+                            rs.getInt("isValid") // Lấy isValid
                     );
                 }
             }
@@ -191,7 +191,7 @@ public class UserDAO extends DBContext<User> {
             pre.setDate(7, new java.sql.Date(user.getCreatedAt().getTime())); // Chuyển đổi Date sang java.sql.Date
             pre.setDate(8, new java.sql.Date(user.getUpdatedAt().getTime())); // Chuyển đổi Date sang java.sql.Date
             pre.setString(9, user.getHash());  // Thêm hash
-            pre.setBoolean(10, user.isValid()); // Thêm isValid
+            pre.setInt(10, user.getIsValid()); // Thêm isValid
             result = pre.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -213,7 +213,7 @@ public class UserDAO extends DBContext<User> {
             pre.setDate(7, new java.sql.Date(user.getCreatedAt().getTime())); // Chuyển đổi Date sang java.sql.Date
             pre.setDate(8, new java.sql.Date(user.getUpdatedAt().getTime())); // Chuyển đổi Date sang java.sql.Date
             pre.setString(9, user.getHash());  // Gán giá trị cho hash
-            pre.setBoolean(10, user.isValid()); // Gán giá trị cho isValid
+            pre.setInt(10, user.getIsValid()); // Gán giá trị cho isValid
             pre.setInt(11, user.getId()); // Thêm id của user để cập nhật
             result = pre.executeUpdate();
         } catch (SQLException ex) {
@@ -295,7 +295,7 @@ public class UserDAO extends DBContext<User> {
                             rs.getDate("created_at"),
                             rs.getDate("updated_at"),
                             rs.getString("hash"), // Thêm thuộc tính hash
-                            rs.getBoolean("isValid") // Thêm thuộc tính isValid
+                            rs.getInt("isValid") // Thêm thuộc tính isValid
                     );
                     list.add(user);
                 }
