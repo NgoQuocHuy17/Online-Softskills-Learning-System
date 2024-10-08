@@ -170,7 +170,9 @@
                                     <div class="submit-section">
                                         <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
                                     </div>
+                                            
                                 </form>
+                                 <a href="change-password.jsp" class="btn btn-primary">Change Password</a>
 
                             </div>
                         </div>
