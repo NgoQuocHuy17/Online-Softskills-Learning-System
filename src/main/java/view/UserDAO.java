@@ -36,38 +36,38 @@ public class UserDAO extends DBContext<User> {
         return false;
     }
 
-    public String register(RegisterBean rb) {
-        String fullName = rb.getFullName();
-        String email = rb.getEmail();
-        String mobile = rb.getMobile();
-        String gender = rb.getGender();
-        String password = rb.getPassword();
-        String myHash = rb.getMyHash();
-
-        try {
-            String sqlQuery = "INSERT INTO users (full_name, gender, email, password, mobile, hash) values (?, ?, ?, ?, ?, ?)";
-            PreparedStatement ps = super.getConn().prepareStatement(sqlQuery);
-            ps.setString(1, fullName);
-            ps.setString(2, gender);
-            ps.setString(3, email);
-            ps.setString(4, password);
-            ps.setString(5, mobile);
-            ps.setString(6, myHash);
-
-            int i = ps.executeUpdate();
-            if (i != 0) {
-                SendingEmail se = new SendingEmail(email, myHash);
-                se.sendMail();
-                return "SUCCESS";
-            }
-
-        } catch (Exception e) {
-
-            System.out.println("RegisterDAO error!");
-        }
-        return "ERROR";
-
-    }
+//    public String register(RegisterBean rb) {
+//        String fullName = rb.getFullName();
+//        String email = rb.getEmail();
+//        String mobile = rb.getMobile();
+//        String gender = rb.getGender();
+//        String password = rb.getPassword();
+//        String myHash = rb.getMyHash();
+//
+//        try {
+//            String sqlQuery = "INSERT INTO users (full_name, gender, email, password, mobile, hash) values (?, ?, ?, ?, ?, ?)";
+//            PreparedStatement ps = super.getConn().prepareStatement(sqlQuery);
+//            ps.setString(1, fullName);
+//            ps.setString(2, gender);
+//            ps.setString(3, email);
+//            ps.setString(4, password);
+//            ps.setString(5, mobile);
+//            ps.setString(6, myHash);
+//
+//            int i = ps.executeUpdate();
+//            if (i != 0) {
+//                SendingEmail se = new SendingEmail(email, myHash);
+//                se.sendMail();
+//                return "SUCCESS";
+//            }
+//
+//        } catch (Exception e) {
+//
+//            System.out.println("RegisterDAO error!");
+//        }
+//        return "ERROR";
+//
+//    }
 
     public User login(String email, String password) {
         User user = null;
@@ -108,7 +108,7 @@ public class UserDAO extends DBContext<User> {
                             rs.getDate("created_at"),
                             rs.getDate("updated_at"),
                             rs.getString("hash"), // Thêm thuộc tính hash
-                            rs.getBoolean("isValid") // Thêm thuộc tính isValid
+                            rs.getInt("isValid") // Thêm thuộc tính isValid
                     );
                 }
             }
@@ -137,7 +137,7 @@ public class UserDAO extends DBContext<User> {
                         rs.getDate("created_at"), // Lấy created_at
                         rs.getDate("updated_at"), // Lấy updated_at
                         rs.getString("hash"), // Lấy hash
-                        rs.getBoolean("isValid") // Lấy isValid
+                        rs.getInt("isValid") // Lấy isValid
                 );
                 users.add(user);
             }
@@ -167,7 +167,7 @@ public class UserDAO extends DBContext<User> {
                             rs.getDate("created_at"), // Lấy created_at
                             rs.getDate("updated_at"), // Lấy updated_at
                             rs.getString("hash"), // Lấy hash
-                            rs.getBoolean("isValid") // Lấy isValid
+                            rs.getInt("isValid") // Lấy isValid
                     );
                 }
             }
@@ -191,7 +191,7 @@ public class UserDAO extends DBContext<User> {
             pre.setDate(7, new java.sql.Date(user.getCreatedAt().getTime())); // Chuyển đổi Date sang java.sql.Date
             pre.setDate(8, new java.sql.Date(user.getUpdatedAt().getTime())); // Chuyển đổi Date sang java.sql.Date
             pre.setString(9, user.getHash());  // Thêm hash
-            pre.setBoolean(10, user.isValid()); // Thêm isValid
+            pre.setInt(10, user.getIsValid()); // Thêm isValid
             result = pre.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -213,7 +213,7 @@ public class UserDAO extends DBContext<User> {
             pre.setDate(7, new java.sql.Date(user.getCreatedAt().getTime())); // Chuyển đổi Date sang java.sql.Date
             pre.setDate(8, new java.sql.Date(user.getUpdatedAt().getTime())); // Chuyển đổi Date sang java.sql.Date
             pre.setString(9, user.getHash());  // Gán giá trị cho hash
-            pre.setBoolean(10, user.isValid()); // Gán giá trị cho isValid
+            pre.setInt(10, user.getIsValid()); // Gán giá trị cho isValid
             pre.setInt(11, user.getId()); // Thêm id của user để cập nhật
             result = pre.executeUpdate();
         } catch (SQLException ex) {
@@ -234,6 +234,44 @@ public class UserDAO extends DBContext<User> {
         }
         return result;
     }
+
+
+     public String getEmailByUser(String user) throws SQLException {
+        String sql = "Select email from users where name = ?";
+        String email = "";
+        PreparedStatement ps = super.getConn().prepareStatement(sql);
+        ps.setString(1, user);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            email = rs.getString("email");
+            return email;
+        }
+        return null;
+    }
+ public void updatePassword(String name, String newPassword) {
+        String sql = "UPDATE users SET password = ? WHERE email = ?";
+        try {
+            PreparedStatement ps = super.getConn().prepareStatement(sql);
+            ps.setString(1, newPassword);
+            ps.setString(2, name);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("updatePassword: " + e.getMessage());
+        }
+    }
+
+
+     public boolean isEmailExist(String email) throws SQLException {
+        String sql = "Select email from users where email = ?";
+        PreparedStatement ps = super.getConn().prepareStatement(sql);
+        ps.setString(1, email);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return true;
+        }
+        return false;
+    }
+
 
     public List<User> getUsersByPage(int pageNumber, int pageSize) {
         List<User> list = new ArrayList<>();
@@ -257,7 +295,7 @@ public class UserDAO extends DBContext<User> {
                             rs.getDate("created_at"),
                             rs.getDate("updated_at"),
                             rs.getString("hash"), // Thêm thuộc tính hash
-                            rs.getBoolean("isValid") // Thêm thuộc tính isValid
+                            rs.getInt("isValid") // Thêm thuộc tính isValid
                     );
                     list.add(user);
                 }
@@ -284,4 +322,5 @@ public class UserDAO extends DBContext<User> {
 
         return totalUsers;
     }
+
 }

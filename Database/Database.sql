@@ -68,6 +68,17 @@ CREATE TABLE courses (
     CONSTRAINT FK_Courses_Users FOREIGN KEY (owner_id) 
         REFERENCES users(id) ON DELETE SET NULL  -- Khóa ngoại tham chiếu đến bảng users
 );
+-- Table: subjects
+CREATE TABLE subjects (
+    id INT IDENTITY(1,1) PRIMARY KEY,          -- Unique identifier for each subject
+    name NVARCHAR(255) NOT NULL,               -- Name of the subject
+    category NVARCHAR(255),                     -- Category of the subject
+    owner_id INT,                               -- ID of the user who owns the subject
+    status NVARCHAR(50) DEFAULT 'Draft',       -- Status of the subject (e.g., Draft, Published)
+    created_at DATETIME DEFAULT GETDATE(),      -- Creation timestamp
+    updated_at DATETIME DEFAULT GETDATE(),      -- Last update timestamp
+    CONSTRAINT FK_Subjects_Users FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE SET NULL
+);
 
 -- Table: course_sale
 CREATE TABLE course_sale (

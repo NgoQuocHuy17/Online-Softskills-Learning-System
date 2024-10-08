@@ -14,12 +14,12 @@ public class User {
     private Date createdAt;
     private Date updatedAt;
     private String hash;          // Thêm thuộc tính hash
-    private boolean isValid;      // Thay đổi kiểu thành boolean
+    private int isValid;         // Thay đổi kiểu thành int
 
     public User() {
     }
 
-    public User(int id, String fullName, String gender, String email, String password, String role, String avatarUrl, Date createdAt, Date updatedAt, String hash, boolean isValid) {
+    public User(int id, String fullName, String gender, String email, String password, String role, String avatarUrl, Date createdAt, Date updatedAt, String hash, int isValid) {
         this.id = id;
         this.fullName = fullName;
         this.gender = gender;
@@ -113,11 +113,12 @@ public class User {
         this.hash = hash;
     }
 
-    public boolean isValid() {
+    public int getIsValid() {
         return isValid;
     }
 
-    public void setIsValid(boolean isValid) {
+    public void setIsValid(int isValid) {
         this.isValid = isValid;
     }
+
 }

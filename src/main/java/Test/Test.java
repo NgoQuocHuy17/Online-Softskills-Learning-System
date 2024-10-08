@@ -1,3 +1,5 @@
+package Test;
+
 import view.UserContactDAO;
 import model.UserContact;
 
