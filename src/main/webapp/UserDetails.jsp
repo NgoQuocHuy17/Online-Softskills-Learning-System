@@ -1,22 +1,13 @@
 <%-- 
-    Document   : profile-settings-mentee
-    Created on : May 26, 2024, 5:20:36 PM
-    Author     : asus
+    Document   : UserDetails
+    Created on : 7 thg 10, 2024, 16:35:04
+    Author     : hung6
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="model.User" %>
 
 <!DOCTYPE html>
-<%
-    User loggedInUser = (User) session.getAttribute("user");
-
-    String fullName = loggedInUser.getFullName();
-    String role = loggedInUser.getRole();
-    String gender = loggedInUser.getGender();
-    String email = loggedInUser.getEmail();
-%>
 
 <html lang="en">
 
@@ -24,7 +15,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Profile Settings</title>
+        <title>User Details</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
         <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -81,8 +72,8 @@
                                                  class="avatar-img rounded-circle">
                                         </div>
                                         <div class="user-text">
-                                            <h6><%= fullName%></h6> <!-- Lấy fullName từ session -->
-                                            <p><%= role%></p> <!-- Lấy role từ session -->
+                                            <h6>NAME?</h6> <!-- Lấy fullName từ session -->
+                                            <p>ROLE?</p> <!-- Lấy role từ session -->
                                         </div>
 
                                     </div>
@@ -100,7 +91,7 @@
                 <div class="container-fluid">
                     <div class="row align-items-center">
                         <div class="col-md-12 col-12">
-                            <h2 class="breadcrumb-title">Profile Settings</h2>
+                            <h2 class="breadcrumb-title">User Details</h2>
                         </div>
                     </div>
                 </div>
@@ -128,50 +119,72 @@
                                                     <div class="profile-img">
                                                         <img src="assets/img/user/user.jpg" alt="User Image">
                                                     </div>
-                                                    <div class="upload-img">
-                                                        <div class="change-photo-btn">
-                                                            <span><i class="fa fa-upload"></i> Upload Photo</span>
-                                                            <input type="file" class="upload" name="avatar">
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Full Name</label>
-                                                <input type="text" class="form-control" name="fullName" value="<%= fullName%>">
+                                                <input type="text" class="form-control" name="fullName" value="" readonly>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Gender</label>
-                                                <select class="form-control" name="gender">
-                                                    <option value="Male" <%= "Male".equals(gender) ? "selected" : ""%>>Male</option>
-                                                    <option value="Female" <%= "Female".equals(gender) ? "selected" : ""%>>Female</option>
-                                                    <option value="Other" <%= "Other".equals(gender) ? "selected" : ""%>>Other</option>
+                                                <select class="form-control" name="gender" disabled>
+                                                    <option value="Male">Male</option>
+                                                    <option value="Female">Female</option>
+                                                    <option value="Other">Other</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Email</label>
-                                                <input type="email" class="form-control" name="email" value="<%= email%>" readonly>
+                                                <input type="email" class="form-control" name="email" value="" readonly>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Mobile</label>
-                                                <input type="text" name="mobile" value="mobile?" class="form-control">
+                                                <input type="text" name="mobile" value="" class="form-control" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label>Role</label>
+                                                <select class="form-control" name="role">
+                                                    <option value="Admin">Admin</option>
+                                                    <option value="User">User</option>
+                                                    <option value="Guest">Guest</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Address Field (Read-Only) -->
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label>Address</label>
+                                                <input type="text" name="address" value="" class="form-control" readonly>
+                                            </div>
+                                        </div>
+
+                                        <!-- Status Field (Editable) -->
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label>Status</label>
+                                                <select class="form-control" name="status">
+                                                    <option value="Active">Active</option>
+                                                    <option value="Inactive">Inactive</option>
+                                                    <option value="Pending">Pending</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="submit-section">
                                         <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
                                     </div>
-                                            
                                 </form>
-                                 <a href="change-password.jsp" class="btn btn-primary">Change Password</a>
 
                             </div>
                         </div>
@@ -188,7 +201,7 @@
 
                                 <div class="footer-widget footer-about">
                                     <div class="footer-logo">
-                                        <img src="assets/img/logo.png" alt="logo">
+                                        <img src="" alt="logo">
                                     </div>
                                     <div class="footer-about-content">
                                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -202,13 +215,7 @@
                                                     <a href="#" target="_blank"><i class="fab fa-twitter"></i> </a>
                                                 </li>
                                                 <li>
-                                                    <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                                                </li>
-                                                <li>
                                                     <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" target="_blank"><i class="fab fa-dribbble"></i> </a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -293,3 +300,4 @@
         <script src="assets/js/script.js"></script>
     </body>
 </html>
+

@@ -2,6 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
         <meta charset="utf-8">
         <title>Login</title>
@@ -30,8 +31,7 @@
                                 <h4 style="color: red; align-content: center;">
                                     ${requestScope.error}
                                 </h4>
-                                <form method="post" action="login">
-                                    <input type="hidden" name="action" value="login"/>
+                                <form method="post" action="loginn">
                                     <div class="form-group">
                                         <label class="form-control-label">Email</label>
                                         <input type="email" name="email" class="form-control">
@@ -41,12 +41,6 @@
                                         <div class="pass-group">
                                             <input type="password" name="password" class="form-control pass-input">
                                             <span class="fas fa-eye toggle-password"></span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check form-check-xs custom-checkbox">
-                                            <input type="checkbox" class="form-check-input" name="agreeCheckboxUser" value="ON" id="agree_checkbox_user">
-                                            <label class="form-check-label" for="agree_checkbox_user">Remember Password</label>
                                         </div>
                                     </div>
                                     <div class="text-end">
@@ -68,4 +62,5 @@
         <script src="assets/js/bootstrap.bundle.min.js"></script>
         <script src="assets/js/script.js"></script>
     </body>
+
 </html>
