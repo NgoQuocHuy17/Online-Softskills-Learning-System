@@ -1,25 +1,51 @@
-﻿-- 1. Insert data into the users table
-INSERT INTO users (full_name, gender, email, password_hash, role, avatar_url)
+﻿-- Insert users
+INSERT INTO users (full_name, gender, email, password, role, avatar_url, created_at, updated_at, hash, isValid) 
 VALUES 
-('Nguyen Van A', 'Male', 'a.nguyen@example.com', 'hash_pass_1', 'Admin', 'avatar1.jpg'),
-('Tran Thi B', 'Female', 'b.tran@example.com', 'hash_pass_2', 'Instructor', 'avatar2.jpg'),
-('Le Van C', 'Male', 'c.le@example.com', 'hash_pass_3', 'Student', 'avatar3.jpg'),
-('Pham Thi D', 'Female', 'd.pham@example.com', 'hash_pass_4', 'Guest', 'avatar4.jpg'),
-('Do Van E', 'Other', 'e.do@example.com', 'hash_pass_5', 'Student', 'avatar5.jpg'),
-('Nguyen Van F', 'Male', 'f.nguyen@example.com', 'hash_pass_6', 'Instructor', 'avatar6.jpg'),
-('Tran Thi G', 'Female', 'g.tran@example.com', 'hash_pass_7', 'Admin', 'avatar7.jpg');
-GO
+('Nguyen Van A', 'Male', 'nguyenvana@example.com', 'password123', 'Admin', 'assets/img/user/user1.jpg', GETDATE(), GETDATE(), 'hash1', 1),
+('Tran Thi B', 'Female', 'tranthib@example.com', 'password456', 'Student', 'assets/img/user/user2.jpg', GETDATE(), GETDATE(), 'hash2', 1),
+('Le Van C', 'Male', 'levanc@example.com', 'password789', 'Student', 'assets/img/user/user3.jpg', GETDATE(), GETDATE(), 'hash3', 1),
+('Pham Minh D', 'Male', 'phamind@example.com', 'password321', 'Teacher', 'assets/img/user/user4.jpg', GETDATE(), GETDATE(), 'hash4', 1),
+('Vo Thi E', 'Female', 'vothie@example.com', 'password654', 'Teacher', 'assets/img/user/user5.jpg', GETDATE(), GETDATE(), 'hash5', 1),
+('Nguyen Van F', 'Male', 'nguyenf@example.com', 'password987', 'Admin', 'assets/img/user/user6.jpg', GETDATE(), GETDATE(), 'hash6', 1),
+('Tran Thi G', 'Female', 'trang@example.com', 'password159', 'Student', 'assets/img/user/user7.jpg', GETDATE(), GETDATE(), 'hash7', 1),
+('Le Van H', 'Male', 'levanh@example.com', 'password753', 'Teacher', 'assets/img/user/user8.jpg', GETDATE(), GETDATE(), 'hash8', 1),
+('Pham Minh I', 'Male', 'phami@example.com', 'password852', 'Teacher', 'assets/img/user/user9.jpg', GETDATE(), GETDATE(), 'hash9', 1),
+('Vo Thi J', 'Female', 'voj@example.com', 'password246', 'Student', 'assets/img/user/user10.jpg', GETDATE(), GETDATE(), 'hash10', 1),
+('Nguyen Van K', 'Male', 'nguyenk@example.com', 'password369', 'Admin', 'assets/img/user/user11.jpg', GETDATE(), GETDATE(), 'hash11', 1),
+('Tran Thi L', 'Female', 'tranl@example.com', 'password147', 'Teacher', 'assets/img/user/user12.jpg', GETDATE(), GETDATE(), 'hash12', 1);
 
--- 2. Insert data into the user_contacts table
-INSERT INTO user_contacts (user_id, contact_type, contact_value)
+-- Insert user_contacts
+INSERT INTO user_contacts (user_id, contact_type, contact_value, is_preferred) 
 VALUES 
-(1, 'Phone', '0909123456'),
-(2, 'Phone', '0909234567'),
-(3, 'Email', 'c.le2@example.com'),
-(4, 'Phone', '0909345678'),
-(5, 'Phone', '0909456789'),
-(6, 'Email', 'f.nguyen2@example.com');
-GO
+(1, 'Phone', '0123456789', 1),  
+(1, 'Email', 'nguyenvana_work@example.com', 0), 
+(1, 'Email', 'nguyenvana_home@example.com', 0),  
+(2, 'Phone', '0987654321', 0),  
+(2, 'Phone', '0981122334', 1),  
+(2, 'Email', 'tranthib_email@example.com', 1),  
+(3, 'Phone', '0345678901', 0),  
+(3, 'Email', 'levanc_email@example.com', 0),  
+(3, 'Email', 'levanc_alternate@example.com', 1),  
+(4, 'Phone', '0246813579', 1),  
+(4, 'Email', 'phamind_email@example.com', 0),  
+(5, 'Phone', '0147246385', 0),  
+(5, 'Phone', '0152958304', 1),  
+(5, 'Email', 'vothie_email@example.com', 0),  
+(6, 'Phone', '0161234567', 1),  
+(6, 'Email', 'nguyenf_home@example.com', 0),  
+(6, 'Email', 'nguyenf_work@example.com', 0),  
+(7, 'Phone', '0179876543', 0),  
+(7, 'Email', 'trang_email@example.com', 1),  
+(8, 'Phone', '0186543210', 1),  
+(8, 'Email', 'levanh_email@example.com', 0),  
+(9, 'Phone', '0191234567', 0),  
+(9, 'Email', 'phami_email@example.com', 0),  
+(10, 'Phone', '0209876543', 1),  
+(10, 'Email', 'voj_email@example.com', 0),  
+(11, 'Phone', '0211234567', 0),  
+(11, 'Email', 'nguyenk_email@example.com', 1),  
+(12, 'Phone', '0229876543', 1),  
+(12, 'Email', 'tranl_email@example.com', 0);
 
 -- 3. Insert data into the login_history table
 INSERT INTO login_history (user_id, ip_address)
@@ -31,8 +57,6 @@ VALUES
 (5, '192.168.1.5'),
 (6, '192.168.1.6');
 GO
-
-
 
 -- 4. Insert data into the courses table
 INSERT INTO courses (title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, status, is_sponsored)

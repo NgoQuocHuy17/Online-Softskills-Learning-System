@@ -149,8 +149,8 @@
                                                 <label>Role</label>
                                                 <select class="form-control" name="role">
                                                     <option value="Admin" <%= "Admin".equals(user.getRole()) ? "selected" : ""%>>Admin</option>
-                                                    <option value="User" <%= "User".equals(user.getRole()) ? "selected" : ""%>>User</option>
-                                                    <option value="Guest" <%= "Guest".equals(user.getRole()) ? "selected" : ""%>>Guest</option>
+                                                    <option value="Teacher" <%= "Teacher".equals(user.getRole()) ? "selected" : ""%>>Teacher</option>
+                                                    <option value="Student" <%= "Student".equals(user.getRole()) ? "selected" : ""%>>Student</option>
                                                 </select>
                                             </div>
                                         </div>

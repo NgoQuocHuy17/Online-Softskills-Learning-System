@@ -13,7 +13,7 @@ CREATE TABLE users (
     gender NVARCHAR(10) DEFAULT 'Other',       
     email VARCHAR(255) UNIQUE NOT NULL,        
     password VARCHAR(255) NOT NULL,
-    role NVARCHAR(50) DEFAULT 'Guest',         
+    role NVARCHAR(50) DEFAULT 'Student',         
     avatar_url VARCHAR(255),                   
     created_at DATETIME DEFAULT GETDATE(),     
     updated_at DATETIME DEFAULT GETDATE(),
