@@ -13,6 +13,7 @@ VALUES
 ('Vo Thi J', 'Female', 'voj@example.com', 'password246', 'Student', 'assets/img/user/user10.jpg', GETDATE(), GETDATE(), 'hash10', 1),
 ('Nguyen Van K', 'Male', 'nguyenk@example.com', 'password369', 'Admin', 'assets/img/user/user11.jpg', GETDATE(), GETDATE(), 'hash11', 1),
 ('Tran Thi L', 'Female', 'tranl@example.com', 'password147', 'Teacher', 'assets/img/user/user12.jpg', GETDATE(), GETDATE(), 'hash12', 1);
+GO
 
 -- Insert user_contacts
 INSERT INTO user_contacts (user_id, contact_type, contact_value, is_preferred) 
@@ -46,6 +47,7 @@ VALUES
 (11, 'Email', 'nguyenk_email@example.com', 1),  
 (12, 'Phone', '0229876543', 1),  
 (12, 'Email', 'tranl_email@example.com', 0);
+GO
 
 -- 3. Insert data into the login_history table
 INSERT INTO login_history (user_id, ip_address)
@@ -65,7 +67,7 @@ VALUES
 ('Team Leadership', 'Become a strong leader', 'Master the skills needed to lead teams to success.', 'Leadership', 200.00, 250.00, 6, 'Draft', 0),
 ('Emotional Intelligence', 'Understand your emotions better', 'A comprehensive guide to emotional intelligence.', 'Psychology', 120.00, 170.00, 2, 'Published', 0),
 ('Conflict Resolution', 'Resolve conflicts easily', 'Techniques and strategies to resolve conflicts effectively.', 'Negotiation', 180.00, 230.00, 1, 'Published', 1),
-('Time Management', 'Manage your time better', 'Learn time management techniques for increased productivity.', 'Productivity', 90.00, 140.00, 3, 'Published', 0);
+('Time Management', 'Manage your time better', 'Learn time management techniques for increased productivity.', 'Productivity', 90.00, 140.00, 3, 'Published', 0),
 
 -- Communication courses
 ('Public Speaking Mastery', 'Conquer your fear of public speaking', 'Learn techniques to become a confident and persuasive speaker.', 'Communication', 150.00, 250.00, 3, 'Published', 1),
@@ -92,12 +94,12 @@ VALUES
 ('The Pomodoro Technique', 'Boost focus and productivity', 'Master the time management method to accomplish more.', 'Productivity', 80.00, 140.00, 6, 'Published', 0),
 ('Mindfulness for Productivity', 'Achieve more by doing less', 'Learn how mindfulness can enhance your focus and productivity.', 'Productivity', 100.00, 180.00, 3, 'Published', 0),
 
--- New category: Project Management
+-- Project Management courses
 ('Agile Project Management', 'Lead agile projects successfully', 'Master the principles and practices of Agile project management.', 'Project Management', 220.00, 380.00, 2, 'Published', 1),
 ('Risk Management', 'Identify and mitigate project risks', 'Learn strategies to manage risks in complex projects.', 'Project Management', 180.00, 320.00, 5, 'Published', 0),
 ('Stakeholder Management', 'Build strong project relationships', 'Develop skills to effectively manage project stakeholders.', 'Project Management', 160.00, 280.00, 1, 'Draft', 0),
 
--- New category: Personal Finance
+-- Personal Finance courses
 ('Budgeting Basics', 'Take control of your finances', 'Learn how to create and stick to a personal budget.', 'Personal Finance', 90.00, 160.00, 3, 'Published', 1),
 ('Investing for Beginners', 'Start your investment journey', 'Understand the basics of investing and building wealth.', 'Personal Finance', 150.00, 250.00, 4, 'Published', 0),
 ('Retirement Planning', 'Secure your financial future', 'Learn strategies for effective retirement planning.', 'Personal Finance', 180.00, 320.00, 6, 'Draft', 0);
@@ -211,29 +213,29 @@ INSERT INTO blog_posts (title, thumbnail_url, category_id, content, author_id)
 VALUES 
 ('Effective Communication Tips', 'thumb1.jpg', 2, 'This blog post discusses the best communication tips.', 1),
 ('Leadership in Modern Organizations', 'thumb2.jpg', 1, 'Leadership strategies in modern workplaces.', 2),
-('Emotional Intelligence for Success', 'thumb3.jpg', 3, 'How emotional intelligence can lead to success.', 3);
-('Conflict Resolution Strategies', 'thumb4.jpg', 4, 'Best strategies to resolve conflicts in the workplace.', 4, 'Published'),
-('Time Management for Productivity', 'thumb5.jpg', 5, 'How to manage your time effectively for better productivity.', 5, 'Published'),
-('The Power of Active Listening', 'thumb6.jpg', 2, 'Learn how active listening can improve your communication.', 1, 'Published'),
-('Building Team Leadership', 'thumb7.jpg', 1, 'How to build and strengthen leadership within teams.', 2, 'Published'),
-('Understanding Emotional Triggers', 'thumb8.jpg', 3, 'A deep dive into emotional triggers and how to manage them.', 3, 'Published'),
-('Negotiation Techniques for Success', 'thumb9.jpg', 4, 'Essential negotiation techniques for successful deals.', 4, 'Published'),
-('Mastering Time Blocking', 'thumb10.jpg', 5, 'A guide to mastering time blocking for personal and professional use.', 5, 'Published'),
-('Developing Empathy in Leadership', 'thumb11.jpg', 1, 'How developing empathy can make you a better leader.', 2, 'Published'),
-('The Role of Emotional Intelligence in Negotiation', 'thumb12.jpg', 3, 'How emotional intelligence plays a role in successful negotiations.', 3, 'Published'),
-('Advanced Communication Strategies', 'thumb13.jpg', 2, 'Advanced techniques to communicate more effectively.', 1, 'Published'),
-('Boosting Team Morale Through Leadership', 'thumb14.jpg', 1, 'Leadership strategies to boost team morale and productivity.', 2, 'Published'),
-('Psychological Approaches to Conflict Resolution', 'thumb15.jpg', 3, 'Using psychology to effectively resolve conflicts.', 4, 'Published'),
-('Improving Personal Productivity', 'thumb16.jpg', 5, 'Simple tips to improve personal productivity.', 5, 'Published'),
-('Draft Blog Post 1', 'thumb17.jpg', 2, 'This blog post is still in draft.', 1, 'Draft'),
-('Draft Blog Post 2', 'thumb18.jpg', 3, 'This blog post is under construction.', 3, 'Draft'),
-('Draft Blog Post 3', 'thumb19.jpg', 4, 'Waiting for approval.', 4, 'Draft'),
-('Draft Blog Post 4', 'thumb20.jpg', 5, 'This is a future blog post.', 5, 'Draft'),
-('Time Management in the Modern World', 'thumb21.jpg', 5, 'Strategies to manage your time in a fast-paced world.', 5, 'Published'),
-('How to Negotiate Like a Pro', 'thumb22.jpg', 4, 'Learn the secrets of successful negotiation.', 4, 'Published'),
-('The Importance of Emotional Intelligence in Leadership', 'thumb23.jpg', 1, 'Emotional intelligence is key to effective leadership.', 3, 'Published'),
-('Communication Pitfalls to Avoid', 'thumb24.jpg', 2, 'Common communication mistakes and how to avoid them.', 1, 'Published'),
-('Managing Stress through Time Management', 'thumb25.jpg', 5, 'How to reduce stress through better time management.', 5, 'Published');
+('Emotional Intelligence for Success', 'thumb3.jpg', 3, 'How emotional intelligence can lead to success.', 3),
+('Conflict Resolution Strategies', 'thumb4.jpg', 4, 'Best strategies to resolve conflicts in the workplace.', 4),
+('Time Management for Productivity', 'thumb5.jpg', 5, 'How to manage your time effectively for better productivity.', 5),
+('The Power of Active Listening', 'thumb6.jpg', 2, 'Learn how active listening can improve your communication.', 1),
+('Building Team Leadership', 'thumb7.jpg', 1, 'How to build and strengthen leadership within teams.', 2),
+('Understanding Emotional Triggers', 'thumb8.jpg', 3, 'A deep dive into emotional triggers and how to manage them.', 3),
+('Negotiation Techniques for Success', 'thumb9.jpg', 4, 'Essential negotiation techniques for successful deals.', 4),
+('Mastering Time Blocking', 'thumb10.jpg', 5, 'A guide to mastering time blocking for personal and professional use.', 5),
+('Developing Empathy in Leadership', 'thumb11.jpg', 1, 'How developing empathy can make you a better leader.', 2),
+('The Role of Emotional Intelligence in Negotiation', 'thumb12.jpg', 3, 'How emotional intelligence plays a role in successful negotiations.', 3),
+('Advanced Communication Strategies', 'thumb13.jpg', 2, 'Advanced techniques to communicate more effectively.', 1),
+('Boosting Team Morale Through Leadership', 'thumb14.jpg', 1, 'Leadership strategies to boost team morale and productivity.', 2),
+('Psychological Approaches to Conflict Resolution', 'thumb15.jpg', 3, 'Using psychology to effectively resolve conflicts.', 4),
+('Improving Personal Productivity', 'thumb16.jpg', 5, 'Simple tips to improve personal productivity.', 5),
+('Draft Blog Post 1', 'thumb17.jpg', 2, 'This blog post is still in draft.', 1),
+('Draft Blog Post 2', 'thumb18.jpg', 3, 'This blog post is under construction.', 3),
+('Draft Blog Post 3', 'thumb19.jpg', 4, 'Waiting for approval.', 4),
+('Draft Blog Post 4', 'thumb20.jpg', 5, 'This is a future blog post.', 5),
+('Time Management in the Modern World', 'thumb21.jpg', 5, 'Strategies to manage your time in a fast-paced world.', 5),
+('How to Negotiate Like a Pro', 'thumb22.jpg', 4, 'Learn the secrets of successful negotiation.', 4),
+('The Importance of Emotional Intelligence in Leadership', 'thumb23.jpg', 1, 'Emotional intelligence is key to effective leadership.', 3),
+('Communication Pitfalls to Avoid', 'thumb24.jpg', 2, 'Common communication mistakes and how to avoid them.', 1),
+('Managing Stress through Time Management', 'thumb25.jpg', 5, 'How to reduce stress through better time management.', 5);
 GO
 
 -- 16. Insert data into the tags table
