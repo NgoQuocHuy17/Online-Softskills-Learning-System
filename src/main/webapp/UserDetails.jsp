@@ -13,9 +13,6 @@
 <!DOCTYPE html>
 
 <html lang="en">
-
-    <!-- Mirrored from mentoring.dreamguystech.com/html/template/profile-settings.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 May 2023 10:32:21 GMT -->
-
     <head>
         <meta charset="utf-8">
         <title>User Details</title>
@@ -60,7 +57,6 @@
 
                         </div>
                         <ul class="nav header-navbar-rht">
-
                             <li class="nav-item dropdown has-arrow logged-item">
                                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                                     <span class="user-img">
@@ -78,13 +74,11 @@
                                             <h6>NAME?</h6> <!-- Lấy fullName từ session -->
                                             <p>ROLE?</p> <!-- Lấy role từ session -->
                                         </div>
-
                                     </div>
                                     <a class="dropdown-item" href="profile-settings.jsp">Profile Settings</a>
                                     <a class="dropdown-item" href="login.jsp">Logout</a>
                                 </div>
                             </li>
-
                         </ul>
                     </nav>
                 </div>
@@ -95,6 +89,9 @@
                     <div class="row align-items-center">
                         <div class="col-md-12 col-12">
                             <h2 class="breadcrumb-title">User Details</h2>
+                        </div>
+                        <div class="col-md-4 col-12 text-right">
+                            <a href="AddUser.jsp" class="btn btn-success">Add New User</a>
                         </div>
                     </div>
                 </div>
@@ -111,20 +108,35 @@
                                             String message = (String) request.getAttribute("message");
                                             if (message != null) {
                                         %>
-                                        <div class="alert alert-danger">
+                                        <div class="alert alert-success">
                                             <%= message%>
                                         </div>
                                         <%
                                             }
-                                            // Lấy dữ liệu người dùng từ thuộc tính servlet
-                                            User user = (User) request.getAttribute("user"); // Lấy đối tượng User từ request
-%>
-                                        <div class="col-12 col-md-12">
+                                            User user = (User) request.getAttribute("user");
+                                        %>
+                                        <input type="hidden" name="userId" value="<%= user.getId()%>">
+                                        <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <div class="change-avatar">
                                                     <div class="profile-img">
                                                         <img src="<%= user.getAvatarUrl()%>" alt="User Image">
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <div class="video-gallery">
+                                                    <c:forEach var="video" items="${videos}">
+                                                        <div class="video-item">
+                                                            <video width="320" height="240" controls>
+                                                                <source src="${video.videoUrl}" type="video/mp4">
+                                                                Your browser does not support the video tag.
+                                                            </video>
+                                                        </div>
+                                                    </c:forEach>
                                                 </div>
                                             </div>
                                         </div>

@@ -15,6 +15,23 @@ VALUES
 ('Tran Thi L', 'Female', 'tranl@example.com', 'password147', 'Teacher', 'assets/img/user/user12.jpg', GETDATE(), GETDATE(), 'hash12', 1);
 GO
 
+
+
+INSERT INTO user_videos (user_id, video_url) 
+VALUES 
+(1, 'assets/video/Video1.mp4'),
+(2, 'assets/video/Video2.mp4'),
+(3, 'assets/video/Video3.mp4'),
+(4, 'assets/video/Video4.mp4'),
+(5, 'assets/video/Video5.mp4'),
+(6, 'assets/video/Video6.mp4'),
+(7, 'assets/video/Video1.mp4'),
+(8, 'assets/video/Video2.mp4'),
+(9, 'assets/video/Video3.mp4'),
+(10, 'assets/video/Video4.mp4'),
+(11, 'assets/video/Video5.mp4'),
+(12, 'assets/video/Video6.mp4')
+
 -- Insert user_contacts
 INSERT INTO user_contacts (user_id, contact_type, contact_value, is_preferred) 
 VALUES 

@@ -13,8 +13,8 @@ public class User {
     private String avatarUrl;
     private Date createdAt;
     private Date updatedAt;
-    private String hash;          // Thêm thuộc tính hash
-    private int isValid;         // Thay đổi kiểu thành int
+    private String hash;
+    private int isValid;
 
     public User() {
     }

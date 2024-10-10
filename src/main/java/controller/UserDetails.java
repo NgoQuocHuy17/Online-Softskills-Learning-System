@@ -10,7 +10,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import model.UserContact;
+import model.UserVideo;
 import view.UserContactDAO;
+import view.UserVideoDAO;
 
 @WebServlet(name = "UserDetails", urlPatterns = {"/UserDetails"})
 public class UserDetails extends HttpServlet {
@@ -25,7 +27,6 @@ public class UserDetails extends HttpServlet {
             return;
         }
 
-        // Chuyển đổi userId sang kiểu số
         int userId;
         try {
             userId = Integer.parseInt(userIdParam);
@@ -38,16 +39,19 @@ public class UserDetails extends HttpServlet {
         // Tạo đối tượng UserDAO và lấy thông tin người dùng
         UserDAO userDAO = new UserDAO();
         UserContactDAO userContactDAO = new UserContactDAO();
+        UserVideoDAO userVideoDAO = new UserVideoDAO();
+
         User user = userDAO.getUserById(userId);
         List<UserContact> phones = userContactDAO.getUserPhones(userId);
         List<UserContact> emails = userContactDAO.getUserEmails(userId);
+        List<UserVideo> videos = userVideoDAO.getUserVideo(userId);
 
-        // Gửi danh sách số điện thoại và email đến JSP
+        // Gửi danh sách video, số điện thoại và email đến JSP
+        request.setAttribute("videos", videos);
         request.setAttribute("phones", phones);
         request.setAttribute("emails", emails);
-
-        // Gửi thông tin người dùng đến trang UserDetails.jsp
         request.setAttribute("user", user);
+
         request.getRequestDispatcher("/UserDetails.jsp").forward(request, response);
     }
 }
