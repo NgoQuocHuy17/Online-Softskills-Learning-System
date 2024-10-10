@@ -68,6 +68,14 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <mainClass>newpackage.NewClass</mainClass> <!-- Adjust this to your package -->
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

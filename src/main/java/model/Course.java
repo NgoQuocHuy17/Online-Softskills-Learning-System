@@ -115,4 +115,11 @@ public class Course {
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    @Override
+    public String toString() {
+        return "Course{" + "id=" + id + ", title=" + title + ", tagLine=" + tagLine + ", description=" + description + ", category=" + category + ", basicPackagePrice=" + basicPackagePrice + ", advancedPackagePrice=" + advancedPackagePrice + ", ownerId=" + ownerId + ", isSponsored=" + isSponsored + ", status=" + status + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + '}';
+    }
+    
+    
 }

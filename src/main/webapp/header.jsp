@@ -48,10 +48,6 @@
                             <a href="#">Expert<i class="fas fa-chevron-down"></i></a>
                             <ul class="submenu">
                                 <li><a href="dashboard.html">Expert Dashboard</a></li>
-                                <li><a href="bookings.html">Bookings</a></li>
-                                <li><a href="schedule-timings.html">Schedule Timing</a></li>
-                                <li><a href="mentee-list.html">Student List</a></li>
-                                <li><a href="profile-mentee.html">Student Profile</a></li>
                                 <li class="has-submenu">
                                     <a href="blog.html">Blog</a>
                                     <ul class="submenu">
@@ -62,11 +58,12 @@
                                     </ul>
                                 </li>
                                 <li><a href="chat.html">Chat</a></li>
-                                <li><a href="invoices.html">Invoices</a></li>
                                 <li><a href="profile-settings.html">Profile Settings</a></li>
                                 <li><a href="reviews.html">Reviews</a></li>
-                                <li><a href="mentor-register.html">Mentor Register</a></li>
                             </ul>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="SubjectList">Subject</a>
                         </li>
                         <% } else if (loggedInUser.getRole().equals("Student")) { %>
                         <!-- Chỉ hiện phần Mentee nếu role là Student -->
@@ -80,16 +77,8 @@
                                         <li><a href="map-list.html">Map List</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="search.html">Search Expert</a></li>
-                                <li><a href="profile.html">Expert Profile</a></li>
-                                <li><a href="bookings-mentee.html">Bookings</a></li>
-                                <li><a href="checkout.html">Checkout</a></li>
-                                <li><a href="booking-success.html">Booking Success</a></li>
                                 <li><a href="dashboard-mentee.html">Student Dashboard</a></li>
-                                <li><a href="favourites.html">Favourites</a></li>
-                                <li><a href="chat-mentee.html">Chat</a></li>
                                 <li><a href="profile-settings-mentee.html">Profile Settings</a></li>
-                                <li><a href="change-password.html">Change Password</a></li>
                             </ul>
                         </li>
                         <% } else if (loggedInUser.getRole().equals("Admin")) { %>
@@ -101,26 +90,7 @@
                         <% } %>
 
                         <!-- Phần Pages và Blog vẫn giữ nguyên cho mọi người -->
-                        <li class="has-submenu">
-                            <a href="#">Pages <i class="fas fa-chevron-down"></i></a>
-                            <ul class="submenu">
-                                <li><a href="voice-call.html">Voice Call</a></li>
-                                <li><a href="video-call.html">Video Call</a></li>
-                                <li><a href="search.html">Search Mentors</a></li>
-                                <li><a href="components.html">Components</a></li>
-                                <li class="has-submenu">
-                                    <a href="invoices.html">Invoices</a>
-                                    <ul class="submenu">
-                                        <li><a href="invoices.html">Invoices</a></li>
-                                        <li><a href="invoice-view.html">Invoice View</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="blank-page.html">Starter Page</a></li>
-                                <li><a href="login.jsp">Login</a></li>
-                                <li><a href="register.jsp">Register</a></li>
-                                <li><a href="forgot-password.html">Forgot Password</a></li>
-                            </ul>
-                        </li>
+                       
                         <li class="has-submenu">
                             <a href="course">Courses</a>
                         </li>
