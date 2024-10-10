@@ -12,6 +12,57 @@ public class CourseDAO extends DBContext<Course> {
         super();
     }
 
+   public boolean addNewCourse(Course course) {
+    String sql = "INSERT INTO courses (title, description, category, owner_id, is_sponsored, status) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
+
+    try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+        pst.setString(1, course.getTitle());
+        pst.setString(2, course.getDescription());
+        pst.setString(3, course.getCategory());
+        pst.setInt(4, course.getOwnerId());
+        pst.setBoolean(5, course.isSponsored());
+        pst.setString(6, course.getStatus());
+        
+        int i = pst.executeUpdate();
+        return i > 0; // Return true if insertion was successful
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
+
+    public List<Course> getAllCourses() {
+        List<Course> courses = new ArrayList<>();
+        String sql = "SELECT id, title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, is_sponsored, status, created_at, updated_at "
+                + "FROM courses";  // Removed WHERE clause for sponsored courses
+
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Course course = new Course();
+                    course.setId(rs.getInt("id"));
+                    course.setTitle(rs.getString("title"));
+                    course.setTagLine(rs.getString("tag_line"));
+                    course.setDescription(rs.getString("description"));
+                    course.setCategory(rs.getString("category"));
+                    course.setBasicPackagePrice(rs.getBigDecimal("basic_package_price"));
+                    course.setAdvancedPackagePrice(rs.getBigDecimal("advanced_package_price"));
+                    course.setOwnerId(rs.getInt("owner_id"));
+                    course.setSponsored(rs.getBoolean("is_sponsored"));
+                    course.setStatus(rs.getString("status"));
+                    course.setCreatedAt(rs.getTimestamp("created_at"));
+                    course.setUpdatedAt(rs.getTimestamp("updated_at"));
+                    courses.add(course);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return courses;
+    }
+
     public List<Course> getFeaturedCourses(int size) {
         List<Course> courses = new ArrayList<>();
         String sql = "SELECT TOP (?) id, title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, is_sponsored, status, created_at, updated_at "
@@ -59,6 +110,22 @@ public class CourseDAO extends DBContext<Course> {
         }
 
         return categories;
+    }
+
+    public List<String> getAllStatuses() {
+        List<String> statuses = new ArrayList<>();
+        String sql = "SELECT DISTINCT status FROM courses";
+
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
+            while (rs.next()) {
+                String status = rs.getString("status");
+                statuses.add(status);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return statuses;
     }
 
     public List<Course> getCoursesByCategory(String category, int page, int pageSize) {
@@ -140,6 +207,38 @@ public class CourseDAO extends DBContext<Course> {
         List<Course> courses = new ArrayList<>();
         String sql = "SELECT id, title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, is_sponsored, status, created_at, updated_at "
                 + "FROM courses WHERE title LIKE ? AND status = 'Published'"
+                + "ORDER BY is_sponsored DESC, updated_at DESC";
+
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setString(1, "%" + title + "%");
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Course course = new Course();
+                    course.setId(rs.getInt("id"));
+                    course.setTitle(rs.getString("title"));
+                    course.setTagLine(rs.getString("tag_line"));
+                    course.setDescription(rs.getString("description"));
+                    course.setCategory(rs.getString("category"));
+                    course.setBasicPackagePrice(rs.getBigDecimal("basic_package_price"));
+                    course.setAdvancedPackagePrice(rs.getBigDecimal("advanced_package_price"));
+                    course.setOwnerId(rs.getInt("owner_id"));
+                    course.setSponsored(rs.getBoolean("is_sponsored"));
+                    course.setStatus(rs.getString("status"));
+                    course.setCreatedAt(rs.getTimestamp("created_at"));
+                    course.setUpdatedAt(rs.getTimestamp("updated_at"));
+                    courses.add(course);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return courses;
+    }
+
+    public List<Course> getSubjectByTitle(String title) {
+        List<Course> courses = new ArrayList<>();
+        String sql = "SELECT id, title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, is_sponsored, status, created_at, updated_at "
+                + "FROM courses WHERE title LIKE ? "
                 + "ORDER BY is_sponsored DESC, updated_at DESC";
 
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
@@ -268,6 +367,23 @@ public class CourseDAO extends DBContext<Course> {
 
         return courses;
     }
+public Integer getIdByTitle(String title) {
+    Integer courseId = null; // Initialize to null in case no course is found
+    String sql = "SELECT id FROM courses WHERE title = ?";
+
+    try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+        pst.setString(1, title); // Set the title in the prepared statement
+        try (ResultSet rs = pst.executeQuery()) {
+            if (rs.next()) {
+                courseId = rs.getInt("id"); // Get the course ID
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return courseId; // Return the course ID or null if not found
+}
 
     public int getTotalCoursesByTitleAndCategory(String title, String category) {
         int totalCourses = 0;

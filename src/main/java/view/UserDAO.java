@@ -1,6 +1,6 @@
 package view;
 
-import controller.SendMailActivateAcc;
+import controller.SendingEmail;
 import controller.RegisterBean;
 import java.sql.Connection;
 import model.User;
@@ -13,61 +13,11 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/**
+ *
+ * @author Minh
+ */
 public class UserDAO extends DBContext<User> {
-
-    public User getUserById(int userId) {
-        User user = null;
-        String query = "SELECT * FROM users WHERE id = ?";
-
-        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, userId);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-
-                    user = new User(
-                            rs.getInt("id"),
-                            rs.getString("full_name"),
-                            rs.getString("gender"),
-                            rs.getString("email"),
-                            rs.getString("password"),
-                            rs.getString("role"),
-                            rs.getString("avatar_url"),
-                            rs.getDate("created_at"),
-                            rs.getDate("updated_at"),
-                            rs.getString("hash"),
-                            rs.getInt("isValid")
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return user;
-    }
-
-    public boolean addUser(User user) {
-        String sql = "INSERT INTO users (full_name, gender, email, password, role, isValid) VALUES (?, ?, ?, ?, ?, ?)";
-
-        try (Connection conn = getConn(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, user.getFullName());
-            stmt.setString(2, user.getGender());
-            stmt.setString(3, user.getEmail());
-            stmt.setString(4, user.getPassword());
-            stmt.setString(5, user.getRole());
-            stmt.setInt(6, user.getIsValid());
-
-            int rowsInserted = stmt.executeUpdate();
-            return rowsInserted > 0;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
 
     public boolean updateProfile(User user) {
         String query = "UPDATE users SET full_name = ?, gender = ?, mobile = ? WHERE id = ?";
@@ -118,6 +68,7 @@ public class UserDAO extends DBContext<User> {
 //        return "ERROR";
 //
 //    }
+
     public User login(String email, String password) {
         User user = null;
         String query = "SELECT * FROM users WHERE email = ? AND password = ?";
@@ -156,8 +107,8 @@ public class UserDAO extends DBContext<User> {
                             rs.getString("avatar_url"),
                             rs.getDate("created_at"),
                             rs.getDate("updated_at"),
-                            rs.getString("hash"),
-                            rs.getInt("isValid")
+                            rs.getString("hash"), // Thêm thuộc tính hash
+                            rs.getInt("isValid") // Thêm thuộc tính isValid
                     );
                 }
             }
@@ -176,17 +127,17 @@ public class UserDAO extends DBContext<User> {
             while (rs.next()) {
                 // Tạo một đối tượng User mới trong vòng lặp
                 User user = new User(
-                        rs.getInt("id"),
-                        rs.getString("full_name"),
-                        rs.getString("gender"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getString("role"),
-                        rs.getString("avatar_url"),
-                        rs.getDate("created_at"),
-                        rs.getDate("updated_at"),
-                        rs.getString("hash"),
-                        rs.getInt("isValid")
+                        rs.getInt("id"), // Lấy id
+                        rs.getString("full_name"), // Lấy full_name
+                        rs.getString("gender"), // Lấy gender
+                        rs.getString("email"), // Lấy email
+                        rs.getString("password"), // Lấy password
+                        rs.getString("role"), // Lấy role
+                        rs.getString("avatar_url"), // Lấy avatar_url
+                        rs.getDate("created_at"), // Lấy created_at
+                        rs.getDate("updated_at"), // Lấy updated_at
+                        rs.getString("hash"), // Lấy hash
+                        rs.getInt("isValid") // Lấy isValid
                 );
                 users.add(user);
             }
@@ -206,17 +157,17 @@ public class UserDAO extends DBContext<User> {
             try (ResultSet rs = pre.executeQuery()) {
                 if (rs.next()) {
                     user = new User(
-                            rs.getInt("id"),
-                            rs.getString("full_name"),
-                            rs.getString("gender"),
-                            rs.getString("email"),
-                            rs.getString("password"),
-                            rs.getString("role"),
-                            rs.getString("avatar_url"),
-                            rs.getDate("created_at"),
-                            rs.getDate("updated_at"),
-                            rs.getString("hash"),
-                            rs.getInt("isValid")
+                            rs.getInt("id"), // Lấy id
+                            rs.getString("full_name"), // Lấy full_name
+                            rs.getString("gender"), // Lấy gender
+                            rs.getString("email"), // Lấy email
+                            rs.getString("password"), // Lấy password
+                            rs.getString("role"), // Lấy role
+                            rs.getString("avatar_url"), // Lấy avatar_url
+                            rs.getDate("created_at"), // Lấy created_at
+                            rs.getDate("updated_at"), // Lấy updated_at
+                            rs.getString("hash"), // Lấy hash
+                            rs.getInt("isValid") // Lấy isValid
                     );
                 }
             }
@@ -237,10 +188,10 @@ public class UserDAO extends DBContext<User> {
             pre.setString(4, user.getPassword());
             pre.setString(5, user.getRole());
             pre.setString(6, user.getAvatarUrl());
-            pre.setDate(7, new java.sql.Date(user.getCreatedAt().getTime()));
-            pre.setDate(8, new java.sql.Date(user.getUpdatedAt().getTime()));
-            pre.setString(9, user.getHash());
-            pre.setInt(10, user.getIsValid());
+            pre.setDate(7, new java.sql.Date(user.getCreatedAt().getTime())); // Chuyển đổi Date sang java.sql.Date
+            pre.setDate(8, new java.sql.Date(user.getUpdatedAt().getTime())); // Chuyển đổi Date sang java.sql.Date
+            pre.setString(9, user.getHash());  // Thêm hash
+            pre.setInt(10, user.getIsValid()); // Thêm isValid
             result = pre.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -259,11 +210,11 @@ public class UserDAO extends DBContext<User> {
             pre.setString(4, user.getPassword());
             pre.setString(5, user.getRole());
             pre.setString(6, user.getAvatarUrl());
-            pre.setDate(7, new java.sql.Date(user.getCreatedAt().getTime()));
-            pre.setDate(8, new java.sql.Date(user.getUpdatedAt().getTime()));
-            pre.setString(9, user.getHash());
-            pre.setInt(10, user.getIsValid());
-            pre.setInt(11, user.getId());
+            pre.setDate(7, new java.sql.Date(user.getCreatedAt().getTime())); // Chuyển đổi Date sang java.sql.Date
+            pre.setDate(8, new java.sql.Date(user.getUpdatedAt().getTime())); // Chuyển đổi Date sang java.sql.Date
+            pre.setString(9, user.getHash());  // Gán giá trị cho hash
+            pre.setInt(10, user.getIsValid()); // Gán giá trị cho isValid
+            pre.setInt(11, user.getId()); // Thêm id của user để cập nhật
             result = pre.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -284,8 +235,9 @@ public class UserDAO extends DBContext<User> {
         return result;
     }
 
-    public String getEmailByUser(String user) throws SQLException {
-        String sql = "Select email from users where name = ?";
+
+     public String getEmailByUser(String user) throws SQLException {
+        String sql = "Select email from users where full_name = ?";
         String email = "";
         PreparedStatement ps = super.getConn().prepareStatement(sql);
         ps.setString(1, user);
@@ -296,8 +248,19 @@ public class UserDAO extends DBContext<User> {
         }
         return null;
     }
-
-    public void updatePassword(String name, String newPassword) {
+      public int getIDByUser(String name) throws SQLException {
+        String sql = "Select id from users where full_name = ?";
+        int id ;
+        PreparedStatement ps = super.getConn().prepareStatement(sql);
+        ps.setString(1, name);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            id = rs.getInt("id");
+            return id;
+        }
+        return 0;
+    }
+ public void updatePassword(String name, String newPassword) {
         String sql = "UPDATE users SET password = ? WHERE email = ?";
         try {
             PreparedStatement ps = super.getConn().prepareStatement(sql);
@@ -309,7 +272,8 @@ public class UserDAO extends DBContext<User> {
         }
     }
 
-    public boolean isEmailExist(String email) throws SQLException {
+
+     public boolean isEmailExist(String email) throws SQLException {
         String sql = "Select email from users where email = ?";
         PreparedStatement ps = super.getConn().prepareStatement(sql);
         ps.setString(1, email);
@@ -320,146 +284,135 @@ public class UserDAO extends DBContext<User> {
         return false;
     }
 
-    public List<User> getUsersByPage(int pageNumber, int pageSize, String genderFilter, String roleFilter, String statusFilter, String searchTerm, String sortBy, String sortOrder) {
-        List<User> list = new ArrayList<>();
-        StringBuilder query = new StringBuilder("SELECT * FROM users WHERE 1=1");
 
-        // Thêm điều kiện lọc
+public List<User> getUsersByPage(int pageNumber, int pageSize, String genderFilter, String roleFilter, String statusFilter, String searchTerm, String sortBy, String sortOrder) {
+    List<User> list = new ArrayList<>();
+    StringBuilder query = new StringBuilder("SELECT * FROM users WHERE 1=1");
+    
+    // Thêm điều kiện lọc
+    if (genderFilter != null && !genderFilter.isEmpty()) {
+        query.append(" AND gender = ?");
+    }
+    if (roleFilter != null && !roleFilter.isEmpty()) {
+        query.append(" AND role = ?");
+    }
+    if (statusFilter != null && !statusFilter.isEmpty()) {
+        query.append(" AND isValid = ?");
+    }
+    if (searchTerm != null && !searchTerm.isEmpty()) {
+        query.append(" AND (full_name LIKE ? OR email LIKE ? OR id IN (SELECT user_id FROM user_contacts WHERE contact_value LIKE ?))");
+    }
+
+    // Thêm điều kiện sắp xếp
+    if (sortBy != null && !sortBy.isEmpty()) {
+        query.append(" ORDER BY ").append(sortBy).append(" ").append(sortOrder);
+    } else {
+        query.append(" ORDER BY id"); // Sắp xếp mặc định theo id nếu không có tham số
+    }
+
+    // Thêm phân trang
+    query.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+    
+    int offset = (pageNumber - 1) * pageSize;
+
+    try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query.toString())) {
+        int index = 1;
+        
+        // Thiết lập các tham số lọc
         if (genderFilter != null && !genderFilter.isEmpty()) {
-            query.append(" AND gender = ?");
+            ps.setString(index++, genderFilter);
         }
         if (roleFilter != null && !roleFilter.isEmpty()) {
-            query.append(" AND role = ?");
+            ps.setString(index++, roleFilter);
         }
         if (statusFilter != null && !statusFilter.isEmpty()) {
-            query.append(" AND isValid = ?");
+            ps.setBoolean(index++, statusFilter.equals("Valid"));
         }
         if (searchTerm != null && !searchTerm.isEmpty()) {
-            query.append(" AND (full_name LIKE ? OR email LIKE ? OR id IN (SELECT user_id FROM user_contacts WHERE contact_value LIKE ?))");
+            String searchPattern = "%" + searchTerm + "%";
+            ps.setString(index++, searchPattern);
+            ps.setString(index++, searchPattern);
+            ps.setString(index++, searchPattern);
         }
 
-        // Thêm điều kiện sắp xếp
-        if (sortBy != null && !sortBy.isEmpty()) {
-            query.append(" ORDER BY ").append(sortBy).append(" ").append(sortOrder);
-        } else {
-            query.append(" ORDER BY id"); // Sắp xếp mặc định theo id nếu không có tham số
+        // Thiết lập tham số offset và pageSize
+        ps.setInt(index++, offset);
+        ps.setInt(index++, pageSize);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                User user = new User(
+                        rs.getInt("id"),
+                        rs.getString("full_name"),
+                        rs.getString("gender"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("role"),
+                        rs.getString("avatar_url"),
+                        rs.getDate("created_at"),
+                        rs.getDate("updated_at"),
+                        rs.getString("hash"),
+                        rs.getInt("isValid")
+                );
+                list.add(user);
+            }
         }
-
-        // Thêm phân trang
-        query.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
-
-        int offset = (pageNumber - 1) * pageSize;
-
-        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query.toString())) {
-            int index = 1;
-
-            // Thiết lập các tham số lọc
-            if (genderFilter != null && !genderFilter.isEmpty()) {
-                ps.setString(index++, genderFilter);
-            }
-            if (roleFilter != null && !roleFilter.isEmpty()) {
-                ps.setString(index++, roleFilter);
-            }
-            if (statusFilter != null && !statusFilter.isEmpty()) {
-                ps.setBoolean(index++, statusFilter.equals("Valid"));
-            }
-            if (searchTerm != null && !searchTerm.isEmpty()) {
-                String searchPattern = "%" + searchTerm + "%";
-                ps.setString(index++, searchPattern);
-                ps.setString(index++, searchPattern);
-                ps.setString(index++, searchPattern);
-            }
-
-            // Thiết lập tham số offset và pageSize
-            ps.setInt(index++, offset);
-            ps.setInt(index++, pageSize);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    User user = new User(
-                            rs.getInt("id"),
-                            rs.getString("full_name"),
-                            rs.getString("gender"),
-                            rs.getString("email"),
-                            rs.getString("password"),
-                            rs.getString("role"),
-                            rs.getString("avatar_url"),
-                            rs.getDate("created_at"),
-                            rs.getDate("updated_at"),
-                            rs.getString("hash"),
-                            rs.getInt("isValid")
-                    );
-                    list.add(user);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return list;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+
+    return list;
+}
+
 
     // Phương thức đếm tổng số lượng users
-    public int getTotalUsers(String genderFilter, String roleFilter, String statusFilter, String searchTerm) {
-        int totalUsers = 0;
-        StringBuilder query = new StringBuilder("SELECT COUNT(*) AS total FROM users WHERE 1=1");
+public int getTotalUsers(String genderFilter, String roleFilter, String statusFilter, String searchTerm) {
+    int totalUsers = 0;
+    StringBuilder query = new StringBuilder("SELECT COUNT(*) AS total FROM users WHERE 1=1");
+    
+    if (genderFilter != null && !genderFilter.isEmpty()) {
+        query.append(" AND gender = ?");
+    }
+    if (roleFilter != null && !roleFilter.isEmpty()) {
+        query.append(" AND role = ?");
+    }
+    if (statusFilter != null) {
+        query.append(" AND isValid = ?");
+    }
+    if (searchTerm != null && !searchTerm.isEmpty()) {
+        query.append(" AND (full_name LIKE ? OR email LIKE ? OR id IN (SELECT user_id FROM user_contacts WHERE contact_value LIKE ?))");
+    }
+
+    try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query.toString())) {
+        int paramIndex = 1;
 
         if (genderFilter != null && !genderFilter.isEmpty()) {
-            query.append(" AND gender = ?");
+            ps.setString(paramIndex++, genderFilter);
         }
         if (roleFilter != null && !roleFilter.isEmpty()) {
-            query.append(" AND role = ?");
+            ps.setString(paramIndex++, roleFilter);
         }
         if (statusFilter != null) {
-            query.append(" AND isValid = ?");
+            ps.setBoolean(paramIndex++, statusFilter.equals("Valid"));
         }
         if (searchTerm != null && !searchTerm.isEmpty()) {
-            query.append(" AND (full_name LIKE ? OR email LIKE ? OR id IN (SELECT user_id FROM user_contacts WHERE contact_value LIKE ?))");
+            String likeTerm = "%" + searchTerm + "%";
+            ps.setString(paramIndex++, likeTerm);
+            ps.setString(paramIndex++, likeTerm);
+            ps.setString(paramIndex++, likeTerm);
         }
 
-        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query.toString())) {
-            int paramIndex = 1;
-
-            if (genderFilter != null && !genderFilter.isEmpty()) {
-                ps.setString(paramIndex++, genderFilter);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                totalUsers = rs.getInt("total");
             }
-            if (roleFilter != null && !roleFilter.isEmpty()) {
-                ps.setString(paramIndex++, roleFilter);
-            }
-            if (statusFilter != null) {
-                ps.setBoolean(paramIndex++, statusFilter.equals("Valid"));
-            }
-            if (searchTerm != null && !searchTerm.isEmpty()) {
-                String likeTerm = "%" + searchTerm + "%";
-                ps.setString(paramIndex++, likeTerm);
-                ps.setString(paramIndex++, likeTerm);
-                ps.setString(paramIndex++, likeTerm);
-            }
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    totalUsers = rs.getInt("total");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-
-        return totalUsers;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
 
-    public boolean updateUserRoleAndStatus(int userId, String role, int isValid) {
-        String query = "UPDATE users SET role = ?, isValid = ? WHERE id = ?";
-        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, role);
-            ps.setInt(2, isValid);
-            ps.setInt(3, userId);
-            int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+    return totalUsers;
+}
+
 
 }

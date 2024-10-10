@@ -3,25 +3,45 @@ package Test;
 import java.util.List;
 import model.UserVideo;
 import view.UserVideoDAO;
+import model.Course;
+import model.User;
+import view.CourseDAO;
+import view.UserDAO;
 
 public class Test {
+//    public static void main(String[] args) {
+//        UserDAO userDAO = new UserDAO();
+//
+//        // Tham số cho phương thức getUsersByPage
+//        int pageNumber = 1;      // Số trang
+//        int pageSize = 5;        // Số lượng người dùng mỗi trang
+//        String genderFilter = "Male";  // Lọc theo giới tính (null nếu không lọc)
+//        String roleFilter = null;     // Lọc theo vai trò (null nếu không lọc)
+//        String statusFilter = null;   // Lọc theo trạng thái (null nếu không lọc)
+//        String searchTerm = null;     // Tìm kiếm (null nếu không tìm kiếm)
+//        String sortBy = null;         // Sắp xếp theo cột nào
+//        String sortOrder = null;     // Thứ tự sắp xếp (ASC hoặc DESC)
+//
+//        // Gọi phương thức getUsersByPage
+//        List<User> userList = userDAO.getUsersByPage(pageNumber, pageSize, genderFilter, roleFilter, statusFilter, searchTerm, sortBy, sortOrder);
+//
+//        // In danh sách người dùng
+//        for (User user : userList) {
+//            System.out.println("User ID: " + user.getId());
+//            System.out.println("Full Name: " + user.getFullName());
+//            System.out.println("Gender: " + user.getGender());
+//            System.out.println("Email: " + user.getEmail());
+//            System.out.println("Role: " + user.getRole());
+//            System.out.println("Status: " + (user.getIsValid() == 1 ? "Valid" : "Invalid"));
+//            System.out.println("---------------------------");
+//        }
+//    }
+ 
     public static void main(String[] args) {
-        UserVideoDAO userVideosDAO = new UserVideoDAO();
-        
-        // Giả sử bạn muốn kiểm tra userId = 1
-        int testUserId = 1;
-        
-        // Lấy danh sách video của người dùng
-        List<UserVideo> videos = userVideosDAO.getUserVideo(testUserId);
-        
-        // Kiểm tra và in ra kết quả
-        if (videos.isEmpty()) {
-            System.out.println("No videos found for user ID: " + testUserId);
-        } else {
-            System.out.println("Videos for user ID: " + testUserId);
-            for (UserVideo video : videos) {
-                System.out.println("Video ID: " + video.getId() + ", Video URL: " + video.getVideoUrl());
-            }
-        }
+        CourseDAO courseDAO = new CourseDAO(); // Giả sử lớp của bạn có tên là CourseDAO
+     Course c = new Course("test1", "any", "softkill", 2, true, "nice");
+     courseDAO.addNewCourse(c);
     }
 }
+
+
