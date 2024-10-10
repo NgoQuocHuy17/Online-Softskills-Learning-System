@@ -73,39 +73,26 @@
 
         <!-- Pagination controls -->
       <!-- Pagination -->
-            <div class="pagination mt-4">
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        <!-- Previous Button -->
-                        <c:if test="${currentPage > 1}">
-                            <li class="page-item">
-                                <a class="page-link" href="SubjectList?page=${currentPage - 1}&status=${status}"
-                                   aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                        </c:if>
+          <div class="pagination justify-content-center">
+    <ul class="pagination">
+        <!-- Previous button -->
+        <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+            <a class="page-link" href="SubjectList?page=${currentPage - 1}&searchTitle=${searchTitle}&status=${status}">Previous</a>
+        </li>
 
-                        <!-- Page Numbers -->
-                        <c:forEach var="i" begin="1" end="${totalPages}">
-                            <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                <a class="page-link" href="SubjectList?page=${i}&status=${status}">${i}</a>
-                            </li>
-                        </c:forEach>
+        <!-- Page numbers -->
+        <c:forEach var="i" begin="1" end="${totalPages}">
+            <li class="page-item ${currentPage == i ? 'active' : ''}">
+                <a class="page-link" href="SubjectList?page=${i}&searchTitle=${searchTitle}&status=${status}">${i}</a>
+            </li>
+        </c:forEach>
 
-                        <!-- Next Button -->
-                        <c:if test="${currentPage < totalPages}">
-                            <li class="page-item">
-                                <a class="page-link" href="SubjectList?page=${currentPage + 1}&status=${status}"
-                                   aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </c:if>
-                    </ul>
-                </nav>
-            </div>
-        </div>
+        <!-- Next button -->
+        <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+            <a class="page-link" href="SubjectList?page=${currentPage + 1}&searchTitle=${searchTitle}&status=${status}">Next</a>
+        </li>
+    </ul>
+</div>
 
         <jsp:include page="footer.jsp" />
     </div>
