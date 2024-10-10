@@ -94,8 +94,11 @@
                         </li>
                         <% } else if (loggedInUser.getRole().equals("Admin")) { %>
                         <!-- Chỉ hiện phần Admin nếu role là Admin -->
-                        <li>
-                            <a href="admin/index.html" target="_blank">Admin</a>
+                        <li class="has-submenu">
+                            <a href="admin/index.html">Admin<i class="fas fa-chevron-down"></i></a>
+                            <ul class="submenu">
+                                <li><a href="/UserList">User List</a></li>
+                            </ul>
                         </li>
                         <% } %>
                         <% } %>
