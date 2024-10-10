@@ -339,8 +339,8 @@ public List<User> getUsersByPage(int pageNumber, int pageSize, String genderFilt
                         rs.getString("avatar_url"),
                         rs.getDate("created_at"),
                         rs.getDate("updated_at"),
-                        rs.getString("hash"), // Thêm thuộc tính hash
-                        rs.getInt("isValid") // Thêm thuộc tính isValid
+                        rs.getString("hash"),
+                        rs.getInt("isValid")
                 );
                 list.add(user);
             }

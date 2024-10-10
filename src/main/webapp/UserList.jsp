@@ -98,29 +98,34 @@
                         <div class="col-md-4 col-12">
                             <form class="search-form custom-search-form" action="UserList" method="get">
                                 <div class="input-group">
-                                    <input type="text" name="searchTerm" placeholder="Search user..." class="form-control">
+                                    <input type="text" name="searchTerm" placeholder="Search user..." class="form-control" value="${param.searchTerm}">
+                                    <input type="hidden" name="gender" value="${param.gender}"/>
+                                    <input type="hidden" name="role" value="${param.role}"/>
+                                    <input type="hidden" name="status" value="${param.status}"/>
                                     <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                                 </div>
                             </form>
+
                         </div>
 
                         <div class="col-md-4 col-12">
                             <form class="filter-form" action="UserList" method="get">
                                 <div class="input-group">
+                                    <input type="hidden" name="searchTerm" value="${param.searchTerm}"/>
                                     <select name="gender" class="form-control">
                                         <option value="">All Genders</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
+                                        <option value="Male" ${param.gender == 'Male' ? 'selected' : ''}>Male</option>
+                                        <option value="Female" ${param.gender == 'Female' ? 'selected' : ''}>Female</option>
                                     </select>
                                     <select name="role" class="form-control">
                                         <option value="">All Roles</option>
-                                        <option value="Admin">Admin</option>
-                                        <option value="User">User</option>
+                                        <option value="Admin" ${param.role == 'Admin' ? 'selected' : ''}>Admin</option>
+                                        <option value="User" ${param.role == 'User' ? 'selected' : ''}>User</option>
                                     </select>
                                     <select name="status" class="form-control">
                                         <option value="">All Statuses</option>
-                                        <option value="Valid">Valid</option>
-                                        <option value="Invalid">Invalid</option>
+                                        <option value="Valid" ${param.status == 'Valid' ? 'selected' : ''}>Valid</option>
+                                        <option value="Invalid" ${param.status == 'Invalid' ? 'selected' : ''}>Invalid</option>
                                     </select>
                                     <button type="submit" class="btn btn-primary">Filter</button>
                                 </div>
@@ -140,93 +145,152 @@
                     <div class="row">
                         <!-- Table for displaying user information -->
                         <h2 class="mt-4">User List</h2>
-                        <table class="table table-bordered table-hover">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th><a href="?sort=id&page=${currentPage}">User ID</a></th>
-                                    <th><a href="?sort=fullName&page=${currentPage}">Full Name</a></th>
-                                    <th><a href="?sort=gender&page=${currentPage}">Gender</a></th>
-                                    <th><a href="?sort=email&page=${currentPage}">Email</a></th>
-                                    <th><a href="?sort=mobile&page=${currentPage}">Mobile</a></th>
-                                    <th><a href="?sort=role&page=${currentPage}">Role</a></th>
-                                    <th><a href="?sort=status&page=${currentPage}">Status</a></th>
-                                    <th>Action</th> <!-- Thêm cột để hiển thị nút chi tiết -->
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Duyệt qua danh sách user và hiển thị trong bảng -->
-                                <c:forEach var="user" items="${userList}">
+                        <c:if test="${empty userList}">
+                            <div class="alert alert-warning">
+                                Không có người dùng hợp lệ
+                            </div>
+                        </c:if>
+                        <c:if test="${not empty userList}">
+                            <table class="table table-bordered table-hover">
+                                <thead class="thead-dark">
                                     <tr>
-                                        <td>${user.id}</td>
-                                        <td>${user.fullName}</td>
-                                        <td>${user.gender}</td>
-                                        <td>
-                                            <strong>${user.email}</strong> <br/>
-                                            <c:set var="emailKey" value="emails_${user.id}" />
-                                            <c:set var="userEmails" value="${requestScope[emailKey]}" />
-                                            <c:forEach var="email" items="${userEmails}">
-                                                ${email.contactValue} <br/>
-                                            </c:forEach>
-                                        </td>
-                                        <td>
-                                            <c:set var="phoneKey" value="phones_${user.id}" />
-                                            <c:set var="userPhones" value="${requestScope[phoneKey]}" />
-                                            <c:forEach var="phone" items="${userPhones}">
-                                                ${phone.contactValue} <br/>
-                                            </c:forEach>
-                                        </td>
-                                        <td>${user.role}</td>
-                                        <td>
-                                            <c:choose>
-                                                <c:when test="${user.isValid == 1}">
-                                                    Valid
-                                                </c:when>
-                                                <c:otherwise>
-                                                    Invalid
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </td>
-
-                                        <td>
-                                            <!-- Nút chi tiết gửi id của user -->
-                                            <form action="UserDetails" method="post">
-                                                <input type="hidden" name="userId" value="${user.id}"/>
-                                                <button type="submit" class="btn btn-primary">Details</button>
-                                            </form>
-                                        </td>
+                                        <th>
+                                            User ID
+                                            <a href="?sort=id&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
+                                                <i class="fas fa-arrow-up"></i>
+                                            </a>
+                                            <a href="?sort=id&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </a>
+                                        </th>
+                                        <th>
+                                            Full Name  
+                                            <a href="?sort=full_name&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
+                                                <i class="fas fa-arrow-up"></i>
+                                            </a>
+                                            <a href="?sort=full_name&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </a>
+                                        </th>
+                                        <th>
+                                            Gender 
+                                            <a href="?sort=gender&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
+                                                <i class="fas fa-arrow-up"></i>
+                                            </a>
+                                            <a href="?sort=gender&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </a>
+                                        </th>
+                                        <th>
+                                            Email 
+                                            <a href="?sort=email&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
+                                                <i class="fas fa-arrow-up"></i>
+                                            </a>
+                                            <a href="?sort=email&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </a>
+                                        </th>
+                                        <th>
+                                            Mobile 
+                                            <a href="?sort=mobile&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
+                                                <i class="fas fa-arrow-up"></i>
+                                            </a>
+                                            <a href="?sort=mobile&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </a>
+                                        </th>
+                                        <th>
+                                            Role 
+                                            <a href="?sort=role&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
+                                                <i class="fas fa-arrow-up"></i>
+                                            </a>
+                                            <a href="?sort=role&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </a>
+                                        </th>
+                                        <th>
+                                            Status 
+                                            <a href="?sort=isValid&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
+                                                <i class="fas fa-arrow-up"></i>
+                                            </a>
+                                            <a href="?sort=status&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </a>
+                                        </th>
                                     </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="user" items="${userList}">
+                                        <tr>
+                                            <td>${user.id}</td>
+                                            <td>${user.fullName}</td>
+                                            <td>${user.gender}</td>
+                                            <td>
+                                                <strong>${user.email}</strong> <br/>
+                                                <c:set var="emailKey" value="emails_${user.id}" />
+                                                <c:set var="userEmails" value="${requestScope[emailKey]}" />
+                                                <c:forEach var="email" items="${userEmails}">
+                                                    ${email.contactValue} <br/>
+                                                </c:forEach>
+                                            </td>
+                                            <td>
+                                                <c:set var="phoneKey" value="phones_${user.id}" />
+                                                <c:set var="userPhones" value="${requestScope[phoneKey]}" />
+                                                <c:forEach var="phone" items="${userPhones}">
+                                                    ${phone.contactValue} <br/>
+                                                </c:forEach>
+                                            </td>
+                                            <td>${user.role}</td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${user.isValid == 1}">
+                                                        Valid
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        Invalid
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                            <td>
+                                                <form action="UserDetails" method="post">
+                                                    <input type="hidden" name="userId" value="${user.id}"/>
+                                                    <button type="submit" class="btn btn-primary">Details</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </c:if>
                     </div>
 
                     <div class="row">
                         <!-- Phân trang -->
-                        <div class="blog-pagination mt-4">
-                            <nav>
-                                <ul class="pagination justify-content-center">
-                                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                        <a class="page-link" href="?page=${currentPage - 1}&sort=${param.sort}" tabindex="-1">
-                                            <i class="fas fa-angle-double-left"></i>
-                                        </a>
-                                    </li>
-
-                                    <!-- Hiển thị các số trang -->
-                                    <c:forEach var="i" begin="1" end="${totalPages}">
-                                        <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                            <a class="page-link" href="?page=${i}&sort=${param.sort}">${i}</a>
+                        <c:if test="${totalPages > 1 && not empty userList}">
+                            <div class="blog-pagination mt-4">
+                                <nav>
+                                    <ul class="pagination justify-content-center">
+                                        <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                            <a class="page-link" href="?page=${currentPage - 1}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&sort=${param.sort}&sortOrder=${param.sortOrder}" tabindex="-1">
+                                                <i class="fas fa-angle-double-left"></i>
+                                            </a>
                                         </li>
-                                    </c:forEach>
-
-                                    <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                        <a class="page-link" href="?page=${currentPage + 1}&sort=${param.sort}">
-                                            <i class="fas fa-angle-double-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
+                                        <c:forEach var="i" begin="1" end="${totalPages}">
+                                            <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                                <a class="page-link" href="?page=${i}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&sort=${param.sort}&sortOrder=${param.sortOrder}">${i}</a>
+                                            </li>
+                                        </c:forEach>
+                                        <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                            <a class="page-link" href="?page=${currentPage + 1}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&sort=${param.sort}&sortOrder=${param.sortOrder}">
+                                                <i class="fas fa-angle-double-right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </c:if>
                     </div>
+
                 </div>
             </div>
 
