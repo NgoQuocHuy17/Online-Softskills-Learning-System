@@ -1,17 +1,29 @@
 package Test;
 
-import SendingMail.SendingEmail;
+import model.User;
+import view.UserDAO;
 
 public class Test {
     public static void main(String[] args) {
-        SendingEmail emailSender = new SendingEmail();
+        UserDAO userDAO = new UserDAO(); // Giả sử bạn đã có một lớp UserDAO
+        int testUserId = 1; // Thay đổi ID người dùng để kiểm tra
 
-        // Khai báo cứng thông tin email
-        String to = "hung9a112004@gmail.com"; // Thay thế bằng địa chỉ email người nhận
-        String subject = "Test Email Subject";
-        String body = "This is a test email sent from the SendingEmail class.";
+        User user = userDAO.getUserById(testUserId);
 
-        // Gửi email
-        emailSender.sendEmail(to, subject, body);
+        if (user != null) {
+            System.out.println("User found:");
+            System.out.println("ID: " + user.getId());
+            System.out.println("Full Name: " + user.getFullName());
+            System.out.println("Gender: " + user.getGender());
+            System.out.println("Email: " + user.getEmail());
+            System.out.println("Role: " + user.getRole());
+            System.out.println("Avatar URL: " + user.getAvatarUrl());
+            System.out.println("Created At: " + user.getCreatedAt());
+            System.out.println("Updated At: " + user.getUpdatedAt());
+            System.out.println("Hash: " + user.getHash());
+            System.out.println("Is Valid: " + user.getIsValid());
+        } else {
+            System.out.println("User not found with ID: " + testUserId);
+        }
     }
 }

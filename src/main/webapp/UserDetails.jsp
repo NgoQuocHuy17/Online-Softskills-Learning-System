@@ -8,6 +8,7 @@
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="model.User" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
 
@@ -53,7 +54,7 @@
                             </div>
                             <ul class="main-nav">
                                 <li>
-                                    <a href="home">Home</a>
+                                    <a href="UserList">Back to User List</a>
                                 </li>
                             </ul>
 
@@ -116,17 +117,13 @@
                                         <%
                                             }
                                             // Lấy dữ liệu người dùng từ thuộc tính servlet
-                                            String avatarUrl = (String) request.getAttribute("avatar_url");
-                                            String fullName = (String) request.getAttribute("fullName");
-                                            String gender = (String) request.getAttribute("gender");
-                                            String role = (String) request.getAttribute("role");
-                                            String status = (String) request.getAttribute("status");
-                                        %>
+                                            User user = (User) request.getAttribute("user"); // Lấy đối tượng User từ request
+%>
                                         <div class="col-12 col-md-12">
                                             <div class="form-group">
                                                 <div class="change-avatar">
                                                     <div class="profile-img">
-                                                        <img src="<%= avatarUrl%>" alt="User Image">
+                                                        <img src="<%= user.getAvatarUrl()%>" alt="User Image">
                                                     </div>
                                                 </div>
                                             </div>
@@ -134,16 +131,16 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Full Name</label>
-                                                <input type="text" class="form-control" name="fullName" value="<%= fullName%>" readonly>
+                                                <input type="text" class="form-control" name="fullName" value="${user.getFullName()}" readonly>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Gender</label>
                                                 <select class="form-control" name="gender" disabled>
-                                                    <option value="Male" <%= "Male".equals(gender) ? "selected" : ""%>>Male</option>
-                                                    <option value="Female" <%= "Female".equals(gender) ? "selected" : ""%>>Female</option>
-                                                    <option value="Other" <%= "Other".equals(gender) ? "selected" : ""%>>Other</option>
+                                                    <option value="Male" <%= "Male".equals(user.getGender()) ? "selected" : ""%>>Male</option>
+                                                    <option value="Female" <%= "Female".equals(user.getGender()) ? "selected" : ""%>>Female</option>
+                                                    <option value="Other" <%= "Other".equals(user.getGender()) ? "selected" : ""%>>Other</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -151,44 +148,44 @@
                                             <div class="form-group">
                                                 <label>Role</label>
                                                 <select class="form-control" name="role">
-                                                    <option value="Admin" <%= "Admin".equals(role) ? "selected" : ""%>>Admin</option>
-                                                    <option value="User" <%= "User".equals(role) ? "selected" : ""%>>User</option>
-                                                    <option value="Guest" <%= "Guest".equals(role) ? "selected" : ""%>>Guest</option>
+                                                    <option value="Admin" <%= "Admin".equals(user.getRole()) ? "selected" : ""%>>Admin</option>
+                                                    <option value="User" <%= "User".equals(user.getRole()) ? "selected" : ""%>>User</option>
+                                                    <option value="Guest" <%= "Guest".equals(user.getRole()) ? "selected" : ""%>>Guest</option>
                                                 </select>
                                             </div>
                                         </div>
-
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Status</label>
                                                 <select class="form-control" name="status">
-                                                    <option value="Active" <%= "Active".equals(status) ? "selected" : ""%>>Active</option>
-                                                    <option value="Inactive" <%= "Inactive".equals(status) ? "selected" : ""%>>Inactive</option>
-                                                    <option value="Pending" <%= "Pending".equals(status) ? "selected" : ""%>>Pending</option>
+                                                    <option value="Active" <%= "Active".equals(user.getIsValid() == 1 ? "Active" : "Inactive") ? "selected" : ""%>>Active</option>
+                                                    <option value="Inactive" <%= "Inactive".equals(user.getIsValid() == 0 ? "Inactive" : "Active") ? "selected" : ""%>>Inactive</option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
 
                                     <!-- Hiển thị tất cả số điện thoại -->
-                                    <div class="col-12 col-md-12">
+                                    <div class="col-12 col-md-6">
                                         <label>Phone</label>
                                         <div class="form-group">
-                                            <c:forEach var="email" items="${emails}">
-                                                ${email.contactValue} <br/>
+                                            <c:forEach var="phone" items="${phones}">
+                                                <input type="text" class="form-control mb-2" value="${phone.contactValue}" readonly>
                                             </c:forEach>
                                         </div>
                                     </div>
 
-                                    <!-- Hiển thị tất cả email -->
-                                    <div class="col-12 col-md-12">
+                                    <!-- Hiển thị email -->
+                                    <div class="col-12 col-md-6">
                                         <label>Email</label>
                                         <div class="form-group">
-                                            <c:forEach var="phone" items="${phones}">
-                                                ${phone.contactValue} <br/>
+                                            <input type="text" class="form-control mb-2" value="${user.getEmail()}" readonly>
+                                            <c:forEach var="email" items="${emails}">
+                                                <input type="text" class="form-control mb-2" value="${email.contactValue}" readonly>
                                             </c:forEach>
                                         </div>
                                     </div>
+
                                     <div class="submit-section">
                                         <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
                                     </div>
