@@ -55,13 +55,13 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import java.util.Properties;
 
-public class SendingEmail {
+public class SendMailActivateAcc {
 
     private String userEmail;
     private String myHash;
 
     // Constructor
-    public SendingEmail(String userEmail, String myHash) {
+    public SendMailActivateAcc(String userEmail, String myHash) {
         this.userEmail = userEmail;
         this.myHash = myHash;
     }

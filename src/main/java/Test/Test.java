@@ -1,35 +1,17 @@
 package Test;
 
-import java.util.List;
-import model.User;
-import view.UserDAO;
+import SendingMail.SendingEmail;
 
 public class Test {
     public static void main(String[] args) {
-        UserDAO userDAO = new UserDAO();
+        SendingEmail emailSender = new SendingEmail();
 
-        // Tham số cho phương thức getUsersByPage
-        int pageNumber = 1;      // Số trang
-        int pageSize = 5;        // Số lượng người dùng mỗi trang
-        String genderFilter = "Male";  // Lọc theo giới tính (null nếu không lọc)
-        String roleFilter = null;     // Lọc theo vai trò (null nếu không lọc)
-        String statusFilter = null;   // Lọc theo trạng thái (null nếu không lọc)
-        String searchTerm = null;     // Tìm kiếm (null nếu không tìm kiếm)
-        String sortBy = null;         // Sắp xếp theo cột nào
-        String sortOrder = null;     // Thứ tự sắp xếp (ASC hoặc DESC)
+        // Khai báo cứng thông tin email
+        String to = "hung9a112004@gmail.com"; // Thay thế bằng địa chỉ email người nhận
+        String subject = "Test Email Subject";
+        String body = "This is a test email sent from the SendingEmail class.";
 
-        // Gọi phương thức getUsersByPage
-        List<User> userList = userDAO.getUsersByPage(pageNumber, pageSize, genderFilter, roleFilter, statusFilter, searchTerm, sortBy, sortOrder);
-
-        // In danh sách người dùng
-        for (User user : userList) {
-            System.out.println("User ID: " + user.getId());
-            System.out.println("Full Name: " + user.getFullName());
-            System.out.println("Gender: " + user.getGender());
-            System.out.println("Email: " + user.getEmail());
-            System.out.println("Role: " + user.getRole());
-            System.out.println("Status: " + (user.getIsValid() == 1 ? "Valid" : "Invalid"));
-            System.out.println("---------------------------");
-        }
+        // Gửi email
+        emailSender.sendEmail(to, subject, body);
     }
 }

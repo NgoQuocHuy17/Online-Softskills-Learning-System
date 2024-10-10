@@ -252,7 +252,7 @@
                                                 </c:choose>
                                             </td>
                                             <td>
-                                                <form action="UserDetails" method="post">
+                                                <form action="UserDetails" method="get">
                                                     <input type="hidden" name="userId" value="${user.id}"/>
                                                     <button type="submit" class="btn btn-primary">Details</button>
                                                 </form>
