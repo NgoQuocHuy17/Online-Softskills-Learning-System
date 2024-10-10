@@ -13,9 +13,6 @@
 <!DOCTYPE html>
 
 <html lang="en">
-
-    <!-- Mirrored from mentoring.dreamguystech.com/html/template/profile-settings.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 May 2023 10:32:21 GMT -->
-
     <head>
         <meta charset="utf-8">
         <title>User Details</title>
@@ -60,7 +57,6 @@
 
                         </div>
                         <ul class="nav header-navbar-rht">
-
                             <li class="nav-item dropdown has-arrow logged-item">
                                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                                     <span class="user-img">
@@ -97,7 +93,6 @@
                         <div class="col-md-4 col-12 text-right">
                             <a href="AddUser.jsp" class="btn btn-success">Add New User</a>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -121,12 +116,27 @@
                                             User user = (User) request.getAttribute("user");
                                         %>
                                         <input type="hidden" name="userId" value="<%= user.getId()%>">
-                                        <div class="col-12 col-md-12">
+                                        <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <div class="change-avatar">
                                                     <div class="profile-img">
                                                         <img src="<%= user.getAvatarUrl()%>" alt="User Image">
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <div class="video-gallery">
+                                                    <c:forEach var="video" items="${videos}">
+                                                        <div class="video-item">
+                                                            <video width="320" height="240" controls>
+                                                                <source src="${video.videoUrl}" type="video/mp4">
+                                                                Your browser does not support the video tag.
+                                                            </video>
+                                                        </div>
+                                                    </c:forEach>
                                                 </div>
                                             </div>
                                         </div>
