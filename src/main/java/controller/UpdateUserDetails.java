@@ -11,7 +11,9 @@ import java.util.List;
 import view.UserDAO;
 import model.User;
 import model.UserContact;
+import model.UserVideo;
 import view.UserContactDAO;
+import view.UserVideoDAO;
 
 @WebServlet(name = "UpdateUserDetails", urlPatterns = {"/UpdateUserDetails"})
 public class UpdateUserDetails extends HttpServlet {
@@ -35,11 +37,15 @@ public class UpdateUserDetails extends HttpServlet {
         }
 
         UserContactDAO userContactDAO = new UserContactDAO();
+        UserVideoDAO userVideoDAO = new UserVideoDAO();
 
         User user = userDAO.getUserById(userId);
         List<UserContact> phones = userContactDAO.getUserPhones(userId);
         List<UserContact> emails = userContactDAO.getUserEmails(userId);
+        List<UserVideo> videos = userVideoDAO.getUserVideo(userId);
 
+        // Gửi danh sách video, số điện thoại và email đến JSP
+        request.setAttribute("videos", videos);
         request.setAttribute("phones", phones);
         request.setAttribute("emails", emails);
         request.setAttribute("user", user);
