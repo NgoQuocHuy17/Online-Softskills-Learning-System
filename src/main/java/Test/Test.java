@@ -5,25 +5,26 @@ import view.UserDAO;
 
 public class Test {
     public static void main(String[] args) {
-        UserDAO userDAO = new UserDAO(); // Giả sử bạn đã có một lớp UserDAO
-        int testUserId = 1; // Thay đổi ID người dùng để kiểm tra
+        // Khởi tạo UserDAO
+        UserDAO userDAO = new UserDAO();
 
-        User user = userDAO.getUserById(testUserId);
+        // Tạo một đối tượng User mới
+        User newUser = new User();
+        newUser.setFullName("John Doe");
+        newUser.setGender("Male");
+        newUser.setEmail("johndoe@example.com");
+        newUser.setPassword("securePassword123");
+        newUser.setRole("Student");
+        newUser.setIsValid(1); // 1 cho Active, 0 cho Inactive
 
-        if (user != null) {
-            System.out.println("User found:");
-            System.out.println("ID: " + user.getId());
-            System.out.println("Full Name: " + user.getFullName());
-            System.out.println("Gender: " + user.getGender());
-            System.out.println("Email: " + user.getEmail());
-            System.out.println("Role: " + user.getRole());
-            System.out.println("Avatar URL: " + user.getAvatarUrl());
-            System.out.println("Created At: " + user.getCreatedAt());
-            System.out.println("Updated At: " + user.getUpdatedAt());
-            System.out.println("Hash: " + user.getHash());
-            System.out.println("Is Valid: " + user.getIsValid());
+        // Thêm user vào cơ sở dữ liệu
+        boolean isAdded = userDAO.addUser(newUser);
+
+        // Kiểm tra kết quả
+        if (isAdded) {
+            System.out.println("User added successfully!");
         } else {
-            System.out.println("User not found with ID: " + testUserId);
+            System.out.println("Failed to add user.");
         }
     }
 }

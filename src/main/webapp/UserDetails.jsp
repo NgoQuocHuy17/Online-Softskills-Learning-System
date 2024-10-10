@@ -78,13 +78,11 @@
                                             <h6>NAME?</h6> <!-- Lấy fullName từ session -->
                                             <p>ROLE?</p> <!-- Lấy role từ session -->
                                         </div>
-
                                     </div>
                                     <a class="dropdown-item" href="profile-settings.jsp">Profile Settings</a>
                                     <a class="dropdown-item" href="login.jsp">Logout</a>
                                 </div>
                             </li>
-
                         </ul>
                     </nav>
                 </div>
@@ -96,6 +94,10 @@
                         <div class="col-md-12 col-12">
                             <h2 class="breadcrumb-title">User Details</h2>
                         </div>
+                        <div class="col-md-4 col-12 text-right">
+                            <a href="AddUser.jsp" class="btn btn-success">Add New User</a>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -111,14 +113,14 @@
                                             String message = (String) request.getAttribute("message");
                                             if (message != null) {
                                         %>
-                                        <div class="alert alert-danger">
+                                        <div class="alert alert-success">
                                             <%= message%>
                                         </div>
                                         <%
                                             }
-                                            // Lấy dữ liệu người dùng từ thuộc tính servlet
-                                            User user = (User) request.getAttribute("user"); // Lấy đối tượng User từ request
-%>
+                                            User user = (User) request.getAttribute("user");
+                                        %>
+                                        <input type="hidden" name="userId" value="<%= user.getId()%>">
                                         <div class="col-12 col-md-12">
                                             <div class="form-group">
                                                 <div class="change-avatar">

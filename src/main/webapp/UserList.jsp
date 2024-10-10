@@ -134,7 +134,7 @@
                         </div>
 
                         <div class="col-md-4 col-12 text-right">
-                            <a href="AddUser" class="btn btn-success">Add User</a>
+                            <a href="AddUser.jsp" class="btn btn-success">Add User</a>
                         </div>
                     </div>
                 </div>
@@ -244,10 +244,10 @@
                                             <td>
                                                 <c:choose>
                                                     <c:when test="${user.isValid == 1}">
-                                                        Valid
+                                                        Active
                                                     </c:when>
                                                     <c:otherwise>
-                                                        Invalid
+                                                        Inactive
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>

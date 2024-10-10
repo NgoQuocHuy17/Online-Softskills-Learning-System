@@ -47,6 +47,28 @@ public class UserDAO extends DBContext<User> {
         return user;
     }
 
+    public boolean addUser(User user) {
+        String sql = "INSERT INTO users (full_name, gender, email, password, role, isValid) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = getConn(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, user.getFullName());
+            stmt.setString(2, user.getGender());
+            stmt.setString(3, user.getEmail());
+            stmt.setString(4, user.getPassword());
+            stmt.setString(5, user.getRole());
+            stmt.setInt(6, user.getIsValid());
+
+            int rowsInserted = stmt.executeUpdate();
+            return rowsInserted > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     public boolean updateProfile(User user) {
         String query = "UPDATE users SET full_name = ?, gender = ?, mobile = ? WHERE id = ?";
 
@@ -424,6 +446,20 @@ public class UserDAO extends DBContext<User> {
         }
 
         return totalUsers;
+    }
+
+    public boolean updateUserRoleAndStatus(int userId, String role, int isValid) {
+        String query = "UPDATE users SET role = ?, isValid = ? WHERE id = ?";
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, role);
+            ps.setInt(2, isValid);
+            ps.setInt(3, userId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

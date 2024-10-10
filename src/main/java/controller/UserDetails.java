@@ -25,7 +25,6 @@ public class UserDetails extends HttpServlet {
             return;
         }
 
-        // Chuyển đổi userId sang kiểu số
         int userId;
         try {
             userId = Integer.parseInt(userIdParam);
@@ -38,6 +37,7 @@ public class UserDetails extends HttpServlet {
         // Tạo đối tượng UserDAO và lấy thông tin người dùng
         UserDAO userDAO = new UserDAO();
         UserContactDAO userContactDAO = new UserContactDAO();
+        
         User user = userDAO.getUserById(userId);
         List<UserContact> phones = userContactDAO.getUserPhones(userId);
         List<UserContact> emails = userContactDAO.getUserEmails(userId);
@@ -45,9 +45,8 @@ public class UserDetails extends HttpServlet {
         // Gửi danh sách số điện thoại và email đến JSP
         request.setAttribute("phones", phones);
         request.setAttribute("emails", emails);
-
-        // Gửi thông tin người dùng đến trang UserDetails.jsp
         request.setAttribute("user", user);
+        
         request.getRequestDispatcher("/UserDetails.jsp").forward(request, response);
     }
 }
