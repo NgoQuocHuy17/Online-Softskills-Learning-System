@@ -53,7 +53,7 @@
                             </div>
                             <ul class="main-nav">
                                 <li class="has-submenu">
-                                    <a href="index.html">Home</a>   
+                                    <a href="home">Home</a>   
                                 </li>
 
                                 <li class="login-link">
