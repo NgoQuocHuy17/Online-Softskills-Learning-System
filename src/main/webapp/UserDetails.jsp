@@ -4,6 +4,8 @@
     Author     : hung6
 --%>
 
+<%@page import="model.UserContact"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="model.User" %>
 
@@ -102,22 +104,29 @@
                     <div class="row">
                         <div class="card">
                             <div class="card-body">
-                                <form action="updateProfile" method="post">
+                                <form action="UpdateUserDetails" method="post">
                                     <div class="row form-row">
                                         <%
                                             String message = (String) request.getAttribute("message");
                                             if (message != null) {
-                                                String alertType = message.startsWith("Failed") ? "alert-danger" : "alert-success";
                                         %>
-                                        <div class="alert <%= alertType%>">
+                                        <div class="alert alert-danger">
                                             <%= message%>
                                         </div>
-                                        <% }%>
+                                        <%
+                                            }
+                                            // Lấy dữ liệu người dùng từ thuộc tính servlet
+                                            String avatarUrl = (String) request.getAttribute("avatar_url");
+                                            String fullName = (String) request.getAttribute("fullName");
+                                            String gender = (String) request.getAttribute("gender");
+                                            String role = (String) request.getAttribute("role");
+                                            String status = (String) request.getAttribute("status");
+                                        %>
                                         <div class="col-12 col-md-12">
                                             <div class="form-group">
                                                 <div class="change-avatar">
                                                     <div class="profile-img">
-                                                        <img src="assets/img/user/user.jpg" alt="User Image">
+                                                        <img src="<%= avatarUrl%>" alt="User Image">
                                                     </div>
                                                 </div>
                                             </div>
@@ -125,67 +134,65 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Full Name</label>
-                                                <input type="text" class="form-control" name="fullName" value="" readonly>
+                                                <input type="text" class="form-control" name="fullName" value="<%= fullName%>" readonly>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Gender</label>
                                                 <select class="form-control" name="gender" disabled>
-                                                    <option value="Male">Male</option>
-                                                    <option value="Female">Female</option>
-                                                    <option value="Other">Other</option>
+                                                    <option value="Male" <%= "Male".equals(gender) ? "selected" : ""%>>Male</option>
+                                                    <option value="Female" <%= "Female".equals(gender) ? "selected" : ""%>>Female</option>
+                                                    <option value="Other" <%= "Other".equals(gender) ? "selected" : ""%>>Other</option>
                                                 </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label>Email</label>
-                                                <input type="email" class="form-control" name="email" value="" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label>Mobile</label>
-                                                <input type="text" name="mobile" value="" class="form-control" readonly>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Role</label>
                                                 <select class="form-control" name="role">
-                                                    <option value="Admin">Admin</option>
-                                                    <option value="User">User</option>
-                                                    <option value="Guest">Guest</option>
+                                                    <option value="Admin" <%= "Admin".equals(role) ? "selected" : ""%>>Admin</option>
+                                                    <option value="User" <%= "User".equals(role) ? "selected" : ""%>>User</option>
+                                                    <option value="Guest" <%= "Guest".equals(role) ? "selected" : ""%>>Guest</option>
                                                 </select>
                                             </div>
                                         </div>
 
-                                        <!-- Address Field (Read-Only) -->
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label>Address</label>
-                                                <input type="text" name="address" value="" class="form-control" readonly>
-                                            </div>
-                                        </div>
-
-                                        <!-- Status Field (Editable) -->
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Status</label>
                                                 <select class="form-control" name="status">
-                                                    <option value="Active">Active</option>
-                                                    <option value="Inactive">Inactive</option>
-                                                    <option value="Pending">Pending</option>
+                                                    <option value="Active" <%= "Active".equals(status) ? "selected" : ""%>>Active</option>
+                                                    <option value="Inactive" <%= "Inactive".equals(status) ? "selected" : ""%>>Inactive</option>
+                                                    <option value="Pending" <%= "Pending".equals(status) ? "selected" : ""%>>Pending</option>
                                                 </select>
                                             </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Hiển thị tất cả số điện thoại -->
+                                    <div class="col-12 col-md-12">
+                                        <label>Phone</label>
+                                        <div class="form-group">
+                                            <c:forEach var="email" items="${emails}">
+                                                ${email.contactValue} <br/>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
+
+                                    <!-- Hiển thị tất cả email -->
+                                    <div class="col-12 col-md-12">
+                                        <label>Email</label>
+                                        <div class="form-group">
+                                            <c:forEach var="phone" items="${phones}">
+                                                ${phone.contactValue} <br/>
+                                            </c:forEach>
                                         </div>
                                     </div>
                                     <div class="submit-section">
                                         <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
                                     </div>
                                 </form>
-
                             </div>
                         </div>
                     </div>

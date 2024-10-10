@@ -25,7 +25,6 @@ public class UserDAO extends DBContext<User> {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
 
-                    // Tạo đối tượng Users từ kết quả
                     user = new User(
                             rs.getInt("id"),
                             rs.getString("full_name"),

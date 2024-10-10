@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import model.User;
 
 @WebServlet(name = "updateProfile", urlPatterns = "/updateProfile")
-public class updateProfile extends HttpServlet {
+public class UpdateProfile extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
