@@ -26,7 +26,7 @@
 
         <!-- Create New Button -->
         <div class="mb-4 text-right">
-            <a href="createCourse.jsp" class="btn btn-success">Create New Course</a>
+            <a href="NewSubject.jsp" class="btn btn-success">Create New Course</a>
         </div>
 
         <!-- Search Box -->
@@ -72,18 +72,39 @@
         </c:forEach>
 
         <!-- Pagination controls -->
-        <div class="pagination">
-            <c:if test="${currentPage > 1}">
-                <a href="SubjectList?page=${currentPage - 1}&searchTitle=${param.searchTitle}&status=${param.status}" class="btn btn-secondary">Previous</a>
-            </c:if>
+      <!-- Pagination -->
+            <div class="pagination mt-4">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <!-- Previous Button -->
+                        <c:if test="${currentPage > 1}">
+                            <li class="page-item">
+                                <a class="page-link" href="SubjectList?page=${currentPage - 1}&status=${status}"
+                                   aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        </c:if>
 
-            <c:forEach var="i" begin="1" end="${totalPages}">
-                <a href="SubjectList?page=${i}&searchTitle=${param.searchTitle}&status=${param.status}" class="btn ${i == currentPage ? 'btn-primary' : 'btn-light'}">${i}</a>
-            </c:forEach>
+                        <!-- Page Numbers -->
+                        <c:forEach var="i" begin="1" end="${totalPages}">
+                            <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                <a class="page-link" href="SubjectList?page=${i}&status=${status}">${i}</a>
+                            </li>
+                        </c:forEach>
 
-            <c:if test="${currentPage < totalPages}">
-                <a href="SubjectList?page=${currentPage + 1}&searchTitle=${param.searchTitle}&status=${param.status}" class="btn btn-secondary">Next</a>
-            </c:if>
+                        <!-- Next Button -->
+                        <c:if test="${currentPage < totalPages}">
+                            <li class="page-item">
+                                <a class="page-link" href="SubjectList?page=${currentPage + 1}&status=${status}"
+                                   aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </c:if>
+                    </ul>
+                </nav>
+            </div>
         </div>
 
         <jsp:include page="footer.jsp" />

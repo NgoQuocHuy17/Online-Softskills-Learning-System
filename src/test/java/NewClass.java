@@ -1,5 +1,3 @@
-package newpackage;
-
 
 import java.util.List;
 import model.Course;

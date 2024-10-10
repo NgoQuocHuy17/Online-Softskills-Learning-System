@@ -37,17 +37,8 @@ public class Test {
  
     public static void main(String[] args) {
         CourseDAO courseDAO = new CourseDAO(); // Giả sử lớp của bạn có tên là CourseDAO
-        List<String> statuses = courseDAO.getAllStatuses();
-
-        // In ra các trạng thái
-        if (statuses.isEmpty()) {
-            System.out.println("Không có trạng thái nào.");
-        } else {
-            System.out.println("Các trạng thái có trong bảng courses:");
-            for (String status : statuses) {
-                System.out.println(status);
-            }
-        }
+     Course c = new Course("test1", "any", "softkill", 2, true, "nice");
+     courseDAO.addNewCourse(c);
     }
 }
 

@@ -65,14 +65,13 @@ public class SubjectList extends HttpServlet {
         // Pagination logic
         int totalCourses = allCourses.size();
         int totalPages = (int) Math.ceil((double) totalCourses / itemsPerPage);
-        int startIndex = (currentPage - 1) * itemsPerPage;
+        int startIndex = (currentPage -1 ) * itemsPerPage;
         int endIndex = Math.min(startIndex + itemsPerPage, totalCourses);
 
         // Get the sublist for the current page
         List<Course> paginatedCourses = allCourses.subList(startIndex, endIndex);
 
         request.setAttribute("courses", paginatedCourses);
-     
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("searchTitle", searchTitle); // Set the search title for the form

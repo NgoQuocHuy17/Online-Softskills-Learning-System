@@ -18,6 +18,19 @@ public class Course {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
+    public Course(String title, String description, String category, int ownerId, boolean isSponsored, String status) {
+        this.title = title;
+        this.description = description;
+        this.category = category;
+        this.ownerId = ownerId;
+        this.isSponsored = isSponsored;
+        this.status = status;
+    }
+
+    public Course() {
+    }
+
+    
     // Getters and Setters
 
     public int getId() {

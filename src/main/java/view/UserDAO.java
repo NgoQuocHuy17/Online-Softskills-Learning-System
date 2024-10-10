@@ -237,7 +237,7 @@ public class UserDAO extends DBContext<User> {
 
 
      public String getEmailByUser(String user) throws SQLException {
-        String sql = "Select email from users where name = ?";
+        String sql = "Select email from users where full_name = ?";
         String email = "";
         PreparedStatement ps = super.getConn().prepareStatement(sql);
         ps.setString(1, user);
@@ -247,6 +247,18 @@ public class UserDAO extends DBContext<User> {
             return email;
         }
         return null;
+    }
+      public int getIDByUser(String name) throws SQLException {
+        String sql = "Select id from users where full_name = ?";
+        int id ;
+        PreparedStatement ps = super.getConn().prepareStatement(sql);
+        ps.setString(1, name);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            id = rs.getInt("id");
+            return id;
+        }
+        return 0;
     }
  public void updatePassword(String name, String newPassword) {
         String sql = "UPDATE users SET password = ? WHERE email = ?";
