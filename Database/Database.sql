@@ -32,9 +32,9 @@ CREATE TABLE user_videos (
 CREATE TABLE user_contacts (
     id INT IDENTITY(1,1) PRIMARY KEY,           
     user_id INT NOT NULL,                       
-    contact_type NVARCHAR(50) NOT NULL,  -- 'Phone' hoặc 'Email'
+    contact_type NVARCHAR(50) NOT NULL,
     contact_value VARCHAR(255) NOT NULL,        
-    is_preferred bit DEFAULT 0,  -- Cột mới để đánh dấu phương thức liên hệ yêu thích
+    is_preferred bit DEFAULT 0,
     CONSTRAINT FK_UserContacts_Users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -87,15 +87,17 @@ CREATE TABLE subjects (
     CONSTRAINT FK_Subjects_Users FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
--- Table: course_sale
-CREATE TABLE course_sale (
-    course_id INT PRIMARY KEY,                         -- Khóa chính, đồng thời là khóa ngoại
-    basic_package_sale_price DECIMAL(10, 2),           -- Giá giảm của gói cơ bản
-    advanced_package_sale_price DECIMAL(10, 2),        -- Giá giảm của gói nâng cao
-    start_date DATETIME NOT NULL,                      -- Ngày bắt đầu giảm giá
-    end_date DATETIME NOT NULL,                        -- Ngày kết thúc giảm giá
+-- Table: packages
+CREATE TABLE packages (
+    package_id INT PRIMARY KEY,
+	course_id INT NOT NULL,
+	package_name NVARCHAR(255),
+    price DECIMAL(10, 2),
+    sale_price DECIMAL(10, 2),
+    sale_start DATETIME NOT NULL,
+    sale_end DATETIME NOT NULL,
     CONSTRAINT FK_CourseSale_Courses FOREIGN KEY (course_id) 
-        REFERENCES courses(id) ON DELETE CASCADE       -- Khóa ngoại tham chiếu đến bảng courses
+        REFERENCES courses(id) ON DELETE CASCADE
 );
 
 -- Table: course_details
