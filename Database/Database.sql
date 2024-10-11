@@ -100,6 +100,19 @@ CREATE TABLE packages (
         REFERENCES courses(id) ON DELETE CASCADE
 );
 
+-- Table: thumbnails
+CREATE TABLE Thumbnails (
+    id INT PRIMARY KEY IDENTITY(1,1),   -- Auto-incrementing primary key
+    courseId INT NOT NULL,              -- Foreign key reference to Courses table
+    fileName NVARCHAR(255),             -- File name of the uploaded image
+    fileData VARBINARY(MAX) NOT NULL,   -- Binary data for the image file
+    uploaded_at DATETIME DEFAULT GETDATE(), -- Timestamp for when the image was uploaded
+
+    -- Foreign key constraint to ensure thumbnails are linked to existing courses
+    FOREIGN KEY (courseId) REFERENCES Courses(id)
+        ON DELETE CASCADE                -- Delete associated thumbnails if the course is deleted
+);
+
 -- Table: course_details
 CREATE TABLE course_details (
     course_id INT PRIMARY KEY,              
