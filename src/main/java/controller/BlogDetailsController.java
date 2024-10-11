@@ -39,7 +39,7 @@ public class BlogDetailsController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         BlogPostDAO blogPostDAO = new BlogPostDAO();
-        int id = Integer.parseInt(request.getParameter("bloglistid"));
+        int id = Integer.parseInt(request.getParameter("id"));
         BlogPost blogPost = blogPostDAO.select(id);
         
         UserDAO userDao = new UserDAO();
