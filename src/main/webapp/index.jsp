@@ -3,41 +3,27 @@
     Created on : May 21, 2024, 11:32:05 PM
     Author     : asus
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-
-    <!-- Mirrored from mentoring.dreamguystech.com/html/template/index-five.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 May 2023 10:31:03 GMT -->
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
         <title>Mentoring</title>
-
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
-
         <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-
         <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
         <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
-
         <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
         <link rel="stylesheet" href="assets/css/owl.theme.default.min.css">
-
         <link rel="stylesheet" href="assets/plugins/slick/slick.css">
         <link rel="stylesheet" href="assets/plugins/slick/slick-theme.css">
-
         <link rel="stylesheet" href="assets/plugins/aos/aos.css">
-
         <link rel="stylesheet" href="assets/css/style.css">
     </head>
     <body class="body-home-one">
-
         <div class="main-wrapper">
-
             <jsp:include page="header.jsp"/>
-
-
             <section class=" home-slide home-slide-four d-flex align-items-center">
                 <div class="container">
                     <div class="side-four-right">
@@ -50,7 +36,6 @@
                                     <h1>Engaging & <br>Accessible <span>Online<br>Courses</span> For All</h1>
                                     <p>Own your future learning new skills online</p>
                                 </div>
-
                                 <div class="search-box">
                                     <form action="https://mentoring.dreamguystech.com/html/template/search.html">
                                         <div class="form-group search-info location-search">
@@ -59,7 +44,6 @@
                                         </div>
                                     </form>
                                 </div>
-
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -70,8 +54,6 @@
                     </div>
                 </div>
             </section>
-
-
             <section class="most-popular course-categories-four">
                 <div class="container">
                     <div class="side-four">
@@ -211,8 +193,6 @@
                     </div>
                 </div>
             </section>
-
-
             <section class="section featured-course-four">
                 <div class="container">
                     <div class="side-four-right">
@@ -723,8 +703,6 @@
                     </div>
                 </div>
             </section>
-
-
             <section class="new-course new-course-four">
                 <div class="container">
                     <div class="new-course-background">
