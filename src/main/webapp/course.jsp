@@ -60,36 +60,44 @@
             </form>
 
             <!-- Course List -->
-            <c:forEach var="course" items="${courses}">
-                <div class="col-md-12 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h2 class="card-title">
-                                ${course.title}
-                                <c:if test="${course.sponsored}">
-                                    <span class="hot-icon" title="Hot Course">🔥</span>
-                                </c:if>
-                            </h2>
-                            <p class="card-text"><strong>Tagline:</strong> ${course.tagLine}</p>
-                            <p class="card-text"><strong>Category:</strong> ${course.category}</p>
-                            <p class="card-text"><strong>Basic Package Price:</strong> ${course.basicPackagePrice}</p>
-                            <p class="card-text"><strong>Advanced Package Price:</strong> ${course.advancedPackagePrice}</p>
+            <c:if test="${not empty courses}">
+                <c:forEach var="course" items="${courses}">
+                    <div class="col-md-12 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="card-title">
+                                    ${course.title}
+                                    <c:if test="${course.sponsored}">
+                                        <span class="hot-icon" title="Hot Course">🔥</span>
+                                    </c:if>
+                                </h2>
+                                <p class="card-text"><strong>Tagline:</strong> ${course.tagLine}</p>
+                                <p class="card-text"><strong>Category:</strong> ${course.category}</p>
+                                <p class="card-text"><strong>Basic Package Price:</strong> ${course.basicPackagePrice}</p>
+                                <p class="card-text"><strong>Advanced Package Price:</strong> ${course.advancedPackagePrice}</p>
 
-                            <!-- Sử dụng fmt:formatDate để định dạng updatedAt thành dd/MM/yyyy -->
-                            <p class="card-text">
-                                <strong>Update at:</strong> 
-                                <fmt:formatDate value="${course.updatedAt}" pattern="dd/MM/yyyy" />
-                            </p>
+                                <!-- Format updatedAt to dd/MM/yyyy -->
+                                <p class="card-text">
+                                    <strong>Update at:</strong> 
+                                    <fmt:formatDate value="${course.updatedAt}" pattern="dd/MM/yyyy" />
+                                </p>
 
-                            <!-- Nút View Details -->
-                            <a href="course-detail?courseId=${course.id}" class="btn btn-primary">View Details</a>
+                                <!-- View Details Button -->
+                                <a href="course-detail?courseId=${course.id}" class="btn btn-primary">View Details</a>
 
-                            <!-- Nút Register thêm vào -->
-                            <a href="CourseRegister?courseId=${course.id}" class="btn btn-success ml-2">Register</a>
+                                <!-- Register Button -->
+                                <a href="CourseRegister?courseId=${course.id}" class="btn btn-success ml-2">Register</a>
+                            </div>
                         </div>
                     </div>
+                </c:forEach>
+            </c:if>
+
+            <c:if test="${empty courses}">
+                <div class="alert alert-warning text-center">
+                    <strong>No courses available.</strong>
                 </div>
-            </c:forEach>
+            </c:if>
 
             <!-- Pagination -->
             <div class="pagination mt-4">
