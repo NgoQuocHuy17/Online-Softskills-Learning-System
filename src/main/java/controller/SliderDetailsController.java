@@ -51,6 +51,7 @@ public class SliderDetailsController extends HttpServlet {
                 request.getRequestDispatcher("error.jsp").forward(request, response);
             }
         } else {
+            response.sendRedirect("SliderListController");
             request.setAttribute("errorMessage", "No slider ID provided.");
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
