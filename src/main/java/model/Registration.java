@@ -11,7 +11,6 @@ public class Registration {
     private Date validFrom;
     private Date validTo;
 
-    // Constructor
     public Registration(int id, int userId, int packageId, double totalCost, String status, Date validFrom, Date validTo) {
         this.id = id;
         this.userId = userId;
@@ -22,7 +21,6 @@ public class Registration {
         this.validTo = validTo;
     }
 
-    // Getters and Setters
     public int getId() {
         return id;
     }
