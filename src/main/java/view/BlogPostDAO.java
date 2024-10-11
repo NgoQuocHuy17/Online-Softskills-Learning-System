@@ -3,6 +3,8 @@ package view;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.*;
 
 public class BlogPostDAO extends DBContext<BlogPost> {
@@ -45,8 +47,8 @@ public class BlogPostDAO extends DBContext<BlogPost> {
                     post.setContent(rs.getString("content"));
                     post.setAuthorId(rs.getInt("author_id"));
                     post.setStatus(rs.getString("status"));
-                    post.setCreatedAt(rs.getTimestamp("created_at"));
-                    post.setUpdatedAt(rs.getTimestamp("updated_at"));
+                    post.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                    post.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
 
                     blogPosts.add(post);
                 }
@@ -126,8 +128,8 @@ public class BlogPostDAO extends DBContext<BlogPost> {
                     post.setContent(rs.getString("content"));
                     post.setAuthorId(rs.getInt("author_id"));
                     post.setStatus(rs.getString("status"));
-                    post.setCreatedAt(rs.getTimestamp("created_at"));
-                    post.setUpdatedAt(rs.getTimestamp("updated_at"));
+                    post.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                    post.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
 
                     blogPosts.add(post);
                 }
@@ -142,27 +144,110 @@ public class BlogPostDAO extends DBContext<BlogPost> {
 
     @Override
     public List<BlogPost> select() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "SELECT [id], [title], [thumbnail_url], [category_id], [content], [author_id], [status], [created_at], [updated_at] FROM [dbo].[blog_posts]";
+        List<BlogPost> blogPosts = new ArrayList();
+        try (PreparedStatement pre = super.getConn().prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
+            while (rs.next()) {
+                BlogPost blogPost = new BlogPost();
+                blogPost.setId(rs.getInt(1));
+                blogPost.setTitle(rs.getString(2));
+                blogPost.setThumbnailUrl(rs.getString(3));
+                blogPost.setCategoryId(rs.getInt(4));
+                blogPost.setContent(rs.getString(5));
+                blogPost.setAuthorId(rs.getInt(6));
+                blogPost.setStatus(rs.getString(7));
+                blogPost.setCreatedAt(rs.getTimestamp(8).toLocalDateTime());
+                blogPost.setUpdatedAt(rs.getTimestamp(9).toLocalDateTime());
+                blogPosts.add(blogPost);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BlogPostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return blogPosts;
     }
 
     @Override
     public BlogPost select(int... id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "SELECT * FROM [dbo].[blog_posts] WHERE id = ?";
+        BlogPost blogPost = null;
+        try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
+            pre.setInt(1, id[0]);
+            try (ResultSet rs = pre.executeQuery()) {
+                if (rs.next()) {
+                    blogPost = new BlogPost();
+                    blogPost.setId(rs.getInt(1));
+                    blogPost.setTitle(rs.getString(2));
+                    blogPost.setThumbnailUrl(rs.getString(3));
+                    blogPost.setCategoryId(rs.getInt(4));
+                    blogPost.setContent(rs.getString(5));
+                    blogPost.setAuthorId(rs.getInt(6));
+                    blogPost.setStatus(rs.getString(7));
+                    blogPost.setCreatedAt(rs.getTimestamp(8).toLocalDateTime());
+                    blogPost.setUpdatedAt(rs.getTimestamp(9).toLocalDateTime());
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BlogPostDAO.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }
+        return blogPost;
     }
 
     @Override
-    public int insert(BlogPost oj) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public int insert(BlogPost blogPost) {
+        String sql = "INSERT INTO [dbo].[blog_posts] "
+                + "([title], [thumbnail_url], [category_id], [content], [author_id], [status], [created_at], [updated_at]) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        int result = 0;
+        try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
+            pre.setString(1, blogPost.getTitle());
+            pre.setString(2, blogPost.getThumbnailUrl());
+            pre.setInt(3, blogPost.getCategoryId());
+            pre.setString(4, blogPost.getContent());
+            pre.setInt(5, blogPost.getAuthorId());
+            pre.setString(6, blogPost.getStatus());
+            pre.setTimestamp(7, Timestamp.valueOf(blogPost.getCreatedAt()));
+            pre.setTimestamp(8, Timestamp.valueOf(blogPost.getCreatedAt()));
+            result = pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(BlogPostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
     }
 
     @Override
-    public int update(BlogPost oj) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public int update(BlogPost blogPost) {
+        String sql = "UPDATE [dbo].[blog_posts] "
+                + "SET [title] = ?, [thumbnail_url] = ?, [category_id] = ?, [content] = ?, [author_id] = ?, [status] = ?, [created_at] = ?, [updated_at] = ? "
+                + "WHERE id = ?";
+        int result = 0;
+        try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
+            pre.setString(1, blogPost.getTitle());
+            pre.setString(2, blogPost.getThumbnailUrl());
+            pre.setInt(3, blogPost.getCategoryId());
+            pre.setString(4, blogPost.getContent());
+            pre.setInt(5, blogPost.getAuthorId());
+            pre.setString(6, blogPost.getStatus());
+            pre.setTimestamp(7, Timestamp.valueOf(blogPost.getCreatedAt()));
+            pre.setTimestamp(8, Timestamp.valueOf(blogPost.getCreatedAt()));
+            pre.setInt(9, blogPost.getId());
+            result = pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(BlogPostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
     }
 
     @Override
     public int delete(int... id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "DELETE FROM [dbo].[blog_posts] WHERE id = ?";
+        int result = 0;
+        try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
+            pre.setInt(1, id[0]);
+            result = pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(BlogPostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
     }
-
 }

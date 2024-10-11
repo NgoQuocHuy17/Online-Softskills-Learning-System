@@ -6,6 +6,109 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SliderDAO extends DBContext<Slider> {
+    
+    public List<Slider> select(int page, int slidersPerPage, String statusFilter, String searchQuery) {
+        List<Slider> sliders = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM sliders WHERE 1=1");
+
+        // Append conditions based on filters
+        if (statusFilter != null && !statusFilter.isEmpty()) {
+            sql.append(" AND status = ?");
+        }
+
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            sql.append(" AND (title LIKE ? OR backlink LIKE ?)");
+        }
+
+        // SQL Server syntax for pagination using OFFSET and FETCH
+        sql.append(" ORDER BY id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+        try (PreparedStatement ps = super.getConn().prepareStatement(sql.toString())) {
+            int index = 1;
+
+            // Set the status filter if applicable
+            if (statusFilter != null && !statusFilter.isEmpty()) {
+                ps.setString(index++, statusFilter);
+            }
+
+            // Set the search query if applicable
+            if (searchQuery != null && !searchQuery.isEmpty()) {
+                String wildcardQuery = "%" + searchQuery + "%";
+                ps.setString(index++, wildcardQuery); // For title
+                ps.setString(index++, wildcardQuery); // For backlink
+            }
+
+            // Set pagination parameters
+            ps.setInt(index++, (page - 1) * slidersPerPage); // Offset
+            ps.setInt(index++, slidersPerPage); // Limit
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Slider slider = new Slider();
+                    slider.setId(rs.getInt("id"));
+                    slider.setTitle(rs.getString("title"));
+                    slider.setImageUrl(rs.getString("image_url"));
+                    slider.setBacklink(rs.getString("backlink"));
+                    slider.setStatus(rs.getString("status"));
+                    slider.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                    slider.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+                    sliders.add(slider);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return sliders;
+    }
+
+    public int getTotalSliders(String statusFilter, String searchQuery) {
+        int total = 0;
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM sliders WHERE 1=1");
+
+        if (statusFilter != null && !statusFilter.isEmpty()) {
+            sql.append(" AND status = ?");
+        }
+
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            sql.append(" AND (title LIKE ? OR backlink LIKE ?)");
+        }
+
+        try (PreparedStatement ps = super.getConn().prepareStatement(sql.toString())) {
+            int index = 1;
+
+            if (statusFilter != null && !statusFilter.isEmpty()) {
+                ps.setString(index++, statusFilter);
+            }
+
+            if (searchQuery != null && !searchQuery.isEmpty()) {
+                String wildcardQuery = "%" + searchQuery + "%";
+                ps.setString(index++, wildcardQuery); // For title
+                ps.setString(index++, wildcardQuery); // For backlink
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    total = rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return total;
+    }
+
+    public void toggleSliderStatus(int id) {
+        String sql = "UPDATE sliders SET status = CASE WHEN status = 'active' THEN 'inactive' ELSE 'active' END WHERE id = ?";
+
+        try (PreparedStatement ps = super.getConn().prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }    
 
     // Method to get all visible sliders from the database
     public List<Slider> getVisibleSliders() {
