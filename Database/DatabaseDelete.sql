@@ -1,2 +1,0 @@
-ALTER DATABASE [SoftSkillsOnlineLearningSystem] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-DROP DATABASE [SoftSkillsOnlineLearningSystem];
