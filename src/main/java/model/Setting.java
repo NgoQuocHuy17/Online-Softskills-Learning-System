@@ -11,8 +11,17 @@ public class Setting {
     private String value;
     private int orderNum;
     private String status;
+    private String type;
 
     public Setting() {
+    }
+
+    public Setting(int id, String value, int orderNum, String status, String type) {
+        this.id = id;
+        this.value = value;
+        this.orderNum = orderNum;
+        this.status = status;
+        this.type = type;
     }
 
     public Setting(int id, String settingType, String value, int orderNum, String status) {
@@ -21,6 +30,14 @@ public class Setting {
         this.value = value;
         this.orderNum = orderNum;
         this.status = status;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public int getId() {

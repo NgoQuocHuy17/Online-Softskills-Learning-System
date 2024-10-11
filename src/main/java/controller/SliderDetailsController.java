@@ -5,27 +5,21 @@
 package controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.List;
-import model.BlogPost;
-import model.Category;
-import model.User;
-import view.BlogPostDAO;
-import view.CategoryDAO;
-import view.UserDAO;
+import model.Slider;
+import view.SliderDAO;
 
 /**
  *
  * @author Minh
  */
-@WebServlet(name = "BlogDetailsController", urlPatterns = {"/BlogDetailsController"})
-public class BlogDetailsController extends HttpServlet {
+@WebServlet(name = "SliderDetailsController", urlPatterns = {"/SliderDetailsController"})
+public class SliderDetailsController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,35 +32,29 @@ public class BlogDetailsController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        BlogPostDAO blogPostDAO = new BlogPostDAO();
-        int id = Integer.parseInt(request.getParameter("bloglistid"));
-        BlogPost blogPost = blogPostDAO.select(id);
-        
-        UserDAO userDao = new UserDAO();
-        User author = userDao.select(blogPost.getAuthorId());
-    
-        
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String formattedCreatedAt = blogPost.getCreatedAt().format(dtf);
-        String formattedUpdatedAt = blogPost.getUpdatedAt().format(dtf);
-        
-        
-        
-        CategoryDAO catDAO = new CategoryDAO();
-        Category cat = catDAO.select(blogPost.getCategoryId());
-        
-        List<BlogPost> blogPosts = blogPostDAO.select();
-        
-        Comparator<BlogPost> com = Comparator.comparing(BlogPost::getCreatedAt).reversed();
-        
-        blogPosts.sort(com);
-        request.setAttribute("blogPost", blogPost);
-        request.setAttribute("author", author);
-        request.setAttribute("blogPosts", blogPosts);
-        request.setAttribute("category", cat);
-        request.setAttribute("formattedCreatedAt", formattedCreatedAt);
-        request.setAttribute("formattedUpdatedAt", formattedUpdatedAt);
-        request.getRequestDispatcher("blog-details.jsp").forward(request, response);
+        String idParam = request.getParameter("id");
+        if (idParam != null && !idParam.isEmpty()) {
+            try {
+                int id = Integer.parseInt(idParam);
+                SliderDAO sliderDao = new SliderDAO();
+                Slider slider = sliderDao.select(id);
+
+                if (slider != null) {
+                    request.setAttribute("slider", slider);
+                    request.getRequestDispatcher("slider-details.jsp").forward(request, response);
+                } else {
+                    request.setAttribute("errorMessage", "Slider not found.");
+                    request.getRequestDispatcher("error.jsp").forward(request, response);
+                }
+            } catch (NumberFormatException e) {
+                request.setAttribute("errorMessage", "Invalid slider ID.");
+                request.getRequestDispatcher("error.jsp").forward(request, response);
+            }
+        } else {
+            response.sendRedirect("SliderListController");
+            request.setAttribute("errorMessage", "No slider ID provided.");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

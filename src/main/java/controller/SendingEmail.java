@@ -1,4 +1,4 @@
-package SendingMail;
+package controller;
 
 import java.util.Properties;
 import jakarta.mail.*;
