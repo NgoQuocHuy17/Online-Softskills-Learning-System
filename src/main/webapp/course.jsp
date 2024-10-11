@@ -85,7 +85,7 @@
                             <a href="course-detail?courseId=${course.id}" class="btn btn-primary">View Details</a>
 
                             <!-- Nút Register thêm vào -->
-                            <a href="/register?courseId=${course.id}" class="btn btn-success ml-2">Register</a>
+                            <a href="CourseRegister?courseId=${course.id}" class="btn btn-success ml-2">Register</a>
                         </div>
                     </div>
                 </div>

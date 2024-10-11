@@ -1,46 +1,34 @@
 package Test;
 
+
 import java.util.List;
-import model.UserVideo;
-import view.UserVideoDAO;
-import model.Course;
-import model.User;
 import view.CourseDAO;
-import view.UserDAO;
+import view.PackageDAO;
+import model.Package;
 
 public class Test {
-//    public static void main(String[] args) {
-//        UserDAO userDAO = new UserDAO();
-//
-//        // Tham số cho phương thức getUsersByPage
-//        int pageNumber = 1;      // Số trang
-//        int pageSize = 5;        // Số lượng người dùng mỗi trang
-//        String genderFilter = "Male";  // Lọc theo giới tính (null nếu không lọc)
-//        String roleFilter = null;     // Lọc theo vai trò (null nếu không lọc)
-//        String statusFilter = null;   // Lọc theo trạng thái (null nếu không lọc)
-//        String searchTerm = null;     // Tìm kiếm (null nếu không tìm kiếm)
-//        String sortBy = null;         // Sắp xếp theo cột nào
-//        String sortOrder = null;     // Thứ tự sắp xếp (ASC hoặc DESC)
-//
-//        // Gọi phương thức getUsersByPage
-//        List<User> userList = userDAO.getUsersByPage(pageNumber, pageSize, genderFilter, roleFilter, statusFilter, searchTerm, sortBy, sortOrder);
-//
-//        // In danh sách người dùng
-//        for (User user : userList) {
-//            System.out.println("User ID: " + user.getId());
-//            System.out.println("Full Name: " + user.getFullName());
-//            System.out.println("Gender: " + user.getGender());
-//            System.out.println("Email: " + user.getEmail());
-//            System.out.println("Role: " + user.getRole());
-//            System.out.println("Status: " + (user.getIsValid() == 1 ? "Valid" : "Invalid"));
-//            System.out.println("---------------------------");
-//        }
-//    }
- 
     public static void main(String[] args) {
-        CourseDAO courseDAO = new CourseDAO(); // Giả sử lớp của bạn có tên là CourseDAO
-     Course c = new Course("test1", "any", "softkill", 2, true, "nice");
-     courseDAO.addNewCourse(c);
+        PackageDAO courseDAO = new PackageDAO();
+        
+        // Replace with a valid course ID to test
+        int courseIdToTest = 1; // Change this to a valid course ID in your database
+        
+        List<Package> packages = courseDAO.getPackagesByCourseId(courseIdToTest);
+        
+        if (packages.isEmpty()) {
+            System.out.println("No packages found for course ID: " + courseIdToTest);
+        } else {
+            System.out.println("Packages for course ID " + courseIdToTest + ":");
+            for (Package pkg : packages) {
+                System.out.println("ID: " + pkg.getId() +
+                                   ", Course ID: " + pkg.getCourseId() +
+                                   ", Package Name: " + pkg.getPackageName() +
+                                   ", Price: " + pkg.getPrice() +
+                                   ", Sale Price: " + pkg.getSalePrice() +
+                                   ", Sale Start: " + pkg.getSaleStart() +
+                                   ", Sale End: " + pkg.getSaleEnd());
+            }
+        }
     }
 }
 

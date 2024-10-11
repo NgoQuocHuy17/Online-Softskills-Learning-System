@@ -89,13 +89,13 @@ CREATE TABLE subjects (
 
 -- Table: packages
 CREATE TABLE packages (
-    package_id INT PRIMARY KEY,
+    id INT IDENTITY(1,1) PRIMARY KEY,
 	course_id INT NOT NULL,
 	package_name NVARCHAR(255),
     price DECIMAL(10, 2),
     sale_price DECIMAL(10, 2),
-    sale_start DATETIME NOT NULL,
-    sale_end DATETIME NOT NULL,
+    sale_start DATETIME DEFAULT GETDATE(),
+    sale_end DATETIME DEFAULT GETDATE(),
     CONSTRAINT FK_CourseSale_Courses FOREIGN KEY (course_id) 
         REFERENCES courses(id) ON DELETE CASCADE
 );
@@ -128,16 +128,13 @@ CREATE TABLE course_translations (
 CREATE TABLE registrations (
     id INT IDENTITY(1,1) PRIMARY KEY,           
     user_id INT,                                
-    course_id INT,                              
-    package_name VARCHAR(255),                  
+    package_id INT,                  
     total_cost DECIMAL(10, 2),                  
-    status NVARCHAR(50) DEFAULT 'Submitted',    
-    valid_from DATE,                            
-    valid_to DATE,                              
-    created_at DATETIME DEFAULT GETDATE(),      
-    updated_at DATETIME DEFAULT GETDATE(),      
+    status NVARCHAR(50) DEFAULT 'Pending',    
+    valid_from DATETIME DEFAULT GETDATE(),
+    valid_to DATETIME DEFAULT DATEADD(WEEK, 1, GETDATE()), -- Thời gian hiện tại +1 tuần
     CONSTRAINT FK_Registrations_Users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT FK_Registrations_Courses FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+    CONSTRAINT FK_Registrations_Packages FOREIGN KEY (package_id) REFERENCES packages(id) ON DELETE CASCADE
 );
 
 -- Table: user_courses

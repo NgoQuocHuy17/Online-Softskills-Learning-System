@@ -122,15 +122,30 @@ VALUES
 ('Retirement Planning', 'Secure your financial future', 'Learn strategies for effective retirement planning.', 'Personal Finance', 180.00, 320.00, 6, 'Draft', 0);
 GO
 
--- 5. Insert data into the course_sale table
-INSERT INTO course_sale (course_id, basic_package_sale_price, advanced_package_sale_price, start_date, end_date)
+-- 5. Insert data into the packages table
+INSERT INTO packages (course_id, package_name, price, sale_price) 
 VALUES 
-(1, 80.00, 120.00, '2024-01-01', '2024-01-31'),
-(2, 150.00, 200.00, '2024-02-01', '2024-02-28'),
-(3, 100.00, 150.00, '2024-03-01', '2024-03-31'),
-(4, 160.00, 210.00, '2024-04-01', '2024-04-30'),
-(5, 70.00, 120.00, '2024-05-01', '2024-05-31');
-GO
+(1, 'Basic Package', 65.00, 52.00), 
+(1, 'Premium Package', 95.00, 76.00),
+(2, 'Basic Package', 60.00, 48.00), 
+(2, 'Premium Package', 99.00, 79.20),
+(3, 'Basic Package', 70.00, 56.00), 
+(3, 'Premium Package', 90.00, 72.00),
+(4, 'Basic Package', 62.00, 49.60), 
+(4, 'Premium Package', 92.00, 73.60),
+(5, 'Basic Package', 67.00, 53.60), 
+(5, 'Premium Package', 94.00, 75.20),
+(6, 'Basic Package', 68.00, 54.40), 
+(6, 'Premium Package', 98.00, 78.40),
+(7, 'Basic Package', 63.00, 50.40), 
+(7, 'Premium Package', 93.00, 74.40),
+(8, 'Basic Package', 66.00, 52.80), 
+(8, 'Premium Package', 96.00, 76.80),
+(9, 'Basic Package', 61.00, 48.80), 
+(9, 'Premium Package', 97.00, 77.60),
+(10, 'Basic Package', 64.00, 51.20), 
+(10, 'Premium Package', 91.00, 72.80);
+
 
 -- 6. Insert data into the course_details table
 INSERT INTO course_details (course_id, section_title, content, image_path, video_url)
@@ -153,14 +168,9 @@ VALUES
 GO
 
 -- 8. Insert data into the registrations table
-INSERT INTO registrations (user_id, course_id, package_name, total_cost, valid_from, valid_to)
-VALUES 
-(3, 1, 'Basic', 100.00, '2024-01-01', '2024-06-30'),
-(4, 3, 'Advanced', 170.00, '2024-02-01', '2024-07-31'),
-(5, 4, 'Basic', 180.00, '2024-03-01', '2024-08-31'),
-(2, 2, 'Advanced', 250.00, '2024-04-01', '2024-09-30'),
-(1, 5, 'Basic', 90.00, '2024-05-01', '2024-10-31');
-GO
+--INSERT INTO registrations (user_id, course_id, package_name, total_cost, valid_from, valid_to)
+--VALUES 
+--GO
 
 -- 9. Insert data into the user_courses table
 INSERT INTO user_courses (user_id, course_id, role, status)
