@@ -7,7 +7,7 @@ package model;
 
 public class Setting {
     private int id;
-    private String type;
+    private String settingType;
     private String value;
     private int orderNum;
     private String status;
@@ -15,9 +15,9 @@ public class Setting {
     public Setting() {
     }
 
-    public Setting(int id, String type, String value, int orderNum, String status) {
+    public Setting(int id, String settingType, String value, int orderNum, String status) {
         this.id = id;
-        this.type = type;
+        this.settingType = settingType;
         this.value = value;
         this.orderNum = orderNum;
         this.status = status;
@@ -31,12 +31,12 @@ public class Setting {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public String getSettingType() {
+        return settingType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setSettingType(String settingType) {
+        this.settingType = settingType;
     }
 
     public String getValue() {
@@ -61,10 +61,5 @@ public class Setting {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "Setting{" + "id=" + id + ", type=" + type + ", value=" + value + ", orderNum=" + orderNum + ", status=" + status + '}';
     }
 }

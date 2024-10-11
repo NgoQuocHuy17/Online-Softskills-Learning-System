@@ -1,11 +1,7 @@
 package model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
-/**
- *
- * @author Minh
- */
 public class User {
 
     private int id;
@@ -13,27 +9,28 @@ public class User {
     private String gender;
     private String email;
     private String password;
-    private String mobile;
     private String role;
     private String avatarUrl;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
+    private String hash;
+    private int isValid;
 
     public User() {
     }
 
-    public User(int id, String fullName, String gender, String email, String password, String mobile, String role, 
-            String avatarUrl, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public User(int id, String fullName, String gender, String email, String password, String role, String avatarUrl, Date createdAt, Date updatedAt, String hash, int isValid) {
         this.id = id;
         this.fullName = fullName;
         this.gender = gender;
         this.email = email;
         this.password = password;
-        this.mobile = mobile;
         this.role = role;
         this.avatarUrl = avatarUrl;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.hash = hash;
+        this.isValid = isValid;
     }
 
     public int getId() {
@@ -76,14 +73,6 @@ public class User {
         this.password = password;
     }
 
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
     public String getRole() {
         return role;
     }
@@ -100,24 +89,36 @@ public class User {
         this.avatarUrl = avatarUrl;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    @Override
-    public String toString() {
-        return "User{" + "id=" + id + ", fullName=" + fullName + ", gender=" + gender + ", email=" + email + ", password=" + password + ", mobile=" + mobile + ", role=" + role + ", avatarUrl=" + avatarUrl + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + '}';
+    public String getHash() {
+        return hash;
     }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+    public int getIsValid() {
+        return isValid;
+    }
+
+    public void setIsValid(int isValid) {
+        this.isValid = isValid;
+    }
+
 }

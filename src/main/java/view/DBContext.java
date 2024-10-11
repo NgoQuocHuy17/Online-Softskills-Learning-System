@@ -12,7 +12,7 @@ public abstract class DBContext<E> {
     private final String pass;
 
     public DBContext() {
-        this("jdbc:sqlserver://localhost:1433;databaseName=OnlineSoftSkillsLearningSystem;trustServerCertificate=true",
+        this("jdbc:sqlserver://localhost:1433;databaseName=SoftSkillsOnlineLearningSystem;trustServerCertificate=true",
                 "sa", "123");
     }
 
@@ -60,8 +60,4 @@ public abstract class DBContext<E> {
     public abstract int update(E obj);
 
     public abstract int delete(int... id);
-
-    public Connection getConn() {
-        return conn;
-    }
 }
