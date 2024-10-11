@@ -146,7 +146,7 @@
                                         url: "searchAutoComplete",
                                         data: {term: request.term},
                                         success: function (data) {
-                                            var titles = data.split(",");
+                                            var titles = data.split("|||");
                                             response(titles);
                                         }
                                     });

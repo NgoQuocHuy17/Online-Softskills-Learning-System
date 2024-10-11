@@ -236,33 +236,33 @@ VALUES
 GO
 
 -- 15. Insert data into the blog_posts table
-INSERT INTO blog_posts (title, thumbnail_url, category_id, content, author_id)
+INSERT INTO blog_posts (title, thumbnail_url, category_id, content, author_id, status)
 VALUES 
-('Effective Communication Tips', 'thumb1.jpg', 2, 'This blog post discusses the best communication tips.', 1),
-('Leadership in Modern Organizations', 'thumb2.jpg', 1, 'Leadership strategies in modern workplaces.', 2),
-('Emotional Intelligence for Success', 'thumb3.jpg', 3, 'How emotional intelligence can lead to success.', 3),
-('Conflict Resolution Strategies', 'thumb4.jpg', 4, 'Best strategies to resolve conflicts in the workplace.', 4),
-('Time Management for Productivity', 'thumb5.jpg', 5, 'How to manage your time effectively for better productivity.', 5),
-('The Power of Active Listening', 'thumb6.jpg', 2, 'Learn how active listening can improve your communication.', 1),
-('Building Team Leadership', 'thumb7.jpg', 1, 'How to build and strengthen leadership within teams.', 2),
-('Understanding Emotional Triggers', 'thumb8.jpg', 3, 'A deep dive into emotional triggers and how to manage them.', 3),
-('Negotiation Techniques for Success', 'thumb9.jpg', 4, 'Essential negotiation techniques for successful deals.', 4),
-('Mastering Time Blocking', 'thumb10.jpg', 5, 'A guide to mastering time blocking for personal and professional use.', 5),
-('Developing Empathy in Leadership', 'thumb11.jpg', 1, 'How developing empathy can make you a better leader.', 2),
-('The Role of Emotional Intelligence in Negotiation', 'thumb12.jpg', 3, 'How emotional intelligence plays a role in successful negotiations.', 3),
-('Advanced Communication Strategies', 'thumb13.jpg', 2, 'Advanced techniques to communicate more effectively.', 1),
-('Boosting Team Morale Through Leadership', 'thumb14.jpg', 1, 'Leadership strategies to boost team morale and productivity.', 2),
-('Psychological Approaches to Conflict Resolution', 'thumb15.jpg', 3, 'Using psychology to effectively resolve conflicts.', 4),
-('Improving Personal Productivity', 'thumb16.jpg', 5, 'Simple tips to improve personal productivity.', 5),
-('Draft Blog Post 1', 'thumb17.jpg', 2, 'This blog post is still in draft.', 1),
-('Draft Blog Post 2', 'thumb18.jpg', 3, 'This blog post is under construction.', 3),
-('Draft Blog Post 3', 'thumb19.jpg', 4, 'Waiting for approval.', 4),
-('Draft Blog Post 4', 'thumb20.jpg', 5, 'This is a future blog post.', 5),
-('Time Management in the Modern World', 'thumb21.jpg', 5, 'Strategies to manage your time in a fast-paced world.', 5),
-('How to Negotiate Like a Pro', 'thumb22.jpg', 4, 'Learn the secrets of successful negotiation.', 4),
-('The Importance of Emotional Intelligence in Leadership', 'thumb23.jpg', 1, 'Emotional intelligence is key to effective leadership.', 3),
-('Communication Pitfalls to Avoid', 'thumb24.jpg', 2, 'Common communication mistakes and how to avoid them.', 1),
-('Managing Stress through Time Management', 'thumb25.jpg', 5, 'How to reduce stress through better time management.', 5);
+('Effective Communication Tips', 'thumb1.jpg', 2, 'This blog post discusses the best communication tips.', 1, 'Published'),
+('Leadership in Modern Organizations', 'thumb2.jpg', 1, 'Leadership strategies in modern workplaces.', 2, 'Published'),
+('Emotional Intelligence for Success', 'thumb3.jpg', 3, 'How emotional intelligence can lead to success.', 3, 'Published'),
+('Conflict Resolution Strategies', 'thumb4.jpg', 4, 'Best strategies to resolve conflicts in the workplace.', 4, 'Published'),
+('Time Management for Productivity', 'thumb5.jpg', 5, 'How to manage your time effectively for better productivity.', 5, 'Published'),
+('The Power of Active Listening', 'thumb6.jpg', 2, 'Learn how active listening can improve your communication.', 1, 'Published'),
+('Building Team Leadership', 'thumb7.jpg', 1, 'How to build and strengthen leadership within teams.', 2, 'Published'),
+('Understanding Emotional Triggers', 'thumb8.jpg', 3, 'A deep dive into emotional triggers and how to manage them.', 3, 'Published'),
+('Negotiation Techniques for Success', 'thumb9.jpg', 4, 'Essential negotiation techniques for successful deals.', 4, 'Published'),
+('Mastering Time Blocking', 'thumb10.jpg', 5, 'A guide to mastering time blocking for personal and professional use.', 5, 'Published'),
+('Developing Empathy in Leadership', 'thumb11.jpg', 1, 'How developing empathy can make you a better leader.', 2, 'Published'),
+('The Role of Emotional Intelligence in Negotiation', 'thumb12.jpg', 3, 'How emotional intelligence plays a role in successful negotiations.', 3, 'Published'),
+('Advanced Communication Strategies', 'thumb13.jpg', 2, 'Advanced techniques to communicate more effectively.', 1, 'Published'),
+('Boosting Team Morale Through Leadership', 'thumb14.jpg', 1, 'Leadership strategies to boost team morale and productivity.', 2, 'Published'),
+('Psychological Approaches to Conflict Resolution', 'thumb15.jpg', 3, 'Using psychology to effectively resolve conflicts.', 4, 'Published'),
+('Improving Personal Productivity', 'thumb16.jpg', 5, 'Simple tips to improve personal productivity.', 5, 'Published'),
+('Draft Blog Post 1', 'thumb17.jpg', 2, 'This blog post is still in draft.', 1, 'Draft'),
+('Draft Blog Post 2', 'thumb18.jpg', 3, 'This blog post is under construction.', 3, 'Draft'),
+('Draft Blog Post 3', 'thumb19.jpg', 4, 'Waiting for approval.', 4, 'Draft'),
+('Draft Blog Post 4', 'thumb20.jpg', 5, 'This is a future blog post.', 5, 'Draft'),
+('Time Management in the Modern World', 'thumb21.jpg', 5, 'Strategies to manage your time in a fast-paced world.', 5, 'Published'),
+('How to Negotiate Like a Pro', 'thumb22.jpg', 4, 'Learn the secrets of successful negotiation.', 4, 'Published'),
+('The Importance of Emotional Intelligence in Leadership', 'thumb23.jpg', 1, 'Emotional intelligence is key to effective leadership.', 3, 'Published'),
+('Communication Pitfalls to Avoid', 'thumb24.jpg', 2, 'Common communication mistakes and how to avoid them.', 1, 'Published'),
+('Managing Stress through Time Management', 'thumb25.jpg', 5, 'How to reduce stress through better time management.', 5, 'Published');
 GO
 
 -- 16. Insert data into the tags table

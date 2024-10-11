@@ -1,4 +1,4 @@
-// File: SearchAutoCompleteServlet.java
+package controller;// File: SearchAutoCompleteServlet.java
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,7 +24,7 @@ public class SearchAutoCompleteServlet extends HttpServlet {
         StringBuilder result = new StringBuilder();
         for (String title : courseTitles) {
             if (result.length() > 0) {
-                result.append(",");  // Thêm dấu phẩy giữa các tiêu đề
+                result.append("|||");  // Thêm dấu ||| giữa các tiêu đề
             }
             result.append(title);
         }
