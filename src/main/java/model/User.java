@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -16,13 +16,14 @@ public class User {
     private String mobile;
     private String role;
     private String avatarUrl;
-    private Date createdAt;
-    private Date updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public User() {
     }
 
-    public User(int id, String fullName, String gender, String email, String password, String mobile, String role, String avatarUrl, Date createdAt, Date updatedAt) {
+    public User(int id, String fullName, String gender, String email, String password, String mobile, String role, 
+            String avatarUrl, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.fullName = fullName;
         this.gender = gender;
@@ -99,19 +100,24 @@ public class User {
         this.avatarUrl = avatarUrl;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" + "id=" + id + ", fullName=" + fullName + ", gender=" + gender + ", email=" + email + ", password=" + password + ", mobile=" + mobile + ", role=" + role + ", avatarUrl=" + avatarUrl + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + '}';
     }
 }

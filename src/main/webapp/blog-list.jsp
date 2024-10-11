@@ -34,7 +34,7 @@
 
             <div class="row">
                 <!-- Vòng lặp qua danh sách blog -->
-                <c:forEach var="post" items="${blogPosts}">
+                <c:forEach var="post" items="${blogPost}">
                     <div class="col-12 mb-4">
                         <div class="card">
                             <img src="${post.thumbnailUrl}" class="card-img-top" alt="${post.title}" style="max-height: 400px; object-fit: cover;">

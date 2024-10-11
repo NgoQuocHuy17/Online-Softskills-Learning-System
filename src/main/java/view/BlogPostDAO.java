@@ -2,10 +2,11 @@ package view;
 
 import model.BlogPost;
 import java.util.List;
-import java.util.Vector;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -18,7 +19,7 @@ public class BlogPostDAO extends DBContext<BlogPost> {
     @Override
     public List<BlogPost> select() {
         String sql = "SELECT [id], [title], [thumbnail_url], [category_id], [content], [author_id], [status], [created_at], [updated_at] FROM [dbo].[blog_posts]";
-        List<BlogPost> blogPosts = new Vector();
+        List<BlogPost> blogPosts = new ArrayList();
         try (PreparedStatement pre = super.getConn().prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
             while (rs.next()) {
                 BlogPost blogPost = new BlogPost();
@@ -29,8 +30,8 @@ public class BlogPostDAO extends DBContext<BlogPost> {
                 blogPost.setContent(rs.getString(5));
                 blogPost.setAuthorId(rs.getInt(6));
                 blogPost.setStatus(rs.getString(7));
-                blogPost.setCreatedAt(rs.getTimestamp(8));
-                blogPost.setUpdatedAt(rs.getTimestamp(9));
+                blogPost.setCreatedAt(rs.getTimestamp(8).toLocalDateTime());
+                blogPost.setUpdatedAt(rs.getTimestamp(9).toLocalDateTime());
                 blogPosts.add(blogPost);
             }
         } catch (SQLException ex) {
@@ -41,7 +42,7 @@ public class BlogPostDAO extends DBContext<BlogPost> {
 
     @Override
     public BlogPost select(int... id) {
-        String sql = "SELECT [id], [title], [thumbnail_url], [category_id], [content], [author_id], [status], [created_at], [updated_at] FROM [dbo].[blog_posts] WHERE id = ?";
+        String sql = "SELECT * FROM [dbo].[blog_posts] WHERE id = ?";
         BlogPost blogPost = null;
         try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
             pre.setInt(1, id[0]);
@@ -55,12 +56,13 @@ public class BlogPostDAO extends DBContext<BlogPost> {
                     blogPost.setContent(rs.getString(5));
                     blogPost.setAuthorId(rs.getInt(6));
                     blogPost.setStatus(rs.getString(7));
-                    blogPost.setCreatedAt(rs.getTimestamp(8));
-                    blogPost.setUpdatedAt(rs.getTimestamp(9));
+                    blogPost.setCreatedAt(rs.getTimestamp(8).toLocalDateTime());
+                    blogPost.setUpdatedAt(rs.getTimestamp(9).toLocalDateTime());
                 }
             }
         } catch (SQLException ex) {
             Logger.getLogger(BlogPostDAO.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
         return blogPost;
     }
@@ -78,8 +80,8 @@ public class BlogPostDAO extends DBContext<BlogPost> {
             pre.setString(4, blogPost.getContent());
             pre.setInt(5, blogPost.getAuthorId());
             pre.setString(6, blogPost.getStatus());
-            pre.setTimestamp(7, new java.sql.Timestamp(blogPost.getCreatedAt().getTime()));
-            pre.setTimestamp(8, new java.sql.Timestamp(blogPost.getUpdatedAt().getTime()));
+            pre.setTimestamp(7, Timestamp.valueOf(blogPost.getCreatedAt()));
+            pre.setTimestamp(8, Timestamp.valueOf(blogPost.getCreatedAt()));
             result = pre.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(BlogPostDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -100,8 +102,8 @@ public class BlogPostDAO extends DBContext<BlogPost> {
             pre.setString(4, blogPost.getContent());
             pre.setInt(5, blogPost.getAuthorId());
             pre.setString(6, blogPost.getStatus());
-            pre.setTimestamp(7, new java.sql.Timestamp(blogPost.getCreatedAt().getTime()));
-            pre.setTimestamp(8, new java.sql.Timestamp(blogPost.getUpdatedAt().getTime()));
+            pre.setTimestamp(7, Timestamp.valueOf(blogPost.getCreatedAt()));
+            pre.setTimestamp(8, Timestamp.valueOf(blogPost.getCreatedAt()));
             pre.setInt(9, blogPost.getId());
             result = pre.executeUpdate();
         } catch (SQLException ex) {

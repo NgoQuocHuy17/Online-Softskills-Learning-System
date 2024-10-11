@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -15,13 +15,14 @@ public class BlogPost {
     private String content;
     private int authorId;
     private String status;
-    private Date createdAt;
-    private Date updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public BlogPost() {
     }
 
-    public BlogPost(int id, String title, String thumbnailUrl, int category_id, String content, int authorId, String status, Date createdAt, Date updatedAt) {
+    public BlogPost(int id, String title, String thumbnailUrl, int category_id, String content, int authorId, String status, 
+            LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
         this.thumbnailUrl = thumbnailUrl;
@@ -89,20 +90,24 @@ public class BlogPost {
         this.status = status;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-    
+
+    @Override
+    public String toString() {
+        return "BlogPost{" + "id=" + id + ", title=" + title + ", thumbnailUrl=" + thumbnailUrl + ", categoryId=" + categoryId + ", content=" + content + ", authorId=" + authorId + ", status=" + status + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + '}';
+    }
 }

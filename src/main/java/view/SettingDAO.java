@@ -2,7 +2,7 @@ package view;
 
 import model.Setting;
 import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,12 +18,12 @@ public class SettingDAO extends DBContext<Setting> {
     @Override
     public List<Setting> select() {
         String sql = "SELECT [id], [setting_type], [value], [order_num], [status] FROM [dbo].[settings]";
-        List<Setting> settings = new Vector();
+        List<Setting> settings = new ArrayList();
         try (PreparedStatement pre = super.getConn().prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
             while (rs.next()) {
                 Setting setting = new Setting();
                 setting.setId(rs.getInt(1));
-                setting.setSettingType(rs.getString(2));
+                setting.setType(rs.getString(2));
                 setting.setValue(rs.getString(3));
                 setting.setOrderNum(rs.getInt(4));
                 setting.setStatus(rs.getString(5));
@@ -45,14 +45,14 @@ public class SettingDAO extends DBContext<Setting> {
                 if (rs.next()) {
                     setting = new Setting();
                     setting.setId(rs.getInt(1));
-                    setting.setSettingType(rs.getString(2));
+                    setting.setType(rs.getString(2));
                     setting.setValue(rs.getString(3));
                     setting.setOrderNum(rs.getInt(4));
                     setting.setStatus(rs.getString(5));
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, "Error selecting setting with id " + id, ex);
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, "Error selecting setting with id " + id[0], ex);
         }
         return setting;
     }
@@ -64,7 +64,7 @@ public class SettingDAO extends DBContext<Setting> {
                 + "VALUES (?, ?, ?, ?)";
         int result = 0;
         try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
-            pre.setString(1, setting.getSettingType());
+            pre.setString(1, setting.getType());
             pre.setString(2, setting.getValue());
             pre.setInt(3, setting.getOrderNum());
             pre.setString(4, setting.getStatus());
@@ -82,7 +82,7 @@ public class SettingDAO extends DBContext<Setting> {
                 + "WHERE id = ?";
         int result = 0;
         try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
-            pre.setString(1, setting.getSettingType());
+            pre.setString(1, setting.getType());
             pre.setString(2, setting.getValue());
             pre.setInt(3, setting.getOrderNum());
             pre.setString(4, setting.getStatus());
@@ -102,8 +102,60 @@ public class SettingDAO extends DBContext<Setting> {
             pre.setInt(1, id[0]);
             result = pre.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, "Error deleting setting with id " + id, ex);
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, "Error deleting setting with id " + id[0], ex);
         }
         return result;
+    }
+
+    // New overloaded select method for filtering, searching, and sorting
+    public List<Setting> select(String searchValue, String type, String status, String sort, String order) {
+        StringBuilder sql = new StringBuilder("SELECT [id], [setting_type], [value], [order_num], [status] FROM [dbo].[settings] WHERE 1=1");
+        
+        // Add filters based on input parameters
+        if (searchValue != null && !searchValue.isEmpty()) {
+            sql.append(" AND [value] LIKE ?");
+        }
+        if (type != null && !type.isEmpty()) {
+            sql.append(" AND [setting_type] = ?");
+        }
+        if (status != null && !status.isEmpty()) {
+            sql.append(" AND [status] = ?");
+        }
+
+        // Add sorting if specified
+        if (sort != null && !sort.isEmpty()) {
+            sql.append(" ORDER BY ").append(sort).append(" ").append(order != null && order.equalsIgnoreCase("desc") ? "DESC" : "ASC");
+        }
+
+        List<Setting> settings = new ArrayList();
+        try (PreparedStatement pre = super.getConn().prepareStatement(sql.toString())) {
+            int index = 1;
+
+            // Set the parameters for the prepared statement
+            if (searchValue != null && !searchValue.isEmpty()) {
+                pre.setString(index++, "%" + searchValue + "%");
+            }
+            if (type != null && !type.isEmpty()) {
+                pre.setString(index++, type);
+            }
+            if (status != null && !status.isEmpty()) {
+                pre.setString(index++, status);
+            }
+
+            try (ResultSet rs = pre.executeQuery()) {
+                while (rs.next()) {
+                    Setting setting = new Setting();
+                    setting.setId(rs.getInt(1));
+                    setting.setType(rs.getString(2));
+                    setting.setValue(rs.getString(3));
+                    setting.setOrderNum(rs.getInt(4));
+                    setting.setStatus(rs.getString(5));
+                    settings.add(setting);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, "Error selecting settings with filters", ex);
+        }
+        return settings;
     }
 }

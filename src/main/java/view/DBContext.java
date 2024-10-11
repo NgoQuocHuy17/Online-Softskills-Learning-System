@@ -14,7 +14,7 @@ public abstract class DBContext<E> {
     private Connection conn;
 
     public DBContext() {
-        this("jdbc:sqlserver://localhost:1433;databaseName=SoftSkillsOnlineLearningSystem;trustServerCertificate=true",
+        this("jdbc:sqlserver://localhost:1433;databaseName=OnlineSoftSkillsLearningSystem;trustServerCertificate=true",
                 "sa", "123");
     }
 
@@ -45,5 +45,4 @@ public abstract class DBContext<E> {
     public Connection getConn() {
         return conn;
     }
-
 }

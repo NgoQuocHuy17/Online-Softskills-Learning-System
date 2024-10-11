@@ -1,13 +1,14 @@
 package view;
 
-import controller.SendingEmail;
 import controller.RegisterBean;
+import controller.SendingEmail;
 import model.User;
 import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -33,7 +34,7 @@ public class UserDAO extends DBContext<User> {
         }
         return false;
     }
-    
+
     public String register(RegisterBean rb) {
         String fullName = rb.getFullName();
         String email = rb.getEmail();
@@ -66,7 +67,6 @@ public class UserDAO extends DBContext<User> {
         return "ERROR";
 
     }
-    
     public User login(String email, String password) {
         User user = null;
         String query = "SELECT * FROM users WHERE email = ? AND password = ?";
@@ -84,8 +84,8 @@ public class UserDAO extends DBContext<User> {
                             rs.getString(6),
                             rs.getString(7),
                             rs.getString(8),
-                            rs.getDate(9),
-                            rs.getDate(10)
+                            rs.getTimestamp(9).toLocalDateTime(),
+                            rs.getTimestamp(10).toLocalDateTime()
                     );
                 }
             }
@@ -97,8 +97,19 @@ public class UserDAO extends DBContext<User> {
 
     @Override
     public List<User> select() {
-        String sql = "SELECT * FROM users";
-        List<User> users = new Vector<>();
+        String sql = "SELECT [id]\n"
+                + "      ,[full_name]\n"
+                + "      ,[gender]\n"
+                + "      ,[email]\n"
+                + "      ,[password]\n"
+                + "      ,[role]\n"
+                + "      ,[avatar_url]\n"
+                + "      ,[created_at]\n"
+                + "      ,[updated_at]\n"
+                + "      ,[hash]\n"
+                + "      ,[isValid]\n"
+                + "  FROM [OnlineSoftSkillsLearningSystem].[dbo].[users]";
+        List<User> users = new ArrayList();
         try (PreparedStatement pre = super.getConn().prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
             while (rs.next()) {
                 // Create a new User object inside the loop
@@ -108,11 +119,12 @@ public class UserDAO extends DBContext<User> {
                         rs.getString(3),
                         rs.getString(4),
                         rs.getString(5),
+                        null,
+                        //                        rs.getString(6),
                         rs.getString(6),
                         rs.getString(7),
-                        rs.getString(8),
-                        rs.getDate(9),
-                        rs.getDate(10)
+                        rs.getTimestamp(8).toLocalDateTime(),
+                        rs.getTimestamp(9).toLocalDateTime()
                 );
                 users.add(user);
             }
@@ -136,11 +148,12 @@ public class UserDAO extends DBContext<User> {
                             rs.getString(3),
                             rs.getString(4),
                             rs.getString(5),
+                            null,
+                            //                            rs.getString(6),
                             rs.getString(6),
                             rs.getString(7),
-                            rs.getString(8),
-                            rs.getDate(9),
-                            rs.getDate(10)
+                            rs.getTimestamp(8).toLocalDateTime(),
+                            rs.getTimestamp(9).toLocalDateTime()
                     );
                 }
             }
@@ -153,17 +166,41 @@ public class UserDAO extends DBContext<User> {
     @Override
     public int insert(User user) {
         String sql = "INSERT INTO users (full_name, gender, email, password, mobile, role, avatar_url, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql2 = "INSERT INTO [dbo].[users]\n"
+                + "           ([full_name]\n"
+                + "           ,[gender]\n"
+                + "           ,[email]\n"
+                + "           ,[password]\n"
+                + "           ,[role]\n"
+                + "           ,[avatar_url]\n"
+                + "           ,[created_at]\n"
+                + "           ,[updated_at]\n"
+                + "           ,[hash]\n"
+                + "           ,[isValid])\n"
+                + "     VALUES\n"
+                + "           (?\n"
+                + "           ,?\n"
+                + "           ,?\n"
+                + "           ,?\n"
+                + "           ,?\n"
+                + "           ,?\n"
+                + "           ,?\n"
+                + "           ,?\n"
+                + "           ,?\n"
+                + "           ,?)";
         int result = 0;
-        try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
+        try (PreparedStatement pre = super.getConn().prepareStatement(sql2)) {
             pre.setString(1, user.getFullName());
             pre.setString(2, user.getGender());
             pre.setString(3, user.getEmail());
             pre.setString(4, user.getPassword());
-            pre.setString(5, user.getMobile());
-            pre.setString(6, user.getRole());
-            pre.setString(7, user.getAvatarUrl());
-            pre.setDate(8, (java.sql.Date) user.getCreatedAt());
-            pre.setDate(9, (java.sql.Date) user.getUpdatedAt());
+//            pre.setString(5, user.getMobile());
+            pre.setString(5, user.getRole());
+            pre.setString(6, user.getAvatarUrl());
+            pre.setTimestamp(7, Timestamp.valueOf(user.getCreatedAt()));
+            pre.setTimestamp(8, Timestamp.valueOf(user.getUpdatedAt()));
+            pre.setString(9, null);
+            pre.setInt(10, 0);
             result = pre.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -183,8 +220,8 @@ public class UserDAO extends DBContext<User> {
             pre.setString(5, user.getMobile());
             pre.setString(6, user.getRole());
             pre.setString(7, user.getAvatarUrl());
-            pre.setDate(8, (java.sql.Date) user.getCreatedAt());
-            pre.setDate(9, (java.sql.Date) user.getUpdatedAt());
+            pre.setTimestamp(8, Timestamp.valueOf(user.getCreatedAt()));
+            pre.setTimestamp(9, Timestamp.valueOf(user.getUpdatedAt()));
             pre.setInt(10, user.getId());
             result = pre.executeUpdate();
         } catch (SQLException ex) {
