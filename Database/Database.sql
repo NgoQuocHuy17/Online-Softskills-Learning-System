@@ -90,15 +90,17 @@ CREATE TABLE subjects (
 -- Table: packages
 CREATE TABLE packages (
     id INT IDENTITY(1,1) PRIMARY KEY,
-	course_id INT NOT NULL,
-	package_name NVARCHAR(255),
+    course_id INT NOT NULL,
+    package_name NVARCHAR(255),
     price DECIMAL(10, 2),
     sale_price DECIMAL(10, 2),
     sale_start DATETIME DEFAULT GETDATE(),
-    sale_end DATETIME DEFAULT GETDATE(),
+    sale_end DATETIME DEFAULT DATEADD(DAY, 7, GETDATE()),
+    access_duration INT NOT NULL,
     CONSTRAINT FK_CourseSale_Courses FOREIGN KEY (course_id) 
         REFERENCES courses(id) ON DELETE CASCADE
 );
+
 
 -- Table: course_details
 CREATE TABLE course_details (
@@ -111,8 +113,6 @@ CREATE TABLE course_details (
     updated_at DATETIME DEFAULT GETDATE(),    
     FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE 
 );
-
-
 
 -- Table: course_translations
 CREATE TABLE course_translations (
@@ -139,15 +139,15 @@ CREATE TABLE registrations (
 
 -- Table: user_courses
 CREATE TABLE user_courses (
-    user_id INT,                                
-    course_id INT,                              
-    role NVARCHAR(50) DEFAULT 'Student',        
-    status NVARCHAR(50) DEFAULT 'Enrolled',     
-    created_at DATETIME DEFAULT GETDATE(),      
-    updated_at DATETIME DEFAULT GETDATE(),      
-    PRIMARY KEY (user_id, course_id),           
-    CONSTRAINT FK_UserCourses_Users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT FK_UserCourses_Courses FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    user_id INT NOT NULL,
+    course_id INT NOT NULL,
+    access_start DATETIME DEFAULT GETDATE(),
+    access_end DATETIME DEFAULT DATEADD(DAY, 7, GETDATE()),
+    CONSTRAINT FK_UserCourses_Users FOREIGN KEY (user_id) 
+        REFERENCES users(id) ON DELETE NO ACTION,
+    CONSTRAINT FK_UserCourses_Courses FOREIGN KEY (course_id) 
+        REFERENCES courses(id) ON DELETE NO ACTION,
 );
 
 -- Table: questions
