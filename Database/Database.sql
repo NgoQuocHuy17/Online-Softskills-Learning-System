@@ -117,13 +117,27 @@ CREATE TABLE Thumbnails (
 CREATE TABLE course_details (
     course_id INT PRIMARY KEY,              
     section_title VARCHAR(255),               
-    content TEXT,                          
-    image_path VARCHAR(255),                  
-    video_url VARCHAR(255),                  
+    content TEXT,                                          
     created_at DATETIME DEFAULT GETDATE(),    
     updated_at DATETIME DEFAULT GETDATE(),    
     FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE 
 );
+DROP TABLE [SoftSkillsOnlineLearningSystem].[dbo].[course_details];
+
+-- Table: course_media
+CREATE TABLE course_media (
+    [id] INT IDENTITY(1,1) PRIMARY KEY,
+    [course_id] INT NOT NULL,
+    [media_type] VARCHAR(10) NOT NULL, -- 'image' hoặc 'video' hoặc 'content'
+	content NVARCHAR(MAX),
+    [file_name] NVARCHAR(255), -- tên file với extension
+    [title] NVARCHAR(255), -- tiêu đề của media (optional)
+    [display_order] INT, -- thứ tự hiển thị
+    [is_thumbnail] BIT DEFAULT 0, -- đánh dấu ảnh thumbnail của khóa học
+    [created_at] DATETIME DEFAULT GETDATE(),
+    [updated_at] DATETIME,
+    FOREIGN KEY (course_id) REFERENCES course(course_id)
+)
 
 
 
@@ -265,3 +279,4 @@ CREATE INDEX idx_email ON users(email);
 CREATE INDEX idx_course_title ON courses(title); 
 CREATE INDEX idx_registration_status ON registrations(status);
 CREATE INDEX idx_blog_category ON blog_posts(category_id); 
+

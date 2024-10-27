@@ -6,17 +6,17 @@ public class CourseDetail {
     private int courseId;
     private String sectionTitle;
     private String content;
-    private String imagePath;
-    private String videoUrl;
     private Date createdAt;
     private Date updatedAt;
+    
+    public CourseDetail(){
+        
+    }
 
-    public CourseDetail(int courseId, String sectionTitle, String content, String imagePath, String videoUrl, Date createdAt, Date updatedAt) {
+    public CourseDetail(int courseId, String sectionTitle, String content, Date createdAt, Date updatedAt) {
         this.courseId = courseId;
         this.sectionTitle = sectionTitle;
         this.content = content;
-        this.imagePath = imagePath;
-        this.videoUrl = videoUrl;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -44,22 +44,6 @@ public class CourseDetail {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    public String getVideoUrl() {
-        return videoUrl;
-    }
-
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
     }
 
     public Date getCreatedAt() {
