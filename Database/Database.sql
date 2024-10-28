@@ -112,12 +112,13 @@ CREATE TABLE subjects (
 -- Table: packages
 CREATE TABLE packages (
     id INT IDENTITY(1,1) PRIMARY KEY,
-	course_id INT NOT NULL,
-	package_name NVARCHAR(255),
+    course_id INT NOT NULL,
+    package_name NVARCHAR(255),
     price DECIMAL(10, 2),
     sale_price DECIMAL(10, 2),
     sale_start DATETIME DEFAULT GETDATE(),
-    sale_end DATETIME DEFAULT GETDATE(),
+    sale_end DATETIME DEFAULT DATEADD(DAY, 7, GETDATE()),
+    access_duration INT NOT NULL,
     CONSTRAINT FK_CourseSale_Courses FOREIGN KEY (course_id) 
         REFERENCES courses(id) ON DELETE CASCADE
 );
@@ -148,8 +149,6 @@ DROP TABLE [SoftSkillsOnlineLearningSystem].[dbo].[course_details];
 
 
 
-
-
 -- Table: course_translations
 CREATE TABLE course_translations (
     id INT IDENTITY(1,1) PRIMARY KEY,           
@@ -162,28 +161,31 @@ CREATE TABLE course_translations (
 
 -- Table: registrations
 CREATE TABLE registrations (
-    id INT IDENTITY(1,1) PRIMARY KEY,           
-    user_id INT,                                
-    package_id INT,                  
-    total_cost DECIMAL(10, 2),                  
-    status NVARCHAR(50) DEFAULT 'Pending',    
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    user_id INT,
+    package_id INT,
+    course_id INT,
+    total_cost DECIMAL(10, 2),
+    status NVARCHAR(50) DEFAULT 'Submitted',
     valid_from DATETIME DEFAULT GETDATE(),
-    valid_to DATETIME DEFAULT DATEADD(WEEK, 1, GETDATE()), -- Thời gian hiện tại +1 tuần
-    CONSTRAINT FK_Registrations_Users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT FK_Registrations_Packages FOREIGN KEY (package_id) REFERENCES packages(id) ON DELETE CASCADE
+    valid_to DATETIME DEFAULT DATEADD(WEEK, 1, GETDATE()), -- Current time +1 week
+    CONSTRAINT FK_Registrations_User FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE NO ACTION,
+    CONSTRAINT FK_Registrations_Package FOREIGN KEY (package_id) REFERENCES packages(id) ON DELETE NO ACTION,
+    CONSTRAINT FK_Registrations_Course FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE NO ACTION
 );
+
 
 -- Table: user_courses
 CREATE TABLE user_courses (
-    user_id INT,                                
-    course_id INT,                              
-    role NVARCHAR(50) DEFAULT 'Student',        
-    status NVARCHAR(50) DEFAULT 'Enrolled',     
-    created_at DATETIME DEFAULT GETDATE(),      
-    updated_at DATETIME DEFAULT GETDATE(),      
-    PRIMARY KEY (user_id, course_id),           
-    CONSTRAINT FK_UserCourses_Users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT FK_UserCourses_Courses FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    user_id INT NOT NULL,
+    course_id INT NOT NULL,
+    access_start DATETIME DEFAULT GETDATE(),
+    access_end DATETIME DEFAULT DATEADD(DAY, 7, GETDATE()),
+    CONSTRAINT FK_UserCourses_Users FOREIGN KEY (user_id) 
+        REFERENCES users(id) ON DELETE NO ACTION,
+    CONSTRAINT FK_UserCourses_Courses FOREIGN KEY (course_id) 
+        REFERENCES courses(id) ON DELETE NO ACTION,
 );
 
 -- Table: questions
