@@ -77,7 +77,7 @@ GO
 
 -- 4. Insert data into the courses table
 INSERT INTO courses (title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, status, is_sponsored)
-VALUES 
+VALUES
 ('Effective Communication', 'Learn how to communicate effectively', 'This course will teach you how to improve your communication skills.', 'Communication', 100.00, 150.00, 2, 'Published', 1),
 ('Team Leadership', 'Become a strong leader', 'Master the skills needed to lead teams to success.', 'Leadership', 200.00, 250.00, 6, 'Draft', 0),
 ('Emotional Intelligence', 'Understand your emotions better', 'A comprehensive guide to emotional intelligence.', 'Psychology', 120.00, 170.00, 2, 'Published', 0),
@@ -172,14 +172,35 @@ GO
 --GO
 
 -- 9. Insert data into the user_courses table
-INSERT INTO user_courses (user_id, course_id, role, status)
+INSERT INTO user_courses (user_id, course_id)
 VALUES 
-(3, 1, 'Student', 'Enrolled'),
-(4, 2, 'Student', 'Enrolled'),
-(5, 3, 'Student', 'Enrolled'),
-(2, 4, 'Instructor', 'Enrolled'),
-(1, 5, 'Student', 'Completed');
-GO
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(1, 11),
+(1, 12),
+(1, 13),
+(1, 14),
+(1, 15),
+(1, 16),
+(1, 17),
+(1, 18),
+(1, 19),
+(1, 20),
+(1, 21),
+(1, 22),
+(1, 23),
+(1, 24),
+(1, 25),
+(1, 26);
+
 
 -- 10. Insert data into the questions table
 INSERT INTO questions (course_id, content, level)
