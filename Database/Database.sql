@@ -75,6 +75,28 @@ CREATE TABLE courses (
     CONSTRAINT FK_Courses_Users FOREIGN KEY (owner_id) 
         REFERENCES users(id) ON DELETE SET NULL  -- Khóa ngoại tham chiếu đến bảng users
 );
+
+CREATE TABLE course_content (
+    id INT PRIMARY KEY,
+    course_id INT FOREIGN KEY REFERENCES courses(id),
+    content NVARCHAR(MAX),
+    created_at DATETIME,
+    updated_at DATETIME
+);
+ 
+-- Table: course_media
+CREATE TABLE course_media (
+    [id] INT IDENTITY(1,1) PRIMARY KEY,
+    [course_id] INT NOT NULL,
+    [media_type] VARCHAR(10) NOT NULL, -- 'image' hoặc 'video' 
+    [file_name] NVARCHAR(255), -- tên file với extension
+    [title] NVARCHAR(255), -- tiêu đề của media (optional)
+    [display_order] INT, -- thứ tự hiển thị
+    [created_at] DATETIME DEFAULT GETDATE(),
+    [updated_at] DATETIME,
+    FOREIGN KEY (course_id) REFERENCES courses(id)
+)
+
 -- Table: subjects
 CREATE TABLE subjects (
     id INT IDENTITY(1,1) PRIMARY KEY,          -- Unique identifier for each subject
@@ -124,20 +146,7 @@ CREATE TABLE course_details (
 );
 DROP TABLE [SoftSkillsOnlineLearningSystem].[dbo].[course_details];
 
--- Table: course_media
-CREATE TABLE course_media (
-    [id] INT IDENTITY(1,1) PRIMARY KEY,
-    [course_id] INT NOT NULL,
-    [media_type] VARCHAR(10) NOT NULL, -- 'image' hoặc 'video' hoặc 'content'
-	content NVARCHAR(MAX),
-    [file_name] NVARCHAR(255), -- tên file với extension
-    [title] NVARCHAR(255), -- tiêu đề của media (optional)
-    [display_order] INT, -- thứ tự hiển thị
-    [is_thumbnail] BIT DEFAULT 0, -- đánh dấu ảnh thumbnail của khóa học
-    [created_at] DATETIME DEFAULT GETDATE(),
-    [updated_at] DATETIME,
-    FOREIGN KEY (course_id) REFERENCES course(course_id)
-)
+
 
 
 

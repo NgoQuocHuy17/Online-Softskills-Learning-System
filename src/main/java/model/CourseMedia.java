@@ -16,31 +16,18 @@ public class CourseMedia {
     private String fileName;
     private String title;
     private int displayOrder;
-    private boolean isThumbnail;
-    private String content; // Add content field
 
     public CourseMedia() {
 
     }
 
-    public CourseMedia(int id, int courseId, String mediaType, String fileName, String title, int displayOrder, boolean isThumbnail, String content) {
+    public CourseMedia(int id, int courseId, String mediaType, String fileName, String title, int displayOrder) {
         this.id = id;
         this.courseId = courseId;
         this.mediaType = mediaType;
         this.fileName = fileName;
         this.title = title;
         this.displayOrder = displayOrder;
-        this.isThumbnail = isThumbnail;
-        this.content = content;
-    }
-
-    // Getter and Setter for content
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 
     public int getId() {
@@ -67,10 +54,6 @@ public class CourseMedia {
         return displayOrder;
     }
 
-    public boolean isIsThumbnail() {
-        return isThumbnail;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -93,10 +76,6 @@ public class CourseMedia {
 
     public void setDisplayOrder(int displayOrder) {
         this.displayOrder = displayOrder;
-    }
-
-    public void setIsThumbnail(boolean isThumbnail) {
-        this.isThumbnail = isThumbnail;
     }
 
 }

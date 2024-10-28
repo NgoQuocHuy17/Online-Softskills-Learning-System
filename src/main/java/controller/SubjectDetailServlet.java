@@ -5,20 +5,23 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.CourseDetail;
 import view.CourseDAO;
 import view.CourseMediaDAO;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import model.Course;
+import model.CourseContent;
 import model.CourseMedia;
+import view.CourseContentDAO;
 
 @WebServlet(name = "SubjectDetailServlet", urlPatterns = {"/subjectDetail"})
 public class SubjectDetailServlet extends HttpServlet {
 
     private final CourseDAO courseDAO = new CourseDAO();
     private final CourseMediaDAO courseMediaDAO = new CourseMediaDAO();
+    private final CourseContentDAO courseContentDAO = new CourseContentDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -48,11 +51,8 @@ public class SubjectDetailServlet extends HttpServlet {
             throws ServletException, IOException {
         int courseId = Integer.parseInt(request.getParameter("courseId"));
         Course course = courseDAO.select(courseId);
-
-        // Lấy danh sách media liên quan đến khóa học
         List<CourseMedia> mediaList = courseMediaDAO.selectByCourseId(courseId);
 
-        // Truyền course và mediaList sang JSP
         request.setAttribute("course", course);
         request.setAttribute("mediaList", mediaList);
         request.getRequestDispatcher("/editSubjectDetail.jsp").forward(request, response);
@@ -78,59 +78,91 @@ public class SubjectDetailServlet extends HttpServlet {
     private void updateCourseDetail(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int courseId = Integer.parseInt(request.getParameter("courseId"));
-
-        // Lấy thông tin từ form cho Course
-        String title = request.getParameter("title");
-        String description = request.getParameter("description");
-
-        // Cập nhật Course
         Course course = courseDAO.select(courseId);
-        course.setTitle(title);
-        course.setDescription(description);
+
+        // Update Course data from the form
+        course.setTitle(request.getParameter("title"));
+        course.setDescription(request.getParameter("description"));
+        course.setCategory(request.getParameter("category"));
+        course.setBasicPackagePrice(new BigDecimal(request.getParameter("basicPackagePrice")));
+        course.setAdvancedPackagePrice(new BigDecimal(request.getParameter("advancedPackagePrice")));
+        course.setStatus(request.getParameter("status"));
+        course.setSponsored(request.getParameter("isSponsored") != null);
         courseDAO.update(course);
 
-        // Cập nhật CourseMedia nếu có
+        // Update Media details
+        updateMediaDetails(request, courseId);
+
+        updateContentDetails(request, courseId);
+
+        // Redirect after processing
+        response.sendRedirect("subjectDetail?action=list");
+    }
+
+    private void updateMediaDetails(HttpServletRequest request, int courseId) {
         String[] mediaIds = request.getParameterValues("mediaId");
+        String[] mediaTitles = request.getParameterValues("mediaTitle");
+        String[] mediaTypes = request.getParameterValues("mediaType");
+        String[] fileNames = request.getParameterValues("fileName");
+        String[] displayOrders = request.getParameterValues("displayOrder");
 
         if (mediaIds != null) {
-            String[] mediaTitles = request.getParameterValues("mediaTitle");
-            String[] mediaTypes = request.getParameterValues("mediaType");
-            String[] fileNames = request.getParameterValues("fileName");
-            String[] mediaContents = request.getParameterValues("mediaContent");
-            String[] isThumbnails = request.getParameterValues("isThumbnail");
-            String[] displayOrders = request.getParameterValues("displayOrder");
-
             for (int i = 0; i < mediaIds.length; i++) {
                 String mediaId = mediaIds[i];
-                CourseMedia media = new CourseMedia();
+                CourseMedia media;
 
-                // Nếu mediaId là "new", tức là media mới được thêm
-                if (mediaId.equals("new")) {
-                    media.setCourseId(courseId);  // Gán courseId cho media mới
+                // Determine if it's a new or existing media entry
+                if ("new".equals(mediaId)) {
+                    media = new CourseMedia();
+                    media.setCourseId(courseId);
                 } else {
-                    // Nếu media đã tồn tại, lấy từ database
                     media = courseMediaDAO.select(Integer.parseInt(mediaId));
                 }
 
-                // Cập nhật các thông tin media
+                // Update media details
                 media.setTitle(mediaTitles[i]);
                 media.setMediaType(mediaTypes[i]);
                 media.setFileName(fileNames[i]);
-                media.setContent(mediaContents[i]);
-                media.setIsThumbnail(isThumbnails != null && isThumbnails[i] != null);
                 media.setDisplayOrder(Integer.parseInt(displayOrders[i]));
 
-                // Nếu mediaId là "new", chèn bản ghi mới
-                if (mediaId.equals("new")) {
+                // Insert new media or update existing
+                if ("new".equals(mediaId)) {
                     courseMediaDAO.insert(media);
                 } else {
-                    courseMediaDAO.update(media);  // Cập nhật bản ghi media hiện có
+                    courseMediaDAO.update(media);
                 }
             }
         }
+    }
 
-        // Sau khi cập nhật, chuyển hướng về danh sách
-        response.sendRedirect("subjectDetail?action=list");
+    private void updateContentDetails(HttpServletRequest request, int courseId) {
+        String[] contentIds = request.getParameterValues("contentId");
+        String[] contents = request.getParameterValues("content");
+
+        if (contentIds != null) {
+            for (int i = 0; i < contentIds.length; i++) {
+                String contentId = contentIds[i];
+                CourseContent content;
+
+                // Nếu contentId là "new" thì thêm mới, nếu không thì cập nhật content hiện có
+                if ("new".equals(contentId)) {
+                    content = new CourseContent();
+                    content.setCourseId(courseId);
+                } else {
+                    content = courseContentDAO.select(Integer.parseInt(contentId)); // Lấy content hiện tại
+                }
+
+                // Cập nhật nội dung cho content
+                content.setContent(contents[i]);
+
+                // Chèn mới hoặc cập nhật content dựa trên giá trị contentId
+                if ("new".equals(contentId)) {
+                    courseContentDAO.insert(content); // Thêm mới
+                } else {
+                    courseContentDAO.update(content); // Cập nhật content đã có
+                }
+            }
+        }
     }
 
     private void toggleCourseStatus(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

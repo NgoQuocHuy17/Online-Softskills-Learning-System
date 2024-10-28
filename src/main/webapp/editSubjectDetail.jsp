@@ -17,25 +17,38 @@
             <label>Description:</label>
             <textarea name="description">${course.description}</textarea><br>
 
-            <h3>Media</h3>
+            <label>Category:</label>
+            <input type="text" name="category" value="${course.category}" required><br>
 
-            <!-- Bảng hiển thị media -->
+            <label>Basic Package Price:</label>
+            <input type="number" name="basicPackagePrice" value="${course.basicPackagePrice}" required><br>
+
+            <label>Advanced Package Price:</label>
+            <input type="number" name="advancedPackagePrice" value="${course.advancedPackagePrice}" required><br>
+
+            <label>Status:</label>
+            <select name="status">
+                <option value="Published" ${course.status == 'Published' ? 'selected' : ''}>Published</option>
+                <option value="Unpublished" ${course.status == 'Unpublished' ? 'selected' : ''}>Unpublished</option>
+            </select><br>
+
+            <label>Sponsored:</label>
+            <input type="checkbox" name="isSponsored" ${course.sponsored ? 'checked="checked"' : ''}><br>
+
+
+            <h3>Media</h3>
             <table border="1">
                 <thead>
                     <tr>
                         <th>Media Title</th>
                         <th>Media Type</th>
                         <th>File Name</th>
-                        <th>Content</th>
-                        <th>Is Thumbnail</th>
                         <th>Display Order</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Lặp qua danh sách media -->
                     <c:forEach var="media" items="${mediaList}">
                         <tr>
-                            <!-- Các trường chỉnh sửa của media -->
                             <td>
                                 <input type="hidden" name="mediaId" value="${media.id}">
                                 <input type="text" name="mediaTitle" value="${media.title}" required>
@@ -47,21 +60,41 @@
                                 <input type="text" name="fileName" value="${media.fileName}" required>
                             </td>
                             <td>
-                                <textarea name="mediaContent">${media.content}</textarea>
-                            </td>
-                            <td>
-                                <input type="checkbox" name="isThumbnail" ${media.isThumbnail ? 'checked' : ''}>
-                            </td>
-                            <td>
-                                <input type="number" name="displayOrder" value="${media.displayOrder}" required>
+                                <input type="number" name="displayOrder" value="${media.displayOrder}" min="0" required>
                             </td>
                         </tr>
                     </c:forEach>
                 </tbody>
             </table>
+            <!-- Nút thêm Media -->
+            <a href="addMedia?courseId=${course.id}"><button type="button">Add Media</button></a>
+
+            <h3>Content</h3>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Content</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="content" items="${contentList}">
+                        <tr>
+                            <td>
+                                <input type="hidden" name="contentId" value="${content.id}">
+                                <input type="text" name="contentText" value="${content.content}" required>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+            <!-- Nút thêm Content -->
+            <a href="addContent?courseId=${course.id}"><button type="button">Add Content</button></a>
 
             <button type="submit">Save Changes</button>
+
         </form>
+
+
 
 
     </body>
