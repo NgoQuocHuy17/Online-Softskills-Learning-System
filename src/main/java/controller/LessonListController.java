@@ -4,6 +4,7 @@
  */
 package controller;
 
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -33,10 +34,12 @@ public class LessonListController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int id;
+        id = Integer.parseInt(request.getParameter("courseId"));
         response.setContentType("text/html;charset=UTF-8");
         List<Lesson> l = new ArrayList<>();
         request.setAttribute("lesson", l);
-        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("LessonList.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
