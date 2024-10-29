@@ -1,28 +1,36 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Add Media</title>
-</head>
-<body>
-    <h1>Add Media</h1>
-    <form action="subjectDetail" method="post">
-        <input type="hidden" name="action" value="addMedia">
-        <input type="hidden" name="courseId" value="${courseId}">
+    <head>
+        <title>Add Media</title>
+    </head>
+    <body>
+        <h1>Add Media to Course: ${course.title}</h1>
 
-        <label>Media Title:</label>
-        <input type="text" name="mediaTitle" required><br>
+        <!-- Form upload file, cần enctype="multipart/form-data" -->
+        <form action="addMedia" method="post" enctype="multipart/form-data">
+            <!-- Trường ẩn để gửi courseId -->
+            <input type="hidden" name="courseId" value="${course.id}">
 
-        <label>Media Type:</label>
-        <input type="text" name="mediaType" required><br>
+            <label>Media Type:</label>
+            <select name="mediaType" required>
+                <option value="image">Image</option>
+                <option value="video">Video</option>
+            </select><br>
 
-        <label>File Name:</label>
-        <input type="text" name="fileName" required><br>
+            <label>File:</label>
+            <input type="file" name="file" required><br>
 
-        <label>Display Order:</label>
-        <input type="number" name="displayOrder" min="0" required><br>
+            <label>Title:</label>
+            <input type="text" name="title" required><br>
 
-        <button type="submit">Add Media</button>
-    </form>
-</body>
+            <label>Display Order:</label>
+            <input type="number" name="displayOrder" required><br>
+
+            <button type="submit">Add Media</button>
+        </form>
+
+        <!-- Nút quay lại trang chi tiết khóa học -->
+        <a href="subjectDetail?courseId=${course.id}"><button type="button">Back to Course</button></a>
+    </body>
 </html>

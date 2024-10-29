@@ -52,6 +52,7 @@
             <table border="1" width="100%">
                 <thead>
                     <tr>
+                        <th>Meia type</th>
                         <th style="width: 70%;">Media</th>
                         <th>Action</th>
                     </tr>
@@ -60,8 +61,12 @@
                     <c:forEach var="media" items="${mediaList}">
                         <tr>
                             <td class="media-cell">
+                                <p>${media.mediaType}</p>
+                            </td>
+                            <td class="media-cell">
                                 <!-- Hiển thị hình ảnh hoặc video -->
                                 <c:choose>
+
                                     <c:when test="${media.mediaType == 'image'}">
                                         <img src="media/${media.fileName}?type=image" alt="${media.title}" width="150" height="150"/>
                                     </c:when>
