@@ -14,8 +14,8 @@ public abstract class DBContext<E> {
     public DBContext() {
 //        this("jdbc:sqlserver://localhost:1433;databaseName=SoftSkillsOnlineLearningSystem;trustServerCertificate=true",
 //                "sa", "123");
-        this("jdbc:sqlserver://localhost:1433;databaseName=OnlineSoftSkillsLearningSystem;trustServerCertificate=true",
-                "sa", "123");
+        this("jdbc:sqlserver://localhost:1433;databaseName=SoftSkillsOnlineLearningSystem;trustServerCertificate=true",
+                "sa", "123456");
     }
 
     public DBContext(String url, String user, String pass) {
