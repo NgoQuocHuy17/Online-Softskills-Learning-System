@@ -37,65 +37,96 @@
 
 
             <h3>Media</h3>
-            <table border="1">
+            <style>
+                .media-cell {
+                    padding: 10px;
+                    text-align: center;
+                    vertical-align: top;
+                }
+                .media-title {
+                    margin-top: 5px;
+                    font-weight: bold;
+                }
+            </style>
+
+            <table border="1" width="100%">
                 <thead>
                     <tr>
-                        <th>Media Title</th>
-                        <th>Media Type</th>
-                        <th>File Name</th>
-                        <th>Display Order</th>
+                        <th style="width: 70%;">Media</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <c:forEach var="media" items="${mediaList}">
                         <tr>
-                            <td>
-                                <input type="hidden" name="mediaId" value="${media.id}">
-                                <input type="text" name="mediaTitle" value="${media.title}" required>
+                            <td class="media-cell">
+                                <!-- Hiển thị hình ảnh hoặc video -->
+                                <c:choose>
+                                    <c:when test="${media.mediaType == 'image'}">
+                                        <img src="media/${media.fileName}?type=image" alt="${media.title}" width="150" height="150"/>
+                                    </c:when>
+                                    <c:when test="${media.mediaType == 'video'}">
+                                        <video width="150" height="150" controls>
+                                            <source src="media/${media.fileName}?type=video" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span>Unknown Media Type</span>
+                                    </c:otherwise>
+                                </c:choose>
+                                <!-- Hiển thị tiêu đề dưới media -->
+                                <div class="media-title">${media.title}</div>
                             </td>
-                            <td>
-                                <input type="text" name="mediaType" value="${media.mediaType}" required>
-                            </td>
-                            <td>
-                                <input type="text" name="fileName" value="${media.fileName}" required>
-                            </td>
-                            <td>
-                                <input type="number" name="displayOrder" value="${media.displayOrder}" min="0" required>
+                            <td class="media-cell">
+                                <!-- Nút Edit và Remove -->
+                                <a href="editMedia?mediaId=${media.id}&courseId=${course.id}">
+                                    <button type="button">Edit</button>
+                                </a>
+                                <a href="deleteMedia?mediaId=${media.id}&courseId=${course.id}" 
+                                   onclick="return confirm('Are you sure you want to delete this media?');">
+                                    <button type="button">Remove</button>
+                                </a>
                             </td>
                         </tr>
                     </c:forEach>
                 </tbody>
             </table>
+
             <!-- Nút thêm Media -->
             <a href="addMedia?courseId=${course.id}"><button type="button">Add Media</button></a>
 
             <h3>Content</h3>
-            <table border="1">
+            <table border="1" width="100%">
                 <thead>
                     <tr>
                         <th>Content</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <c:forEach var="content" items="${contentList}">
                         <tr>
                             <td>
+                                <!-- Textarea cho phép sửa ngay lập tức -->
                                 <input type="hidden" name="contentId" value="${content.id}">
-                                <input type="text" name="contentText" value="${content.content}" required>
+                                <textarea name="content" style="width: 100%; height: 100px;">${content.content}</textarea>
+                            </td>
+                            <td>
+                                <!-- Nút Remove -->
+                                <a href="deleteContent?contentId=${content.id}&courseId=${course.id}" 
+                                   onclick="return confirm('Are you sure you want to delete this content?');">
+                                    <button type="button">Remove</button>
+                                </a>
                             </td>
                         </tr>
                     </c:forEach>
                 </tbody>
             </table>
-            <!-- Nút thêm Content -->
-            <a href="addContent?courseId=${course.id}"><button type="button">Add Content</button></a>
 
+            <!-- Nút Lưu thay đổi -->
             <button type="submit">Save Changes</button>
-
         </form>
-
-
-
 
     </body>
 </html>
