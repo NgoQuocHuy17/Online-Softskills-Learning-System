@@ -6,15 +6,19 @@ public class Registration {
     private int id;
     private int userId;
     private int packageId;
+    private int courseId;
     private double totalCost;
     private String status;
     private Date validFrom;
     private Date validTo;
 
-    public Registration(int id, int userId, int packageId, double totalCost, String status, Date validFrom, Date validTo) {
+    public Registration() {}
+
+    public Registration(int id, int userId, int packageId, int courseId, double totalCost, String status, Date validFrom, Date validTo) {
         this.id = id;
         this.userId = userId;
         this.packageId = packageId;
+        this.courseId = courseId;
         this.totalCost = totalCost;
         this.status = status;
         this.validFrom = validFrom;
@@ -43,6 +47,14 @@ public class Registration {
 
     public void setPackageId(int packageId) {
         this.packageId = packageId;
+    }
+
+    public int getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 
     public double getTotalCost() {
@@ -75,5 +87,19 @@ public class Registration {
 
     public void setValidTo(Date validTo) {
         this.validTo = validTo;
+    }
+
+    @Override
+    public String toString() {
+        return "Registration{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", packageId=" + packageId +
+                ", courseId=" + courseId +
+                ", totalCost=" + totalCost +
+                ", status='" + status + '\'' +
+                ", validFrom=" + validFrom +
+                ", validTo=" + validTo +
+                '}';
     }
 }
