@@ -4,134 +4,127 @@
 <html>
     <head>
         <title>Edit Subject Detail</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
+        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+        <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+        <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+        <link rel="stylesheet" href="assets/css/owl.theme.default.min.css">
+        <link rel="stylesheet" href="assets/plugins/slick/slick.css">
+        <link rel="stylesheet" href="assets/plugins/slick/slick-theme.css">
+        <link rel="stylesheet" href="assets/plugins/aos/aos.css">
+        <link rel="stylesheet" href="assets/css/style.css">
+
     </head>
     <body>
-        <h1>Edit Subject Detail</h1>
-        <form action="subjectDetail" method="post">
-            <input type="hidden" name="action" value="update">
-            <input type="hidden" name="courseId" value="${course.id}">
+        <jsp:include page="header.jsp"/>
 
-            <label>Course Title:</label>
-            <input type="text" name="title" value="${course.title}" required><br>
+        <div class="container mt-5 p-4 bg-white rounded shadow">
+            <h1 class="mb-4 text-center text-primary">Edit Subject Detail</h1>
+            <form action="subjectDetail" method="post">
+                <input type="hidden" name="action" value="update">
+                <input type="hidden" name="courseId" value="${course.id}">
 
-            <label>Description:</label>
-            <textarea name="description">${course.description}</textarea><br>
+                <div class="mb-3">
+                    <label class="form-label">Course Title:</label>
+                    <input type="text" name="title" class="form-control" value="${course.title}" required>
+                </div>
 
-            <label>Category:</label>
-            <input type="text" name="category" value="${course.category}" required><br>
+                <div class="mb-3">
+                    <label class="form-label">Description:</label>
+                    <textarea name="description" class="form-control">${course.description}</textarea>
+                </div>
 
-            <label>Basic Package Price:</label>
-            <input type="number" name="basicPackagePrice" value="${course.basicPackagePrice}" required><br>
+                <div class="mb-3">
+                    <label class="form-label">Category:</label>
+                    <input type="text" name="category" class="form-control" value="${course.category}" required>
+                </div>
 
-            <label>Advanced Package Price:</label>
-            <input type="number" name="advancedPackagePrice" value="${course.advancedPackagePrice}" required><br>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Basic Package Price:</label>
+                        <input type="number" name="basicPackagePrice" class="form-control" value="${course.basicPackagePrice}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Advanced Package Price:</label>
+                        <input type="number" name="advancedPackagePrice" class="form-control" value="${course.advancedPackagePrice}" required>
+                    </div>
+                </div>
 
-            <label>Status:</label>
-            <select name="status">
-                <option value="Published" ${course.status == 'Published' ? 'selected' : ''}>Published</option>
-                <option value="Unpublished" ${course.status == 'Unpublished' ? 'selected' : ''}>Unpublished</option>
-            </select><br>
+                <div class="mb-3">
+                    <label class="form-label">Status:</label>
+                    <select name="status" class="form-select">
+                        <option value="Published" ${course.status == 'Published' ? 'selected' : ''}>Published</option>
+                        <option value="Unpublished" ${course.status == 'Unpublished' ? 'selected' : ''}>Unpublished</option>
+                    </select>
+                </div>
 
-            <label>Sponsored:</label>
-            <input type="checkbox" name="isSponsored" ${course.sponsored ? 'checked="checked"' : ''}><br>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" name="isSponsored" class="form-check-input" ${course.sponsored ? 'checked' : ''}>
+                    <label class="form-check-label">Sponsored</label>
+                </div>
 
-
-            <h3>Media</h3>
-            <style>
-                .media-cell {
-                    padding: 10px;
-                    text-align: center;
-                    vertical-align: top;
-                }
-                .media-title {
-                    margin-top: 5px;
-                    font-weight: bold;
-                }
-            </style>
-
-            <table border="1" width="100%">
-                <thead>
-                    <tr>
-                        <th>Meia type</th>
-                        <th style="width: 70%;">Media</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="media" items="${mediaList}">
+                <h3 class="mt-4 mb-3 text-secondary">Media</h3>
+                <table class="table table-bordered table-hover text-center align-middle">
+                    <thead class="table-light">
                         <tr>
-                            <td class="media-cell">
-                                <p>${media.mediaType}</p>
-                            </td>
-                            <td class="media-cell">
-                                <!-- Hiển thị hình ảnh hoặc video -->
-                                <c:choose>
-
-                                    <c:when test="${media.mediaType == 'image'}">
-                                        <img src="media/${media.fileName}?type=image" alt="${media.title}" width="150" height="150"/>
-                                    </c:when>
-                                    <c:when test="${media.mediaType == 'video'}">
-                                        <video width="150" height="150" controls>
-                                            <source src="media/${media.fileName}?type=video" type="video/mp4">
-                                            Your browser does not support the video tag.
-                                        </video>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <span>Unknown Media Type</span>
-                                    </c:otherwise>
-                                </c:choose>
-                                <!-- Hiển thị tiêu đề dưới media -->
-                                <div class="media-title">${media.title}</div>
-                            </td>
-                            <td class="media-cell">
-                                <!-- Nút Edit và Remove -->
-                                <a href="editMedia?mediaId=${media.id}&courseId=${course.id}">
-                                    <button type="button">Edit</button>
-                                </a>
-                                <a href="deleteMedia?mediaId=${media.id}&courseId=${course.id}" 
-                                   onclick="return confirm('Are you sure you want to delete this media?');">
-                                    <button type="button">Remove</button>
-                                </a>
-                            </td>
+                            <th>Media Type</th>
+                            <th>Media</th>
+                            <th>Action</th>
                         </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="media" items="${mediaList}">
+                            <tr>
+                                <td>${media.mediaType}</td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${media.mediaType == 'image'}">
+                                            <img src="media/${media.fileName}?type=image" alt="${media.title}" 
+                                                 class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
+                                        </c:when>
+                                        <c:when test="${media.mediaType == 'video'}">
+                                            <video class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;" controls>
+                                                <source src="media/${media.fileName}?type=video" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span>Unknown Media Type</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <div class="mt-2 fw-bold">${media.title}</div>
+                                </td>
+                                <td>
+                                    <a href="subjectDetail?action=remove&mediaId=${media.id}&courseId=${course.id}" 
+                                       onclick="return confirm('Are you sure you want to delete this media?');" 
+                                       class="btn btn-danger btn-sm">Remove</a>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
 
-            <!-- Nút thêm Media -->
-            <a href="addMedia?courseId=${course.id}"><button type="button">Add Media</button></a>
+                </table>
 
-            <h3>Content</h3>
-            <table border="1" width="100%">
-                <thead>
-                    <tr>
-                        <th>Content</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="content" items="${contentList}">
-                        <tr>
-                            <td>
-                                <!-- Textarea cho phép sửa ngay lập tức -->
-                                <input type="hidden" name="contentId" value="${content.id}">
-                                <textarea name="content" style="width: 100%; height: 100px;">${content.content}</textarea>
-                            </td>
-                            <td>
-                                <!-- Nút Remove -->
-                                <a href="deleteContent?contentId=${content.id}&courseId=${course.id}" 
-                                   onclick="return confirm('Are you sure you want to delete this content?');">
-                                    <button type="button">Remove</button>
-                                </a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+                <a href="addMedia?courseId=${course.id}" class="btn btn-outline-secondary mb-4">Add Media</a>
 
-            <!-- Nút Lưu thay đổi -->
-            <button type="submit">Save Changes</button>
-        </form>
+                <div class="mb-4">
+                    <h3 class="mb-3 text-secondary">Content</h3>
+                    <textarea name="content" class="form-control" style="height: 200px;">${content.content}</textarea>
+                </div>
 
+                <button type="submit" class="btn btn-success w-100">Save Changes</button>
+            </form>
+        </div>
+        <jsp:include page="footer.jsp"/>
+
+        <script src="assets/js/jquery-3.6.0.min.js"></script>
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/owl.carousel.min.js"></script>
+        <script src="assets/plugins/slick/slick.js"></script>
+        <script src="assets/plugins/aos/aos.js"></script>
+        <script src="assets/js/script.js"></script>
     </body>
 </html>

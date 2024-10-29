@@ -77,13 +77,13 @@ CREATE TABLE courses (
 );
 
 CREATE TABLE course_content (
-    id INT PRIMARY KEY,
-    course_id INT FOREIGN KEY REFERENCES courses(id),
+    course_id INT PRIMARY KEY, -- Đặt course_id là khóa chính
     content NVARCHAR(MAX),
-    created_at DATETIME,
-    updated_at DATETIME
+    created_at DATETIME DEFAULT GETDATE(),
+    updated_at DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (course_id) REFERENCES courses(id)
 );
- 
+
 -- Table: course_media
 CREATE TABLE course_media (
     [id] INT IDENTITY(1,1) PRIMARY KEY,

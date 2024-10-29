@@ -12,16 +12,15 @@ import model.CourseContent;
 
 public class CourseContentDAO extends DBContext<CourseContent> {
 
-    // Lấy content theo courseId
+    // Select content by course_id
     public List<CourseContent> selectByCourseId(int courseId) {
         List<CourseContent> contents = new ArrayList<>();
-        String sql = "SELECT id, course_id, content, created_at, updated_at FROM course_content WHERE course_id = ?";
+        String sql = "SELECT course_id, content, created_at, updated_at FROM course_content WHERE course_id = ?";
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, courseId);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 CourseContent content = new CourseContent();
-                content.setId(rs.getInt("id"));
                 content.setCourseId(rs.getInt("course_id"));
                 content.setContent(rs.getString("content"));
                 content.setCreatedAt(rs.getTimestamp("created_at"));
@@ -34,7 +33,7 @@ public class CourseContentDAO extends DBContext<CourseContent> {
         return contents;
     }
 
-    // Thêm content mới
+    // Insert new content
     @Override
     public int insert(CourseContent content) {
         String sql = "INSERT INTO course_content (course_id, content, created_at, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
@@ -48,13 +47,13 @@ public class CourseContentDAO extends DBContext<CourseContent> {
         return 0;
     }
 
-    // Cập nhật content
+    // Update content
     @Override
     public int update(CourseContent content) {
-        String sql = "UPDATE course_content SET content = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
+        String sql = "UPDATE course_content SET content = ?, updated_at = CURRENT_TIMESTAMP WHERE course_id = ?";
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setString(1, content.getContent());
-            pst.setInt(2, content.getId());
+            pst.setInt(2, content.getCourseId());
             return pst.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(CourseContentDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -62,9 +61,10 @@ public class CourseContentDAO extends DBContext<CourseContent> {
         return 0;
     }
 
+    // Delete content by course_id
     @Override
     public int delete(int... ids) {
-        String sql = "DELETE FROM course_content WHERE id = ?";
+        String sql = "DELETE FROM course_content WHERE course_id = ?";
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, ids[0]);
             return pst.executeUpdate();
@@ -82,12 +82,11 @@ public class CourseContentDAO extends DBContext<CourseContent> {
     @Override
     public CourseContent select(int... ids) {
         CourseContent content = new CourseContent();
-        String sql = "SELECT id, course_id, content, created_at, updated_at FROM course_content WHERE id = ?";
+        String sql = "SELECT course_id, content, created_at, updated_at FROM course_content WHERE course_id = ?";
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, ids[0]);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
-                content.setId(rs.getInt("id"));
                 content.setCourseId(rs.getInt("course_id"));
                 content.setContent(rs.getString("content"));
                 content.setCreatedAt(rs.getTimestamp("created_at"));
@@ -98,4 +97,18 @@ public class CourseContentDAO extends DBContext<CourseContent> {
         }
         return content;
     }
+    
+    public static void main(String[] args) {
+        CourseMediaDAO mediaDAO = new CourseMediaDAO();
+
+        int mediaIdToDelete = 26; // Thay đổi ID này thành một mediaId có trong cơ sở dữ liệu của bạn
+        int result = mediaDAO.delete(mediaIdToDelete);
+
+        if (result > 0) {
+            System.out.println("Media with ID " + mediaIdToDelete + " was deleted successfully.");
+        } else {
+            System.out.println("Failed to delete media with ID " + mediaIdToDelete + " or media does not exist.");
+        }
+    }
+    
 }

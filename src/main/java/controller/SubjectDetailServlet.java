@@ -34,7 +34,9 @@ public class SubjectDetailServlet extends HttpServlet {
             case "edit":
                 editCourseDetail(request, response);
                 break;
-            case "list":
+            case "remove":
+                removeSingleMedia(request, response);
+                break;
             default:
                 listCourseDetails(request, response);
                 break;
@@ -51,12 +53,12 @@ public class SubjectDetailServlet extends HttpServlet {
             throws ServletException, IOException {
         int courseId = Integer.parseInt(request.getParameter("courseId"));
         Course course = courseDAO.select(courseId);
-        List<CourseMedia> mediaList = courseMediaDAO.selectByCourseId(courseId);
-        List<CourseContent> contentList = courseContentDAO.selectByCourseId(courseId); // Thêm dòng này
+        CourseContent content = courseContentDAO.select(courseId); // Lấy content đơn
+        List<CourseMedia> mediaList = courseMediaDAO.selectByCourseId(courseId); // Lấy media list
 
         request.setAttribute("course", course);
+        request.setAttribute("content", content != null ? content : new CourseContent(courseId, ""));
         request.setAttribute("mediaList", mediaList);
-        request.setAttribute("contentList", contentList);
         request.getRequestDispatcher("/editSubjectDetail.jsp").forward(request, response);
     }
 
@@ -82,7 +84,7 @@ public class SubjectDetailServlet extends HttpServlet {
         int courseId = Integer.parseInt(request.getParameter("courseId"));
         Course course = courseDAO.select(courseId);
 
-        // Cập nhật Course từ form
+        // Cập nhật các trường của Course từ form
         course.setTitle(request.getParameter("title"));
         course.setDescription(request.getParameter("description"));
         course.setCategory(request.getParameter("category"));
@@ -92,40 +94,72 @@ public class SubjectDetailServlet extends HttpServlet {
         course.setSponsored(request.getParameter("isSponsored") != null);
         courseDAO.update(course);
 
-        // Cập nhật Content từ form
-        updateContentDetails(request, courseId);
+        // Lấy content từ form (cho phép rỗng)
+        String newContent = request.getParameter("content");
 
-        // Chuyển hướng sau khi xử lý
+        // Chèn mới hoặc cập nhật content
+        CourseContent content = courseContentDAO.select(courseId);
+        if (content == null) {
+            // Nếu chưa có, chèn một dòng content mới
+            content = new CourseContent(courseId, newContent);
+            courseContentDAO.insert(content);
+        } else {
+            // Nếu đã có, cập nhật content
+            content.setContent(newContent);
+            courseContentDAO.update(content);
+        }
+
+        // Xử lý media như trước (không thay đổi gì ở phần này)
+        String[] mediaIds = request.getParameterValues("mediaId");
+        String[] mediaTitles = request.getParameterValues("mediaTitle");
+        String[] mediaTypes = request.getParameterValues("mediaType");
+
+        if (mediaIds != null) {
+            for (int i = 0; i < mediaIds.length; i++) {
+                String mediaId = mediaIds[i];
+                CourseMedia media;
+
+                if ("new".equals(mediaId)) {
+                    media = new CourseMedia();
+                    media.setCourseId(courseId);
+                } else {
+                    media = courseMediaDAO.select(Integer.valueOf(mediaId));
+                }
+
+                media.setTitle(mediaTitles[i]);
+                media.setMediaType(mediaTypes[i]);
+
+                if ("new".equals(mediaId)) {
+                    courseMediaDAO.insert(media);
+                } else {
+                    courseMediaDAO.update(media);
+                }
+            }
+        }
+
         response.sendRedirect("subjectDetail?action=list");
     }
 
-    private void updateContentDetails(HttpServletRequest request, int courseId) {
-        String[] contentIds = request.getParameterValues("contentId");
-        String[] contents = request.getParameterValues("content");
+    private void removeSingleMedia(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String courseIdStr = request.getParameter("courseId");
+        String mediaIdStr = request.getParameter("mediaId");
 
-        if (contentIds != null) {
-            for (int i = 0; i < contentIds.length; i++) {
-                String contentId = contentIds[i];
-                CourseContent content;
+        // Nếu không có courseId hoặc mediaId, về trang list
+        if (courseIdStr == null || mediaIdStr == null) {
+            response.sendRedirect("subjectDetail?action=list");
+            return;
+        }
 
-                // Nếu contentId là "new" thì thêm mới, nếu không thì cập nhật content hiện có
-                if ("new".equals(contentId)) {
-                    content = new CourseContent();
-                    content.setCourseId(courseId);
-                } else {
-                    content = courseContentDAO.select(Integer.valueOf(contentId)); // Lấy content hiện tại
-                }
+        try {
+            int courseId = Integer.parseInt(courseIdStr);
+            int mediaId = Integer.parseInt(mediaIdStr);
 
-                // Cập nhật nội dung cho content
-                content.setContent(contents[i]);
-
-                // Chèn mới hoặc cập nhật content dựa trên giá trị contentId
-                if ("new".equals(contentId)) {
-                    courseContentDAO.insert(content); // Thêm mới
-                } else {
-                    courseContentDAO.update(content); // Cập nhật content đã có
-                }
-            }
+            courseMediaDAO.delete(mediaId);
+            response.sendRedirect("subjectDetail?action=edit&courseId=" + courseId);
+        } catch (NumberFormatException e) {
+            // Nếu parse số bị lỗi, về trang list
+            response.sendRedirect("subjectDetail?action=list");
         }
     }
 
@@ -137,4 +171,5 @@ public class SubjectDetailServlet extends HttpServlet {
         courseDAO.update(course);
         response.sendRedirect("subjectDetail?action=list");
     }
+
 }
