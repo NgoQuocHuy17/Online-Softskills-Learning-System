@@ -14,7 +14,7 @@ import java.io.IOException;
 @WebServlet("/media/*")
 public class MediaServlet extends HttpServlet {
     private static final String IMG_PATH = "/assets/img/course/";
-    private static final String VIDEO_PATH = "/assets/video/";
+    private static final String VIDEO_PATH = "/assets/video/course/";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

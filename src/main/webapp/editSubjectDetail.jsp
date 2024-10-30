@@ -70,6 +70,7 @@
                 <table class="table table-bordered table-hover text-center align-middle">
                     <thead class="table-light">
                         <tr>
+                            <th>Display Order</th> <!-- Thêm cột Display Order -->
                             <th>Media Type</th>
                             <th>Media</th>
                             <th>Action</th>
@@ -78,6 +79,22 @@
                     <tbody>
                         <c:forEach var="media" items="${mediaList}">
                             <tr>
+                                <td>
+                                    ${media.displayOrder}
+                                    <!-- Nút để di chuyển lên và xuống -->
+                                    <form action="subjectDetail" method="post" style="display: inline;">
+                                        <input type="hidden" name="action" value="moveUp">
+                                        <input type="hidden" name="mediaId" value="${media.id}">
+                                        <input type="hidden" name="courseId" value="${course.id}">
+                                        <button type="submit" class="btn btn-link p-0">▲</button>
+                                    </form>
+                                    <form action="subjectDetail" method="post" style="display: inline;">
+                                        <input type="hidden" name="action" value="moveDown">
+                                        <input type="hidden" name="mediaId" value="${media.id}">
+                                        <input type="hidden" name="courseId" value="${course.id}">
+                                        <button type="submit" class="btn btn-link p-0">▼</button>
+                                    </form>
+                                </td>
                                 <td>${media.mediaType}</td>
                                 <td>
                                     <c:choose>
@@ -105,7 +122,6 @@
                             </tr>
                         </c:forEach>
                     </tbody>
-
                 </table>
 
                 <a href="addMedia?courseId=${course.id}" class="btn btn-outline-secondary mb-4">Add Media</a>

@@ -76,7 +76,22 @@ public class SubjectDetailServlet extends HttpServlet {
             case "toggleStatus":
                 toggleCourseStatus(request, response);
                 break;
+            case "moveUp":
+                updateMediaOrder(request, response, true); // Truyền true để tăng thứ tự
+                break;
+            case "moveDown":
+                updateMediaOrder(request, response, false); // Truyền false để giảm thứ tự
+                break;
         }
+    }
+
+    private void updateMediaOrder(HttpServletRequest request, HttpServletResponse response, boolean moveUp)
+            throws ServletException, IOException {
+        int courseId = Integer.parseInt(request.getParameter("courseId"));
+        int mediaId = Integer.parseInt(request.getParameter("mediaId"));
+        courseMediaDAO.updateDisplayOrder(mediaId, moveUp); // Sử dụng phương thức mới
+
+        response.sendRedirect("subjectDetail?action=edit&courseId=" + courseId);
     }
 
     private void updateCourseDetail(HttpServletRequest request, HttpServletResponse response)

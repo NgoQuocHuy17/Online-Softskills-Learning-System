@@ -16,7 +16,7 @@ public class CourseMediaDAO extends DBContext<CourseMedia> {
     public List<CourseMedia> selectByCourseId(int courseId) {
         List<CourseMedia> medias = new ArrayList<>();
         String sql = "SELECT id, course_id, media_type, file_name, title, display_order "
-                   + "FROM course_media WHERE course_id = ? ORDER BY display_order";
+                + "FROM course_media WHERE course_id = ? ORDER BY display_order";
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, courseId);
             ResultSet rs = pst.executeQuery();
@@ -40,7 +40,7 @@ public class CourseMediaDAO extends DBContext<CourseMedia> {
     @Override
     public int insert(CourseMedia media) {
         String sql = "INSERT INTO course_media (course_id, media_type, file_name, title, display_order) "
-                   + "VALUES (?, ?, ?, ?, ?)";
+                + "VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, media.getCourseId());
             pst.setString(2, media.getMediaType());
@@ -58,7 +58,7 @@ public class CourseMediaDAO extends DBContext<CourseMedia> {
     @Override
     public int update(CourseMedia media) {
         String sql = "UPDATE course_media SET media_type = ?, file_name = ?, title = ?, display_order = ? "
-                   + "WHERE id = ?";
+                + "WHERE id = ?";
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setString(1, media.getMediaType());
             pst.setString(2, media.getFileName());
@@ -72,6 +72,19 @@ public class CourseMediaDAO extends DBContext<CourseMedia> {
         return 0;
     }
 
+    public void updateDisplayOrder(int mediaId, boolean moveUp) {
+        String sql = moveUp
+                ? "UPDATE course_media SET display_order = display_order - 1 WHERE id = ?"
+                : "UPDATE course_media SET display_order = display_order + 1 WHERE id = ?";
+
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, mediaId);
+            pst.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseMediaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     @Override
     public int delete(int... ids) {
         String sql = "DELETE FROM course_media WHERE id = ?";
@@ -82,6 +95,21 @@ public class CourseMediaDAO extends DBContext<CourseMedia> {
             Logger.getLogger(CourseMediaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
+    }
+
+    public int getMaxDisplayOrder(int courseId) {
+        int maxOrder = 0;
+        String sql = "SELECT MAX(display_order) FROM course_media WHERE course_id = ?";
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, courseId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                maxOrder = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return maxOrder;
     }
 
     @Override

@@ -48,23 +48,32 @@ public class AddMediaServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String mediaType = request.getParameter("mediaType");  // Lấy loại media (image hoặc video)
+        String mediaType = request.getParameter("mediaType");  // Loại media
         String title = request.getParameter("title");          // Tiêu đề của media
-        int displayOrder = Integer.parseInt(request.getParameter("displayOrder"));
         int courseId = Integer.parseInt(request.getParameter("courseId"));
 
         // Xử lý file upload
         Part filePart = request.getPart("file"); // Nhận file từ form
         String fileName = getFileName(filePart); // Lấy tên file
 
+        // Kiểm tra định dạng file dựa vào mediaType đã chọn
+        if (!isValidFileType(fileName, mediaType)) {
+            request.setAttribute("error", "File không đúng định dạng với loại media đã chọn.");
+            request.getRequestDispatcher("/addMedia.jsp").forward(request, response);
+            return;
+        }
+
         // Đường dẫn lưu trữ file
         String uploadPath;
-        if ("image".equals(mediaType)) {
-            uploadPath = getServletContext().getRealPath("/assets/img/course");
-        } else if ("video".equals(mediaType)) {
-            uploadPath = getServletContext().getRealPath("/assets/video");
-        } else {
-            throw new ServletException("Unknown media type: " + mediaType);
+        switch (mediaType) {
+            case "image":
+                uploadPath = getServletContext().getRealPath("/assets/img/course");
+                break;
+            case "video":
+                uploadPath = getServletContext().getRealPath("/assets/video/course");
+                break;
+            default:
+                throw new ServletException("Unknown media type: " + mediaType);
         }
 
         // Tạo thư mục lưu trữ nếu chưa có
@@ -76,22 +85,25 @@ public class AddMediaServlet extends HttpServlet {
         // Ghi file vào server trong thư mục tương ứng
         filePart.write(uploadPath + File.separator + fileName);
 
+        // Lấy displayOrder lớn nhất hiện tại và tăng thêm 1
+        CourseMediaDAO mediaDAO = new CourseMediaDAO();
+        int maxDisplayOrder = mediaDAO.getMaxDisplayOrder(courseId);
+
         // Lưu thông tin media vào cơ sở dữ liệu
         CourseMedia media = new CourseMedia();
         media.setCourseId(courseId);
         media.setMediaType(mediaType);
         media.setFileName(fileName); // Tên file đã lưu
         media.setTitle(title);
-        media.setDisplayOrder(displayOrder);
+        media.setDisplayOrder(maxDisplayOrder + 1); // Tự động thiết lập displayOrder
 
-        CourseMediaDAO mediaDAO = new CourseMediaDAO();
         mediaDAO.insert(media);
 
         // Chuyển hướng về trang chi tiết khóa học
-        response.sendRedirect("subjectDetail?courseId=" + courseId);
+        response.sendRedirect("subjectDetail?action=edit&courseId=" + courseId);
     }
 
-    // Phương thức lấy tên file upload từ Part
+// Phương thức lấy tên file upload từ Part
     private String getFileName(Part part) {
         String contentDisposition = part.getHeader("content-disposition");
         String[] items = contentDisposition.split(";");
@@ -102,4 +114,16 @@ public class AddMediaServlet extends HttpServlet {
         }
         return "";
     }
+
+// Phương thức kiểm tra tính hợp lệ của định dạng file
+    private boolean isValidFileType(String fileName, String mediaType) {
+        String fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+        if ("image".equals(mediaType)) {
+            return fileExtension.equals("jpg") || fileExtension.equals("jpeg") || fileExtension.equals("png") || fileExtension.equals("jfif");
+        } else if ("video".equals(mediaType)) {
+            return fileExtension.equals("mp4") || fileExtension.equals("avi");
+        }
+        return false;
+    }
+
 }

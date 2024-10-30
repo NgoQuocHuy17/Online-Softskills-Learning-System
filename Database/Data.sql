@@ -320,3 +320,15 @@ VALUES
 ('Logo URL', 'logo.jpg', 2),
 ('Footer Text', '© 2024 SoftSkills Online Learning', 3);
 GO
+
+INSERT INTO course_content (course_id, content, created_at, updated_at) VALUES
+(1, 'Introduction to the ring to the pen to the king communication principles and a lot of things else', GETDATE(), GETDATE()),
+(2, 'Developing team leadership skills...', GETDATE(), GETDATE()),
+(3, 'Exploring emotional intelligence...', GETDATE(), GETDATE()),
+(4, 'Techniques for effective conflict resolution...', GETDATE(), GETDATE()),
+(5, 'Time management strategies for productivity...', GETDATE(), GETDATE()),
+(6, 'Conquering fear of public speaking...', GETDATE(), GETDATE()),
+(7, 'Improving business writing skills...', GETDATE(), GETDATE()),
+(8, 'Mastering nonverbal communication...', GETDATE(), GETDATE()),
+(9, 'Developing strategic leadership...', GETDATE(), GETDATE()),
+(10, 'Ethical decision making in leadership...', GETDATE(), GETDATE());
