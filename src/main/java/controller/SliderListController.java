@@ -18,7 +18,7 @@ import view.SliderDAO;
  *
  * @author Minh
  */
-@WebServlet(name = "SliderListController", urlPatterns = {"/SliderListController"})
+@WebServlet(name = "SliderListController", urlPatterns = {"/sliderlist"})
 public class SliderListController extends HttpServlet {
 
     /**
@@ -34,17 +34,14 @@ public class SliderListController extends HttpServlet {
             throws ServletException, IOException {
         SliderDAO sliderDao = new SliderDAO();
 
-        // Get pagination and filter parameters
         String statusFilter = request.getParameter("status");
         String searchQuery = request.getParameter("searchQuery");
         int currentPage = Integer.parseInt(request.getParameter("page") != null ? request.getParameter("page") : "1");
         int slidersPerPage = 5; // Change as needed
 
-        // Fetch filtered and paginated sliders
         List<Slider> sliders = sliderDao.select(currentPage, slidersPerPage, statusFilter, searchQuery);
         int totalSliders = sliderDao.getTotalSliders(statusFilter, searchQuery);
 
-        // Set attributes for JSP
         request.setAttribute("sliders", sliders);
         request.setAttribute("totalSliders", totalSliders);
         request.setAttribute("currentPage", currentPage);

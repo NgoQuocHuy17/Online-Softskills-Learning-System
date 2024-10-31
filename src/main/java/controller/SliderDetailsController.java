@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.format.DateTimeFormatter;
 import model.Slider;
 import view.SliderDAO;
 
@@ -18,7 +19,7 @@ import view.SliderDAO;
  *
  * @author Minh
  */
-@WebServlet(name = "SliderDetailsController", urlPatterns = {"/SliderDetailsController"})
+@WebServlet(name = "SliderDetailsController", urlPatterns = {"/sliderdetails"})
 public class SliderDetailsController extends HttpServlet {
 
     /**
@@ -40,13 +41,23 @@ public class SliderDetailsController extends HttpServlet {
                 Slider slider = sliderDao.select(id);
 
                 if (slider != null) {
+                    if (slider.getCreatedAt() != null && slider.getUpdatedAt() != null) {
+                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        String formattedCreatedAt = slider.getCreatedAt().format(dtf);
+                        String formattedUpdatedAt = slider.getUpdatedAt().format(dtf);
+
+                        request.setAttribute("formattedCreatedAt", formattedCreatedAt);
+                        request.setAttribute("formattedUpdatedAt", formattedUpdatedAt);
+                    }
                     request.setAttribute("slider", slider);
                     request.getRequestDispatcher("slider-details.jsp").forward(request, response);
                 } else {
+                    response.sendRedirect("SliderListController");
                     request.setAttribute("errorMessage", "Slider not found.");
                     request.getRequestDispatcher("error.jsp").forward(request, response);
                 }
             } catch (NumberFormatException e) {
+                response.sendRedirect("SliderListController");
                 request.setAttribute("errorMessage", "Invalid slider ID.");
                 request.getRequestDispatcher("error.jsp").forward(request, response);
             }

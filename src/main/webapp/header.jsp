@@ -3,14 +3,12 @@
     Created on : May 21, 2024, 11:29:08 PM
     Author     : asus
 --%>
-
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="model.User" %>
 <%
     // Lấy đối tượng User từ session
     User loggedInUser = (User) session.getAttribute("user");
 %>
-
 <header class="header header-four">
     <div class="header-fixed">
         <nav class="navbar navbar-expand-lg header-nav scroll-sticky">

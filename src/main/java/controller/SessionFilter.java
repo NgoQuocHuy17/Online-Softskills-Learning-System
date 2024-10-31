@@ -16,7 +16,7 @@ import java.io.IOException;
  * @author Minh
  */
 @WebFilter({"/login.jsp", "/login", "/register"})
-public class LoginFilter implements Filter{
+public class SessionFilter implements Filter{
 
     @Override
     public void doFilter(ServletRequest sr, ServletResponse sr1, FilterChain chain) throws IOException, ServletException {
@@ -31,5 +31,4 @@ public class LoginFilter implements Filter{
             chain.doFilter(request, response);
         }
     }
-
 }

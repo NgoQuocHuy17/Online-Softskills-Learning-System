@@ -24,7 +24,7 @@ import view.UserDAO;
  *
  * @author Minh
  */
-@WebServlet(name = "BlogDetailsController", urlPatterns = {"/BlogDetailsController"})
+@WebServlet(name = "BlogDetailsController", urlPatterns = {"/blogdetails"})
 public class BlogDetailsController extends HttpServlet {
 
     /**

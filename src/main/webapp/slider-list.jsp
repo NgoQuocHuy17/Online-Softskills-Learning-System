@@ -1,16 +1,13 @@
 <%-- 
     Document   : slider-list
-    Created on : Oct 11, 2024, 12:29:29 PM
+    Created on : Oct 11, 2024, 12:29:29?PM
     Author     : Minh
 --%>
-
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%--<%@ page contentType="text/html;charset=UTF-8" language="java" %>--%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="model.Slider" %>
 <%@ page import="java.util.List" %>
-
 <%
-    // Get the sliders, total sliders, current page, and filter parameters from request attributes
     List<Slider> sliders = (List<Slider>) request.getAttribute("sliders");
     int totalSliders = (Integer) request.getAttribute("totalSliders");
     int currentPage = (Integer) request.getAttribute("currentPage");
@@ -19,7 +16,6 @@
     int slidersPerPage = 5; // Adjust as necessary
     int totalPages = (int) Math.ceil((double) totalSliders / slidersPerPage);
 %>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -33,84 +29,8 @@
         <link rel="stylesheet" href="assets/css/style.css">
     </head>
     <body>
+        <%@ include file="header.jsp"%>
         <div class="main-wrapper">
-            <header class="header">
-                <div class="header-fixed">
-                    <nav class="navbar navbar-expand-lg header-nav">
-                        <div class="navbar-header">
-                            <a id="mobile_btn" href="javascript:void(0);">
-                                <span class="bar-icon">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                </span>
-                            </a>
-                            <a href="index.html" class="navbar-brand logo">
-                                <img src="assets/img/logo.png" class="img-fluid" alt="Logo">
-                            </a>
-                        </div>
-                        <div class="main-menu-wrapper">
-                            <div class="menu-header">
-                                <a href="index.html" class="menu-logo">
-                                    <img src="assets/img/logo.png" class="img-fluid" alt="Logo">
-                                </a>
-                                <a id="menu_close" class="menu-close" href="javascript:void(0);">
-                                    <i class="fas fa-times"></i>
-                                </a>
-                            </div>
-                            <ul class="main-nav">
-                                <li class="has-submenu">
-                                    <a href="index.html">Home <i class="fas fa-chevron-down"></i></a>
-                                    <ul class="submenu">
-                                        <li><a href="index.html">Home</a></li>
-                                        <li><a href="index-two.html">Home 2</a></li>
-                                        <li><a href="index-three.html">Home 3</a></li>
-                                        <li><a href="index-four.html">Home 4</a></li>
-                                        <li><a href="index-five.html">Home 5</a></li>
-                                        <li><a href="index-six.html">Home 6</a></li>
-                                        <li><a href="index-seven.html">Home 7</a></li>
-                                    </ul>
-                                </li>
-                                <li class="has-submenu active">
-                                    <a href="#">Sliders <i class="fas fa-chevron-down"></i></a>
-                                    <ul class="submenu">
-                                        <li class="active"><a href="slider-list.jsp">Slider List</a></li>
-                                        <li><a href="add-slider.jsp">Add Slider</a></li>
-                                    </ul>
-                                </li>
-                                <!-- Other menu items here -->
-                                <li class="login-link">
-                                    <a href="login.html">Login / Signup</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <ul class="nav header-navbar-rht">
-                            <li class="nav-item dropdown has-arrow logged-item">
-                                <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                                    <span class="user-img">
-                                        <img class="rounded-circle" src="assets/img/user/user.jpg" width="31" alt="User">
-                                    </span>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <div class="user-header">
-                                        <div class="avatar avatar-sm">
-                                            <img src="assets/img/user/user.jpg" alt="User Image" class="avatar-img rounded-circle">
-                                        </div>
-                                        <div class="user-text">
-                                            <h6>Jonathan Doe</h6>
-                                            <p class="text-muted mb-0">Mentor</p>
-                                        </div>
-                                    </div>
-                                    <a class="dropdown-item" href="dashboard.html">Dashboard</a>
-                                    <a class="dropdown-item" href="profile-settings.html">Profile Settings</a>
-                                    <a class="dropdown-item" href="login.html">Logout</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </header>
-
             <div class="breadcrumb-bar">
                 <div class="container-fluid">
                     <div class="row align-items-center">
@@ -161,7 +81,7 @@
                                             <tr>
                                                 <td>${slider.id}</td>
                                                 <td>
-                                                    <a href="SliderDetailsController?id=${slider.id}">${slider.title}</a>
+                                                    <a href="sliderdetails?id=${slider.id}">${slider.title}</a>
                                                 </td>
                                                 <td><img src="${slider.imageUrl}" alt="${slider.title}" style="max-width: 100px;"></td>
                                                 <td>${slider.status}</td>
@@ -194,24 +114,13 @@
                     </div>
                 </div>
             </div>
-
-            <footer class="footer">
-                <div class="footer-top">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-12 col-12">
-                                <div class="footer-content">
-                                    <p>&copy; 2024 Your Website. All rights reserved.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </footer>
         </div>
-
-        <script src="assets/js/jquery.min.js"></script>
+        <%@ include file="footer.jsp" %>
+        <script src="assets/js/jquery-3.6.0.min.js"></script>
         <script src="assets/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/owl.carousel.min.js"></script>
+        <script src="assets/plugins/slick/slick.js"></script>
+        <script src="assets/plugins/aos/aos.js"></script>
         <script src="assets/js/script.js"></script>
     </body>
 </html>
