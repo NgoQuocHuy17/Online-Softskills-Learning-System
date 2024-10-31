@@ -7,24 +7,21 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Course;
+import model.User;
 import view.CourseDAO;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import model.User;
 
-/**
- *
- * @author ngoqu
- */
 @WebServlet(name = "SubjectList", urlPatterns = {"/SubjectList"})
 public class SubjectList extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Check if the user is logged in and has the appropriate role
+        // Retrieve the logged-in user from the session
         User loggedInUser = (User) request.getSession().getAttribute("user");
         if (loggedInUser == null
                 || (!"Teacher".equals(loggedInUser.getRole()) && !"Admin".equals(loggedInUser.getRole()))) {
@@ -33,7 +30,9 @@ public class SubjectList extends HttpServlet {
             return;
         }
 
-        // Existing code for fetching and displaying subjects
+        // Set the loggedInUser as an attribute to pass to the JSP
+        request.setAttribute("loggedInUser", loggedInUser);
+
         CourseDAO courseDAO = new CourseDAO();
         String searchTitle = request.getParameter("searchTitle");
         String status = request.getParameter("status");
@@ -43,11 +42,12 @@ public class SubjectList extends HttpServlet {
         int page = (pageStr == null || pageStr.isEmpty()) ? 1 : Integer.parseInt(pageStr);
         int pageSize = 5;
 
-        // Retrieve courses and filter based on search title and status
-        List<Course> allCourses = courseDAO.getAllCourses();
+        // Retrieve list of statuses
         List<String> statuses = courseDAO.getAllStatuses();
         request.setAttribute("statuses", statuses);
 
+        // Retrieve courses and filter based on search title and status
+        List<Course> allCourses = courseDAO.getAllCourses();
         if (searchTitle != null && !searchTitle.isEmpty()) {
             allCourses = courseDAO.getSubjectByTitle(searchTitle);
         }
@@ -55,7 +55,6 @@ public class SubjectList extends HttpServlet {
         if (status == null || status.isEmpty()) {
             status = "All";
         }
-
         final String filterStatus = status;
         if (!filterStatus.equals("All")) {
             allCourses = allCourses.stream()
@@ -63,12 +62,34 @@ public class SubjectList extends HttpServlet {
                     .collect(Collectors.toList());
         }
 
-        // Pagination logic
-        int totalCourses = allCourses.size();
+        // Sort courses by ownership if the user is a "Teacher"
+        List<Course> sortedCourses;
+        if ("Teacher".equals(loggedInUser.getRole())) {
+            // Get courses owned by the logged-in teacher
+            List<Course> ownedCourses = allCourses.stream()
+                    .filter(course -> course.getOwnerId() == loggedInUser.getId())
+                    .collect(Collectors.toList());
+
+            // Get other courses not owned by the teacher
+            List<Course> otherCourses = allCourses.stream()
+                    .filter(course -> course.getOwnerId() != loggedInUser.getId())
+                    .collect(Collectors.toList());
+
+            // Combine the lists with the teacher's courses first
+            sortedCourses = new ArrayList<>();
+            sortedCourses.addAll(ownedCourses);
+            sortedCourses.addAll(otherCourses);
+        } else {
+            // Admin users see all courses in the default order
+            sortedCourses = allCourses;
+        }
+
+        // Pagination logic for the sorted courses
+        int totalCourses = sortedCourses.size();
         int totalPages = (int) Math.ceil((double) totalCourses / pageSize);
         int fromIndex = (page - 1) * pageSize;
         int toIndex = Math.min(fromIndex + pageSize, totalCourses);
-        List<Course> paginatedCourses = allCourses.subList(fromIndex, toIndex);
+        List<Course> paginatedCourses = sortedCourses.subList(fromIndex, toIndex);
 
         // Set attributes for the request
         request.setAttribute("courses", paginatedCourses);

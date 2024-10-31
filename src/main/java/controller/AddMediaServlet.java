@@ -34,11 +34,27 @@ public class AddMediaServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Xử lý hiển thị form thêm media (giống như trước)
 
-        // Check if the user is logged in and has the appropriate role
         User loggedInUser = (User) request.getSession().getAttribute("user");
-        if (loggedInUser == null
-                || (!"Teacher".equals(loggedInUser.getRole()) && !"Admin".equals(loggedInUser.getRole()))) {
+        if (loggedInUser == null) {
             // Redirect to "course" page if the user is not a Teacher or Admin
+            response.sendRedirect("home");
+            return;
+        }
+
+        // Check if the user is a teacher or admin
+        if ("Teacher".equals(loggedInUser.getRole())) {
+            int courseId = Integer.parseInt(request.getParameter("courseId"));
+            CourseDAO courseDAO = new CourseDAO();
+            Course course = courseDAO.select(courseId);
+
+            // Check if the logged-in user is the owner of the course
+            if (course.getOwnerId() != loggedInUser.getId()) {
+                // Redirect to SubjectList if the user is not the owner
+                response.sendRedirect("SubjectList");
+                return;
+            }
+        } else if (!"Admin".equals(loggedInUser.getRole())) {
+            // If the user is neither a teacher nor an admin, redirect to home
             response.sendRedirect("home");
             return;
         }

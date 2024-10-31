@@ -60,9 +60,7 @@
                                 <li><a href="reviews.html">Reviews</a></li>
                             </ul>
                         </li>
-                        <li class="has-submenu">
-                            <a href="SubjectList">Subject</a>
-                        </li>
+                        
                         <% } else if (loggedInUser.getRole().equals("Student")) { %>
                         <!-- Chỉ hiện phần Mentee nếu role là Student -->
                         <li class="has-submenu">
