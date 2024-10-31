@@ -10,59 +10,57 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-
 public class UserContactDAO extends DBContext<UserContact> {
-    
+
     public List<UserContact> getUserPhones(int userId) {
-    List<UserContact> phones = new ArrayList<>();
-    String query = "SELECT * FROM user_contacts WHERE user_id = ? AND contact_type = 'Phone'";
+        List<UserContact> phones = new ArrayList<>();
+        String query = "SELECT * FROM user_contacts WHERE user_id = ? AND contact_type = 'Phone'";
 
-    try (PreparedStatement pre = super.getConn().prepareStatement(query)) {
-        pre.setInt(1, userId);
-        try (ResultSet rs = pre.executeQuery()) {
-            while (rs.next()) {
-                UserContact contact = new UserContact(
-                        rs.getInt("id"),
-                        rs.getInt("user_id"),
-                        rs.getString("contact_type"),
-                        rs.getString("contact_value"),
-                        rs.getBoolean("is_preferred")
-                );
-                phones.add(contact);
+        try (PreparedStatement pre = super.getConn().prepareStatement(query)) {
+            pre.setInt(1, userId);
+            try (ResultSet rs = pre.executeQuery()) {
+                while (rs.next()) {
+                    UserContact contact = new UserContact(
+                            rs.getInt("id"),
+                            rs.getInt("user_id"),
+                            rs.getString("contact_type"),
+                            rs.getString("contact_value"),
+                            rs.getBoolean("is_preferred")
+                    );
+                    phones.add(contact);
+                }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+
+        return phones;
     }
 
-    return phones;
-}
+    public List<UserContact> getUserEmails(int userId) {
+        List<UserContact> emails = new ArrayList<>();
+        String query = "SELECT * FROM user_contacts WHERE user_id = ? AND contact_type = 'Email'";
 
-public List<UserContact> getUserEmails(int userId) {
-    List<UserContact> emails = new ArrayList<>();
-    String query = "SELECT * FROM user_contacts WHERE user_id = ? AND contact_type = 'Email'";
-
-    try (PreparedStatement pre = super.getConn().prepareStatement(query)) {
-        pre.setInt(1, userId);
-        try (ResultSet rs = pre.executeQuery()) {
-            while (rs.next()) {
-                UserContact contact = new UserContact(
-                        rs.getInt("id"),
-                        rs.getInt("user_id"),
-                        rs.getString("contact_type"),
-                        rs.getString("contact_value"),
-                        rs.getBoolean("is_preferred")
-                );
-                emails.add(contact);
+        try (PreparedStatement pre = super.getConn().prepareStatement(query)) {
+            pre.setInt(1, userId);
+            try (ResultSet rs = pre.executeQuery()) {
+                while (rs.next()) {
+                    UserContact contact = new UserContact(
+                            rs.getInt("id"),
+                            rs.getInt("user_id"),
+                            rs.getString("contact_type"),
+                            rs.getString("contact_value"),
+                            rs.getBoolean("is_preferred")
+                    );
+                    emails.add(contact);
+                }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+
+        return emails;
     }
-
-    return emails;
-}
-
 
     @Override
     public List<UserContact> select() {

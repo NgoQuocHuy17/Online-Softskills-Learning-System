@@ -144,6 +144,28 @@ VALUES
 (10, 'Basic Package', 64.00, 51.20, 30), 
 (10, 'Premium Package', 91.00, 72.80, 90);
 
+INSERT INTO registrations (user_id, package_id, course_id, total_cost)
+VALUES
+(1, 1, 1, 65.00),   -- Basic Package cho course_id 1
+(1, 2, 1, 95.00),   -- Premium Package cho course_id 1
+(1, 3, 2, 60.00),   -- Basic Package cho course_id 2
+(1, 4, 2, 99.00),   -- Premium Package cho course_id 2
+(1, 5, 3, 70.00),   -- Basic Package cho course_id 3
+(1, 6, 3, 90.00),   -- Premium Package cho course_id 3
+(1, 7, 4, 62.00),   -- Basic Package cho course_id 4
+(1, 8, 4, 92.00),   -- Premium Package cho course_id 4
+(1, 9, 5, 67.00),   -- Basic Package cho course_id 5
+(1, 10, 5, 94.00),  -- Premium Package cho course_id 5
+(1, 11, 6, 68.00),  -- Basic Package cho course_id 6
+(1, 12, 6, 98.00),  -- Premium Package cho course_id 6
+(1, 13, 7, 63.00),  -- Basic Package cho course_id 7
+(1, 14, 7, 93.00),  -- Premium Package cho course_id 7
+(1, 15, 8, 66.00),  -- Basic Package cho course_id 8
+(1, 16, 8, 96.00),  -- Premium Package cho course_id 8
+(1, 17, 9, 61.00),  -- Basic Package cho course_id 9
+(1, 18, 9, 97.00),  -- Premium Package cho course_id 9
+(1, 19, 10, 64.00), -- Basic Package cho course_id 10
+(1, 20, 10, 91.00); -- Premium Package cho course_id 10
 
 
 -- 6. Insert data into the course_details table

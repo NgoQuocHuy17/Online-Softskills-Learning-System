@@ -6,7 +6,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>My Course</title>
+        <title>My Courses</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
         <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -15,9 +15,7 @@
         <link rel="stylesheet" href="assets/css/style.css">
     </head>
     <body>
-
         <div class="main-wrapper">
-
             <header class="header">
                 <div class="header-fixed">
                     <nav class="navbar navbar-expand-lg header-nav">
@@ -50,7 +48,6 @@
                             </ul>
                         </div>
                         <ul class="nav header-navbar-rht">
-
                             <li class="nav-item dropdown has-arrow logged-item">
                                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                                     <span class="user-img">
@@ -81,8 +78,54 @@
             <div class="breadcrumb-bar">
                 <div class="container-fluid">
                     <div class="row align-items-center">
-                        <div class="col-md-4 col-12">
+                        <div class="col-md-12 col-12">
+                            <form action="MyCourses" method="get">
+                                <div class="row">
+                                    <!-- Page Size Dropdown -->
+                                    <div class="col-md-6">
+                                        <div class="page-size-dropdown mt-3">
+                                            <label for="pageSize">Page Size:</label>
+                                            <select id="pageSize" name="pageSize" class="form-control">
+                                                <c:forEach var="size" items="${[5, 10, 15, 20, 25]}">
+                                                    <option 
+                                                        value="${size}" 
+                                                        ${size == param.pageSize ? "selected" : ""}>
+                                                        ${size}
+                                                    </option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                    </div>
 
+                                    <!-- Show Fields Checkboxes -->
+                                    <div class="col-md-6">
+                                        <div class="display-options mt-3">
+                                            <label>Show Fields:</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="showTitle" value="true" ${param.showTitle == 'true' ? 'checked' : ''}>
+                                                <label class="form-check-label" for="showTitle">Title</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="showTagline" value="true" ${param.showTagline == 'true' ? 'checked' : ''}>
+                                                <label class="form-check-label" for="showTagline">Tagline</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="showDescription" value="true" ${param.showDescription == 'true' ? 'checked' : ''}>
+                                                <label class="form-check-label" for="showDescription">Description</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="showCategory" value="true" ${param.showCategory == 'true' ? 'checked' : ''}>
+                                                <label class="form-check-label" for="showCategory">Category</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="mt-3">
+                                    <button type="submit" class="btn btn-primary w-100">Apply</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -102,11 +145,21 @@
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-body">
-                                            <!-- Display course details -->
-                                            <h5 class="card-title"><strong>Title: </strong> ${course.title}</h5>
-                                            <h6 class="card-subtitle mb-2 text-muted"><strong>Tagline: </strong>${course.tagLine}</h6>
-                                            <p class="card-text"><strong>Description: </strong>${course.description}</p>
-                                            <p class="card-text"><strong>Category: </strong>${course.category}</p>
+                                            <h3 class="card-text"><strong>Course ID: </strong>${course.id}</h3>
+
+                                            <c:if test="${showTitle}">
+                                                <h4 class="card-title">Title: ${course.title}</h4>
+                                            </c:if>
+                                            <c:if test="${showTagline}">
+                                                <p class="card-subtitle mb-2"><strong>Tagline: </strong>${course.tagLine}</p>
+                                            </c:if>
+                                            <c:if test="${showDescription}">
+                                                <p class="card-text"><strong>Description: </strong>${course.description}</p>
+                                            </c:if>
+                                            <c:if test="${showCategory}">
+                                                <p class="card-text"><strong>Category: </strong>${course.category}</p>
+                                            </c:if>
+
                                             <!-- "Learn" button -->
                                             <a href="#" class="btn btn-primary">Learn</a>
                                         </div>
@@ -116,38 +169,23 @@
                         </c:forEach>
                     </div>
 
-                    <!-- Pagination -->
-                    <div class="row">
-                        <!--
-                        <c:if test="${totalPages > 1 && not empty courseList}">
-                            <div class="blog-pagination mt-4">
-                                <nav>
-                                    <ul class="pagination justify-content-center">
-                                        <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                            <a class="page-link" href="?page=${currentPage - 1}">
-                                                <i class="fas fa-angle-double-left"></i>
-                                            </a>
-                                        </li>
-                            <c:forEach var="i" begin="1" end="${totalPages}">
-                                <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                    <a class="page-link" href="?page=${i}">${i}</a>
-                                </li>
-                            </c:forEach>
-                            <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                <a class="page-link" href="?page=${currentPage + 1}">
-                                    <i class="fas fa-angle-double-right"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+                    <!-- Pagination Section -->
+                    <div class="pagination">
+                        <c:if test="${totalPages > 1}">
+                            <ul class="pagination">
+                                <c:forEach var="i" begin="1" end="${totalPages}">
+                                    <li class="page-item ${currentPage == i ? 'active' : ''}">
+                                        <a class="page-link" 
+                                           href="MyCourses?page=${i}&pageSize=${param.pageSize}&showTitle=${param.showTitle}&showTagline=${param.showTagline}&showDescription=${param.showDescription}&showCategory=${param.showCategory}">
+                                            ${i}
+                                        </a>
+                                    </li>
+                                </c:forEach>
+                            </ul>
                         </c:if>
-                        -->
                     </div>
                 </div>
             </div>
-
-
 
             <footer class="footer">
                 <jsp:include page="footer.jsp" />
