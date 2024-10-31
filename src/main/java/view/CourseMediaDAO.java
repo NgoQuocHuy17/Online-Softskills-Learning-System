@@ -112,6 +112,58 @@ public class CourseMediaDAO extends DBContext<CourseMedia> {
         return maxOrder;
     }
 
+    public void swapDisplayOrder(int mediaId1, int mediaId2) {
+        String sql = "UPDATE course_media SET display_order = CASE WHEN id = ? THEN ? ELSE ? END WHERE id IN (?, ?)";
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, mediaId1);
+            pst.setInt(2, getDisplayOrder(mediaId2));  // Lấy thứ tự của media thứ hai
+            pst.setInt(3, getDisplayOrder(mediaId1));  // Lấy thứ tự của media thứ nhất
+            pst.setInt(4, mediaId1);
+            pst.setInt(5, mediaId2);
+            pst.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseMediaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private int getDisplayOrder(int mediaId) {
+        String sql = "SELECT display_order FROM course_media WHERE id = ?";
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, mediaId);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("display_order");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseMediaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    public CourseMedia selectByDisplayOrder(int courseId, int displayOrder) {
+        CourseMedia media = null;
+        String sql = "SELECT * FROM course_media WHERE course_id = ? AND display_order = ?";
+
+        try (Connection conn = getConn(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, courseId);
+            stmt.setInt(2, displayOrder);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    media = new CourseMedia();
+                    media.setId(rs.getInt("id"));
+                    media.setCourseId(rs.getInt("courseId"));
+                    media.setTitle(rs.getString("title"));
+                    media.setMediaType(rs.getString("mediaType"));
+                    media.setDisplayOrder(rs.getInt("displayOrder"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return media;
+    }
+
     @Override
     public List<CourseMedia> select() {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -119,6 +171,28 @@ public class CourseMediaDAO extends DBContext<CourseMedia> {
 
     @Override
     public CourseMedia select(int... ids) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (ids.length == 0) {
+            return null;
+        }
+
+        String sql = "SELECT * FROM course_media WHERE id = ?";
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, ids[0]);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                CourseMedia media = new CourseMedia();
+                media.setId(rs.getInt("id"));
+                media.setCourseId(rs.getInt("course_id"));
+                media.setMediaType(rs.getString("media_type"));
+                media.setFileName(rs.getString("file_name"));
+                media.setTitle(rs.getString("title"));
+                media.setDisplayOrder(rs.getInt("display_order"));
+                return media;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseMediaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
+
 }

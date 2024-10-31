@@ -49,16 +49,26 @@ public class SubjectDetailServlet extends HttpServlet {
         request.getRequestDispatcher("/subjectList.jsp").forward(request, response);
     }
 
-    private void editCourseDetail(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    private void editCourseDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int courseId = Integer.parseInt(request.getParameter("courseId"));
+
+        // Lấy danh sách media từ session nếu có, nếu không lấy từ cơ sở dữ liệu và lưu vào session
+        List<CourseMedia> mediaList = (List<CourseMedia>) request.getSession().getAttribute("tempMediaList");
+        if (mediaList == null) {
+            mediaList = courseMediaDAO.selectByCourseId(courseId);
+            request.getSession().setAttribute("tempMediaList", mediaList);
+        }
+
+        // Lấy các thông tin khác
         Course course = courseDAO.select(courseId);
-        CourseContent content = courseContentDAO.select(courseId); // Lấy content đơn
-        List<CourseMedia> mediaList = courseMediaDAO.selectByCourseId(courseId); // Lấy media list
+        CourseContent content = courseContentDAO.select(courseId);
+        int maxOrder = mediaList.size();
 
         request.setAttribute("course", course);
         request.setAttribute("content", content != null ? content : new CourseContent(courseId, ""));
         request.setAttribute("mediaList", mediaList);
+        request.setAttribute("maxOrder", maxOrder);
+
         request.getRequestDispatcher("/editSubjectDetail.jsp").forward(request, response);
     }
 
@@ -85,74 +95,80 @@ public class SubjectDetailServlet extends HttpServlet {
         }
     }
 
-    private void updateMediaOrder(HttpServletRequest request, HttpServletResponse response, boolean moveUp)
-            throws ServletException, IOException {
-        int courseId = Integer.parseInt(request.getParameter("courseId"));
+    private void updateMediaOrder(HttpServletRequest request, HttpServletResponse response, boolean moveUp) throws ServletException, IOException {
+        List<CourseMedia> mediaList = (List<CourseMedia>) request.getSession().getAttribute("tempMediaList");
         int mediaId = Integer.parseInt(request.getParameter("mediaId"));
-        courseMediaDAO.updateDisplayOrder(mediaId, moveUp); // Sử dụng phương thức mới
 
-        response.sendRedirect("subjectDetail?action=edit&courseId=" + courseId);
-    }
+        // Tìm media cần thay đổi
+        for (int i = 0; i < mediaList.size(); i++) {
+            if (mediaList.get(i).getId() == mediaId) {
+                // Xác định media liền kề để hoán đổi vị trí
+                int swapIndex = moveUp ? i - 1 : i + 1;
+                if (swapIndex >= 0 && swapIndex < mediaList.size()) {
+                    CourseMedia adjacentMedia = mediaList.get(swapIndex);
+                    CourseMedia currentMedia = mediaList.get(i);
 
-    private void updateCourseDetail(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int courseId = Integer.parseInt(request.getParameter("courseId"));
-        Course course = courseDAO.select(courseId);
+                    // Hoán đổi thứ tự hiển thị
+                    int tempOrder = currentMedia.getDisplayOrder();
+                    currentMedia.setDisplayOrder(adjacentMedia.getDisplayOrder());
+                    adjacentMedia.setDisplayOrder(tempOrder);
 
-        // Cập nhật các trường của Course từ form
-        course.setTitle(request.getParameter("title"));
-        course.setDescription(request.getParameter("description"));
-        course.setCategory(request.getParameter("category"));
-        course.setBasicPackagePrice(new BigDecimal(request.getParameter("basicPackagePrice")));
-        course.setAdvancedPackagePrice(new BigDecimal(request.getParameter("advancedPackagePrice")));
-        course.setStatus(request.getParameter("status"));
-        course.setSponsored(request.getParameter("isSponsored") != null);
-        courseDAO.update(course);
-
-        // Lấy content từ form (cho phép rỗng)
-        String newContent = request.getParameter("content");
-
-        // Chèn mới hoặc cập nhật content
-        CourseContent content = courseContentDAO.select(courseId);
-        if (content == null) {
-            // Nếu chưa có, chèn một dòng content mới
-            content = new CourseContent(courseId, newContent);
-            courseContentDAO.insert(content);
-        } else {
-            // Nếu đã có, cập nhật content
-            content.setContent(newContent);
-            courseContentDAO.update(content);
-        }
-
-        // Xử lý media như trước (không thay đổi gì ở phần này)
-        String[] mediaIds = request.getParameterValues("mediaId");
-        String[] mediaTitles = request.getParameterValues("mediaTitle");
-        String[] mediaTypes = request.getParameterValues("mediaType");
-
-        if (mediaIds != null) {
-            for (int i = 0; i < mediaIds.length; i++) {
-                String mediaId = mediaIds[i];
-                CourseMedia media;
-
-                if ("new".equals(mediaId)) {
-                    media = new CourseMedia();
-                    media.setCourseId(courseId);
-                } else {
-                    media = courseMediaDAO.select(Integer.valueOf(mediaId));
+                    // Hoán đổi vị trí trong danh sách
+                    mediaList.set(i, adjacentMedia);
+                    mediaList.set(swapIndex, currentMedia);
                 }
-
-                media.setTitle(mediaTitles[i]);
-                media.setMediaType(mediaTypes[i]);
-
-                if ("new".equals(mediaId)) {
-                    courseMediaDAO.insert(media);
-                } else {
-                    courseMediaDAO.update(media);
-                }
+                break;
             }
         }
 
-        response.sendRedirect("subjectDetail?action=list");
+        // Cập nhật danh sách media trong session để lưu lại thứ tự preview
+        request.getSession().setAttribute("tempMediaList", mediaList);
+        response.sendRedirect("subjectDetail?action=edit&courseId=" + request.getParameter("courseId"));
+    }
+
+    private void updateCourseDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            // Lấy khóa học hiện tại dựa vào ID
+            int courseId = Integer.parseInt(request.getParameter("courseId"));
+            Course course = courseDAO.select(courseId);
+
+            if (course != null) {
+                // Cập nhật thông tin khóa học từ form
+                String title = request.getParameter("title");
+                String description = request.getParameter("description");
+
+                course.setTitle(title);
+                course.setDescription(description);
+
+                // Cập nhật thông tin khóa học vào cơ sở dữ liệu
+                courseDAO.update(course);
+            }
+
+            // Lấy danh sách media tạm thời từ session
+            List<CourseMedia> mediaList = (List<CourseMedia>) request.getSession().getAttribute("tempMediaList");
+            if (mediaList != null) {
+                // Cập nhật thứ tự hiển thị của media vào cơ sở dữ liệu
+                for (CourseMedia media : mediaList) {
+                    courseMediaDAO.update(media);
+                }
+
+                // Xóa danh sách media tạm thời khỏi session sau khi lưu
+                request.getSession().removeAttribute("tempMediaList");
+            }
+
+            // Chuyển hướng về trang danh sách khóa học sau khi cập nhật thành công
+            response.sendRedirect("subjectDetail?action=list");
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            // Xử lý lỗi và hiển thị thông báo lỗi nếu có vấn đề trong việc lấy hoặc cập nhật khóa học
+            request.setAttribute("error", "Invalid course ID.");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Xử lý lỗi chung và hiển thị thông báo lỗi
+            request.setAttribute("error", "An error occurred while updating the course details.");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
     }
 
     private void removeSingleMedia(HttpServletRequest request, HttpServletResponse response)

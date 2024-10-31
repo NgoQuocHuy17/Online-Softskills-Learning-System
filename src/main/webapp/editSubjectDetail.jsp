@@ -66,35 +66,22 @@
                     <label class="form-check-label">Sponsored</label>
                 </div>
 
+                <!-- Media Section -->
                 <h3 class="mt-4 mb-3 text-secondary">Media</h3>
                 <table class="table table-bordered table-hover text-center align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>Display Order</th> <!-- Thêm cột Display Order -->
+                            <th>Display Order</th>
                             <th>Media Type</th>
                             <th>Media</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="media" items="${mediaList}">
+                        <!-- Lấy danh sách media từ session nếu có, nếu không thì lấy từ mediaList -->
+                        <c:forEach var="media" items="${sessionScope.tempMediaList != null ? sessionScope.tempMediaList : mediaList}">
                             <tr>
-                                <td>
-                                    ${media.displayOrder}
-                                    <!-- Nút để di chuyển lên và xuống -->
-                                    <form action="subjectDetail" method="post" style="display: inline;">
-                                        <input type="hidden" name="action" value="moveUp">
-                                        <input type="hidden" name="mediaId" value="${media.id}">
-                                        <input type="hidden" name="courseId" value="${course.id}">
-                                        <button type="submit" class="btn btn-link p-0">▲</button>
-                                    </form>
-                                    <form action="subjectDetail" method="post" style="display: inline;">
-                                        <input type="hidden" name="action" value="moveDown">
-                                        <input type="hidden" name="mediaId" value="${media.id}">
-                                        <input type="hidden" name="courseId" value="${course.id}">
-                                        <button type="submit" class="btn btn-link p-0">▼</button>
-                                    </form>
-                                </td>
+                                <td>${media.displayOrder}</td>
                                 <td>${media.mediaType}</td>
                                 <td>
                                     <c:choose>
@@ -115,6 +102,19 @@
                                     <div class="mt-2 fw-bold">${media.title}</div>
                                 </td>
                                 <td>
+                                    <!-- Nút move up và move down gửi yêu cầu POST để cập nhật session -->
+                                    <form action="subjectDetail" method="post" style="display: inline;">
+                                        <input type="hidden" name="action" value="moveUp">
+                                        <input type="hidden" name="mediaId" value="${media.id}">
+                                        <input type="hidden" name="courseId" value="${course.id}">
+                                        <button type="submit" class="btn btn-link p-0" ${media.displayOrder <= 1 ? 'disabled' : ''}>▲</button>
+                                    </form>
+                                    <form action="subjectDetail" method="post" style="display: inline;">
+                                        <input type="hidden" name="action" value="moveDown">
+                                        <input type="hidden" name="mediaId" value="${media.id}">
+                                        <input type="hidden" name="courseId" value="${course.id}">
+                                        <button type="submit" class="btn btn-link p-0" ${media.displayOrder >= maxOrder ? 'disabled' : ''}>▼</button>
+                                    </form>
                                     <a href="subjectDetail?action=remove&mediaId=${media.id}&courseId=${course.id}" 
                                        onclick="return confirm('Are you sure you want to delete this media?');" 
                                        class="btn btn-danger btn-sm">Remove</a>
