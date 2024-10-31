@@ -183,8 +183,7 @@ public class SubjectDetailServlet extends HttpServlet {
         }
     }
 
-    private void removeSingleMedia(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    private void removeSingleMedia(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String courseIdStr = request.getParameter("courseId");
         String mediaIdStr = request.getParameter("mediaId");
 
@@ -197,7 +196,12 @@ public class SubjectDetailServlet extends HttpServlet {
             int courseId = Integer.parseInt(courseIdStr);
             int mediaId = Integer.parseInt(mediaIdStr);
 
+            // Xóa media
             courseMediaDAO.delete(mediaId);
+
+            // Sắp xếp lại thứ tự hiển thị
+            courseMediaDAO.reorderDisplayOrderAfterRemoval(courseId);
+
             response.sendRedirect("subjectDetail?action=edit&courseId=" + courseId);
         } catch (NumberFormatException e) {
             response.sendRedirect("SubjectList");

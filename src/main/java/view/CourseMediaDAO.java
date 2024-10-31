@@ -195,4 +195,28 @@ public class CourseMediaDAO extends DBContext<CourseMedia> {
         return null;
     }
 
+    public void reorderDisplayOrderAfterRemoval(int courseId) {
+        String selectSql = "SELECT id FROM course_media WHERE course_id = ? ORDER BY display_order";
+        String updateSql = "UPDATE course_media SET display_order = ? WHERE id = ?";
+
+        try (Connection conn = getConn(); PreparedStatement selectPst = conn.prepareStatement(selectSql); PreparedStatement updatePst = conn.prepareStatement(updateSql)) {
+
+            // Lấy danh sách các media theo display_order
+            selectPst.setInt(1, courseId);
+            ResultSet rs = selectPst.executeQuery();
+
+            int newOrder = 1;
+            while (rs.next()) {
+                int mediaId = rs.getInt("id");
+
+                // Cập nhật display_order mới
+                updatePst.setInt(1, newOrder++);
+                updatePst.setInt(2, mediaId);
+                updatePst.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseMediaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }
