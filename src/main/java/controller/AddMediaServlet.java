@@ -83,9 +83,9 @@ public class AddMediaServlet extends HttpServlet {
         Part filePart = request.getPart("file"); // Nhận file từ form
         String fileName = getFileName(filePart); // Lấy tên file
 
-        // Kiểm tra định dạng file dựa vào mediaType đã chọn
         if (!isValidFileType(fileName, mediaType)) {
             request.setAttribute("error", "File không đúng định dạng với loại media đã chọn.");
+            request.setAttribute("course", new CourseDAO().getCourseById(courseId)); // Cập nhật course
             request.getRequestDispatcher("/addMedia.jsp").forward(request, response);
             return;
         }
