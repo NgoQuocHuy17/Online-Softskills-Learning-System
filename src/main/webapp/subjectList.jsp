@@ -65,7 +65,7 @@
                         <p class="card-text"><strong>Category:</strong> ${course.category}</p>
                         <p class="card-text"><strong>Owner:</strong> ${course.ownerId}</p>
                         <p class="card-text"><strong>Status:</strong> ${course.status}</p>
-                        <a href="course-detail?courseId=${course.id}" class="btn btn-primary">View Details</a>
+                        <a href="LessonListController?courseId=${course.id}" class="btn btn-primary">View Details</a>
                     </div>
                 </div>
             </div>

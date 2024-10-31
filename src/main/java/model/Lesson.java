@@ -1,28 +1,28 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author ngoqu
- */
+import java.util.Date;
+
 public class Lesson {
 
-    public int id;
-    public int courseID;
-    public String title;
-    public String description;
+    private int id;
+    private int courseID;
+    private String title;
+    private String description;
+    private Date createdDate;         // New attribute
+    private Date lastUpdatedDate;     // New attribute
+    private boolean status;            // Changed to boolean
 
     public Lesson() {
     }
 
-    public Lesson(int id, int courseID, String title, String description) {
+    public Lesson(int id, int courseID, String title, String description, Date createdDate, Date lastUpdatedDate, boolean status) {
         this.id = id;
         this.courseID = courseID;
         this.title = title;
         this.description = description;
+        this.createdDate = createdDate;
+        this.lastUpdatedDate = lastUpdatedDate;
+        this.status = status;
     }
 
     public int getId() {
@@ -57,4 +57,29 @@ public class Lesson {
         this.description = description;
     }
 
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getLastUpdatedDate() {
+        return lastUpdatedDate;
+    }
+
+    public void setLastUpdatedDate(Date lastUpdatedDate) {
+        this.lastUpdatedDate = lastUpdatedDate;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    
 }

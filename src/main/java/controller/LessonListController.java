@@ -1,20 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.List;
 import model.Lesson;
+import view.LessonDAO;
 
 /**
  *
@@ -23,62 +19,121 @@ import model.Lesson;
 @WebServlet(name = "LessonListController", urlPatterns = {"/LessonListController"})
 public class LessonListController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int id;
-        id = Integer.parseInt(request.getParameter("courseId"));
-        response.setContentType("text/html;charset=UTF-8");
-        List<Lesson> l = new ArrayList<>();
-        request.setAttribute("lesson", l);
+        int courseId = Integer.parseInt(request.getParameter("courseId"));
+
+        int page = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
+
+        // Get the items per page from the request, default to 10 if not provided
+        int pageSize = Integer.parseInt(request.getParameter("itemsPerPage") == null ? "10" : request.getParameter("itemsPerPage"));
+        String status = request.getParameter("status");
+        if (status == null) {
+            status = "All"; // Default to "All" if status is not set
+        }
+
+        // Get all lessons based on course ID
+        LessonDAO lessonDAO = new LessonDAO();
+        List<Lesson> allLessons = lessonDAO.getLessonsByCourseId(courseId);
+
+        // List for filtered lessons
+        List<Lesson> filteredLessons = new ArrayList<>();
+
+        // Filtering lessons based on the status
+        if (status == null || status.equalsIgnoreCase("All")) {
+            filteredLessons = allLessons; // Show all lessons
+        } else if ("Active".equalsIgnoreCase(status)) {
+            for (Lesson lesson : allLessons) {
+                if (lesson.isStatus()) { // If lesson is active
+                    filteredLessons.add(lesson);
+                }
+            }
+        } else if ("Inactive".equalsIgnoreCase(status)) {
+            for (Lesson lesson : allLessons) {
+                if (!lesson.isStatus()) { // If lesson is inactive
+                    filteredLessons.add(lesson);
+                }
+            }
+        }
+
+        // Check if there are no lessons to display
+        boolean showEmpty = filteredLessons.isEmpty() && "Inactive".equalsIgnoreCase(status);
+        request.setAttribute("showEmpty", showEmpty);
+
+        // If there are lessons, proceed with pagination
+        if (!showEmpty) {
+            // Update total lessons after filtering
+            int totalLessons = filteredLessons.size();
+            // Calculate total pages
+            int totalPages = (int) Math.ceil((double) totalLessons / pageSize);
+
+            // Calculate the indices for pagination
+            int fromIndex = (page - 1) * pageSize;
+            if (fromIndex >= totalLessons) {
+                fromIndex = totalLessons - 1; // Ensure fromIndex is valid
+            }
+            int toIndex = Math.min(fromIndex + pageSize, totalLessons);
+
+            // Get paginated lessons
+            List<Lesson> paginatedLessons = filteredLessons.subList(fromIndex, toIndex);
+
+            // Pass the necessary attributes to the JSP
+            request.setAttribute("lessons", paginatedLessons);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("totalPages", totalPages);
+            request.setAttribute("courseId", courseId);
+            request.setAttribute("itemsPerPage", pageSize); // Add this line to send itemsPerPage to JSP
+            request.setAttribute("status", status); // Pass the status back to JSP
+        }
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("LessonList.jsp");
+        dispatcher.forward(request, response);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int courseId = Integer.parseInt(request.getParameter("courseId"));
+        String toggleStatus = request.getParameter("toggleStatus");
+        String lessonIdParam = request.getParameter("lessonId");
+     
+        // Check if this is a status toggle request
+        if (toggleStatus != null && lessonIdParam != null) {
+            int lessonId = Integer.parseInt(lessonIdParam);
+            LessonDAO lessonDAO = new LessonDAO();
+
+            // Get the current lesson
+            Lesson lesson = lessonDAO.getLessonById(lessonId);
+
+            if (lesson != null) {
+                // Toggle status based on the action specified in the form
+                boolean newStatus = "activate".equalsIgnoreCase(toggleStatus);
+                lesson.setStatus(newStatus);
+                lessonDAO.updateLesson(lesson); // Assuming updateLesson handles the update in DB
+            }
+
+            // Redirect back to the lesson list after status change
+            response.sendRedirect("LessonListController?courseId=" + courseId + 
+                    "&itemsPerPage="+request.getParameter("itemsPerPage")+
+                    "&page="+request.getParameter("page")+"&status="+request.getParameter("status")
+                    );
+
+                   
+        } else {
+            // If not a status change request, handle normally
+
+            processRequest(request, response);
+        }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }
