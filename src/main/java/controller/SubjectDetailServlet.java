@@ -13,6 +13,7 @@ import java.util.List;
 import model.Course;
 import model.CourseContent;
 import model.CourseMedia;
+import model.User;
 import view.CourseContentDAO;
 
 @WebServlet(name = "SubjectDetailServlet", urlPatterns = {"/subjectDetail"})
@@ -24,28 +25,32 @@ public class SubjectDetailServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        User loggedInUser = (User) request.getSession().getAttribute("user");
+        if (loggedInUser == null
+                || (!"Teacher".equals(loggedInUser.getRole()) && !"Admin".equals(loggedInUser.getRole()))) {
+            // Redirect to "course" page if the user is not a Teacher or Admin
+            response.sendRedirect("home");
+            return;
+        }
+
         String action = request.getParameter("action");
-        if (action == null) {
-            action = "list";
-        }
 
-        switch (action) {
-            case "edit":
-                editCourseDetail(request, response);
-                break;
-            case "remove":
-                removeSingleMedia(request, response);
-                break;
-            default:
-                listCourseDetails(request, response);
-                break;
+        if (action != null) {
+            switch (action) {
+                case "edit":
+                    editCourseDetail(request, response);
+                    break;
+                case "remove":
+                    removeSingleMedia(request, response);
+                    break;
+                default:
+                    response.sendRedirect("SubjectList");
+                    break;
+            }
+        } else {
+            response.sendRedirect("SubjectList");
         }
-    }
-
-    private void listCourseDetails(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Course> courses = courseDAO.selectAll();
-        request.setAttribute("courses", courses);
-        request.getRequestDispatcher("/subjectList.jsp").forward(request, response);
     }
 
     private void editCourseDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -74,23 +79,27 @@ public class SubjectDetailServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        if (action == null) {
-            action = "list";
-        }
 
-        switch (action) {
-            case "update":
-                updateCourseDetail(request, response);
-                break;
-            case "toggleStatus":
-                toggleCourseStatus(request, response);
-                break;
-            case "moveUp":
-                updateMediaOrder(request, response, true); // Truyền true để tăng thứ tự
-                break;
-            case "moveDown":
-                updateMediaOrder(request, response, false); // Truyền false để giảm thứ tự
-                break;
+        if (action != null) {
+            switch (action) {
+                case "update":
+                    updateCourseDetail(request, response);
+                    break;
+                case "toggleStatus":
+                    toggleCourseStatus(request, response);
+                    break;
+                case "moveUp":
+                    updateMediaOrder(request, response, true); // Truyền true để tăng thứ tự
+                    break;
+                case "moveDown":
+                    updateMediaOrder(request, response, false); // Truyền false để giảm thứ tự
+                    break;
+                default:
+                    response.sendRedirect("SubjectList");
+                    break;
+            }
+        } else {
+            response.sendRedirect("SubjectList");
         }
     }
 
@@ -127,44 +136,34 @@ public class SubjectDetailServlet extends HttpServlet {
 
     private void updateCourseDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // Lấy khóa học hiện tại dựa vào ID
             int courseId = Integer.parseInt(request.getParameter("courseId"));
             Course course = courseDAO.select(courseId);
 
             if (course != null) {
-                // Cập nhật thông tin khóa học từ form
                 String title = request.getParameter("title");
                 String description = request.getParameter("description");
 
                 course.setTitle(title);
                 course.setDescription(description);
 
-                // Cập nhật thông tin khóa học vào cơ sở dữ liệu
                 courseDAO.update(course);
             }
 
-            // Lấy danh sách media tạm thời từ session
             List<CourseMedia> mediaList = (List<CourseMedia>) request.getSession().getAttribute("tempMediaList");
             if (mediaList != null) {
-                // Cập nhật thứ tự hiển thị của media vào cơ sở dữ liệu
                 for (CourseMedia media : mediaList) {
                     courseMediaDAO.update(media);
                 }
-
-                // Xóa danh sách media tạm thời khỏi session sau khi lưu
                 request.getSession().removeAttribute("tempMediaList");
             }
 
-            // Chuyển hướng về trang danh sách khóa học sau khi cập nhật thành công
-            response.sendRedirect("subjectDetail?action=list");
+            response.sendRedirect("SubjectList");
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            // Xử lý lỗi và hiển thị thông báo lỗi nếu có vấn đề trong việc lấy hoặc cập nhật khóa học
             request.setAttribute("error", "Invalid course ID.");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
-            // Xử lý lỗi chung và hiển thị thông báo lỗi
             request.setAttribute("error", "An error occurred while updating the course details.");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
@@ -175,9 +174,8 @@ public class SubjectDetailServlet extends HttpServlet {
         String courseIdStr = request.getParameter("courseId");
         String mediaIdStr = request.getParameter("mediaId");
 
-        // Nếu không có courseId hoặc mediaId, về trang list
         if (courseIdStr == null || mediaIdStr == null) {
-            response.sendRedirect("subjectDetail?action=list");
+            response.sendRedirect("SubjectList");
             return;
         }
 
@@ -188,8 +186,7 @@ public class SubjectDetailServlet extends HttpServlet {
             courseMediaDAO.delete(mediaId);
             response.sendRedirect("subjectDetail?action=edit&courseId=" + courseId);
         } catch (NumberFormatException e) {
-            // Nếu parse số bị lỗi, về trang list
-            response.sendRedirect("subjectDetail?action=list");
+            response.sendRedirect("SubjectList");
         }
     }
 
@@ -199,7 +196,6 @@ public class SubjectDetailServlet extends HttpServlet {
         String newStatus = course.getStatus().equals("Published") ? "Unpublished" : "Published";
         course.setStatus(newStatus);
         courseDAO.update(course);
-        response.sendRedirect("subjectDetail?action=list");
+        response.sendRedirect("SubjectList");
     }
-
 }

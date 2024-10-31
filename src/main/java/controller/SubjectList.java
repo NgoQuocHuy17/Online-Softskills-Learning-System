@@ -10,9 +10,9 @@ import model.Course;
 import view.CourseDAO;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import model.User;
 
 /**
  *
@@ -23,40 +23,44 @@ public class SubjectList extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+
+        // Check if the user is logged in and has the appropriate role
+        User loggedInUser = (User) request.getSession().getAttribute("user");
+        if (loggedInUser == null
+                || (!"Teacher".equals(loggedInUser.getRole()) && !"Admin".equals(loggedInUser.getRole()))) {
+            // Redirect to "course" page if the user is not a Teacher or Admin
+            response.sendRedirect("course");
+            return;
+        }
+
+        // Existing code for fetching and displaying subjects
         CourseDAO courseDAO = new CourseDAO();
         String searchTitle = request.getParameter("searchTitle");
-       
         String status = request.getParameter("status");
-        String pageStr = request.getParameter("page"); // Get the page number from the request
+        String pageStr = request.getParameter("page");
 
-        // Set default values for pagination and filters
+        // Default values for pagination and filters
         int page = (pageStr == null || pageStr.isEmpty()) ? 1 : Integer.parseInt(pageStr);
-        int pageSize = 5; // Number of courses per page
-       
-        // Default status
-        // Retrieve the list of all courses and statuses for filtering
+        int pageSize = 5;
+
+        // Retrieve courses and filter based on search title and status
         List<Course> allCourses = courseDAO.getAllCourses();
         List<String> statuses = courseDAO.getAllStatuses();
         request.setAttribute("statuses", statuses);
 
-        // Filter courses by search title (if provided)
         if (searchTitle != null && !searchTitle.isEmpty()) {
             allCourses = courseDAO.getSubjectByTitle(searchTitle);
         }
 
-        // Filter courses by status (if not "All")
-         if (status == null || status.isEmpty()) {
+        if (status == null || status.isEmpty()) {
             status = "All";
         }
-          List<Course> filteredCourses = new ArrayList<>();
-        if (!status.equals("All")) {
-            for (Course course : allCourses) {
-                if (course.getStatus().equals(status)) {
-                    filteredCourses.add(course);
-                }
-            }
-            allCourses = filteredCourses; // Update allCourses to be the filtered list
+
+        final String filterStatus = status;
+        if (!filterStatus.equals("All")) {
+            allCourses = allCourses.stream()
+                    .filter(course -> filterStatus.equals(course.getStatus()))
+                    .collect(Collectors.toList());
         }
 
         // Pagination logic
@@ -64,16 +68,14 @@ public class SubjectList extends HttpServlet {
         int totalPages = (int) Math.ceil((double) totalCourses / pageSize);
         int fromIndex = (page - 1) * pageSize;
         int toIndex = Math.min(fromIndex + pageSize, totalCourses);
-
-        // Get the courses for the current page
         List<Course> paginatedCourses = allCourses.subList(fromIndex, toIndex);
 
-        // Set the attributes for the request
+        // Set attributes for the request
         request.setAttribute("courses", paginatedCourses);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("searchTitle", searchTitle);
-        request.setAttribute("status", status);
+        request.setAttribute("status", filterStatus);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("subjectList.jsp");
         dispatcher.forward(request, response);
@@ -93,6 +95,6 @@ public class SubjectList extends HttpServlet {
 
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Handles Subject List with role-based access control";
     }
 }

@@ -19,6 +19,7 @@ import view.CourseDAO;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.Part;
 import java.io.File;
+import model.User;
 
 @WebServlet("/addMedia")
 @MultipartConfig(
@@ -32,6 +33,16 @@ public class AddMediaServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Xử lý hiển thị form thêm media (giống như trước)
+
+        // Check if the user is logged in and has the appropriate role
+        User loggedInUser = (User) request.getSession().getAttribute("user");
+        if (loggedInUser == null
+                || (!"Teacher".equals(loggedInUser.getRole()) && !"Admin".equals(loggedInUser.getRole()))) {
+            // Redirect to "course" page if the user is not a Teacher or Admin
+            response.sendRedirect("home");
+            return;
+        }
+
         String courseIdParam = request.getParameter("courseId");
         if (courseIdParam == null || courseIdParam.isEmpty()) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing courseId");
