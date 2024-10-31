@@ -15,6 +15,18 @@ import java.util.List;
 
 public class RegistrationDAO extends DBContext<Registration> {
 
+    public boolean deleteRegistrationById(int registrationId) {
+        String query = "DELETE FROM registrations WHERE id = ?";
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, registrationId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0; // Return true if a record was deleted
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Return false if there was an error
+        }
+    }
+
     public List<Registration> getRegistrationsByUserIdWithPagination(int userId, int page, int pageSize, String category, String searchTerm) {
         List<Registration> registrations = new ArrayList<>();
         StringBuilder query = new StringBuilder("SELECT r.* FROM registrations r "
