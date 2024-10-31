@@ -4,22 +4,20 @@ import model.Registration; // Đảm bảo import đúng package chứa Registra
 
 public class Main {
     public static void main(String[] args) {
+        // Tạo đối tượng RegistrationDAO
         RegistrationDAO registrationDAO = new RegistrationDAO();
 
-        // Test userId (thay thế bằng userId hợp lệ từ cơ sở dữ liệu của bạn)
-        int testUserId = 1;
+        // Thay đổi ID người dùng, category và searchTerm theo nhu cầu
+        int userId = 1; // Giả sử ID người dùng là 1
+        String category = "Communication"; // Thay thế với category thực tế nếu cần
+        String searchTerm = "Communication"; // Thay thế với title thực tế nếu cần
 
-        // Lấy danh sách các đăng ký cho user
-        List<Registration> registrations = registrationDAO.getRegistrationsByUserId(testUserId);
+        // Gọi phương thức getTotalRegistrations để lấy tổng số đăng ký
+        int totalRegistrations = registrationDAO.getTotalRegistrations(userId, category, searchTerm);
 
-        // In kết quả
-        if (registrations.isEmpty()) {
-            System.out.println("Không có đăng ký nào cho user với ID: " + testUserId);
-        } else {
-            System.out.println("Danh sách đăng ký cho user ID " + testUserId + ":");
-            for (Registration registration : registrations) {
-                System.out.println(registration);
-            }
-        }
+        // In ra kết quả
+        System.out.println("Total registrations for user ID " + userId + 
+                           " with category '" + category + "' and search term '" + searchTerm + "': " + 
+                           totalRegistrations);
     }
 }

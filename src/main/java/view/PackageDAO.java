@@ -15,6 +15,31 @@ import java.util.List;
 
 public class PackageDAO extends DBContext<Package> {
 
+    public Package getPackageById(int packageId) {
+        Package pkg = null;
+        String query = "SELECT * FROM packages WHERE id = ?";
+
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, packageId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    pkg = new Package(
+                            rs.getInt("id"),
+                            rs.getInt("course_id"),
+                            rs.getString("package_name"),
+                            rs.getDouble("price"),
+                            rs.getDouble("sale_price"),
+                            rs.getTimestamp("sale_start"),
+                            rs.getTimestamp("sale_end")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return pkg;
+    }
+
     public List<Package> getPackagesByCourseId(int courseId) {
         List<Package> packages = new ArrayList<>();
         String query = "SELECT * FROM packages WHERE course_id = ?";

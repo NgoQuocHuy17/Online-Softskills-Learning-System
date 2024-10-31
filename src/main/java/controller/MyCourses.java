@@ -49,6 +49,6 @@ public class MyCourses extends HttpServlet {
         
         // Set the list of courses as an attribute and forward to myCourses.jsp
         request.setAttribute("courseList", courseList);
-        request.getRequestDispatcher("myCourses.jsp").forward(request, response);
+        request.getRequestDispatcher("MyCourses.jsp").forward(request, response);
     }
 }

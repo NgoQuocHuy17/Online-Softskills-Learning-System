@@ -1,5 +1,7 @@
 
-<%@page import="model.UserContact"%>
+<%@page import="model.Package"%>
+<%@page import="model.Course"%>
+
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -9,7 +11,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>UserList</title>
+        <title>My Registrations</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
         <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -18,9 +20,7 @@
         <link rel="stylesheet" href="assets/css/style.css">
     </head>
     <body>
-
         <div class="main-wrapper">
-
             <header class="header">
                 <div class="header-fixed">
                     <nav class="navbar navbar-expand-lg header-nav">
@@ -53,7 +53,6 @@
                             </ul>
                         </div>
                         <ul class="nav header-navbar-rht">
-
                             <li class="nav-item dropdown has-arrow logged-item">
                                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                                     <span class="user-img">
@@ -72,21 +71,19 @@
                                     </div>
                                     <a class="dropdown-item" href="dashboard.html">Dashboard</a>
                                     <a class="dropdown-item" href="profile-settings.html">Profile Settings</a>
-                                    <a class="dropdown-item" href="login.html">Logout</a>
+                                    <a class="dropdown-item" href="login.jsp">Logout</a>
                                 </div>
                             </li>
-
                         </ul>
                     </nav>
                 </div>
             </header>
 
-
             <div class="breadcrumb-bar">
                 <div class="container-fluid">
                     <div class="row align-items-center">
-                        <div class="col-md-8 col-12">
-                            <h2 class="mt-4">My Registrations</h2>
+                        <div class="col-md-12 col-12">
+                            <h2 class="breadcrumb-title">My Registrations</h2>
                         </div>
                     </div>
                 </div>
@@ -95,178 +92,168 @@
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
-                        <c:if test="${empty registrationList}">
-                            <div class="alert alert-warning">
-                                You have no registrations.
-                            </div>
-                        </c:if>
-                        <c:if test="${not empty registrationList}">
-                            <table class="table table-bordered table-hover">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>Registration ID</th>
-                                        <th>Subject</th>
-                                        <th>Registration Time</th>
-                                        <th>Package</th>
-                                        <th>Total Cost</th>
-                                        <th>Status</th>
-                                        <th>Valid From</th>
-                                        <th>Valid To</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach var="registration" items="${registrationList}">
-                                        <tr>
-                                            <td>${registration.id}</td>
-                                            <td>${registration.subject}</td>
-                                            <td>${registration.registrationTime}</td>
-                                            <td></td>
-                                            <td>${registration.totalCost}</td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${registration.status == 'Valid'}">
-                                                        Active
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        Expired
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td>${registration.validFrom}</td>
-                                            <td>${registration.validTo}</td>
-                                        </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        </c:if>
-                    </div>
+                        <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
+                            <div class="profile-sidebar">
+                                <div class="sidebar">
+                                    <form action="MyRegistrations" method="get">
+                                        <!-- Search Box -->
+                                        <div class="search-box">
+                                            <input 
+                                                type="text" 
+                                                name="searchTerm" 
+                                                placeholder="Search subject title..." 
+                                                class="form-control" 
+                                                value="${param.searchTerm}">
+                                        </div>
 
-                    <div class="row">
-                        <!-- Pagination -->
-                        <c:if test="${totalPages > 1 && not empty registrationList}">
-                            <div class="blog-pagination mt-4">
-                                <nav>
-                                    <ul class="pagination justify-content-center">
-                                        <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                            <a class="page-link" href="?page=${currentPage - 1}&sort=${param.sort}&sortOrder=${param.sortOrder}" tabindex="-1">
-                                                <i class="fas fa-angle-double-left"></i>
-                                            </a>
-                                        </li>
+                                        <!-- Category Dropdown -->
+                                        <div class="category-dropdown mt-3">
+                                            <label for="category">Category:</label>
+                                            <select id="category" name="category" class="form-control">
+                                                <option value="">All Category</option>
+                                                <c:forEach var="cat" items="${categories}">
+                                                    <option 
+                                                        value="${cat}" 
+                                                        ${cat == param.category ? "selected" : ""}>
+                                                        ${cat}
+                                                    </option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+
+                                        <!-- Page Size Dropdown -->
+                                        <div class="page-size-dropdown mt-3">
+                                            <label for="pageSize">Page Size:</label>
+                                            <select id="pageSize" name="pageSize" class="form-control">
+                                                <c:forEach var="size" items="${[5, 10, 15, 20, 25]}">
+                                                    <option 
+                                                        value="${size}" 
+                                                        ${size == param.pageSize ? "selected" : ""}>
+                                                        ${size}
+                                                    </option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+
+                                        <!-- Display Options -->
+                                        <div class="display-options mt-3">
+                                            <label>Show Fields:</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="showTitle" name="showTitle" value="true" ${param.showTitle == 'true' ? 'checked' : ''}>
+                                                <label class="form-check-label" for="showTitle"> Title</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="showCategory" name="showCategory" value="true" ${param.showCategory == 'true' ? 'checked' : ''}>
+                                                <label class="form-check-label" for="showCategory"> Category</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="showPackage" name="showPackage" value="true" ${param.showPackage == 'true' ? 'checked' : ''}>
+                                                <label class="form-check-label" for="showPackage"> Package</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="showCost" name="showCost" value="true" ${param.showCost == 'true' ? 'checked' : ''}>
+                                                <label class="form-check-label" for="showCost"> Cost</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="showStatus" name="showStatus" value="true" ${param.showStatus == 'true' ? 'checked' : ''}>
+                                                <label class="form-check-label" for="showStatus"> Status</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="showValid" name="showValid" value="true" ${param.showValid == 'true' ? 'checked' : ''}>
+                                                <label class="form-check-label" for="showValid"> Valid time</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Submit Button -->
+                                        <div class="mt-3">
+                                            <button type="submit" class="btn btn-primary w-100">Search</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-7 col-lg-8 col-xl-9">
+                            <div class="appointments">
+                                <c:forEach var="registration" items="${registrations}">
+                                    <div class="appointment-list">
+                                        <div class="profile-info-widget">
+                                            <div class="profile-det-info">
+                                                <h3><strong>Registration ID: ${registration.id}</strong></h3>
+                                                <c:if test="${showTitle}">
+                                                    <c:set var="courseKey" value="course_${registration.id}" />
+                                                    <c:set var="course" value="${requestScope[courseKey]}" />
+                                                    <h5>Course Title: ${course.title}</h5>
+                                                </c:if>
+
+                                                <c:if test="${showCategory}">
+                                                    <h5>Course Category: ${course.category}</h5>
+                                                </c:if>
+
+                                                <c:if test="${showPackage}">
+                                                    <c:set var="pkgKey" value="package_${registration.id}" />
+                                                    <c:set var="pkg" value="${requestScope[pkgKey]}" />
+                                                    <h5>Package Name: ${pkg.packageName}</h5>
+                                                </c:if>
+
+                                                <c:if test="${showCost}">
+                                                    <h5>Total Cost: ${registration.totalCost}$</h5>
+                                                </c:if>
+
+                                                <c:if test="${showStatus}">
+                                                    <h5>Status: <strong>${registration.status}</strong></h5>
+                                                </c:if>
+
+                                                <c:if test="${showValid}">
+                                                    <h5><i class="far fa-clock"></i> Valid From: ${registration.validFrom}</h5>
+                                                    <h5><i class="far fa-clock"></i> Valid To: ${registration.validTo}</h5>
+                                                </c:if>
+
+                                            </div>
+
+                                        </div>
+                                        <div class="appointment-action">
+                                            <!-- Only show Edit and Cancel buttons if status is "Submitted" -->
+                                            <c:if test="${registration.status == 'Submitted'}">
+                                                <a href="" class="btn btn-sm bg-success-light">
+                                                    <i class=""></i> Edit
+                                                </a>
+                                                <a href="CancelRegistration" class="btn btn-sm bg-danger-light">
+                                                    <i class="fas fa-times"></i> Cancel
+                                                </a>
+                                            </c:if>
+                                        </div>
+
+                                    </div>
+                                </c:forEach>
+                            </div>
+
+                            <div class="pagination">
+                                <c:if test="${totalPages > 1}">
+                                    <ul class="pagination">
                                         <c:forEach var="i" begin="1" end="${totalPages}">
-                                            <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                                <a class="page-link" href="?page=${i}&sort=${param.sort}&sortOrder=${param.sortOrder}">${i}</a>
+                                            <li class="page-item ${currentPage == i ? 'active' : ''}">
+                                                <a class="page-link" href="MyRegistrations?page=${i}&pageSize=${param.pageSize}&category=${param.category}&searchTerm=${param.searchTerm}&showTitle=${param.showTitle}&showCategory=${param.showCategory}&showPackage=${param.showPackage}&showCost=${param.showCost}&showStatus=${param.showStatus}&showValid=${param.showValid}">
+                                                    ${i}
+                                                </a>
                                             </li>
                                         </c:forEach>
-                                        <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                            <a class="page-link" href="?page=${currentPage + 1}&sort=${param.sort}&sortOrder=${param.sortOrder}">
-                                                <i class="fas fa-angle-double-right"></i>
-                                            </a>
-                                        </li>
                                     </ul>
-                                </nav>
+                                </c:if>
                             </div>
-                        </c:if>
+                        </div>
                     </div>
                 </div>
             </div>
 
 
             <footer class="footer">
-                <div class="footer-top">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-lg-3 col-md-6">
-
-                                <div class="footer-widget footer-about">
-                                    <div class="footer-logo">
-                                        <img src="" alt="logo">
-                                    </div>
-                                    <div class="footer-about-content">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                            incididunt ut labore et dolore magna aliqua. </p>
-                                        <div class="social-icon">
-                                            <ul>
-                                                <li>
-                                                    <a href="#" target="_blank"><i class="fab fa-facebook-f"></i> </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" target="_blank"><i class="fab fa-twitter"></i> </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="col-lg-3 col-md-6">
-
-                                <div class="footer-widget footer-menu">
-                                    <h2 class="footer-title">For Mentee</h2>
-                                    <ul>
-                                        <li><a href="search.html">Search Mentors</a></li>
-                                        <li><a href="login.jsp">Login</a></li>
-                                        <li><a href="register.jsp">Register</a></li>
-                                        <li><a href="">Booking</a></li>
-                                        <li><a href="">Mentee Dashboard</a></li>
-                                    </ul>
-                                </div>
-
-                            </div>
-                            <div class="col-lg-3 col-md-6">
-
-                                <div class="footer-widget footer-menu">
-                                    <h2 class="footer-title">For Mentors</h2>
-                                    <ul>
-                                        <li><a href="">Appointments</a></li>
-                                        <li><a href="">Chat</a></li>
-                                        <li><a href="login.jsp">Login</a></li>
-                                        <li><a href="register.jsp">Register</a></li>
-                                        <li><a href="">Mentor Dashboard</a></li>
-                                    </ul>
-                                </div>
-
-                            </div>
-                            <div class="col-lg-3 col-md-6">
-
-                                <div class="footer-widget footer-contact">
-                                    <h2 class="footer-title">Contact Us</h2>
-                                    <div class="footer-contact-info">
-                                        <div class="footer-address">
-                                            <span><i class="fas fa-map-marker-alt"></i></span>
-                                            <p> FPT University </p>
-                                        </div>
-                                        <p>
-                                            <i class="fas fa-phone-alt"></i>
-                                            +1 315 369 5943
-                                        </p>
-                                        <p class="mb-0">
-                                            <i class="fas fa-envelope"></i>
-                                            Email
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="footer-bottom">
-                    <div class="container-fluid">
-
-                        <div class="copyright">
-                            <div class="row">
-                                <div class="col-12 text-center">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <jsp:include page="footer.jsp" />
             </footer>
 
         </div>
+
         <script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="assets/js/jquery-3.6.0.min.js"></script>
         <script src="assets/js/bootstrap.bundle.min.js"></script>
         <script src="assets/plugins/theia-sticky-sidebar/ResizeSensor.js"></script>
@@ -274,5 +261,5 @@
         <script src="assets/js/script.js"></script>
     </body>
 
-    <!-- Mirrored from mentoring.dreamguystech.com/html/template/mentee-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 May 2023 10:32:09 GMT -->
+    <!-- Mirrored from mentoring.dreamguystech.com/html/template/appointments.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 May 2023 10:33:04 GMT -->
 </html>
