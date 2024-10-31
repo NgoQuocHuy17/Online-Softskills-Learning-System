@@ -66,6 +66,10 @@
                     <label class="form-check-label">Sponsored</label>
                 </div>
 
+                <div class="mb-4">
+                    <h3 class="mb-3 text-secondary">Content</h3>
+                    <textarea name="content" class="form-control" style="height: 200px;">${content.content}</textarea>
+                </div>
                 <!-- Media Section -->
                 <h3 class="mt-4 mb-3 text-secondary">Media</h3>
                 <table class="table table-bordered table-hover text-center align-middle">
@@ -126,10 +130,7 @@
 
                 <a href="addMedia?courseId=${course.id}" class="btn btn-outline-secondary mb-4">Add Media</a>
 
-                <div class="mb-4">
-                    <h3 class="mb-3 text-secondary">Content</h3>
-                    <textarea name="content" class="form-control" style="height: 200px;">${content.content}</textarea>
-                </div>
+
 
                 <button type="submit" class="btn btn-success w-100">Save Changes</button>
             </form>
