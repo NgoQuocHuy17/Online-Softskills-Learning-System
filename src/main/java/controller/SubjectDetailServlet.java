@@ -9,7 +9,6 @@ import view.CourseDAO;
 import view.CourseMediaDAO;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 import model.Course;
 import model.CourseContent;

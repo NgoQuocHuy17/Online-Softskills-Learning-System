@@ -90,19 +90,19 @@
                         <% } %>
                         <% } %>
 
-                        <!-- Phần Pages và Blog vẫn giữ nguyên cho mọi người -->
-                       
+
                         <li class="has-submenu">
+                            <% if (loggedInUser != null && (loggedInUser.getRole().equals("Teacher") || loggedInUser.getRole().equals("Admin"))) { %>
+                            <a href="SubjectList">Courses</a>
+                            <% } else { %>
                             <a href="course">Courses</a>
+                            <% } %>
                         </li>
-                        <li class="has-submenu">
-                            <a href="#">Blog <i class="fas fa-chevron-down"></i></a>
-                            <ul class="submenu">
-                                <li><a href="bloglist">Blog List</a></li>
-                                <li><a href="blog-grid.html">Blog Grid</a></li>
-                                <li><a href="blog-details.html">Blog Details</a></li>
-                            </ul>
+
+                        <li class="home">
+                            <a href="bloglist">Blog</a>
                         </li>
+                        
                     </ul>
                 </div>
 
