@@ -9,6 +9,7 @@ import view.CourseDAO;
 import view.CourseMediaDAO;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import model.Course;
 import model.CourseContent;
@@ -152,15 +153,32 @@ public class SubjectDetailServlet extends HttpServlet {
         try {
             int courseId = Integer.parseInt(request.getParameter("courseId"));
             Course course = courseDAO.select(courseId);
+            CourseContent content = courseContentDAO.select(courseId);
 
             if (course != null) {
                 String title = request.getParameter("title");
                 String description = request.getParameter("description");
+                String category = request.getParameter("category");
+                BigDecimal basicPackagePrice = new BigDecimal(request.getParameter("basicPackagePrice"));
+                BigDecimal advancedPackagePrice = new BigDecimal(request.getParameter("advancedPackagePrice"));
+                String status = request.getParameter("status");
+                boolean isSponsored = request.getParameter("isSponsored") != null;
 
+                // Cập nhật thông tin course
                 course.setTitle(title);
                 course.setDescription(description);
-
+                course.setCategory(category);
+                course.setBasicPackagePrice(basicPackagePrice);
+                course.setAdvancedPackagePrice(advancedPackagePrice);
+                course.setStatus(status);
+                course.setSponsored(isSponsored);
                 courseDAO.update(course);
+            }
+            if (content != null) {
+                // Cập nhật nội dung content
+                String contentText = request.getParameter("content");
+                content.setContent(contentText);
+                courseContentDAO.update(content);
             }
 
             List<CourseMedia> mediaList = (List<CourseMedia>) request.getSession().getAttribute("tempMediaList");
@@ -174,7 +192,7 @@ public class SubjectDetailServlet extends HttpServlet {
             response.sendRedirect("SubjectList");
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            request.setAttribute("error", "Invalid course ID.");
+            request.setAttribute("error", "Invalid input for numerical fields.");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -211,7 +229,7 @@ public class SubjectDetailServlet extends HttpServlet {
     private void toggleCourseStatus(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int courseId = Integer.parseInt(request.getParameter("courseId"));
         Course course = courseDAO.select(courseId);
-        String newStatus = course.getStatus().equals("Published") ? "Unpublished" : "Published";
+        String newStatus = course.getStatus().equals("Published") ? "Draft" : "Published";
         course.setStatus(newStatus);
         courseDAO.update(course);
         response.sendRedirect("SubjectList");

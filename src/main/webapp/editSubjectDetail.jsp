@@ -57,7 +57,7 @@
                     <label class="form-label">Status:</label>
                     <select name="status" class="form-select">
                         <option value="Published" ${course.status == 'Published' ? 'selected' : ''}>Published</option>
-                        <option value="Unpublished" ${course.status == 'Unpublished' ? 'selected' : ''}>Unpublished</option>
+                        <option value="Draft" ${course.status == 'Draft' ? 'selected' : ''}>Draft</option>
                     </select>
                 </div>
 
