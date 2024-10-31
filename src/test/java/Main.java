@@ -1,23 +1,30 @@
+
 import java.util.List;
 import view.RegistrationDAO; // Đảm bảo import đúng package chứa RegistrationDAO
 import model.Registration; // Đảm bảo import đúng package chứa Registration
+import view.UserCourseDAO;
 
 public class Main {
+
     public static void main(String[] args) {
-        // Tạo đối tượng RegistrationDAO
-        RegistrationDAO registrationDAO = new RegistrationDAO();
+        UserCourseDAO userCourseDAO = new UserCourseDAO();
 
-        // Thay đổi ID người dùng, category và searchTerm theo nhu cầu
-        int userId = 1; // Giả sử ID người dùng là 1
-        String category = "Communication"; // Thay thế với category thực tế nếu cần
-        String searchTerm = "Communication"; // Thay thế với title thực tế nếu cần
+        // Sample user ID, page number, and page size for testing
+        int userId = 1; // Replace with a valid user ID from your database
+        int page = 1;   // First page
+        int pageSize = 10; // Number of courses per page
 
-        // Gọi phương thức getTotalRegistrations để lấy tổng số đăng ký
-        int totalRegistrations = registrationDAO.getTotalRegistrations(userId, category, searchTerm);
+        // Call the method to get course IDs
+        List<Integer> courseIds = userCourseDAO.getCourseIdsByUserId(userId, page, pageSize);
 
-        // In ra kết quả
-        System.out.println("Total registrations for user ID " + userId + 
-                           " with category '" + category + "' and search term '" + searchTerm + "': " + 
-                           totalRegistrations);
+        // Print the retrieved course IDs
+        if (courseIds.isEmpty()) {
+            System.out.println("No courses found for user ID: " + userId);
+        } else {
+            System.out.println("Course IDs for user ID " + userId + " on page " + page + ":");
+            for (int id : courseIds) {
+                System.out.println(id);
+            }
+        }
     }
 }

@@ -10,21 +10,38 @@ import java.util.List;
 
 public class UserCourseDAO extends DBContext<UserCourse> {
 
-    public List<Integer> getCourseIdsByUserId(int userId) {
+    public List<Integer> getCourseIdsByUserId(int userId, int page, int pageSize) {
         List<Integer> courseIds = new ArrayList<>();
-        String query = "SELECT course_id FROM user_courses WHERE user_id = ?";
+        String query = "SELECT id FROM user_courses WHERE user_id = ? ORDER BY course_id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
-        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, userId);
+            ps.setInt(2, (page - 1) * pageSize); // Offset
+            ps.setInt(3, pageSize);
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
-                courseIds.add(rs.getInt("course_id"));
+                courseIds.add(rs.getInt("id"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return courseIds;
+    }
+
+    public int getTotalCoursesByUserId(int userId) {
+        int totalCourses = 0;
+        String query = "SELECT COUNT(course_id) AS total FROM user_courses WHERE user_id = ?";
+
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                totalCourses = rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalCourses;
     }
 
     @Override
