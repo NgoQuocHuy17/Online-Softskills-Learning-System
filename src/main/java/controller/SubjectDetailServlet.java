@@ -72,23 +72,21 @@ public class SubjectDetailServlet extends HttpServlet {
     private void editCourseDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int courseId = Integer.parseInt(request.getParameter("courseId"));
 
-        // Lấy danh sách media từ session nếu có, nếu không lấy từ cơ sở dữ liệu và lưu vào session
-        List<CourseMedia> mediaList = (List<CourseMedia>) request.getSession().getAttribute("tempMediaList");
-        if (mediaList == null) {
-            mediaList = courseMediaDAO.selectByCourseId(courseId);
-            request.getSession().setAttribute("tempMediaList", mediaList);
-        }
+        // Luôn lấy mediaList từ database
+        List<CourseMedia> mediaList = courseMediaDAO.selectByCourseId(courseId);
 
         // Lấy các thông tin khác
         Course course = courseDAO.select(courseId);
         CourseContent content = courseContentDAO.select(courseId);
         int maxOrder = mediaList.size();
 
+        // Đặt thuộc tính vào request để hiển thị trong JSP
         request.setAttribute("course", course);
         request.setAttribute("content", content != null ? content : new CourseContent(courseId, ""));
         request.setAttribute("mediaList", mediaList);
         request.setAttribute("maxOrder", maxOrder);
 
+        // Chuyển tiếp sang trang JSP
         request.getRequestDispatcher("/editSubjectDetail.jsp").forward(request, response);
     }
 

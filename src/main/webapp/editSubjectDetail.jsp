@@ -79,15 +79,15 @@
                     </thead>
                     <tbody>
                         <!-- Lấy danh sách media từ session nếu có, nếu không thì lấy từ mediaList -->
-                        <c:forEach var="media" items="${sessionScope.tempMediaList != null ? sessionScope.tempMediaList : mediaList}">
+                        <c:forEach var="media" items="${mediaList}">
+                            <!-- Hiển thị thông tin media -->
                             <tr>
                                 <td>${media.displayOrder}</td>
                                 <td>${media.mediaType}</td>
                                 <td>
                                     <c:choose>
                                         <c:when test="${media.mediaType == 'image'}">
-                                            <img src="media/${media.fileName}?type=image" alt="${media.title}" 
-                                                 class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
+                                            <img src="media/${media.fileName}?type=image" alt="${media.title}" class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
                                         </c:when>
                                         <c:when test="${media.mediaType == 'video'}">
                                             <video class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;" controls>
@@ -102,7 +102,7 @@
                                     <div class="mt-2 fw-bold">${media.title}</div>
                                 </td>
                                 <td>
-                                    <!-- Nút move up và move down gửi yêu cầu POST để cập nhật session -->
+                                    <!-- Hiển thị nút điều khiển thứ tự hiển thị -->
                                     <form action="subjectDetail" method="post" style="display: inline;">
                                         <input type="hidden" name="action" value="moveUp">
                                         <input type="hidden" name="mediaId" value="${media.id}">
