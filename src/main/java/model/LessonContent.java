@@ -1,27 +1,49 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author ngoqu
- */
+import java.util.Date;
+
 public class LessonContent {
+    private int id;
+    private int lessonId;
+    private String contentURL;
+    private String contentType; // New field
+    private String contentDescription;
+    private String imageURL; // New field
+    private String videoURL; // New field
+    private String textContent; // New field
+    private int orderInLesson; // New field
+    private Date createdDate; // New field
 
-    public int id;
-    public int lessonid;
-    public String contentURL;
-    public String description;
-
-    public LessonContent(int id, int lessonid, String contentURL, String description) {
+    public LessonContent(int id, int lessonId, String contentURL, String contentType, String contentDescription, 
+                         String imageURL, String videoURL, String textContent, int orderInLesson, Date createdDate) {
         this.id = id;
-        this.lessonid = lessonid;
+        this.lessonId = lessonId;
         this.contentURL = contentURL;
-        this.description = description;
+        this.contentType = contentType;
+        this.contentDescription = contentDescription;
+        this.imageURL = imageURL;
+        this.videoURL = videoURL;
+        this.textContent = textContent;
+        this.orderInLesson = orderInLesson;
+        this.createdDate = createdDate;
     }
 
+    public LessonContent(int lessonId, String contentURL, String contentType, String contentDescription, String imageURL, String videoURL, String textContent, int orderInLesson) {
+        this.lessonId = lessonId;
+        this.contentURL = contentURL;
+        this.contentType = contentType;
+        this.contentDescription = contentDescription;
+        this.imageURL = imageURL;
+        this.videoURL = videoURL;
+        this.textContent = textContent;
+        this.orderInLesson = orderInLesson;
+    }
+
+    
+
+   
+
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -30,12 +52,12 @@ public class LessonContent {
         this.id = id;
     }
 
-    public int getLessonid() {
-        return lessonid;
+    public int getLessonId() {
+        return lessonId;
     }
 
-    public void setLessonid(int lessonid) {
-        this.lessonid = lessonid;
+    public void setLessonId(int lessonId) {
+        this.lessonId = lessonId;
     }
 
     public String getContentURL() {
@@ -46,12 +68,59 @@ public class LessonContent {
         this.contentURL = contentURL;
     }
 
-    public String getDescription() {
-        return description;
+    public String getContentType() {
+        return contentType;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
+    public String getContentDescription() {
+        return contentDescription;
+    }
+
+    public void setContentDescription(String contentDescription) {
+        this.contentDescription = contentDescription;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public String getVideoURL() {
+        return videoURL;
+    }
+
+    public void setVideoURL(String videoURL) {
+        this.videoURL = videoURL;
+    }
+
+    public String getTextContent() {
+        return textContent;
+    }
+
+    public void setTextContent(String textContent) {
+        this.textContent = textContent;
+    }
+
+    public int getOrderInLesson() {
+        return orderInLesson;
+    }
+
+    public void setOrderInLesson(int orderInLesson) {
+        this.orderInLesson = orderInLesson;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
 }

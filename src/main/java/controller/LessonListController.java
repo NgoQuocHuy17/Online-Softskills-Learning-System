@@ -102,7 +102,10 @@ public class LessonListController extends HttpServlet {
         int courseId = Integer.parseInt(request.getParameter("courseId"));
         String toggleStatus = request.getParameter("toggleStatus");
         String lessonIdParam = request.getParameter("lessonId");
-     
+        String status = request.getParameter("status");
+         if (status == null||status.isBlank()||status.isEmpty()) {
+            status = "All"; 
+        }
         // Check if this is a status toggle request
         if (toggleStatus != null && lessonIdParam != null) {
             int lessonId = Integer.parseInt(lessonIdParam);
@@ -119,12 +122,11 @@ public class LessonListController extends HttpServlet {
             }
 
             // Redirect back to the lesson list after status change
-            response.sendRedirect("LessonListController?courseId=" + courseId + 
-                    "&itemsPerPage="+request.getParameter("itemsPerPage")+
-                    "&page="+request.getParameter("page")+"&status="+request.getParameter("status")
-                    );
+            response.sendRedirect("LessonListController?courseId=" + courseId
+                    + "&itemsPerPage=" + request.getParameter("itemsPerPage")
+                    + "&page=" + request.getParameter("page") + "&status=" +status
+            );
 
-                   
         } else {
             // If not a status change request, handle normally
 

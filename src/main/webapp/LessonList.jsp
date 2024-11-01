@@ -112,7 +112,7 @@
                                 </form>
 
                                 <!-- Edit Lesson Button -->
-                                <a href="LessonDetails?lessonId=${lesson.id}" class="btn btn-primary btn-sm">Edit</a>
+                                <a href="LessonDetailController?lessonID=${lesson.id}" class="btn btn-primary btn-sm">Edit</a>
                             </td>
                         </tr>
                     </c:forEach>
