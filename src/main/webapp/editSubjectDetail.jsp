@@ -91,11 +91,11 @@
                                 <td>
                                     <c:choose>
                                         <c:when test="${media.mediaType == 'image'}">
-                                            <img src="media/${media.fileName}?type=image" alt="${media.title}" class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
+                                            <img src="assets/img/course/${media.fileName}?type=image" alt="${media.title}" class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
                                         </c:when>
                                         <c:when test="${media.mediaType == 'video'}">
                                             <video class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;" controls>
-                                                <source src="media/${media.fileName}?type=video" type="video/mp4">
+                                                <source src="assets/video/course/${media.fileName}?type=video" type="video/mp4">
                                                 Your browser does not support the video tag.
                                             </video>
                                         </c:when>
