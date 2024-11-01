@@ -1,3 +1,6 @@
+<%@page import="model.BlogPost"%>
+<%@page import="view.CategoryDAO"%>
+<%@page import="model.Category"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -68,7 +71,10 @@
                         <div class="col-lg-8 col-md-12">
                             <div class="blog-view">
                                 <div class="blog blog-single-post">
-                                    <h3 class="blog-title">${courseDetail.title}</h3>
+                                    <%
+                                        var courseDetail = request.getAttribute("courseDetail");
+                                    %>
+                                    <h3 class="blog-title">${blogPost.title}</h3>
                                     <div class="blog-info clearfix">
                                         <div class="post-left">
                                             <ul>
@@ -90,31 +96,11 @@
                                                 </li>
                                                 <li>
                                                     <i class="fa fa-tags"></i>
-                                                    <c:out value="${courseDetail.category}"/>
-                                                </li>
-                                                <li>
-                                                    <i class="fa fa-star"></i>
-                                                    Sponsored: <c:out value="${courseDetail.sponsoredStatus}"/>
+                                                    Category: <c:out value="${category.name}"/>
                                                 </li>
                                                 <li>
                                                     <i class="fa fa-info-circle"></i>
-                                                    Status: <c:out value="${courseDetail.status}"/>
-                                                </li>
-                                                <li>
-                                                    <i class="fa fa-comment"></i>
-                                                    Tagline: <c:out value="${courseDetail.tagLine}"/>
-                                                </li>
-                                                <li>
-                                                    <i class="fa fa-file-alt"></i>
-                                                    Description: <c:out value="${courseDetail.description}"/>
-                                                </li>
-                                                <li>
-                                                    <i class="fa fa-dollar-sign"></i>
-                                                    Basic Package Price: <strong>$${courseDetail.basicPackagePrice}</strong>
-                                                </li>
-                                                <li>
-                                                    <i class="fa fa-dollar-sign"></i>
-                                                    Advanced Package Price: <strong>$${courseDetail.advancedPackagePrice}</strong>
+                                                    Status: <c:out value="${blogPost.status}"/>
                                                 </li>
                                             </ul>
                                         </div>
@@ -163,7 +149,7 @@
                             </div>
                             <div class="card post-widget">
                                 <div class="card-header">
-                                    <h4 class="card-title">Latest Courses</h4>
+                                    <h4 class="card-title">Latest Posts</h4>
                                 </div>
                                 <div class="card-body">
                                     <c:forEach var="blogPost" items="${blogPosts}" end="4">
@@ -189,13 +175,14 @@
                             </div>
                             <div class="card category-widget">
                                 <div class="card-header">
-                                    <h4 class="card-title">Course Categories</h4>
+                                    <h4 class="card-title">Posts Categories</h4>
                                 </div>
                                 <div class="card-body">
                                     <ul class="categories">
                                         <c:if test="${categories != null}">
                                             <c:forEach var="category" items="${categories}">
-                                                <li><a href="#">HTML <span>(62)</span></a></li>
+                                                <!--<li><a href="#">HTML <span>(62)</span></a></li>-->
+                                                <c:out value="${category.name}"/>
                                                 </c:forEach>
                                             </c:if>
                                     </ul>
@@ -209,7 +196,8 @@
                                     <ul class="tags">
                                         <c:if test="${tags != null}">
                                             <c:forEach var="tag" items="${tags}">
-                                                <li><a href="#" class="tag">HTML</a></li>
+<!--                                                <li><a href="#" class="tag">HTML</a></li>-->
+                                                        <c:out value="${tag.name}"/>
                                                 </c:forEach>
                                             </c:if>
                                     </ul>
