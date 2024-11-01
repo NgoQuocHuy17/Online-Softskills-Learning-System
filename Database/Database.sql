@@ -285,6 +285,37 @@ CREATE TABLE settings (
     status NVARCHAR(50) DEFAULT 'Active'        
 );
 
+CREATE TABLE Lesson (
+    LessonID INT PRIMARY KEY IDENTITY(1,1),
+    CourseID INT NOT NULL,
+    Title NVARCHAR(255) NOT NULL,
+    Description NVARCHAR(MAX) NULL,
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    LastUpdatedDate DATETIME DEFAULT GETDATE(),
+   Status BIT DEFAULT 1,  
+);
+
+-- Foreign Key Constraints
+ALTER TABLE Lesson
+ADD FOREIGN KEY (CourseID) REFERENCES courses(id);
+
+CREATE TABLE LessonContent (
+    ContentID INT PRIMARY KEY IDENTITY(1,1),
+    LessonID INT NOT NULL,
+    ContentURL NVARCHAR(255) NULL,  -- URL for media or other external resources
+    ContentType NVARCHAR(50) NOT NULL CHECK (ContentType IN ('video', 'pdf', 'quiz', 'image', 'text', 'url')),  -- Supported content types
+    ContentDescription NVARCHAR(MAX) NULL,  -- Expanded to allow detailed descriptions
+    ImageURL NVARCHAR(255) NULL,  -- Optional image URL for 'image' content type
+    VideoURL NVARCHAR(255) NULL,  -- Optional video URL for 'video' content type
+    TextContent NVARCHAR(MAX) NULL,  -- Text content for descriptive or text-based content
+    OrderInLesson INT NOT NULL,  -- Order of content within the lesson
+    CreatedDate DATETIME DEFAULT GETDATE()
+);
+
+-- Foreign Key Constraint
+ALTER TABLE LessonContent
+ADD FOREIGN KEY (LessonID) REFERENCES Lesson(LessonID);
+
 -- Indexes for optimized querying
 CREATE INDEX idx_email ON users(email);         
 CREATE INDEX idx_course_title ON courses(title); 

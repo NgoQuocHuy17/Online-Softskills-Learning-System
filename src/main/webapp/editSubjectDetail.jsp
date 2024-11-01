@@ -23,6 +23,9 @@
 
         <div class="container mt-5 p-4 bg-white rounded shadow">
             <h1 class="mb-4 text-center text-primary">Edit Subject Detail</h1>
+            <div class="mb-4">
+                <a href="LessonListController?courseId=${course.id}" class="btn btn-primary">Go to Lesson List</a>
+            </div>
             <form action="subjectDetail" method="post">
                 <input type="hidden" name="action" value="update">
                 <input type="hidden" name="courseId" value="${course.id}">
