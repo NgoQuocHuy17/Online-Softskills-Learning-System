@@ -60,7 +60,7 @@
                                 <li><a href="reviews.html">Reviews</a></li>
                             </ul>
                         </li>
-                        
+
                         <% } else if (loggedInUser.getRole().equals("Student")) { %>
                         <!-- Chỉ hiện phần Mentee nếu role là Student -->
                         <li class="has-submenu">
@@ -91,16 +91,20 @@
 
                         <li class="has-submenu">
                             <% if (loggedInUser != null && (loggedInUser.getRole().equals("Teacher") || loggedInUser.getRole().equals("Admin"))) { %>
-                            <a href="SubjectList">Courses</a>
-                            <% } else { %>
-                            <a href="course">Courses</a>
-                            <% } %>
+                            <a href="SubjectList">Courses<i class="fas fa-chevron-down"></i></a>
+                                <% } else { %>
+                            <a href="course">Courses<i class="fas fa-chevron-down"></i></a>
+                                <% } %>
+
+                            <ul class="submenu">
+                                <li><a href="MyCourses">My Courses</a></li>
+                            </ul>
                         </li>
 
                         <li class="home">
                             <a href="blog-list">Blog</a>
                         </li>
-                        
+
                     </ul>
                 </div>
 
@@ -116,6 +120,7 @@
                             <span><%= loggedInUser.getFullName()%></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="MyRegistrations">My Registrations</a></li>
                             <li><a class="dropdown-item" href="profile-settings.jsp">Profile Settings</a></li>
                             <li><a class="dropdown-item" href="logout.jsp">Logout</a></li>
                         </ul>

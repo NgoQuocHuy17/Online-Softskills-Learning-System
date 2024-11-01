@@ -29,6 +29,8 @@ import model.User;
 )
 public class AddMediaServlet extends HttpServlet {
 
+    private final CourseDAO courseDAO = new CourseDAO();
+
     // Cấu hình tương tự như trước, nhưng sẽ có thêm phần xử lý upload file
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -44,7 +46,6 @@ public class AddMediaServlet extends HttpServlet {
         // Check if the user is a teacher or admin
         if ("Teacher".equals(loggedInUser.getRole())) {
             int courseId = Integer.parseInt(request.getParameter("courseId"));
-            CourseDAO courseDAO = new CourseDAO();
             Course course = courseDAO.select(courseId);
 
             // Check if the logged-in user is the owner of the course
@@ -101,12 +102,6 @@ public class AddMediaServlet extends HttpServlet {
                 break;
             default:
                 throw new ServletException("Unknown media type: " + mediaType);
-        }
-
-        // Tạo thư mục lưu trữ nếu chưa có
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs(); // Tạo thư mục nếu chưa tồn tại
         }
 
         // Ghi file vào server trong thư mục tương ứng

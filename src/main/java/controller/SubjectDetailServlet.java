@@ -115,7 +115,7 @@ public class SubjectDetailServlet extends HttpServlet {
 
     private void updateMediaOrder(HttpServletRequest request, HttpServletResponse response, boolean moveUp) throws ServletException, IOException {
         int courseId = Integer.parseInt(request.getParameter("courseId"));
-        List<CourseMedia> mediaList = courseMediaDAO.selectByCourseId(courseId); // Lấy trực tiếp từ database
+        List<CourseMedia> mediaList = courseMediaDAO.selectByCourseId(courseId); 
         int mediaId = Integer.parseInt(request.getParameter("mediaId"));
 
         for (int i = 0; i < mediaList.size(); i++) {
