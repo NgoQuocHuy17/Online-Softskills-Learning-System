@@ -98,7 +98,7 @@
                         </li>
 
                         <li class="home">
-                            <a href="bloglist">Blog</a>
+                            <a href="blog-list">Blog</a>
                         </li>
                         
                     </ul>
