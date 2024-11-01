@@ -28,7 +28,7 @@
             <h1 class="text-center mb-4">Blog Posts</h1>
 
             <div class="mb-3">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#createPostModal">Create New Post</button>
+                <a href="blog-create"><button class="btn btn-primary" data-toggle="modal" data-target="#createPostModal">Create New Post</button></a>
             </div>
 
             <!-- Modal for Creating a Blog Post -->
@@ -150,6 +150,6 @@
         <script src="assets/js/owl.carousel.min.js"></script>
         <script src="assets/plugins/slick/slick.js"></script>
         <script src="assets/plugins/aos/aos.js"></script>
-        <script src="assets/js/script.js"></script>   
+        <script src="assets/js/script.js"></script>
     </body>
 </html>

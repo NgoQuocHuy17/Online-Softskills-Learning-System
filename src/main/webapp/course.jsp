@@ -83,7 +83,7 @@
                                 </p>
 
                                 <!-- View Details Button -->
-                                <a href="course-detail?courseId=${course.id}" class="btn btn-primary">View Details</a>
+                                <a href="course-details?courseId=${course.id}" class="btn btn-primary">View Details</a>
 
                                 <!-- Register Button -->
                                 <a href="CourseRegister?courseId=${course.id}" class="btn btn-success ml-2">Register</a>

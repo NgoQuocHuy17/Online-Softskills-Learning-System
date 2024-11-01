@@ -44,6 +44,7 @@ public class CourseDetailsController extends HttpServlet {
         
         CourseDAO coursedao = new CourseDAO();
         Course course = coursedao.getCourseById(id);
+        var courses = coursedao.select();
         
         CourseContentDAO courseContentDAO = new CourseContentDAO();
         CourseContent courseContent = courseContentDAO.select(id);
@@ -60,6 +61,7 @@ public class CourseDetailsController extends HttpServlet {
         String formattedCreatedAt = course.getCreatedAt().toLocalDateTime().format(dtf);
         String formattedUpdatedAt = course.getUpdatedAt().toLocalDateTime().format(dtf);
         
+        request.setAttribute("courses", courses);
         request.setAttribute("courseDetail", course);
         request.setAttribute("courseContent", courseContent);
         request.setAttribute("courseMedias", courseMedias);

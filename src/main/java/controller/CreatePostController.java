@@ -18,13 +18,10 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import model.BlogPost;
-import model.Category;
-import model.User;
 import view.BlogPostDAO;
 import view.CategoryDAO;
 import view.UserDAO;
@@ -34,8 +31,19 @@ import view.UserDAO;
  * @author Minh
  */
 @MultipartConfig
-@WebServlet(name = "BlogUpdateController", urlPatterns = {"/blog-update"})
-public class BlogUpdateController extends HttpServlet {
+@WebServlet(name = "CreatePostController", urlPatterns = {"/blog-create"})
+public class CreatePostController extends HttpServlet {
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    private static final String UPLOAD_DIR = "uploads";
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -48,26 +56,14 @@ public class BlogUpdateController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
+        var categories = new CategoryDAO().select();
+        var authors = new UserDAO().select();
+        var thumbnails = retrieveThumbnails();
         
-        BlogPostDAO blogPostDAO = new BlogPostDAO();
-        BlogPost post = blogPostDAO.select(id);
-        List<Category> categories = new CategoryDAO().select();
-        int page = 1;
-        String pagePara = request.getParameter("page");
-        if (pagePara != null) {
-            page = Integer.parseInt(pagePara);
-        }
-        
-        List<String> thumbnails = retrieveThumbnails();
-        List<User> authors = new UserDAO().select();
-        
-        request.setAttribute("authors", authors);
         request.setAttribute("thumbnails", thumbnails);
         request.setAttribute("categories", categories);
-        request.setAttribute("page", page);
-        request.setAttribute("post", post);
-        request.getRequestDispatcher("blog-update.jsp").forward(request, response);
+        request.setAttribute("authors", authors);
+        request.getRequestDispatcher("blog-create.jsp").forward(request, response);
     }
 
     /**
@@ -81,49 +77,42 @@ public class BlogUpdateController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
         String title = request.getParameter("title");
         String content = request.getParameter("content");
-        String raw = request.getParameter("categoryId");
-        int categoryId = Integer.parseInt(request.getParameter("categoryId"));
-        String existingThumbnail = request.getParameter("existingThumbnail"); // Existing thumbnail option
-        Part newThumbnailPart = request.getPart("thumbnail"); // New thumbnail upload
-        
-        String thumbnailUrl; // This will hold the final thumbnail URL
-        
-        if (newThumbnailPart != null && newThumbnailPart.getSize() > 0) {
-            // Handle new thumbnail upload
-            String fileName = new File(newThumbnailPart.getSubmittedFileName()).getName();
-            File uploads = new File(getServletContext().getRealPath(THUMBNAIL_DIRECTORY));
-            uploads.mkdirs(); // Create the directory if it doesn't exist
-            File file = new File(uploads, fileName);
+        String categoryId = request.getParameter("categoryId");
+        String authorId = request.getParameter("authorId");
+        String status = request.getParameter("status");
+        String existingThumbnail = request.getParameter("existingThumbnail");
 
-            // Copy the uploaded file to the target location
-            Files.copy(newThumbnailPart.getInputStream(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            thumbnailUrl = "assets/img/blog/" + fileName; // Update this based on your URL structure
-        } else {
-            // Use the existing thumbnail if no new one was uploaded
-            thumbnailUrl = existingThumbnail;
+        // Handle file upload if a new file is provided
+        Part filePart = request.getPart("thumbnail");
+        String fileName = null;
+        if (filePart != null && filePart.getSize() > 0) {
+            fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+            String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+
+            filePart.write(uploadPath + File.separator + fileName);
         }
-        
-        int page = 1;
-        String pagePara = request.getParameter("page");
-        if (pagePara != null){
-            page = Integer.parseInt(pagePara);
-        }
-        
-        
-        BlogPostDAO blogPostDAO = new BlogPostDAO();
-        BlogPost blogPost = blogPostDAO.select(id);
-        
-        blogPost.setTitle(title);
-        blogPost.setContent(content);
-        blogPost.setCategoryId(categoryId);
-        blogPost.setThumbnailUrl(thumbnailUrl);
-        blogPost.setUpdatedAt(LocalDateTime.now());
-        
-        blogPostDAO.update(blogPost);
-        response.sendRedirect("blog-list?page="+page);
+
+        // Create a new BlogPost object or persist data (logic not included)
+        BlogPost newPost = new BlogPost();
+        newPost.setTitle(title);
+        newPost.setContent(content);
+        newPost.setCategoryId(Integer.parseInt(categoryId));
+        newPost.setAuthorId(Integer.parseInt(authorId));
+        newPost.setStatus(status);
+        newPost.setThumbnailUrl(fileName != null ? UPLOAD_DIR + "/" + fileName : existingThumbnail);
+        newPost.setCreatedAt(LocalDateTime.now());
+        newPost.setUpdatedAt(LocalDateTime.now());
+        // Save the post to a database or other storage (this requires implementation)
+        // Redirect to the blog list or confirmation page
+        new BlogPostDAO().insert(newPost);
+
+        response.sendRedirect("blog-list");
     }
 
     /**
@@ -135,10 +124,7 @@ public class BlogUpdateController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
-    private String THUMBNAIL_DIRECTORY = "/assets/img/blog";
-    
-    // Method to retrieve thumbnail file names from the specified directory using NIO
+
     private List<String> retrieveThumbnails() throws IOException {
         ServletContext context = getServletContext();
         String THUMBNAIL_DIRECTORY = context.getRealPath("/assets/img/blog");
@@ -157,4 +143,5 @@ public class BlogUpdateController extends HttpServlet {
         }
         return thumbnailList;
     }
+    
 }

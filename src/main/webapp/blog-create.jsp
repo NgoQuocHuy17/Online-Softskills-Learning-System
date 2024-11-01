@@ -1,9 +1,4 @@
 <%-- 
-    Document   : blog-update
-    Created on : Nov 1, 2024, 8:22:43 AM
-    Author     : Minh
---%>
-<%-- 
     Document   : blog-create
     Created on : Nov 1, 2024, 8:22:43 AM
     Author     : Minh
@@ -122,12 +117,12 @@
         <script src="assets/js/jquery-3.6.0.min.js"></script>
         <script src="assets/js/bootstrap.bundle.min.js"></script>
         <script>
-                                function selectThumbnail(thumbnail) {
-                                    document.getElementById('selectedThumbnail').value = thumbnail;
-                                    const options = document.querySelectorAll('.thumbnail-option');
-                                    options.forEach(option => option.classList.remove('selected'));
-                                    event.currentTarget.classList.add('selected');
-                                }
+            function selectThumbnail(thumbnail) {
+                document.getElementById('selectedThumbnail').value = thumbnail;
+                const options = document.querySelectorAll('.thumbnail-option');
+                options.forEach(option => option.classList.remove('selected'));
+                event.currentTarget.classList.add('selected');
+            }
         </script>
     </body>
 </html>
