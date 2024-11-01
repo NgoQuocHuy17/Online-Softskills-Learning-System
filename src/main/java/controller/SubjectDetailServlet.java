@@ -73,21 +73,16 @@ public class SubjectDetailServlet extends HttpServlet {
     private void editCourseDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int courseId = Integer.parseInt(request.getParameter("courseId"));
 
-        // Luôn lấy mediaList từ database
-        List<CourseMedia> mediaList = courseMediaDAO.selectByCourseId(courseId);
-
-        // Lấy các thông tin khác
         Course course = courseDAO.select(courseId);
         CourseContent content = courseContentDAO.select(courseId);
+        List<CourseMedia> mediaList = courseMediaDAO.selectByCourseId(courseId); // Lấy từ database
         int maxOrder = mediaList.size();
 
-        // Đặt thuộc tính vào request để hiển thị trong JSP
         request.setAttribute("course", course);
         request.setAttribute("content", content != null ? content : new CourseContent(courseId, ""));
         request.setAttribute("mediaList", mediaList);
         request.setAttribute("maxOrder", maxOrder);
 
-        // Chuyển tiếp sang trang JSP
         request.getRequestDispatcher("/editSubjectDetail.jsp").forward(request, response);
     }
 
@@ -119,34 +114,29 @@ public class SubjectDetailServlet extends HttpServlet {
     }
 
     private void updateMediaOrder(HttpServletRequest request, HttpServletResponse response, boolean moveUp) throws ServletException, IOException {
-        List<CourseMedia> mediaList = (List<CourseMedia>) request.getSession().getAttribute("tempMediaList");
+        int courseId = Integer.parseInt(request.getParameter("courseId"));
+        List<CourseMedia> mediaList = courseMediaDAO.selectByCourseId(courseId); // Lấy trực tiếp từ database
         int mediaId = Integer.parseInt(request.getParameter("mediaId"));
 
-        // Tìm media cần thay đổi
         for (int i = 0; i < mediaList.size(); i++) {
             if (mediaList.get(i).getId() == mediaId) {
-                // Xác định media liền kề để hoán đổi vị trí
                 int swapIndex = moveUp ? i - 1 : i + 1;
                 if (swapIndex >= 0 && swapIndex < mediaList.size()) {
                     CourseMedia adjacentMedia = mediaList.get(swapIndex);
                     CourseMedia currentMedia = mediaList.get(i);
 
-                    // Hoán đổi thứ tự hiển thị
                     int tempOrder = currentMedia.getDisplayOrder();
                     currentMedia.setDisplayOrder(adjacentMedia.getDisplayOrder());
                     adjacentMedia.setDisplayOrder(tempOrder);
 
-                    // Hoán đổi vị trí trong danh sách
-                    mediaList.set(i, adjacentMedia);
-                    mediaList.set(swapIndex, currentMedia);
+                    courseMediaDAO.update(currentMedia); // Cập nhật trong database
+                    courseMediaDAO.update(adjacentMedia); // Cập nhật trong database
                 }
                 break;
             }
         }
 
-        // Cập nhật danh sách media trong session để lưu lại thứ tự preview
-        request.getSession().setAttribute("tempMediaList", mediaList);
-        response.sendRedirect("subjectDetail?action=edit&courseId=" + request.getParameter("courseId"));
+        response.sendRedirect("subjectDetail?action=edit&courseId=" + courseId);
     }
 
     private void updateCourseDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

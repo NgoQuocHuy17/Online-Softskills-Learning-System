@@ -82,9 +82,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Lấy danh sách media từ session nếu có, nếu không thì lấy từ mediaList -->
                         <c:forEach var="media" items="${mediaList}">
-                            <!-- Hiển thị thông tin media -->
                             <tr>
                                 <td>${media.displayOrder}</td>
                                 <td>${media.mediaType}</td>
@@ -106,7 +104,6 @@
                                     <div class="mt-2 fw-bold">${media.title}</div>
                                 </td>
                                 <td>
-                                    <!-- Hiển thị nút điều khiển thứ tự hiển thị -->
                                     <form action="subjectDetail" method="post" style="display: inline;">
                                         <input type="hidden" name="action" value="moveUp">
                                         <input type="hidden" name="mediaId" value="${media.id}">
@@ -129,8 +126,6 @@
                 </table>
 
                 <a href="addMedia?courseId=${course.id}" class="btn btn-outline-secondary mb-4">Add Media</a>
-
-
 
                 <button type="submit" class="btn btn-success w-100">Save Changes</button>
             </form>
