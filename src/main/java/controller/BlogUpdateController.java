@@ -4,28 +4,30 @@
  */
 package controller;
 
+import jakarta.servlet.ServletContext;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import model.BlogPost;
 import model.Category;
-import model.User;
 import view.BlogPostDAO;
 import view.CategoryDAO;
-import view.UserDAO;
 
 /**
  *
  * @author Minh
  */
-@WebServlet(name = "BlogDetailsController", urlPatterns = {"/blog-details"})
-public class BlogDetailsController extends HttpServlet {
+@WebServlet(name = "BlogUpdateController", urlPatterns = {"/blog-update"})
+public class BlogUpdateController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,35 +40,8 @@ public class BlogDetailsController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        BlogPostDAO blogPostDAO = new BlogPostDAO();
-        int id = Integer.parseInt(request.getParameter("id"));
-        BlogPost blogPost = blogPostDAO.select(id);
-        
-        UserDAO userDao = new UserDAO();
-        User author = userDao.select(blogPost.getAuthorId());
-    
-        
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String formattedCreatedAt = blogPost.getCreatedAt().format(dtf);
-        String formattedUpdatedAt = blogPost.getUpdatedAt().format(dtf);
         
         
-        
-        CategoryDAO catDAO = new CategoryDAO();
-        Category cat = catDAO.select(blogPost.getCategoryId());
-        
-        List<BlogPost> blogPosts = blogPostDAO.select();
-        
-        Comparator<BlogPost> com = Comparator.comparing(BlogPost::getCreatedAt).reversed();
-        
-        blogPosts.sort(com);
-        request.setAttribute("blogPost", blogPost);
-        request.setAttribute("author", author);
-        request.setAttribute("blogPosts", blogPosts);
-        request.setAttribute("category", cat);
-        request.setAttribute("formattedCreatedAt", formattedCreatedAt);
-        request.setAttribute("formattedUpdatedAt", formattedUpdatedAt);
-        request.getRequestDispatcher("blog-details.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -81,7 +56,24 @@ public class BlogDetailsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int id = Integer.parseInt(request.getParameter("id"));
+        
+        BlogPostDAO blogPostDAO = new BlogPostDAO();
+        BlogPost post = blogPostDAO.select(id);
+        List<Category> categories = new CategoryDAO().select();
+        int page = 1;
+        String pagePara = request.getParameter("page");
+        if (pagePara != null) {
+            page = Integer.parseInt(pagePara);
+        }
+        
+        List<String> thumbnails = retrieveThumbnails();
+        
+        request.setAttribute("thumbnails", thumbnails);
+        request.setAttribute("categories", categories);
+        request.setAttribute("page", page);
+        request.setAttribute("post", post);
+        request.getRequestDispatcher("blog-update.jsp").forward(request, response);
     }
 
     /**
@@ -95,7 +87,7 @@ public class BlogDetailsController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
     }
 
     /**
@@ -107,5 +99,24 @@ public class BlogDetailsController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
+    // Method to retrieve thumbnail file names from the specified directory using NIO
+    public List<String> retrieveThumbnails() throws IOException {
+        ServletContext context = getServletContext();
+        String THUMBNAIL_DIRECTORY = context.getRealPath("/assets/img/blog");
+        List<String> thumbnailList = new ArrayList<>();
+        Path thumbnailDir = Paths.get(THUMBNAIL_DIRECTORY);
 
+        // Check if the directory exists
+        if (Files.exists(thumbnailDir) && Files.isDirectory(thumbnailDir)) {
+            // Use a Directory Stream to list files
+            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(thumbnailDir, "*.{jpg,png,jpeg}")) {
+                for (Path path : directoryStream) {
+                    // Add the file name to the list
+                    thumbnailList.add(path.getFileName().toString());
+                }
+            }
+        }
+        return thumbnailList;
+    }
 }

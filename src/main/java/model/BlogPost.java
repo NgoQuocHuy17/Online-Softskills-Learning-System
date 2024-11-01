@@ -119,4 +119,9 @@ public class BlogPost {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    @Override
+    public String toString() {
+        return "BlogPost{" + "id=" + id + ", title=" + title + ", thumbnailUrl=" + thumbnailUrl + ", category=" + category + ", content=" + content + ", authorId=" + authorId + ", status=" + status + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", categoryId=" + categoryId + '}';
+    }   
 }
