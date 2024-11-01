@@ -182,9 +182,9 @@
                                         <c:if test="${categories != null}">
                                             <c:forEach var="category" items="${categories}">
                                                 <!--<li><a href="#">HTML <span>(62)</span></a></li>-->
-                                                <c:out value="${category.name}"/>
-                                                </c:forEach>
-                                            </c:if>
+                                                <li>${category.name}</li>
+                                            </c:forEach>
+                                        </c:if>
                                     </ul>
                                 </div>
                             </div>
@@ -196,8 +196,8 @@
                                     <ul class="tags">
                                         <c:if test="${tags != null}">
                                             <c:forEach var="tag" items="${tags}">
-<!--                                                <li><a href="#" class="tag">HTML</a></li>-->
-                                                        <c:out value="${tag.name}"/>
+                                                <!--<li><a href="#" class="tag">HTML</a></li>-->
+                                                <li>${tag.name}</li>
                                                 </c:forEach>
                                             </c:if>
                                     </ul>
