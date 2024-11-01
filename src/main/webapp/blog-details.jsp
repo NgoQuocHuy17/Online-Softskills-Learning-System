@@ -152,25 +152,28 @@
                                     <h4 class="card-title">Latest Posts</h4>
                                 </div>
                                 <div class="card-body">
-                                    <c:forEach var="blogPost" items="${blogPosts}" end="4">
-                                        <li>
-                                            <div class="post-thumb">
-                                                <a href="blog-details.html?bloglistid=${blogPost.id}">
-                                                    <img class="img-fluid" src="${blogPost.thumbnailUrl}" alt="">
-                                                </a>
-                                            </div>
-                                            <div class="post-info">
-                                                <h4>
-                                                    <a href="BlogDetailsController?bloglistid=${blogPost.id}">
-                                                        <c:out value="${blogPost.title}"/>
+                                    <ul style="list-style: none; padding-left: 0;">
+                                        <c:forEach var="blogPost" items="${blogPosts}" end="4">
+                                            <li>
+                                                <div class="post-thumb">
+                                                    <a href="blog-details?id=${blogPost.id}">
+                                                        <img class="img-fluid" src="${blogPost.thumbnailUrl}" alt="">
                                                     </a>
-                                                </h4>
-                                                <p>
-                                                    <c:out value="${formattedUpdatedAt}"/>
-                                                </p>
-                                            </div>
-                                        </li>
-                                    </c:forEach>
+                                                </div>
+                                                <div class="post-info">
+                                                    <h4>
+                                                        <a href="blog-details?id=${blogPost.id}">
+                                                            <c:out value="${blogPost.title}"/>
+                                                        </a>
+                                                    </h4>
+                                                    <p>
+                                                        <c:out value="${formattedUpdatedAt}"/>
+                                                    </p>
+                                                </div>
+                                            </li>
+                                            <br>
+                                        </c:forEach>
+                                    </ul>
                                 </div>
                             </div>
                             <div class="card category-widget">
@@ -182,9 +185,9 @@
                                         <c:if test="${categories != null}">
                                             <c:forEach var="category" items="${categories}">
                                                 <!--<li><a href="#">HTML <span>(62)</span></a></li>-->
-                                                <li>${category.name}</li>
-                                            </c:forEach>
-                                        </c:if>
+                                                <li class="tag">${category.name}</li>
+                                                </c:forEach>
+                                            </c:if>
                                     </ul>
                                 </div>
                             </div>
@@ -197,7 +200,7 @@
                                         <c:if test="${tags != null}">
                                             <c:forEach var="tag" items="${tags}">
                                                 <!--<li><a href="#" class="tag">HTML</a></li>-->
-                                                <li>${tag.name}</li>
+                                                <li class="tag">${tag.name}</li>
                                                 </c:forEach>
                                             </c:if>
                                     </ul>
