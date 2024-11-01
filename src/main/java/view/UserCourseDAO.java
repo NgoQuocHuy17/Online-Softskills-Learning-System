@@ -68,5 +68,4 @@ public class UserCourseDAO extends DBContext<UserCourse> {
     public int delete(int... id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
 }

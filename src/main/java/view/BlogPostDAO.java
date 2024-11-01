@@ -9,6 +9,33 @@ import model.*;
 
 public class BlogPostDAO extends DBContext<BlogPost> {
 
+    public boolean changeStatus(int id, String status) {
+        
+        String oppositeStatus = switch (status){
+            case "active" -> "Active";
+            case "inactive" -> "Inactive";
+            default -> "Inactive";
+        };
+        
+        String sql = "UPDATE [dbo].[blog_posts]\n"
+                + "   SET\n"
+                + "      [status] = ?\n"
+                + " WHERE id = ?";
+        
+        int result = 0;
+        
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, oppositeStatus);
+            ps.setInt(2, id);
+
+            result = ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result > 0;
+    }
+
     public String getCategoryNameById(int categoryId) {
         String name = "";
         String sql = "SELECT name FROM categories WHERE id = ?";
@@ -140,8 +167,6 @@ public class BlogPostDAO extends DBContext<BlogPost> {
         return blogPosts;
     }
 
-
-
     @Override
     public List<BlogPost> select() {
         String sql = "SELECT [id], [title], [thumbnail_url], [category_id], [content], [author_id], [status], [created_at], [updated_at] FROM [dbo].[blog_posts]";
@@ -188,7 +213,7 @@ public class BlogPostDAO extends DBContext<BlogPost> {
             }
         } catch (SQLException ex) {
             Logger.getLogger(BlogPostDAO.class.getName()).log(Level.SEVERE, null, ex);
-            
+
         }
         return blogPost;
     }

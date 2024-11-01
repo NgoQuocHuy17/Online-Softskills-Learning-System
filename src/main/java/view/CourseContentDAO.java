@@ -97,18 +97,4 @@ public class CourseContentDAO extends DBContext<CourseContent> {
         }
         return content;
     }
-    
-    public static void main(String[] args) {
-        CourseMediaDAO mediaDAO = new CourseMediaDAO();
-
-        int mediaIdToDelete = 26; // Thay đổi ID này thành một mediaId có trong cơ sở dữ liệu của bạn
-        int result = mediaDAO.delete(mediaIdToDelete);
-
-        if (result > 0) {
-            System.out.println("Media with ID " + mediaIdToDelete + " was deleted successfully.");
-        } else {
-            System.out.println("Failed to delete media with ID " + mediaIdToDelete + " or media does not exist.");
-        }
-    }
-    
 }

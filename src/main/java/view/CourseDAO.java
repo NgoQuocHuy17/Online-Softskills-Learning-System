@@ -13,53 +13,11 @@ public class CourseDAO extends DBContext<Course> {
     }
 
     public boolean addNewCourse(Course course) {
-        String sql = "INSERT INTO courses (title, description, category, owner_id, is_sponsored, status) "
-                + "VALUES (?, ?, ?, ?, ?, ?)";
-
-        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
-            pst.setString(1, course.getTitle());
-            pst.setString(2, course.getDescription());
-            pst.setString(3, course.getCategory());
-            pst.setInt(4, course.getOwnerId());
-            pst.setBoolean(5, course.isSponsored());
-            pst.setString(6, course.getStatus());
-
-            int i = pst.executeUpdate();
-            return i > 0; // Return true if insertion was successful
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return insert(course) > 0;
     }
 
     public List<Course> getAllCourses() {
-        List<Course> courses = new ArrayList<>();
-        String sql = "SELECT id, title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, is_sponsored, status, created_at, updated_at "
-                + "FROM courses";  // Removed WHERE clause for sponsored courses
-
-        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
-            try (ResultSet rs = pst.executeQuery()) {
-                while (rs.next()) {
-                    Course course = new Course();
-                    course.setId(rs.getInt("id"));
-                    course.setTitle(rs.getString("title"));
-                    course.setTagLine(rs.getString("tag_line"));
-                    course.setDescription(rs.getString("description"));
-                    course.setCategory(rs.getString("category"));
-                    course.setBasicPackagePrice(rs.getBigDecimal("basic_package_price"));
-                    course.setAdvancedPackagePrice(rs.getBigDecimal("advanced_package_price"));
-                    course.setOwnerId(rs.getInt("owner_id"));
-                    course.setSponsored(rs.getBoolean("is_sponsored"));
-                    course.setStatus(rs.getString("status"));
-                    course.setCreatedAt(rs.getTimestamp("created_at"));
-                    course.setUpdatedAt(rs.getTimestamp("updated_at"));
-                    courses.add(course);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return courses;
+        return select();
     }
 
     public List<Course> getFeaturedCourses(int size) {
@@ -286,32 +244,7 @@ public class CourseDAO extends DBContext<Course> {
     }
 
     public Course getCourseById(int id) {
-        Course course = null;
-        String sql = "SELECT id, title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, is_sponsored, status, created_at, updated_at "
-                + "FROM courses WHERE id = ?";
-        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
-            pst.setInt(1, id);
-            try (ResultSet rs = pst.executeQuery()) {
-                if (rs.next()) {
-                    course = new Course();
-                    course.setId(rs.getInt("id"));
-                    course.setTitle(rs.getString("title"));
-                    course.setTagLine(rs.getString("tag_line"));
-                    course.setDescription(rs.getString("description"));
-                    course.setCategory(rs.getString("category"));
-                    course.setBasicPackagePrice(rs.getBigDecimal("basic_package_price"));
-                    course.setAdvancedPackagePrice(rs.getBigDecimal("advanced_package_price"));
-                    course.setOwnerId(rs.getInt("owner_id"));
-                    course.setSponsored(rs.getBoolean("is_sponsored"));
-                    course.setStatus(rs.getString("status"));
-                    course.setCreatedAt(rs.getTimestamp("created_at"));
-                    course.setUpdatedAt(rs.getTimestamp("updated_at"));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return course;
+        return select(id);
     }
 
     public List<Course> getCoursesByTitleAndCategory(String title, String category, int page, int pageSize) {
@@ -414,59 +347,17 @@ public class CourseDAO extends DBContext<Course> {
         return totalCourses;
     }
 
-    // CourseDAO.java
-    public int update(Course course) {
-        String sql = "UPDATE courses SET title = ?, tag_line = ?, description = ?, category = ?, "
-                + "basic_package_price = ?, advanced_package_price = ?, is_sponsored = ?, "
-                + "status = ?, updated_at = ? WHERE id = ?";
-        try (Connection conn = getConn(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, course.getTitle());
-            stmt.setString(2, course.getTagLine());
-            stmt.setString(3, course.getDescription());
-            stmt.setString(4, course.getCategory());
-            stmt.setBigDecimal(5, course.getBasicPackagePrice());
-            stmt.setBigDecimal(6, course.getAdvancedPackagePrice());
-            stmt.setBoolean(7, course.isSponsored());
-            stmt.setString(8, course.getStatus()); // Cập nhật trường trạng thái
-            stmt.setTimestamp(9, new Timestamp(System.currentTimeMillis()));
-            stmt.setInt(10, course.getId());
-            return stmt.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return 0;
-    }
-
-    // CourseDAO.java
-    public Course select(int courseId) {
-        String sql = "SELECT * FROM courses WHERE id = ?";
-        try (Connection conn = getConn(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, courseId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    Course course = new Course();
-                    course.setId(rs.getInt("id"));
-                    course.setTitle(rs.getString("title"));
-                    course.setTagLine(rs.getString("tag_line"));
-                    course.setDescription(rs.getString("description"));
-                    course.setCategory(rs.getString("category"));
-                    course.setBasicPackagePrice(rs.getBigDecimal("basic_package_price"));
-                    course.setAdvancedPackagePrice(rs.getBigDecimal("advanced_package_price"));
-                    course.setOwnerId(rs.getInt("owner_id"));
-                    course.setSponsored(rs.getBoolean("is_sponsored"));
-                    course.setStatus(rs.getString("status"));
-                    course.setCreatedAt(rs.getTimestamp("created_at"));
-                    course.setUpdatedAt(rs.getTimestamp("updated_at"));
-                    return course;
-                }
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return null;
+    public Course select(int id) {
+        int[] ids = {id};
+        return select(ids);
     }
 
     public List<Course> selectAll() {
+        return select();
+    }
+
+    @Override
+    public List<Course> select() {
         List<Course> courses = new ArrayList<>();
         String sql = "SELECT * FROM courses";
         try (Connection conn = getConn(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
@@ -493,20 +384,80 @@ public class CourseDAO extends DBContext<Course> {
     }
 
     @Override
-    public List<Course> select() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
     public Course select(int... id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Course course = null;
+        String sql = "SELECT id, title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, is_sponsored, status, created_at, updated_at "
+                + "FROM courses WHERE id = ?";
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, id[0]);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    course = new Course();
+                    course.setId(rs.getInt("id"));
+                    course.setTitle(rs.getString("title"));
+                    course.setTagLine(rs.getString("tag_line"));
+                    course.setDescription(rs.getString("description"));
+                    course.setCategory(rs.getString("category"));
+                    course.setBasicPackagePrice(rs.getBigDecimal("basic_package_price"));
+                    course.setAdvancedPackagePrice(rs.getBigDecimal("advanced_package_price"));
+                    course.setOwnerId(rs.getInt("owner_id"));
+                    course.setSponsored(rs.getBoolean("is_sponsored"));
+                    course.setStatus(rs.getString("status"));
+                    course.setCreatedAt(rs.getTimestamp("created_at"));
+                    course.setUpdatedAt(rs.getTimestamp("updated_at"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return course;
     }
 
     @Override
     public int insert(Course obj) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int i = 0;
+        String sql = "INSERT INTO courses (title, description, category, owner_id, is_sponsored, status) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setString(1, obj.getTitle());
+            pst.setString(2, obj.getDescription());
+            pst.setString(3, obj.getCategory());
+            pst.setInt(4, obj.getOwnerId());
+            pst.setBoolean(5, obj.isSponsored());
+            pst.setString(6, obj.getStatus());
+
+            i = pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return i;
     }
 
+    @Override
+    public int update(Course course) {
+        int i = 0;
+        String sql = "UPDATE courses SET title = ?, tag_line = ?, description = ?, category = ?, "
+                + "basic_package_price = ?, advanced_package_price = ?, is_sponsored = ?, "
+                + "status = ?, updated_at = ? WHERE id = ?";
+        try (Connection conn = getConn(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, course.getTitle());
+            stmt.setString(2, course.getTagLine());
+            stmt.setString(3, course.getDescription());
+            stmt.setString(4, course.getCategory());
+            stmt.setBigDecimal(5, course.getBasicPackagePrice());
+            stmt.setBigDecimal(6, course.getAdvancedPackagePrice());
+            stmt.setBoolean(7, course.isSponsored());
+            stmt.setString(8, course.getStatus()); // Cập nhật trường trạng thái
+            stmt.setTimestamp(9, new Timestamp(System.currentTimeMillis()));
+            stmt.setInt(10, course.getId());
+            i = stmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return i;
+    }
+    
     @Override
     public int delete(int... id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

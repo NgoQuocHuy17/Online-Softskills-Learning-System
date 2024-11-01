@@ -10,22 +10,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.List;
-import model.BlogPost;
-import model.Category;
-import model.User;
 import view.BlogPostDAO;
-import view.CategoryDAO;
-import view.UserDAO;
 
 /**
  *
  * @author Minh
  */
-@WebServlet(name = "BlogDetailsController", urlPatterns = {"/blog-details"})
-public class BlogDetailsController extends HttpServlet {
+@WebServlet(name = "BlogStatusController", urlPatterns = {"/blog-status"})
+public class BlogStatusController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,35 +30,20 @@ public class BlogDetailsController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        BlogPostDAO blogPostDAO = new BlogPostDAO();
         int id = Integer.parseInt(request.getParameter("id"));
-        BlogPost blogPost = blogPostDAO.select(id);
+        String status = request.getParameter("status");
         
-        UserDAO userDao = new UserDAO();
-        User author = userDao.select(blogPost.getAuthorId());
-    
+        BlogPostDAO blogPostDAO = new BlogPostDAO();
+        blogPostDAO.changeStatus(id, status);
         
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String formattedCreatedAt = blogPost.getCreatedAt().format(dtf);
-        String formattedUpdatedAt = blogPost.getUpdatedAt().format(dtf);
-        
-        
-        
-        CategoryDAO catDAO = new CategoryDAO();
-        Category cat = catDAO.select(blogPost.getCategoryId());
-        
-        List<BlogPost> blogPosts = blogPostDAO.select();
-        
-        Comparator<BlogPost> com = Comparator.comparing(BlogPost::getCreatedAt).reversed();
-        
-        blogPosts.sort(com);
-        request.setAttribute("blogPost", blogPost);
-        request.setAttribute("author", author);
-        request.setAttribute("blogPosts", blogPosts);
-        request.setAttribute("category", cat);
-        request.setAttribute("formattedCreatedAt", formattedCreatedAt);
-        request.setAttribute("formattedUpdatedAt", formattedUpdatedAt);
-        request.getRequestDispatcher("blog-details.jsp").forward(request, response);
+        int page = 1;
+        String pagePara = request.getParameter("page");
+        if (pagePara != null){
+            page = Integer.parseInt(pagePara);
+        }
+        request.setAttribute("page", page);
+//        request.getRequestDispatcher("blog-list").forward(request, response);
+        response.sendRedirect("blog-list?page="+page);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

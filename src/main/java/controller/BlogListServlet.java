@@ -10,7 +10,7 @@ import model.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/bloglist")
+@WebServlet("/blog-list")
 public class BlogListServlet extends HttpServlet {
 
     @Override
@@ -40,6 +40,6 @@ public class BlogListServlet extends HttpServlet {
         request.setAttribute("blogPosts", blogPosts);
         request.setAttribute("currentPage", pageNumber);
         request.setAttribute("totalPages", totalPages);
-        request.getRequestDispatcher("/bloglist.jsp").forward(request, response);
+        request.getRequestDispatcher("/blog-list.jsp").forward(request, response);
     }
 }

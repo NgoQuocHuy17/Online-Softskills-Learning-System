@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class Course {
+
     private int id;
     private String title;
     private String tagLine;
@@ -30,9 +31,7 @@ public class Course {
     public Course() {
     }
 
-    
     // Getters and Setters
-
     public int getId() {
         return id;
     }
@@ -129,10 +128,12 @@ public class Course {
         this.updatedAt = updatedAt;
     }
 
+    public String getSponsoredStatus() {
+        return isSponsored ? "Yes" : "No";
+    }
+
     @Override
     public String toString() {
         return "Course{" + "id=" + id + ", title=" + title + ", tagLine=" + tagLine + ", description=" + description + ", category=" + category + ", basicPackagePrice=" + basicPackagePrice + ", advancedPackagePrice=" + advancedPackagePrice + ", ownerId=" + ownerId + ", isSponsored=" + isSponsored + ", status=" + status + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + '}';
     }
-    
-    
 }

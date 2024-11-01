@@ -62,7 +62,7 @@ public class CourseListServlet extends HttpServlet {
             courses = courseDAO.getCoursesByCategory(category, page, pageSize);
             totalCourses = courseDAO.getTotalCoursesByCategory(category);
         }
-
+        
         // Tính toán số trang
         int totalPages = (int) Math.ceil((double) totalCourses / pageSize);
         if (totalPages < 1) {

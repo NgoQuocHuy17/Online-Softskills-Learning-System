@@ -10,22 +10,24 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Course;
+import model.User;
+import view.CourseDAO;
+import view.UserDAO;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
-import model.BlogPost;
-import model.Category;
-import model.User;
-import view.BlogPostDAO;
-import view.CategoryDAO;
-import view.UserDAO;
+import model.CourseContent;
+import model.CourseMedia;
+import view.CourseContentDAO;
+import view.CourseMediaDAO;
 
 /**
  *
  * @author Minh
  */
-@WebServlet(name = "BlogDetailsController", urlPatterns = {"/blog-details"})
-public class BlogDetailsController extends HttpServlet {
+@WebServlet(name = "CourseDetailsController", urlPatterns = {"/course-details"})
+public class CourseDetailsController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,37 +40,36 @@ public class BlogDetailsController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        BlogPostDAO blogPostDAO = new BlogPostDAO();
-        int id = Integer.parseInt(request.getParameter("id"));
-        BlogPost blogPost = blogPostDAO.select(id);
+        int id = Integer.parseInt(request.getParameter("courseId"));
+        
+        CourseDAO coursedao = new CourseDAO();
+        Course course = coursedao.getCourseById(id);
+        var courses = coursedao.select();
+        
+        CourseContentDAO courseContentDAO = new CourseContentDAO();
+        CourseContent courseContent = courseContentDAO.select(id);
+        
+        CourseMediaDAO courseMediaDAO = new CourseMediaDAO();
+        List<CourseMedia> courseMedias = courseMediaDAO.selectByCourseId(id);
+        courseMedias.sort(Comparator.comparing(CourseMedia::getDisplayOrder));
         
         UserDAO userDao = new UserDAO();
-        User author = userDao.select(blogPost.getAuthorId());
-    
+        int authorId = course.getOwnerId();
+        User author = userDao.getUserById(authorId);
         
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String formattedCreatedAt = blogPost.getCreatedAt().format(dtf);
-        String formattedUpdatedAt = blogPost.getUpdatedAt().format(dtf);
+        String formattedCreatedAt = course.getCreatedAt().toLocalDateTime().format(dtf);
+        String formattedUpdatedAt = course.getUpdatedAt().toLocalDateTime().format(dtf);
         
-        
-        
-        CategoryDAO catDAO = new CategoryDAO();
-        Category cat = catDAO.select(blogPost.getCategoryId());
-        
-        List<BlogPost> blogPosts = blogPostDAO.select();
-        
-        Comparator<BlogPost> com = Comparator.comparing(BlogPost::getCreatedAt).reversed();
-        
-        blogPosts.sort(com);
-        request.setAttribute("blogPost", blogPost);
+        request.setAttribute("courses", courses);
+        request.setAttribute("courseDetail", course);
+        request.setAttribute("courseContent", courseContent);
+        request.setAttribute("courseMedias", courseMedias);
         request.setAttribute("author", author);
-        request.setAttribute("blogPosts", blogPosts);
-        request.setAttribute("category", cat);
         request.setAttribute("formattedCreatedAt", formattedCreatedAt);
         request.setAttribute("formattedUpdatedAt", formattedUpdatedAt);
-        request.getRequestDispatcher("blog-details.jsp").forward(request, response);
+        request.getRequestDispatcher("course-details.jsp").forward(request, response);
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
