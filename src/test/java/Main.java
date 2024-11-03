@@ -1,29 +1,30 @@
 
 import java.util.List;
-import view.RegistrationDAO; // Đảm bảo import đúng package chứa RegistrationDAO
-import model.Registration; // Đảm bảo import đúng package chứa Registration
-import view.UserCourseDAO;
+import model.UserMedia;
+import view.UserMediaDAO;
 
 public class Main {
 
     public static void main(String[] args) {
-        UserCourseDAO userCourseDAO = new UserCourseDAO();
+        UserMediaDAO userMediaDAO = new UserMediaDAO();
 
-        // Sample user ID, page number, and page size for testing
-        int userId = 1; // Replace with a valid user ID from your database
-        int page = 1;   // First page
-        int pageSize = 10; // Number of courses per page
+        // Giả sử bạn đã có một userId để kiểm tra, thay đổi giá trị này theo ý bạn
+        int userId = 1; // Thay đổi thành userId mà bạn muốn kiểm tra
 
-        // Call the method to get course IDs
-        List<Integer> courseIds = userCourseDAO.getCourseIdsByUserId(userId, page, pageSize);
+        // Lấy danh sách hình ảnh của người dùng
+        List<UserMedia> images = userMediaDAO.getImagesByUserId(userId);
 
-        // Print the retrieved course IDs
-        if (courseIds.isEmpty()) {
-            System.out.println("No courses found for user ID: " + userId);
+        // Kiểm tra xem có hình ảnh nào không
+        if (images.isEmpty()) {
+            System.out.println("No images found for user ID: " + userId);
         } else {
-            System.out.println("Course IDs for user ID " + userId + " on page " + page + ":");
-            for (int id : courseIds) {
-                System.out.println(id);
+            // In thông tin các hình ảnh
+            System.out.println("Images for user ID: " + userId);
+            for (UserMedia image : images) {
+                System.out.println("ID: " + image.getId());
+                System.out.println("User ID: " + image.getUserId());
+                System.out.println("Media Type: " + image.getMediaType());
+                System.out.println("------------------------------");
             }
         }
     }
