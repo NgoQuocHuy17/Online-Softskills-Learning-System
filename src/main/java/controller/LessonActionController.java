@@ -64,7 +64,7 @@ public class LessonActionController extends HttpServlet {
             content.setContentDescription(contentDescription);
 
             // Define the absolute path to save files locally
-            String uploadPath = "D:/SWP_NHOM_4/target/OnlineSoftskillsLearningSystem-1.0-SNAPSHOT/assets/img";
+            String uploadPath = "C:/Users/hung6/OneDrive/Documents/GitHub/SWP_NHOM_4/target/OnlineSoftskillsLearningSystem-1.0-SNAPSHOT/assets/img";
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) {
                 uploadDir.mkdir(); // Create the directory if it doesn’t exist
@@ -133,7 +133,7 @@ public class LessonActionController extends HttpServlet {
             Part filePart = request.getPart("file");
             if (filePart != null && filePart.getSize() > 0) {
                 String fileName = filePart.getSubmittedFileName();
-                String uploadPath = "D:/SWP_NHOM_4/target/OnlineSoftskillsLearningSystem-1.0-SNAPSHOT/assets/img";
+                String uploadPath = "C:/Users/hung6/OneDrive/Documents/GitHub/SWP_NHOM_4/target/OnlineSoftskillsLearningSystem-1.0-SNAPSHOT/assets/img";
                 File uploadDir = new File(uploadPath);
                 if (!uploadDir.exists()) {
                     uploadDir.mkdir();

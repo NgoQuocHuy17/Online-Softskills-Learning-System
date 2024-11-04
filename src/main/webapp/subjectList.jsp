@@ -68,22 +68,22 @@
 
                             <c:choose>
                                 <c:when test="${loggedInUser.role == 'Admin'}">
-                                    <a href="course-detail?courseId=${course.id}" class="btn btn-primary">View</a>
+                                    <a href="course-details?courseId=${course.id}" class="btn btn-primary">View</a>
                                     <a href="subjectDetail?action=edit&courseId=${course.id}" class="btn btn-outline-success">Edit</a>
                                 </c:when>
                                 <c:when test="${loggedInUser.role == 'Teacher'}">
                                     <c:choose>
                                         <c:when test="${loggedInUser.id == course.ownerId}">
-                                            <a href="course-detail?courseId=${course.id}" class="btn btn-primary">View</a>
+                                            <a href="course-details?courseId=${course.id}" class="btn btn-primary">View</a>
                                             <a href="subjectDetail?action=edit&courseId=${course.id}" class="btn btn-outline-success">Edit</a>
                                         </c:when>
                                         <c:otherwise>
-                                            <a href="course-detail?courseId=${course.id}" class="btn btn-primary">View</a>
+                                            <a href="course-details?courseId=${course.id}" class="btn btn-primary">View</a>
                                         </c:otherwise>
                                     </c:choose>
                                 </c:when>
                                 <c:otherwise>
-                                    <a href="course-detail?courseId=${course.id}" class="btn btn-primary">View</a>
+                                    <a href="course-details?courseId=${course.id}" class="btn btn-primary">View</a>
                                 </c:otherwise>
                             </c:choose>
 

@@ -18,6 +18,7 @@ import model.Category;
 import model.User;
 import view.BlogPostDAO;
 import view.CategoryDAO;
+import view.TagDAO;
 import view.UserDAO;
 
 /**
@@ -54,12 +55,15 @@ public class BlogDetailsController extends HttpServlet {
         
         CategoryDAO catDAO = new CategoryDAO();
         Category cat = catDAO.select(blogPost.getCategoryId());
-        
+        var categories = catDAO.select();
         List<BlogPost> blogPosts = blogPostDAO.select();
-        
+        var tags = new TagDAO().select();
         Comparator<BlogPost> com = Comparator.comparing(BlogPost::getCreatedAt).reversed();
         
         blogPosts.sort(com);
+        
+        request.setAttribute("tags", tags);
+        request.setAttribute("categories", categories);
         request.setAttribute("blogPost", blogPost);
         request.setAttribute("author", author);
         request.setAttribute("blogPosts", blogPosts);

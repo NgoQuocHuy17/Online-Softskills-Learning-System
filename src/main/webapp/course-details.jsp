@@ -1,6 +1,3 @@
-<%@page import="model.CourseMedia"%>
-<%@page import="model.Course"%>
-<%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -20,11 +17,6 @@
         <link rel="stylesheet" href="assets/css/style.css">
 
         <style>
-            .media-slider {
-                position: relative;
-                width: 100%;
-                margin-bottom: 20px; /* Add margin to separate from content */
-            }
             .media-item {
                 display: none;
             }
@@ -44,6 +36,7 @@
             #nextBtn {
                 right: 10px;
             }
+            /* Add space below the package price list */
             /* Add more space below the package price list */
             .post-left ul li {
                 margin-bottom: 20px; /* Increased spacing between list items */
@@ -147,7 +140,7 @@
                                         </div>
 
                                         <!-- Course Content -->
-                                        <div>
+                                        <div class="course-content">
                                             <p>
                                                 <c:out value="${courseContent.content}"/>
                                             </p>
@@ -174,24 +167,17 @@
                                     <h4 class="card-title">Latest Courses</h4>
                                 </div>
                                 <div class="card-body">
-                                    <%
-                                        var courses = (List<Course>) request.getAttribute("courses");
-                                        var coursesMedias = (List<CourseMedia>) request.getAttribute("courseMedias");
-                                        for (int idx = 0; idx < 4; idx++) {
-                                                var course = courses.get(idx);
-                                                
-                                                
-                                    %>
+                                    <c:forEach var="blogPost" items="${blogPosts}" end="4">
                                         <li>
                                             <div class="post-thumb">
-                                                <a href="course-details?id=${course.id}">
-                                                    <img class="img-fluid" src="${course.fileName}" alt="">
+                                                <a href="blog-details.html?bloglistid=${blogPost.id}">
+                                                    <img class="img-fluid" src="${blogPost.thumbnailUrl}" alt="">
                                                 </a>
                                             </div>
                                             <div class="post-info">
                                                 <h4>
-                                                    <a href="course-details?id=${course.courseId}">
-                                                        <c:out value="${course.title}"/>
+                                                    <a href="BlogDetailsController?bloglistid=${blogPost.id}">
+                                                        <c:out value="${blogPost.title}"/>
                                                     </a>
                                                 </h4>
                                                 <p>
@@ -199,9 +185,7 @@
                                                 </p>
                                             </div>
                                         </li>
-                                    <%
-                                        }
-                                    %>
+                                    </c:forEach>
                                 </div>
                             </div>
                             <div class="card category-widget">

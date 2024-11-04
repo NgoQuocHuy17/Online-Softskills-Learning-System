@@ -51,7 +51,7 @@
         <jsp:include page="header.jsp"/>
 
         <div class="container mt-5">
-            <h1 class="text-center mb-4">Create New Blog Post</h1>
+            <h1 class="text-center mb-4">Blog Update</h1>
 
             <form action="blog-create" method="post" enctype="multipart/form-data">
                 <div class="form-group">
