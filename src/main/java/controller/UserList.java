@@ -27,6 +27,12 @@ public class UserList extends HttpServlet {
             page = Integer.parseInt(request.getParameter("page"));
         }
 
+        // Lấy pageSize từ request (có thể chỉnh sửa theo yêu cầu)
+        String pageSizeParam = request.getParameter("pageSize");
+        if (pageSizeParam != null && !pageSizeParam.isEmpty()) {
+            pageSize = Integer.parseInt(pageSizeParam);
+        }
+
         // Lấy các tham số lọc và tìm kiếm từ request
         String genderFilter = request.getParameter("gender");
         if (genderFilter == null || genderFilter.isEmpty()) {
@@ -75,9 +81,25 @@ public class UserList extends HttpServlet {
             request.setAttribute("emails_" + user.getId(), emails);
         }
 
+        // Lấy các tham số 'HideField' từ request
+        String hideFullName = request.getParameter("hideFullName");
+        String hideGender = request.getParameter("hideGender");
+        String hideEmail = request.getParameter("hideEmail");
+        String hideMobile = request.getParameter("hideMobile");
+        String hideRole = request.getParameter("hideRole");
+        String hideStatus = request.getParameter("hideStatus");
+
+        request.setAttribute("hideFullName", hideFullName);
+        request.setAttribute("hideGender", hideGender);
+        request.setAttribute("hideEmail", hideEmail);
+        request.setAttribute("hideMobile", hideMobile);
+        request.setAttribute("hideRole", hideRole);
+        request.setAttribute("hideStatus", hideStatus);
+
         // Gửi danh sách users và các thông tin phân trang đến trang JSP
         request.setAttribute("userList", userList);
         request.setAttribute("currentPage", page);
+        request.setAttribute("pageSize", pageSize);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("genderFilter", genderFilter);
         request.setAttribute("roleFilter", roleFilter);
