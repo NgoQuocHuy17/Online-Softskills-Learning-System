@@ -1,9 +1,4 @@
 <%-- 
-    Document   : blog-update
-    Created on : Nov 1, 2024, 8:22:43 AM
-    Author     : Minh
---%>
-<%-- 
     Document   : blog-create
     Created on : Nov 1, 2024, 8:22:43 AM
     Author     : Minh
