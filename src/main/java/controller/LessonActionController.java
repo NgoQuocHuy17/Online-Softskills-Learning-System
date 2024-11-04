@@ -7,8 +7,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import model.Lesson;
 import model.LessonContent;
 import view.LessonDAO;
@@ -30,7 +31,11 @@ public class LessonActionController extends HttpServlet {
             deleteLessonContent(request, response);
         } else if ("addContent".equals(action)) {
             addLessonContent(request, response);
+            
+        }else if("getContent".equals(action)){
+            
         }
+        
     }
 
     private void updateLesson(HttpServletRequest request, HttpServletResponse response)
@@ -63,27 +68,13 @@ public class LessonActionController extends HttpServlet {
             String contentDescription = request.getParameter("contentdes");
             content.setContentDescription(contentDescription);
 
-            // Define the absolute path to save files locally
-            String uploadPath = "C:/Users/hung6/OneDrive/Documents/GitHub/SWP_NHOM_4/target/OnlineSoftskillsLearningSystem-1.0-SNAPSHOT/assets/img";
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir(); // Create the directory if it doesn’t exist
-            }
-
             // Handle different content types
             if ("image".equals(contentType) || "pdf".equals(contentType)) {
-                Part filePart = request.getPart("file"); // Adjust to match the form's file input name
+                Part filePart = request.getPart("file");
                 if (filePart != null && filePart.getSize() > 0) {
-                    String originalFileName = filePart.getSubmittedFileName();
-
-                    // Generate a unique file name to avoid collisions
-                    String uniqueFileName = originalFileName;
-                    String filePath = uploadPath + File.separator + uniqueFileName;
-
-                    filePart.write(filePath);
-
-                    // Update content URL with a relative path for accessibility
-                    content.setContentURL(uniqueFileName);
+                    // Convert file content to byte array
+                    byte[] fileData = readInputStreamToByteArray(filePart.getInputStream());
+                    content.setMediaData(fileData);
                 }
             } else if ("text".equals(contentType)) {
                 String textContent = request.getParameter("textContent");
@@ -110,7 +101,7 @@ public class LessonActionController extends HttpServlet {
         int lessonId = Integer.parseInt(request.getParameter("lessonId"));
         response.sendRedirect("LessonDetailController?lessonID=" + lessonId);
     }
-
+   
     private void addLessonContent(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int lessonId = Integer.parseInt(request.getParameter("lessonId"));
@@ -122,7 +113,7 @@ public class LessonActionController extends HttpServlet {
         // Get the maximum order for the current lesson
         int maxOrder = contentDAO.getMaxOrderForLesson(lessonId);
 
-        LessonContent content = new LessonContent(0, "", "", "", "", "", "", maxOrder + 1); // Set order to maxOrder + 1
+        LessonContent content = new LessonContent();
 
         content.setLessonId(lessonId);
         content.setContentType(contentType);
@@ -132,16 +123,9 @@ public class LessonActionController extends HttpServlet {
         if ("image".equals(contentType) || "pdf".equals(contentType)) {
             Part filePart = request.getPart("file");
             if (filePart != null && filePart.getSize() > 0) {
-                String fileName = filePart.getSubmittedFileName();
-                String uploadPath = "C:/Users/hung6/OneDrive/Documents/GitHub/SWP_NHOM_4/target/OnlineSoftskillsLearningSystem-1.0-SNAPSHOT/assets/img";
-                File uploadDir = new File(uploadPath);
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdir();
-                }
-
-                String filePath = uploadPath + File.separator + fileName;
-                filePart.write(filePath);
-                content.setContentURL(fileName);
+                // Convert file content to byte array
+                byte[] fileData = readInputStreamToByteArray(filePart.getInputStream());
+                content.setMediaData(fileData);
             }
         } else if ("video".equals(contentType) || "quiz".equals(contentType)) {
             String contentURL = request.getParameter("contentURL");
@@ -156,6 +140,18 @@ public class LessonActionController extends HttpServlet {
 
         // Redirect to lesson details page
         response.sendRedirect("LessonDetailController?lessonID=" + lessonId);
+    }
+
+    // Helper method to convert InputStream to byte array
+    private byte[] readInputStreamToByteArray(InputStream inputStream) throws IOException {
+        try (ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+            int bytesRead;
+            byte[] data = new byte[1024];
+            while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, bytesRead);
+            }
+            return buffer.toByteArray();
+        }
     }
 
     @Override
