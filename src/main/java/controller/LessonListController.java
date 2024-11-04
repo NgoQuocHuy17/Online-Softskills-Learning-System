@@ -34,8 +34,9 @@ public class LessonListController extends HttpServlet {
 
         // Get all lessons based on course ID
         LessonDAO lessonDAO = new LessonDAO();
+        
         List<Lesson> allLessons = lessonDAO.getLessonsByCourseId(courseId);
-
+       if(!allLessons.isEmpty()){
         // List for filtered lessons
         List<Lesson> filteredLessons = new ArrayList<>();
 
@@ -85,7 +86,7 @@ public class LessonListController extends HttpServlet {
             request.setAttribute("itemsPerPage", pageSize); // Add this line to send itemsPerPage to JSP
             request.setAttribute("status", status); // Pass the status back to JSP
         }
-
+       }
         RequestDispatcher dispatcher = request.getRequestDispatcher("LessonList.jsp");
         dispatcher.forward(request, response);
     }
