@@ -6,16 +6,15 @@ package view;
 
 import java.util.ArrayList;
 import java.util.List;
-import model.UserVideo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Base64;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.UserMedia;
+import model.UserVideo;
 
 public class UserMediaDAO extends DBContext<UserVideo> {
 

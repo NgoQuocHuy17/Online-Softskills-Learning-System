@@ -7,7 +7,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Register</title>
+        <title>Register Successfully</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
         <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -21,19 +21,13 @@
                 <div class="content">
                     <div class="account-box">
                         <div>
-                            <h3><span></span> Verify Successful</h3>
+                            <h3><span></span>Register Successfully</h3>
                             <p class="text-muted">Click to the link on your email to activate your account</p>
-
                             <a href="login.jsp" class="btn btn-primary">Back to Login</a>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
-
-        <script src="assets/js/jquery-3.6.0.min.js"></script>
-        <script src="assets/js/bootstrap.bundle.min.js"></script>
-        <script src="assets/js/script.js"></script>
     </body>
 </html>

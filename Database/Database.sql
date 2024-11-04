@@ -29,13 +29,6 @@ CREATE TABLE user_media (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-CREATE TABLE user_videos (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    user_id INT NOT NULL,
-    video_url VARCHAR(255) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
-
 -- Table: user_contacts
 CREATE TABLE user_contacts (
     id INT IDENTITY(1,1) PRIMARY KEY,           

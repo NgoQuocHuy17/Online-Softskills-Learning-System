@@ -1,4 +1,3 @@
-package controller;
 
 import view.UserDAO;
 import model.User;
@@ -12,8 +11,8 @@ import java.util.List;
 import model.UserContact;
 import view.UserContactDAO;
 
-@WebServlet(name = "UserList", urlPatterns = {"/UserList"})
-public class UserList extends HttpServlet {
+@WebServlet(name = "UserListTest", urlPatterns = {"/UserListTest"})
+public class UserListTest extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -86,6 +85,6 @@ public class UserList extends HttpServlet {
         request.setAttribute("sort", sortBy);
         request.setAttribute("sortOrder", sortOrder);
 
-        request.getRequestDispatcher("/UserList.jsp").forward(request, response);
+        request.getRequestDispatcher("/UserListTest.jsp").forward(request, response);
     }
 }

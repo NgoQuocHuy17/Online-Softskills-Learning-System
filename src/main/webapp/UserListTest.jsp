@@ -80,7 +80,7 @@
                 <div class="container-fluid">
                     <div class="row align-items-center">
                         <div class="col-md-4 col-12">
-                            <form class="search-form custom-search-form" action="UserList" method="get">
+                            <form class="search-form custom-search-form" action="UserListTest" method="get">
                                 <div class="input-group">
                                     <input type="text" name="searchTerm" placeholder="Search user..." class="form-control" value="${param.searchTerm}">
                                     <input type="hidden" name="gender" value="${param.gender}"/>
@@ -92,24 +92,49 @@
                         </div>
                         <div class="col-md-4 col-12">
                             <form class="filter-form" action="UserList" method="get">
-                                <div class="input-group">
+                                <div class="container">
                                     <input type="hidden" name="searchTerm" value="${param.searchTerm}"/>
-                                    <select name="gender" class="form-control">
-                                        <option value="">All Genders</option>
-                                        <option value="Male" ${param.gender == 'Male' ? 'selected' : ''}>Male</option>
-                                        <option value="Female" ${param.gender == 'Female' ? 'selected' : ''}>Female</option>
-                                    </select>
-                                    <select name="role" class="form-control">
-                                        <option value="">All Roles</option>
-                                        <option value="Admin" ${param.role == 'Admin' ? 'selected' : ''}>Admin</option>
-                                        <option value="User" ${param.role == 'User' ? 'selected' : ''}>User</option>
-                                    </select>
-                                    <select name="status" class="form-control">
-                                        <option value="">All Statuses</option>
-                                        <option value="Valid" ${param.status == 'Valid' ? 'selected' : ''}>Valid</option>
-                                        <option value="Invalid" ${param.status == 'Invalid' ? 'selected' : ''}>Invalid</option>
-                                    </select>
-                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input type="checkbox" name="gender" value="Male" id="genderMale" class="form-check-input" ${param.gender == 'Male' ? 'checked' : ''}>
+                                                <label for="genderMale" class="form-check-label">Male</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" name="gender" value="Female" id="genderFemale" class="form-check-input" ${param.gender == 'Female' ? 'checked' : ''}>
+                                                <label for="genderFemale" class="form-check-label">Female</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input type="checkbox" name="role" value="Admin" id="roleAdmin" class="form-check-input" ${param.role == 'Admin' ? 'checked' : ''}>
+                                                <label for="roleAdmin" class="form-check-label">Admin</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" name="role" value="Teacher" id="roleTeacher" class="form-check-input" ${param.role == 'Teacher' ? 'checked' : ''}>
+                                                <label for="roleTeacher" class="form-check-label">Teacher</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" name="role" value="Student" id="roleStudent" class="form-check-input" ${param.role == 'Student' ? 'checked' : ''}>
+                                                <label for="roleStudent" class="form-check-label">Student</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input type="checkbox" name="status" value="Valid" id="statusValid" class="form-check-input" ${param.status == 'Valid' ? 'checked' : ''}>
+                                                <label for="statusValid" class="form-check-label">Valid</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" name="status" value="Invalid" id="statusInvalid" class="form-check-input" ${param.status == 'Invalid' ? 'checked' : ''}>
+                                                <label for="statusInvalid" class="form-check-label">Invalid</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 text-center mt-3">
+                                            <button type="submit" class="btn btn-primary">Filter</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>
