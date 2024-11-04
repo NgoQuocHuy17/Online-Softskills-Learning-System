@@ -20,7 +20,7 @@ public class LessonDAO extends DBContext<Lesson> {
 
     public List<Lesson> getLessonsByCourseId(int courseId) {
         List<Lesson> lessons = new ArrayList<>();
-        String sql = "SELECT LessonID, CourseID, Title, Description, CreatedDate, LastUpdatedDate, Status FROM lesson WHERE CourseID = ?";
+        String sql = "SELECT LessonID, CourseID, Title, Description, CreatedDate, LastUpdatedDate, Status FROM Lesson WHERE CourseID = ?";
 
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, courseId); // Set courseId parameter in the query
@@ -47,7 +47,7 @@ public class LessonDAO extends DBContext<Lesson> {
     }
 
     public Lesson getLessonById(int lessonId) {
-        String query = "SELECT * FROM lesson WHERE LessonID = ?";
+        String query = "SELECT * FROM Lesson WHERE LessonID = ?";
         Lesson lesson = null;
 
         try (PreparedStatement ps = super.getConn().prepareStatement(query)) {
@@ -73,7 +73,7 @@ public class LessonDAO extends DBContext<Lesson> {
     }
 
     public boolean updateLesson(Lesson lesson) {
-        String query = "UPDATE lesson SET "
+        String query = "UPDATE Lesson SET "
                 + "CourseID = ?, "
                 + "Title = ?, "
                 + "Description = ?, "

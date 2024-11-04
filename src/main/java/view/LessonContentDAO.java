@@ -15,7 +15,7 @@ public class LessonContentDAO extends DBContext<LessonContent> {
 
     public List<LessonContent> getAllContentByLessonId(int lessonId) {
         List<LessonContent> lessonContents = new ArrayList<>();
-        String sql = "SELECT ContentID, LessonID, ContentURL, ContentType, ContentDescription, TextContent, OrderInLesson, MediaData, CreatedDate FROM lesson_content WHERE LessonID = ? ORDER BY OrderInLesson";
+        String sql = "SELECT ContentID, LessonID, ContentURL, ContentType, ContentDescription, TextContent, OrderInLesson, MediaData, CreatedDate FROM LessonContent WHERE LessonID = ? ORDER BY OrderInLesson";
 
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, lessonId);
@@ -42,7 +42,7 @@ public class LessonContentDAO extends DBContext<LessonContent> {
     }
 
     public boolean addContent(LessonContent content) {
-        String sql = "INSERT INTO lesson_content (LessonID, ContentURL, ContentType, ContentDescription, TextContent, OrderInLesson, MediaData) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO LessonContent (LessonID, ContentURL, ContentType, ContentDescription, TextContent, OrderInLesson, MediaData) VALUES (?, ?, ?, ?, ?, ?, ?)";
         boolean isAdded = false;
 
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
@@ -65,7 +65,7 @@ public class LessonContentDAO extends DBContext<LessonContent> {
 
     public LessonContent getContentById(int contentId) {
         LessonContent content = null;
-        String sql = "SELECT ContentID, LessonID, ContentURL, ContentType, ContentDescription, TextContent, OrderInLesson, MediaData, CreatedDate FROM lesson_content WHERE ContentID = ?";
+        String sql = "SELECT ContentID, LessonID, ContentURL, ContentType, ContentDescription, TextContent, OrderInLesson, MediaData, CreatedDate FROM LessonContent WHERE ContentID = ?";
 
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, contentId);
@@ -91,7 +91,7 @@ public class LessonContentDAO extends DBContext<LessonContent> {
     }
 
     public boolean updateContentById(LessonContent content) {
-        String sql = "UPDATE lesson_content SET ContentURL = ?, ContentType = ?, ContentDescription = ?, TextContent = ?, OrderInLesson = ?, MediaData = ? WHERE ContentID = ?";
+        String sql = "UPDATE LessonContent SET ContentURL = ?, ContentType = ?, ContentDescription = ?, TextContent = ?, OrderInLesson = ?, MediaData = ? WHERE ContentID = ?";
         boolean isUpdated = false;
 
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
@@ -111,8 +111,21 @@ public class LessonContentDAO extends DBContext<LessonContent> {
 
         return isUpdated;
     }
+    public String getContentTypeById(int contentId) {
+        String sql = "SELECT ContentType FROM LessonContent WHERE ContentID = ?";
+        try (Connection conn = getConn(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, contentId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("ContentType");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // No content type found
+    }
    public byte[] getContentDataById(int contentId) {
-        String sql = "SELECT MediaData FROM lesson_content WHERE ContentID = ?";
+        String sql = "SELECT MediaData FROM LessonContent WHERE ContentID = ?";
         try (Connection conn = getConn(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, contentId);
             ResultSet rs = stmt.executeQuery();
@@ -124,8 +137,9 @@ public class LessonContentDAO extends DBContext<LessonContent> {
         }
         return null; // No data found
     }
+    
     public boolean deleteContentById(int contentId) {
-        String sql = "DELETE FROM lesson_content WHERE ContentID = ?";
+        String sql = "DELETE FROM LessonContent WHERE ContentID = ?";
         boolean isDeleted = false;
 
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
@@ -141,7 +155,7 @@ public class LessonContentDAO extends DBContext<LessonContent> {
 
     public int getMaxOrderForLesson(int lessonId) {
         int maxOrder = 0;
-        String sql = "SELECT MAX(OrderInLesson) FROM lesson_content WHERE LessonID = ?";
+        String sql = "SELECT MAX(OrderInLesson) FROM LessonContent WHERE LessonID = ?";
 
         try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, lessonId);
