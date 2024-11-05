@@ -16,6 +16,7 @@ import model.User;
  *
  * @author Minh
  */
+<<<<<<< HEAD
 <<<<<<< HEAD:src/main/java/controller/FilterGuest.java
 @WebFilter({"/profile-settings.jsp", "/my-registrations.jsp", "/my-courses.jsp", "/subject-list.jsp", "/subject-details.jsp", "blog-list.jsp"})
 public class FilterGuest implements Filter {
@@ -23,6 +24,10 @@ public class FilterGuest implements Filter {
 @WebFilter({"/blog-list.html", "/profile.jsp", "/profile.html", "/changepass"})
 public class GuestFilter implements Filter {
 >>>>>>> parent of 7104985 (updated Filters):src/main/java/controller/GuestFilter.java
+=======
+@WebFilter({"/blog-list.html", "/profile.jsp", "/profile.html", "/changepass"})
+public class GuestFilter implements Filter {
+>>>>>>> parent of 7104985 (updated Filters)
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
