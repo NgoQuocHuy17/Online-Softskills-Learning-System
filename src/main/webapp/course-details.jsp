@@ -1,3 +1,6 @@
+<%@page import="model.LessonContent"%>
+<%@page import="java.util.List"%>
+<%@page import="model.Lesson"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -218,6 +221,26 @@
                             </div>
                         </div>
                     </div>
+                                            <%
+                                            var lessons = (List<Lesson>) request.getAttribute("lessons");
+                                            var allLessonContent = (List<List<LessonContent>>) request.getAttribute("allLessonContent");
+                                            for (Lesson lesson : lessons) {
+                                            %>
+                                            <h1>${lesson.title}</h1>
+                                            <h1>${lesson.description}</h1>
+                                            <h1>${lesson.createdDate}</h1>
+                                            <h1>${lesson.lastUpdatedDate}</h1>
+                                            <h1>${lesson.status}</h1>
+                                            <%
+                                                    for (var listLessonContent : allLessonContent) {
+                                                        for (LessonContent lessonContent : listLessonContent) {
+                                            %>
+                                                            
+                                            <%
+                                                }
+                                                        }
+                                                }
+                                            %>
                 </div>
             </div>
         </div>

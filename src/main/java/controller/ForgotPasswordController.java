@@ -25,7 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import view.UserDAO;
 
-@WebServlet("/forgotPassword")
+@WebServlet("/forgot-password")
 public class ForgotPasswordController extends HttpServlet {
 
     private static final long OTP_VALIDITY_PERIOD = 15 * 60 * 1000;
@@ -43,7 +43,7 @@ public class ForgotPasswordController extends HttpServlet {
             Logger.getLogger(ForgotPasswordController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             request.setAttribute("message2", "EMAIL IS NOT IN DATABASE");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("forgotPassword.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("forgot-password.jsp");
             dispatcher.forward(request, response);
             return;
         }
@@ -83,7 +83,7 @@ public class ForgotPasswordController extends HttpServlet {
             } catch (MessagingException e) {
                 throw new RuntimeException(e);
             }
-            dispatcher = request.getRequestDispatcher("EnterOtp.jsp");
+            dispatcher = request.getRequestDispatcher("enter-otp.jsp");
             request.setAttribute("message", "OTP is sent to your email id");
             mySession.setAttribute("otp", otpvalue);
             mySession.setAttribute("email", email);

@@ -1,24 +1,13 @@
-<%-- 
-    Document   : UserDetails
-    Created on : 7 thg 10, 2024, 16:35:04
-    Author     : hung6
---%>
-
-<%@page import="model.UserContact"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="model.User" %>
+<%@ page import="model.Course, model.Package" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
-
 <html lang="en">
-
-    <!-- Mirrored from mentoring.dreamguystech.com/html/template/profile-settings.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 May 2023 10:32:21 GMT -->
-
     <head>
         <meta charset="utf-8">
-        <title>User Details</title>
+        <title>Course Register</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
         <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -54,13 +43,12 @@
                             </div>
                             <ul class="main-nav">
                                 <li>
-                                    <a href="UserList">Back to User List</a>
+                                    <a href="course">Back to course list</a>
                                 </li>
                             </ul>
 
                         </div>
                         <ul class="nav header-navbar-rht">
-
                             <li class="nav-item dropdown has-arrow logged-item">
                                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                                     <span class="user-img">
@@ -92,87 +80,166 @@
                 <div class="container-fluid">
                     <div class="row align-items-center">
                         <div class="col-md-12 col-12">
-                            <h2 class="breadcrumb-title">Add New User</h2>
+                            <h2 class="breadcrumb-title">Course Register</h2>
                         </div>
-
                     </div>
                 </div>
             </div>
+
+            <%
+                // Lấy thông tin khóa học từ servlet
+                Course course = (Course) request.getAttribute("course");
+                String choosingPackageId = (String) request.getAttribute("choosingPackageId");
+                List<Package> packages = (List<Package>) request.getAttribute("packages");
+
+                // Kiểm tra xem có user nào đang đăng nhập hay không
+                String user = (String) session.getAttribute("user");
+            %>
 
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="card">
                             <div class="card-body">
-                                <form action="AddUser" method="post">
-                                    <div class="row form-row">
-                                        <%
-                                            String alertMessage = (String) request.getAttribute("alertMessage");
-                                            if (alertMessage != null) {
-                                        %>
-                                        <div class="alert alert-danger">
-                                            <%= alertMessage%>
-                                        </div>
-                                        <%
-                                            }
-                                            String successMessage = (String) request.getAttribute("successMessage");
-                                            if (successMessage != null) {
-                                        %>
-                                        <div class="alert alert-success">
-                                            <%= successMessage%>
-                                        </div>
-                                        <%
-                                            }
-                                        %>
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label>Full Name</label>
-                                                <input type="text" class="form-control" name="fullName">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label>Gender</label>
-                                                <select class="form-control" name="gender">
-                                                    <option value="Male" >Male</option>
-                                                    <option value="Female" >Female</option>
-                                                    <option value="Other" >Other</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label>Role</label>
-                                                <select class="form-control" name="role">
-                                                    <option value="Admin" >Admin</option>
-                                                    <option value="Teacher" >Teacher</option>
-                                                    <option value="Student" >Student</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label>Status</label>
-                                                <select class="form-control" name="status">
-                                                    <option value="Active" >Active</option>
-                                                    <option value="Inactive" >Inactive</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label>Email</label>
-                                            <div class="form-group">
-                                                <input type="text" class="form-control mb-2" name="email">
-                                            </div>
-                                        </div>
+                                <!-- Thông tin về khóa học và lựa chọn gói -->
+                                <h2><%= course.getTitle()%></h2>
+                                <h4><%= course.getTagLine()%></h4>
+                                <p><%= course.getDescription()%></p>
+
+                                <!-- Form chọn gói -->
+                                <form id="packageForm" action="course-register" method="get">
+                                    <input type="hidden" name="courseId" value="<%= course.getId()%>">
+                                    <div class="form-group">
+                                        <label for="packageSelect">Select Package:</label>
+                                        <select class="form-control" id="packageSelect" name="choosingPackageId" required>
+                                            <c:forEach var="pkg" items="${packages}">
+                                                <option value="${pkg.id}" 
+                                                        <c:if test="${pkg.id == param.choosingPackageId}">selected</c:if>>
+                                                    ${pkg.packageName}
+                                                </option>
+                                            </c:forEach>
+                                        </select>
                                     </div>
-                                    <div class="submit-section">
-                                        <button type="submit" class="btn btn-primary submit-btn">Add</button>
-                                    </div>
+                                    <button type="submit" class="btn btn-primary">Choose Package</button>
+                                    <c:if test="${selectedPackagePrice != null}">
+                                        <h4>
+                                            <strong>Price for the package: </strong> ${selectedPackagePrice}$
+                                        </h4>
+                                        <%if (user != null) {%>
+                                        <button type="submit" class="btn btn-primary">Register</button>
+                                        <%}%>
+                                    </c:if>
                                 </form>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Khối đăng ký khóa học nếu chưa có người dùng đăng nhập -->
+                    <div class="row mt-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <%
+                                    if (user == null) {
+                                %>
+                                <h3>Register for this Course</h3>
+                                <form action="RegisterCourse" method="post">
+                                    <input type="hidden" name="choosingPackageId" value="<%= choosingPackageId%>">
+
+                                    <div class="form-group">
+                                        <label>Full Name</label>
+                                        <input type="text" class="form-control" name="fullName" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Gender</label>
+                                        <select class="form-control" name="gender" required>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>Login Email</label>
+                                        <input type="email" class="form-control" name="email" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Email for contact</label>
+                                        <div id="emailInputs">
+                                            <div class="input-group mb-2">
+                                                <input type="email" class="form-control" name="emails[]" placeholder="Enter email" required>
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text">
+                                                        <input type="radio" name="preferredContact" value="email0" checked> Prefer
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-secondary" id="addEmail">+ Add Email</button>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Phone Numbers</label>
+                                        <div id="phoneInputs">
+                                            <div class="input-group mb-2">
+                                                <input type="text" class="form-control" name="phones[]" placeholder="Enter phone number" required>
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text">
+                                                        <input type="radio" name="preferredContact" value="phone0"> Prefer
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-secondary" id="addPhone">+ Add Phone</button>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Register this course</button>
+                                </form>
+                                <%
+                                    }
+                                %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- JavaScript to dynamically add input fields -->
+                    <script>
+                        let emailIndex = 1;
+                        let phoneIndex = 1;
+
+                        document.getElementById('addEmail').addEventListener('click', function () {
+                            var emailInputs = document.getElementById('emailInputs');
+                            var newEmailInputGroup = document.createElement('div');
+                            newEmailInputGroup.className = 'input-group mb-2';
+                            newEmailInputGroup.innerHTML = `
+                                <input type="email" class="form-control" name="emails[]" placeholder="Enter another email">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <input type="radio" name="preferredContact" value="email${emailIndex}"> Prefer
+                                    </div>
+                                </div>
+                            `;
+                            emailInputs.appendChild(newEmailInputGroup);
+                            emailIndex++;
+                        });
+
+                        document.getElementById('addPhone').addEventListener('click', function () {
+                            var phoneInputs = document.getElementById('phoneInputs');
+                            var newPhoneInputGroup = document.createElement('div');
+                            newPhoneInputGroup.className = 'input-group mb-2';
+                            newPhoneInputGroup.innerHTML = `
+                                <input type="text" class="form-control" name="phones[]" placeholder="Enter another phone number">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <input type="radio" name="preferredContact" value="phone${phoneIndex}"> Prefer
+                                    </div>
+                                </div>
+                            `;
+                            phoneInputs.appendChild(newPhoneInputGroup);
+                            phoneIndex++;
+                        });
+                    </script>
                 </div>
             </div>
 

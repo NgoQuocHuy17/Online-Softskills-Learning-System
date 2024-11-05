@@ -17,7 +17,7 @@ import model.CourseMedia;
 import model.User;
 import view.CourseContentDAO;
 
-@WebServlet(name = "SubjectDetailServlet", urlPatterns = {"/subjectDetail"})
+@WebServlet(name = "SubjectDetailServlet", urlPatterns = {"/subject-details"})
 public class SubjectDetailServlet extends HttpServlet {
 
     private final CourseDAO courseDAO = new CourseDAO();
@@ -83,7 +83,7 @@ public class SubjectDetailServlet extends HttpServlet {
         request.setAttribute("mediaList", mediaList);
         request.setAttribute("maxOrder", maxOrder);
 
-        request.getRequestDispatcher("/editSubjectDetail.jsp").forward(request, response);
+        request.getRequestDispatcher("subject-details.jsp").forward(request, response);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class SubjectDetailServlet extends HttpServlet {
             }
         }
 
-        response.sendRedirect("subjectDetail?action=edit&courseId=" + courseId);
+        response.sendRedirect("subject-details?action=edit&courseId=" + courseId);
     }
 
     private void updateCourseDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -210,7 +210,7 @@ public class SubjectDetailServlet extends HttpServlet {
             // Sắp xếp lại thứ tự hiển thị
             courseMediaDAO.reorderDisplayOrderAfterRemoval(courseId);
 
-            response.sendRedirect("subjectDetail?action=edit&courseId=" + courseId);
+            response.sendRedirect("subject-details?action=edit&courseId=" + courseId);
         } catch (NumberFormatException e) {
             response.sendRedirect("SubjectList");
         }

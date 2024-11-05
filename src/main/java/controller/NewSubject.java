@@ -19,7 +19,7 @@ import view.CourseDAO;
 import view.ThumbnailDAO;
 import view.UserDAO;
 
-@WebServlet(name = "NewSubject", urlPatterns = {"/NewSubject"})
+@WebServlet(name = "NewSubject", urlPatterns = {"/new-subject"})
 @MultipartConfig
 public class NewSubject extends HttpServlet {
 

@@ -51,7 +51,7 @@
                     <input type="hidden" name="status" value="${status}"/>
                 </form>
             </div>
-            <form class="filter-status mb-4" method="get" action="LessonListController">
+            <form class="filter-status mb-4" method="get" action="lesson-list">
                 <div class="form-group">
                     <label for="status">Filter by Status:</label>
                     <select name="status" class="form-control" onchange="this.form.submit()">
@@ -96,7 +96,7 @@
                             </td>
                             <td>
                                 <!-- Activate/Deactivate Button -->
-                                <form action="LessonListController" method="post" class="d-inline">
+                                <form action="lesson-list" method="post" class="d-inline">
                                     <input type="hidden" name="courseId" value="${courseId}"/>
                                     <input type="hidden" name="lessonId" value="${lesson.id}">
                                     <input type="hidden" name="page" value="${currentPage}"/>
@@ -112,7 +112,7 @@
                                 </form>
 
                                 <!-- Edit Lesson Button -->
-                                <a href="LessonDetailController?lessonID=${lesson.id}" class="btn btn-primary btn-sm">Edit</a>
+                                <a href="lesson-details?lessonID=${lesson.id}" class="btn btn-primary btn-sm">Edit</a>
                             </td>
                         </tr>
                     </c:forEach>
@@ -133,7 +133,7 @@
 
             <!-- Button to add a new lesson -->
             <div class="text-end">
-                <a href="LessonDetails" class="btn btn-success">Add New Lesson</a>
+                <a href="lesson-details" class="btn btn-success">Add New Lesson</a>
             </div>
         </div>
         <jsp:include page="footer.jsp" />

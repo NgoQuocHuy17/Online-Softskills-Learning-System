@@ -47,7 +47,7 @@ public class LessonActionController extends HttpServlet {
             lessonDAO.updateLesson(lesson);
         }
 
-        response.sendRedirect("LessonDetailController?lessonID=" + lessonId);
+        response.sendRedirect("lesson-details?lessonID=" + lessonId);
     }
 
     private void updateLessonContent(HttpServletRequest request, HttpServletResponse response)
@@ -98,7 +98,7 @@ public class LessonActionController extends HttpServlet {
         }
 
         int lessonId = Integer.parseInt(request.getParameter("lessonId"));
-        response.sendRedirect("LessonDetailController?lessonID=" + lessonId);
+        response.sendRedirect("lesson-details?lessonID=" + lessonId);
     }
 
     private void deleteLessonContent(HttpServletRequest request, HttpServletResponse response)
@@ -108,7 +108,7 @@ public class LessonActionController extends HttpServlet {
         contentDAO.deleteContentById(contentId);
 
         int lessonId = Integer.parseInt(request.getParameter("lessonId"));
-        response.sendRedirect("LessonDetailController?lessonID=" + lessonId);
+        response.sendRedirect("lesson-details?lessonID=" + lessonId);
     }
 
     private void addLessonContent(HttpServletRequest request, HttpServletResponse response)
@@ -155,7 +155,7 @@ public class LessonActionController extends HttpServlet {
         contentDAO.addContent(content);
 
         // Redirect to lesson details page
-        response.sendRedirect("LessonDetailController?lessonID=" + lessonId);
+        response.sendRedirect("lesson-details?lessonID=" + lessonId);
     }
 
     @Override

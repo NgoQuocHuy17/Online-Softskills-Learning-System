@@ -90,7 +90,7 @@
                     <div class="row align-items-center">
 
                         <div class="col-md-4 col-12">
-                            <form class="search-form custom-search-form" action="UserList" method="get">
+                            <form class="search-form custom-search-form" action="user-list" method="get">
                                 <div class="input-group">
                                     <input type="text" name="searchTerm" placeholder="Search user..." class="form-control" value="${param.searchTerm}">
                                     <input type="hidden" name="gender" value="${param.gender}"/>
@@ -103,7 +103,7 @@
                         </div>
 
                         <div class="col-md-4 col-12">
-                            <form class="filter-form" action="UserList" method="get">
+                            <form class="filter-form" action="user-list" method="get">
                                 <div class="input-group">
                                     <input type="hidden" name="searchTerm" value="${param.searchTerm}"/>
                                     <select name="gender" class="form-control">
@@ -128,7 +128,7 @@
                         </div>
 
                         <div class="col-md-4 col-12 text-right">
-                            <a href="AddUser.jsp" class="btn btn-success">Add User</a>
+                            <a href="add-user.jsp" class="btn btn-success">Add User</a>
                         </div>
                     </div>
                 </div>
@@ -246,7 +246,7 @@
                                                 </c:choose>
                                             </td>
                                             <td>
-                                                <form action="UserDetails" method="get">
+                                                <form action="user-details" method="get">
                                                     <input type="hidden" name="userId" value="${user.id}"/>
                                                     <button type="submit" class="btn btn-primary">Details</button>
                                                 </form>

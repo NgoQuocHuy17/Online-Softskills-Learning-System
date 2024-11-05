@@ -86,7 +86,7 @@
                                 <a href="course-details?courseId=${course.id}" class="btn btn-primary">View Details</a>
 
                                 <!-- Register Button -->
-                                <a href="CourseRegister?courseId=${course.id}" class="btn btn-success ml-2">Register</a>
+                                <a href="course-register?courseId=${course.id}" class="btn btn-success ml-2">Register</a>
                             </div>
                         </div>
                     </div>

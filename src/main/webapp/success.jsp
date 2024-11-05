@@ -24,7 +24,7 @@
                 <h1 style="font-size: 100px;">Success</h1>
 
                 <p class="h4 font-weight-normal">You have successfully create a course.</p>
-                <a href="NewSubject.jsp" class="btn btn-primary">Create more</a>
+                <a href="new-subject.jsp" class="btn btn-primary">Create more</a>
                 <a href="SubjectList" class="btn btn-primary">Cancel</a>
             </div>
         </div>

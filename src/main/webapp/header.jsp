@@ -82,7 +82,7 @@
                         <li class="has-submenu">
                             <a href="admin/index.html">Admin<i class="fas fa-chevron-down"></i></a>
                             <ul class="submenu">
-                                <li><a href="UserList">User List</a></li>
+                                <li><a href="user-list">User List</a></li>
                             </ul>
                         </li>
                         <% } %>
@@ -97,7 +97,7 @@
                                 <% } %>
 
                             <ul class="submenu">
-                                <li><a href="MyCourses">My Courses</a></li>
+                                <li><a href="my-courses">My Courses</a></li>
                             </ul>
                         </li>
 
@@ -120,7 +120,7 @@
                             <span><%= loggedInUser.getFullName()%></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="MyRegistrations">My Registrations</a></li>
+                            <li><a class="dropdown-item" href="my-registrations">My Registrations</a></li>
                             <li><a class="dropdown-item" href="profile-settings.jsp">Profile Settings</a></li>
                             <li><a class="dropdown-item" href="logout.jsp">Logout</a></li>
                         </ul>

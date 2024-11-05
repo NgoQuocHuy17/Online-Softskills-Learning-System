@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Add Content</h1>
-    <form action="subjectDetail" method="post">
+    <form action="subject-details" method="post">
         <input type="hidden" name="action" value="addContent">
         <input type="hidden" name="courseId" value="${courseId}">
 

@@ -95,7 +95,7 @@
                         <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
                             <div class="profile-sidebar">
                                 <div class="sidebar">
-                                    <form action="MyRegistrations" method="get">
+                                    <form action="my-registrations" method="get">
                                         <!-- Search Box -->
                                         <div class="search-box">
                                             <input 
@@ -234,7 +234,7 @@
                                     <ul class="pagination">
                                         <c:forEach var="i" begin="1" end="${totalPages}">
                                             <li class="page-item ${currentPage == i ? 'active' : ''}">
-                                                <a class="page-link" href="MyRegistrations?page=${i}&pageSize=${param.pageSize}&category=${param.category}&searchTerm=${param.searchTerm}&showTitle=${param.showTitle}&showCategory=${param.showCategory}&showPackage=${param.showPackage}&showCost=${param.showCost}&showStatus=${param.showStatus}&showValid=${param.showValid}">
+                                                <a class="page-link" href="my-registrations?page=${i}&pageSize=${param.pageSize}&category=${param.category}&searchTerm=${param.searchTerm}&showTitle=${param.showTitle}&showCategory=${param.showCategory}&showPackage=${param.showPackage}&showCost=${param.showCost}&showStatus=${param.showStatus}&showValid=${param.showValid}">
                                                     ${i}
                                                 </a>
                                             </li>

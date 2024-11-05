@@ -51,7 +51,7 @@
                             </div>
                             <ul class="main-nav">
                                 <li>
-                                    <a href="UserList">Back to User List</a>
+                                    <a href="user-list">Back to User List</a>
                                 </li>
                             </ul>
 
@@ -91,7 +91,7 @@
                             <h2 class="breadcrumb-title">User Details</h2>
                         </div>
                         <div class="col-md-4 col-12 text-right">
-                            <a href="AddUser.jsp" class="btn btn-success">Add New User</a>
+                            <a href="add-user.jsp" class="btn btn-success">Add New User</a>
                         </div>
                     </div>
                 </div>
@@ -102,7 +102,7 @@
                     <div class="row">
                         <div class="card">
                             <div class="card-body">
-                                <form action="UpdateUserDetails" method="post">
+                                <form action="user-details-update" method="post">
                                     <div class="row form-row">
                                         <%
                                             String message = (String) request.getAttribute("message");

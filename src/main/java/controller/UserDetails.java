@@ -14,7 +14,7 @@ import model.UserVideo;
 import view.UserContactDAO;
 import view.UserVideoDAO;
 
-@WebServlet(name = "UserDetails", urlPatterns = {"/UserDetails"})
+@WebServlet(name = "UserDetails", urlPatterns = {"/user-details"})
 public class UserDetails extends HttpServlet {
 
     @Override
@@ -23,7 +23,7 @@ public class UserDetails extends HttpServlet {
         String userIdParam = request.getParameter("userId");
         if (userIdParam == null || userIdParam.isEmpty()) {
             request.setAttribute("message", "User ID is missing.");
-            request.getRequestDispatcher("/UserList.jsp").forward(request, response);
+            request.getRequestDispatcher("/user-list.jsp").forward(request, response);
             return;
         }
 
@@ -32,7 +32,7 @@ public class UserDetails extends HttpServlet {
             userId = Integer.parseInt(userIdParam);
         } catch (NumberFormatException e) {
             request.setAttribute("message", "Invalid User ID.");
-            request.getRequestDispatcher("/UserList.jsp").forward(request, response);
+            request.getRequestDispatcher("/user-list.jsp").forward(request, response);
             return;
         }
 
@@ -52,6 +52,6 @@ public class UserDetails extends HttpServlet {
         request.setAttribute("emails", emails);
         request.setAttribute("user", user);
 
-        request.getRequestDispatcher("/UserDetails.jsp").forward(request, response);
+        request.getRequestDispatcher("/user-details.jsp").forward(request, response);
     }
 }

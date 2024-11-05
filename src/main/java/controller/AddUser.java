@@ -12,7 +12,7 @@ import java.util.Random;
 import model.User;
 import view.UserDAO;
 
-@WebServlet(name = "AddUser", urlPatterns = {"/AddUser"})
+@WebServlet(name = "AddUser", urlPatterns = {"/add-user"})
 public class AddUser extends HttpServlet {
 
     private final UserDAO userDAO = new UserDAO();
@@ -31,13 +31,13 @@ public class AddUser extends HttpServlet {
         try {
             if (userDAO.isEmailExist(email)) {
                 request.setAttribute("alertMessage", "Email already exists. Please use a different email.");
-                request.getRequestDispatcher("AddUser.jsp").forward(request, response);
+                request.getRequestDispatcher("add-user.jsp").forward(request, response);
                 return;
             }
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("alertMessage", "An error occurred while checking email.");
-            request.getRequestDispatcher("AddUser.jsp").forward(request, response);
+            request.getRequestDispatcher("add-user.jsp").forward(request, response);
             return;
         }
 
@@ -70,7 +70,7 @@ public class AddUser extends HttpServlet {
             request.setAttribute("alertMessage", "Failed to add user.");
         }
 
-        request.getRequestDispatcher("AddUser.jsp").forward(request, response);
+        request.getRequestDispatcher("add-user.jsp").forward(request, response);
     }
 
     private String generateRandomPassword(int length) {

@@ -12,7 +12,7 @@ import java.util.List;
 import model.UserContact;
 import view.UserContactDAO;
 
-@WebServlet(name = "UserList", urlPatterns = {"/UserList"})
+@WebServlet(name = "UserList", urlPatterns = {"/user-list"})
 public class UserList extends HttpServlet {
 
     @Override
@@ -81,6 +81,6 @@ public class UserList extends HttpServlet {
         request.setAttribute("sort", sortBy);
         request.setAttribute("sortOrder", sortOrder);
 
-        request.getRequestDispatcher("/UserList.jsp").forward(request, response);
+        request.getRequestDispatcher("/user-list.jsp").forward(request, response);
     }
 }

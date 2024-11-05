@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebServlet(name = "SubjectList", urlPatterns = {"/SubjectList"})
+@WebServlet(name = "SubjectList", urlPatterns = {"/subject-list"})
 public class SubjectList extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -98,7 +98,7 @@ public class SubjectList extends HttpServlet {
         request.setAttribute("searchTitle", searchTitle);
         request.setAttribute("status", filterStatus);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("subjectList.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("subject-list.jsp");
         dispatcher.forward(request, response);
     }
 

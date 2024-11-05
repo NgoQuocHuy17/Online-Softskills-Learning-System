@@ -16,8 +16,8 @@ import model.User;
  *
  * @author Minh
  */
-@WebFilter({"/blog-list.html", "/profile.jsp", "/profile.html", "/changepass"})
-public class GuestFilter implements Filter {
+@WebFilter({"/login.jsp", "/logout.jsp", "/register.jsp", "/forgot-password.jsp", "/new-password.jsp"})
+public class FilterLoggedIn implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -27,28 +27,20 @@ public class GuestFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         HttpSession session = httpRequest.getSession(false);
+        User user = null;
 
-        User user = (User) session.getAttribute("user");
-        String role = user.getRole();
-        
-        String path = httpRequest.getRequestURI();
-        System.out.println(path);
-        
-        if (path.equals(httpRequest.getContextPath() + "/login.jsp") || path.equals(httpRequest.getContextPath() + "/login")) {
-            chain.doFilter(request, response);
+        // Check if session exists and user is logged in
+        if (session != null) {
+            user = (User) session.getAttribute("user");
+        }
+
+        //if user is logged in redirect to home
+        if (user != null) {
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "/home");
             return;
         }
 
-        if (session == null || session.getAttribute("user") == null) {
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
-            return;
-        }
-
-        if (path.startsWith(httpRequest.getContextPath() + "/blog-list.html") && !("USER".equals(role) || !"ADMIN".equals(role))) {
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
-            return;
-        }
-
+        // Allow access to other pages
         chain.doFilter(request, response);
     }
 }

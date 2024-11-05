@@ -44,7 +44,7 @@ public class NewPasswordController extends HttpServlet {
             } else {
                request.setAttribute("message1","NEW PASSWORD AND CONFIRM PASSWORD ARE NOT MATCH");
 			
-		   dispatcher=request.getRequestDispatcher("newPassword.jsp");
+		   dispatcher=request.getRequestDispatcher("new-password.jsp");
             }
             dispatcher.forward(request, response);
         } catch (Exception e) {
