@@ -104,7 +104,7 @@
                     <div class="row">
                         <div class="card">
                             <div class="card-body">
-                                <form action="updateProfile" method="post">
+                                <form action="UpdateProfile" method="post">
                                     <div class="row form-row">
                                         <%
                                             String message = (String) request.getAttribute("message");

@@ -1,31 +1,32 @@
 
+import java.sql.SQLException;
 import java.util.List;
+import model.User;
 import model.UserMedia;
 import view.UserMediaDAO;
+import view.UserDAO;
+
 
 public class Main {
 
     public static void main(String[] args) {
-        UserMediaDAO userMediaDAO = new UserMediaDAO();
+        // Khởi tạo DAO
+        UserDAO userDao = new UserDAO();
 
-        // Giả sử bạn đã có một userId để kiểm tra, thay đổi giá trị này theo ý bạn
-        int userId = 1; // Thay đổi thành userId mà bạn muốn kiểm tra
-
-        // Lấy danh sách hình ảnh của người dùng
-        List<UserMedia> images = userMediaDAO.getImagesByUserId(userId);
-
-        // Kiểm tra xem có hình ảnh nào không
-        if (images.isEmpty()) {
-            System.out.println("No images found for user ID: " + userId);
-        } else {
-            // In thông tin các hình ảnh
-            System.out.println("Images for user ID: " + userId);
-            for (UserMedia image : images) {
-                System.out.println("ID: " + image.getId());
-                System.out.println("User ID: " + image.getUserId());
-                System.out.println("Media Type: " + image.getMediaType());
-                System.out.println("------------------------------");
-            }
+        // Thiết lập các tham số thử nghiệm
+        int pageNumber = 1;
+        int pageSize = 10;
+        String genderFilter = ""; // Ví dụ: Lọc theo giới tính
+        String roleFilter = ""; // Không lọc theo vai trò
+        String statusFilter = ""; // Ví dụ: Lọc theo trạng thái
+        String searchTerm = ""; // Không có từ khóa tìm kiếm
+        String sortBy = ""; // Sắp xếp theo tên đầy đủ
+        String sortOrder = ""; // Thứ tự sắp xếp tăng dần
+        // Gọi hàm getUsersByPage và in kết quả
+        List<User> users = userDao.getUsersByPage(pageNumber, pageSize, genderFilter, roleFilter, statusFilter, searchTerm, sortBy, sortOrder);
+        for (User user : users) {
+            System.out.println(user);
         }
     }
+
 }

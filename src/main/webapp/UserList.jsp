@@ -209,10 +209,10 @@
                                         <c:if test="${!hideStatus}">
                                             <th>
                                                 Status
-                                                <a href="?sort=isValid&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}">
+                                                <a href="?sort=status&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}">
                                                     <i class="fas fa-arrow-up"></i>
                                                 </a>
-                                                <a href="?sort=isValid&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}>
+                                                <a href="?sort=status&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}>
                                                    <i class="fas fa-arrow-down"></i>
                                                 </a>
                                             </th>
@@ -256,7 +256,7 @@
                                             <c:if test="${!hideStatus}">
                                                 <td>
                                                     <c:choose>
-                                                        <c:when test="${user.isValid == 1}">
+                                                        <c:when test="${user.status == 1}">
                                                             Active
                                                         </c:when>
                                                         <c:otherwise>
