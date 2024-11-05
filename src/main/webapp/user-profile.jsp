@@ -2,16 +2,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="model.User" %>
+<%@ page import="model.UserMedia" %>
 
 <!DOCTYPE html>
-<%
-    User loggedInUser = (User) session.getAttribute("user");
 
-    String fullName = loggedInUser.getFullName();
-    String role = loggedInUser.getRole();
-    String gender = loggedInUser.getGender();
-    String email = loggedInUser.getEmail();
-%>
 
 <html lang="en">
 
@@ -29,6 +23,9 @@
     </head>
 
     <body>
+        <%
+            User user = (User) request.getAttribute("user");
+        %>
         <div class="main-wrapper">
             <header class="header">
                 <div class="header-fixed">
@@ -56,10 +53,8 @@
                                     <a href="home">Home</a>
                                 </li>
                             </ul>
-
                         </div>
                         <ul class="nav header-navbar-rht">
-
                             <li class="nav-item dropdown has-arrow logged-item">
                                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                                     <span class="user-img">
@@ -74,16 +69,14 @@
                                                  class="avatar-img rounded-circle">
                                         </div>
                                         <div class="user-text">
-                                            <h6><%= fullName%></h6> <!-- Lấy fullName từ session -->
-                                            <p><%= role%></p> <!-- Lấy role từ session -->
+                                            <h6><%= user.getFullName()%></h6> <!-- Lấy fullName từ session -->
+                                            <p><%= user.getRole()%></p> <!-- Lấy role từ session -->
                                         </div>
-
                                     </div>
                                     <a class="dropdown-item" href="profile-settings.jsp">Profile Settings</a>
                                     <a class="dropdown-item" href="login.jsp">Logout</a>
                                 </div>
                             </li>
-
                         </ul>
                     </nav>
                 </div>
@@ -104,14 +97,13 @@
                     <div class="row">
                         <div class="card">
                             <div class="card-body">
-                                <form action="UpdateProfile" method="post">
+                                <!-- Form cập nhật thông tin người dùng -->
+                                <form action="UpdateProfile" method="post" enctype="multipart/form-data">
                                     <div class="row form-row">
-                                        <%
-                                            String message = (String) request.getAttribute("message");
+                                        <% String message = (String) request.getAttribute("message");
                                             if (message != null) {
-                                                String alertType = message.startsWith("Failed") ? "alert-danger" : "alert-success";
                                         %>
-                                        <div class="alert <%= alertType%>">
+                                        <div class="alert ">
                                             <%= message%>
                                         </div>
                                         <% }%>
@@ -119,7 +111,7 @@
                                             <div class="form-group">
                                                 <div class="change-avatar">
                                                     <div class="profile-img">
-                                                        <img src="assets/img/user/user.jpg" alt="User Image">
+                                                        <img src="data:image/jpeg;base64,${avatar.mediaData}" alt="User Image">
                                                     </div>
                                                     <div class="upload-img">
                                                         <div class="change-photo-btn">
@@ -133,35 +125,96 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Full Name</label>
-                                                <input type="text" class="form-control" name="fullName" value="<%= fullName%>">
+                                                <input type="text" class="form-control" name="fullName" value="<%= user.getFullName()%>">
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Gender</label>
                                                 <select class="form-control" name="gender">
-                                                    <option value="Male" <%= "Male".equals(gender) ? "selected" : ""%>>Male</option>
-                                                    <option value="Female" <%= "Female".equals(gender) ? "selected" : ""%>>Female</option>
-                                                    <option value="Other" <%= "Other".equals(gender) ? "selected" : ""%>>Other</option>
+                                                    <option value="Male" <%= "Male".equals(user.getGender()) ? "selected" : ""%>>Male</option>
+                                                    <option value="Female" <%= "Female".equals(user.getGender()) ? "selected" : ""%>>Female</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>Email</label>
-                                                <input type="email" class="form-control" name="email" value="<%= email%>" readonly>
+                                                <input type="email" class="form-control" name="email" value="<%= user.getEmail()%>" readonly>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
-                                                <label>Mobile</label>
-                                                <input type="text" name="mobile" value="mobile?" class="form-control">
+                                                <label>Address</label>
+                                                <input type="text" class="form-control" name="address" value="<%= user.getAddress()%>">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="submit-section d-flex justify-content-between">
                                         <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
-                                        <button href="change-password.jsp" class="btn btn-primary submit-btn">Change Password</button>
+                                        <a href="change-password.jsp" class="btn btn-primary submit-btn">Change Password</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Form xóa số điện thoại và email -->
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4>User Contact</h4>
+                                <form action="DeleteUserContact" method="post">
+                                    <input type="hidden" name="userId" value="${user.getId()}">
+                                    <div class="row form-row">
+                                        <div class="col-12 col-md-6">
+                                            <label>Mobile Numbers</label>
+                                            <c:forEach var="phone" items="${phones}">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <input type="text" class="form-control" name="phone" value="${phone.contactValue}" readonly>
+                                                    <button type="submit" class="btn btn-danger btn-sm ml-2">Delete</button>
+                                                </div>
+                                            </c:forEach>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label>Emails</label>
+                                            <c:forEach var="email" items="${emails}">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <input type="email" class="form-control" name="email" value="${email.contactValue}" readonly>
+                                                    <button type="submit" class="btn btn-danger btn-sm ml-2">Delete</button>
+                                                </div>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Form thêm số điện thoại và email -->
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4>Update User Contact</h4>
+                                <form action="UpdateUserContact" method="post">
+                                    <input type="hidden" name="userId" value="${user.getId()}">
+                                    <div class="row form-row">
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label>Contact Type</label>
+                                                <select class="form-control" name="contactType">
+                                                    <option value="Phone">Phone</option>
+                                                    <option value="Email">Email</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label>Contact Value</label>
+                                                <input type="text" class="form-control" name="contactValue">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="submit-section">
+                                        <button type="submit" class="btn btn-primary submit-btn">Add Contact</button>
                                     </div>
                                 </form>
                             </div>

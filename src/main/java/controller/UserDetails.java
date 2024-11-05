@@ -11,10 +11,8 @@ import java.io.IOException;
 import java.util.List;
 import model.UserContact;
 import model.UserMedia;
-import model.UserVideo;
 import view.UserContactDAO;
 import view.UserMediaDAO;
-import view.UserVideoDAO;
 
 @WebServlet(name = "UserDetails", urlPatterns = {"/UserDetails"})
 public class UserDetails extends HttpServlet {
