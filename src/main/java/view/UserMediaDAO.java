@@ -31,6 +31,30 @@ public class UserMediaDAO extends DBContext<UserVideo> {
         }
     }
 
+    public void insertAvatar(int userId, byte[] avatarData) {
+        String query = "INSERT INTO user_media (user_id, media_type, media_data) VALUES (?, 'avatar', ?)";
+
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            ps.setBytes(2, avatarData);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateAvatar(int userId, byte[] avatarData) {
+        String query = "UPDATE user_media SET media_data = ? WHERE user_id = ? AND media_type = 'avatar'";
+
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setBytes(1, avatarData);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<UserMedia> getImagesByUserId(int userId) {
         List<UserMedia> images = new ArrayList<>();
         String query = "SELECT * FROM user_media WHERE user_id = ? AND media_type LIKE 'image/%'";
