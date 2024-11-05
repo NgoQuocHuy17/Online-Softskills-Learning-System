@@ -1,15 +1,20 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 
-import view.UserDAO;
-import model.User;
+import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
+import model.User;
 import model.UserContact;
 import view.UserContactDAO;
+import view.UserDAO;
 
 @WebServlet(name = "UserListTest", urlPatterns = {"/UserListTest"})
 public class UserListTest extends HttpServlet {
@@ -50,11 +55,6 @@ public class UserListTest extends HttpServlet {
         String sortBy = request.getParameter("sort");
         String sortOrder = request.getParameter("sortOrder");
 
-        // In ra các giá trị lọc để kiểm tra
-        System.out.println("Gender Filter: " + genderFilter);
-        System.out.println("Role Filter: " + roleFilter);
-        System.out.println("Status Filter: " + statusFilter);
-
         // Lấy danh sách users theo trang với các tham số lọc và tìm kiếm
         List<User> userList = userDAO.getUsersByPage(page, pageSize, genderFilter, roleFilter, statusFilter, searchTerm, sortBy, sortOrder);
 
@@ -78,9 +78,9 @@ public class UserListTest extends HttpServlet {
         request.setAttribute("userList", userList);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
-        request.setAttribute("genderFilter", genderFilter);
-        request.setAttribute("roleFilter", roleFilter);
-        request.setAttribute("statusFilter", statusFilter);
+        request.setAttribute("gender", genderFilter);
+        request.setAttribute("role", roleFilter);
+        request.setAttribute("status", statusFilter);
         request.setAttribute("searchTerm", searchTerm);
         request.setAttribute("sort", sortBy);
         request.setAttribute("sortOrder", sortOrder);

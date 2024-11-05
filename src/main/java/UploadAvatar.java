@@ -16,7 +16,7 @@ import view.UserDAO;
 
 @WebServlet(name = "UpdateUserDetailsTest", urlPatterns = {"/UpdateUserDetailsTest"})
 @MultipartConfig
-public class UpdateUserDetailsTest extends HttpServlet {
+public class UploadAvatar extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -26,8 +26,7 @@ public class UpdateUserDetailsTest extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         UserMediaDAO userMediaDAO = new UserMediaDAO();
 
-        // Lấy kiểu media và dữ liệu
-        String mediaType = mediaPart.getContentType();
+        // Lấy dữ liệu
         byte[] mediaData = new byte[(int) mediaPart.getSize()];
 
         // Đọc dữ liệu từ file upload
