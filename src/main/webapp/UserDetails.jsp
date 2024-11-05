@@ -94,115 +94,181 @@
 
             <div class="content">
                 <div class="container-fluid">
-                    <div class="row">
-                        <div class="card">
-                            <div class="card-body">
-                                <form action="UpdateUserDetails" method="post">
-                                    <div class="row form-row">
-                                        <%
-                                            String message = (String) request.getAttribute("message");
-                                            if (message != null) {
-                                        %>
-                                        <div class="alert alert-success">
-                                            <%= message%>
-                                        </div>
-                                        <%
-                                            }
-                                            User user = (User) request.getAttribute("user");
-                                        %>
-                                        <input type="hidden" name="userId" value="<%= user.getId()%>">
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <div class="change-avatar">
-                                                    <div class="profile-img">
-                                                        <img src="<%= user.getAvatarUrl()%>" alt="User Image">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <div class="video-gallery">
-                                                    <c:forEach var="video" items="${videos}">
-                                                        <div class="video-item">
-                                                            <video width="320" height="240" controls>
-                                                                <source src="${video.videoUrl}" type="video/mp4">
-                                                                Your browser does not support the video tag.
-                                                            </video>
-                                                        </div>
-                                                    </c:forEach>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label>Full Name</label>
-                                                <input type="text" class="form-control" name="fullName" value="${user.getFullName()}" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label>Gender</label>
-                                                <select class="form-control" name="gender" disabled>
-                                                    <option value="Male" <%= "Male".equals(user.getGender()) ? "selected" : ""%>>Male</option>
-                                                    <option value="Female" <%= "Female".equals(user.getGender()) ? "selected" : ""%>>Female</option>
-                                                    <option value="Other" <%= "Other".equals(user.getGender()) ? "selected" : ""%>>Other</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label>Role</label>
-                                                <select class="form-control" name="role">
-                                                    <option value="Admin" <%= "Admin".equals(user.getRole()) ? "selected" : ""%>>Admin</option>
-                                                    <option value="Teacher" <%= "Teacher".equals(user.getRole()) ? "selected" : ""%>>Teacher</option>
-                                                    <option value="Student" <%= "Student".equals(user.getRole()) ? "selected" : ""%>>Student</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label>Status</label>
-                                                <select class="form-control" name="status">
-                                                    <option value="Active" <%= "Active".equals(user.getStatus() == 1 ? "Active" : "Inactive") ? "selected" : ""%>>Active</option>
-                                                    <option value="Inactive" <%= "Inactive".equals(user.getStatus() == 0 ? "Inactive" : "Active") ? "selected" : ""%>>Inactive</option>
-                                                </select>
-                                            </div>
+                    <!-- Form lưu thông tin người dùng -->
+                    <form action="UpdateUserDetails" method="post" enctype="multipart/form-data">
+                        <div class="row form-row">
+                            <%
+                                String message = (String) request.getAttribute("message");
+                                if (message != null) {
+                            %>
+                            <div class="alert alert-success">
+                                <%= message%>
+                            </div>
+                            <%
+                                }
+                                User user = (User) request.getAttribute("user");
+                            %>
+                            <input type="hidden" name="userId" value="<%= user.getId()%>">
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    <div class="change-avatar">
+                                        <div class="profile-img">
+                                            <img src="data:image/jpeg;base64,${avatar.mediaData}" alt="User Image">
                                         </div>
                                     </div>
+                                </div>
+                            </div>
 
-                                    <!-- Hiển thị tất cả số điện thoại -->
-                                    <div class="col-12 col-md-6">
-                                        <label>Phone</label>
-                                        <div class="form-group">
-                                            <c:forEach var="phone" items="${phones}">
-                                                <input type="text" class="form-control mb-2" value="${phone.contactValue}" readonly>
-                                            </c:forEach>
-                                        </div>
-                                    </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    <label>Full Name</label>
+                                    <input type="text" class="form-control" name="fullName" value="${user.getFullName()}" readonly>
+                                </div>
+                            </div>
 
-                                    <!-- Hiển thị email -->
-                                    <div class="col-12 col-md-6">
-                                        <label>Email</label>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control mb-2" value="${user.getEmail()}" readonly>
-                                            <c:forEach var="email" items="${emails}">
-                                                <input type="text" class="form-control mb-2" value="${email.contactValue}" readonly>
-                                            </c:forEach>
-                                        </div>
-                                    </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    <label>Gender</label>
+                                    <select class="form-control" name="gender" disabled>
+                                        <option value="Male" <%= "Male".equals(user.getGender()) ? "selected" : ""%>>Male</option>
+                                        <option value="Female" <%= "Female".equals(user.getGender()) ? "selected" : ""%>>Female</option>
+                                        <option value="Other" <%= "Other".equals(user.getGender()) ? "selected" : ""%>>Other</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                                    <div class="submit-section">
-                                        <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
-                                    </div>
-                                </form>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    <label>Role</label>
+                                    <select class="form-control" name="role">
+                                        <option value="Admin" <%= "Admin".equals(user.getRole()) ? "selected" : ""%>>Admin</option>
+                                        <option value="Teacher" <%= "Teacher".equals(user.getRole()) ? "selected" : ""%>>Teacher</option>
+                                        <option value="Student" <%= "Student".equals(user.getRole()) ? "selected" : ""%>>Student</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <select class="form-control" name="status">
+                                        <option value="Active" <%= "Active".equals(user.getStatus() == 1 ? "Active" : "Inactive") ? "selected" : ""%>>Active</option>
+                                        <option value="Inactive" <%= "Inactive".equals(user.getStatus() == 0 ? "Inactive" : "Active") ? "selected" : ""%>>Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Thêm ô hiển thị address -->
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    <label>Address</label>
+                                    <input type="text" class="form-control" name="address" value="${user.getAddress()}" readonly>
+                                </div>
+                            </div>
+
+                            <!-- Hiển thị tất cả số điện thoại -->
+                            <div class="col-12 col-md-6">
+                                <label>Phone</label>
+                                <div class="form-group">
+                                    <c:forEach var="phone" items="${phones}">
+                                        <input type="text" class="form-control mb-2" value="${phone.contactValue}" readonly>
+                                    </c:forEach>
+                                </div>
+                            </div>
+
+                            <!-- Hiển thị email -->
+                            <div class="col-12 col-md-6">
+                                <label>Email</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control mb-2" value="${user.getEmail()}" readonly>
+                                    <c:forEach var="email" items="${emails}">
+                                        <input type="text" class="form-control mb-2" value="${email.contactValue}" readonly>
+                                    </c:forEach>
+                                </div>
                             </div>
                         </div>
-                    </div>
+
+                        <div class="submit-section">
+                            <button type="submit" class="btn btn-primary submit-btn">Save Information</button>
+                        </div>
+                    </form>
+                    <br>
+                    <!-- Form upload thêm ảnh và video -->
+                    <form action="UpdateUserDetails" method="post" enctype="multipart/form-data">
+                        <div class="row form-row">
+                            <div class="col-12">
+                                <h4>Upload More Media</h4>
+                                <input type="hidden" name="userId" value="<%= user.getId()%>">
+
+                                <div class="form-group">
+                                    <label for="newImages">Upload Images</label>
+                                    <input type="file" id="newImages" name="newImage" class="form-control" accept="image/*" multiple>
+                                    <label for="imageNote">Image Note</label>
+                                    <input type="text" id="imageNote" name="imageNote" class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="newVideos">Upload Videos</label>
+                                    <input type="file" id="newVideos" name="newVideo" class="form-control" accept="video/*" multiple>
+                                    <label for="videoNote">Video Note</label>
+                                    <input type="text" id="videoNote" name="videoNote" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="submit-section">
+                            <button type="submit" class="btn btn-primary submit-btn">Save Media</button>
+                        </div>
+                    </form>
+
+                    <br>
+                    <!-- Form xóa ảnh và video -->
+                    <form action="DeleteUserMedia" method="post">
+                        <div class="row form-row">
+                            <div class="col-12">
+                                <h4>Uploaded Images</h4>
+                                <div class="image-gallery">
+                                    <c:forEach var="image" items="${images}">
+                                        <div class="image-item d-flex align-items-center">
+                                            <div>
+                                                <img width="160" src="data:image/jpeg;base64,${image.mediaData}" alt="User Image" class="img-thumbnail limited-size">
+                                                <p>Note: ${image.note}</p>
+                                            </div>
+                                            <div class="ml-auto">
+                                                <input type="hidden" name="mediaId" value="${image.id}">
+                                                <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px;">Delete</button>
+                                            </div>
+                                        </div>
+                                        <br>
+                                    </c:forEach>
+                                </div>
+                                <br>
+                            </div>
+                            <div class="col-12">
+                                <h4>Uploaded Videos</h4>
+                                <div class="video-gallery">
+                                    <c:forEach var="video" items="${videos}">
+                                        <div class="video-item d-flex align-items-center">
+                                            <div>
+                                                <video width="320" height="240" controls>
+                                                    <source src="data:image/jpeg;base64,${video.mediaData}" type="video/mp4">
+                                                </video>
+                                                <p>Note: ${video.note}</p>
+                                            </div>
+                                            <div class="ml-auto">
+                                                <input type="hidden" name="mediaId" value="${video.id}">
+                                                <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 15px;">Delete</button>
+                                            </div>
+                                        </div>
+                                        <br>
+                                    </c:forEach>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <br>
                 </div>
             </div>
-
 
             <footer class="footer">
                 <jsp:include page="footer.jsp" />

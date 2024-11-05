@@ -94,7 +94,7 @@
                                     <select name="role" class="form-control">
                                         <option value="">All Roles</option>
                                         <option value="Admin" ${param.role == 'Admin' ? 'selected' : ''}>Admin</option>
-                                        <option value="User" ${param.role == 'User' ? 'selected' : ''}>User</option>
+                                        <option value="Student" ${param.role == 'Student' ? 'selected' : ''}>Student</option>
                                         <option value="Teacher" ${param.role == 'Teacher' ? 'selected' : ''}>Teacher</option>
                                     </select>
                                     <select name="status" class="form-control">

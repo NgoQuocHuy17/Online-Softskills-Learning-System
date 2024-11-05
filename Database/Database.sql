@@ -24,6 +24,7 @@ CREATE TABLE user_media (
     user_id INT NOT NULL,
     media_type NVARCHAR(50) NOT NULL,
     media_data VARBINARY(MAX) NOT NULL,
+    note NVARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
@@ -159,6 +160,7 @@ CREATE TABLE registration_media (
     registration_id INT NOT NULL,
     media_type NVARCHAR(50) NOT NULL,
     media_data VARBINARY(MAX) NOT NULL,
+    note NVARCHAR(255),
     FOREIGN KEY (registration_id) REFERENCES registrations(id)
 );
 

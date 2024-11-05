@@ -1,15 +1,17 @@
 package model;
 
 public class RegistrationMedia {
+
     private int id;
     private int registrationId;
     private String mediaType;
-    private byte[] mediaData;
+    private String mediaData;
+    private String note;  // Thêm thuộc tính note
 
     public RegistrationMedia() {
     }
 
-    public RegistrationMedia(int id, int registrationId, String mediaType, byte[] mediaData) {
+    public RegistrationMedia(int id, int registrationId, String mediaType, String mediaData) {
         this.id = id;
         this.registrationId = registrationId;
         this.mediaType = mediaType;
@@ -40,11 +42,20 @@ public class RegistrationMedia {
         this.mediaType = mediaType;
     }
 
-    public byte[] getMediaData() {
+    public String getMediaData() {
         return mediaData;
     }
 
-    public void setMediaData(byte[] mediaData) {
+    public void setMediaData(String mediaData) {
         this.mediaData = mediaData;
     }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
 }

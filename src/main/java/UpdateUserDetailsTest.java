@@ -36,7 +36,7 @@ public class UpdateUserDetailsTest extends HttpServlet {
         }
 
         // Ghi dữ liệu vào database
-        userMediaDAO.insertMedia(userId, mediaType, mediaData);
+        userMediaDAO.insertAvatar(userId, mediaData);
 
         // Lấy thông tin user để hiển thị trên JSP
         User user = userDAO.getUserById(userId);

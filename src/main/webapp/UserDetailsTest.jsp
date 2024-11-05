@@ -118,7 +118,6 @@
                                     <p>Full Name: <%= user.getFullName()%></p>
                                     <p>Email: <%= user.getEmail()%></p>
                                     <p>Role: <%= user.getRole()%></p>
-                                    <p>Created At: <%= user.getCreatedAt()%></p>
                                 </div>
 
                                 <h3>Upload Media</h3>
