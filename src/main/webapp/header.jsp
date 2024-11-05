@@ -114,7 +114,7 @@
                     <!-- Nếu người dùng đã đăng nhập, hiển thị avatar -->
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="<%= loggedInUser.getAvatarUrl() != null ? loggedInUser.getAvatarUrl() : "assets/img/default-avatar.jpg"%>" 
+                            <img src="" 
                                  class="rounded-circle" style="width: 30px; height: 30px;">
 
                             <span><%= loggedInUser.getFullName()%></span>
