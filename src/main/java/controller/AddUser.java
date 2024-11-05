@@ -51,7 +51,7 @@ public class AddUser extends HttpServlet {
         newUser.setEmail(email);
         newUser.setPassword(password);
         newUser.setRole(role);
-        newUser.setIsValid(isValid);
+        newUser.setStatus(isValid);
 
         // Thêm user vào cơ sở dữ liệu
         boolean isAdded = userDAO.addUser(newUser);

@@ -1,8 +1,3 @@
-<%-- 
-    Document   : UserDetails
-    Created on : 7 thg 10, 2024, 16:35:04
-    Author     : hung6
---%>
 
 <%@page import="model.UserContact"%>
 <%@page import="java.util.List"%>
@@ -170,8 +165,8 @@
                                             <div class="form-group">
                                                 <label>Status</label>
                                                 <select class="form-control" name="status">
-                                                    <option value="Active" <%= "Active".equals(user.getIsValid() == 1 ? "Active" : "Inactive") ? "selected" : ""%>>Active</option>
-                                                    <option value="Inactive" <%= "Inactive".equals(user.getIsValid() == 0 ? "Inactive" : "Active") ? "selected" : ""%>>Inactive</option>
+                                                    <option value="Active" <%= "Active".equals(user.getStatus() == 1 ? "Active" : "Inactive") ? "selected" : ""%>>Active</option>
+                                                    <option value="Inactive" <%= "Inactive".equals(user.getStatus() == 0 ? "Inactive" : "Active") ? "selected" : ""%>>Inactive</option>
                                                 </select>
                                             </div>
                                         </div>
