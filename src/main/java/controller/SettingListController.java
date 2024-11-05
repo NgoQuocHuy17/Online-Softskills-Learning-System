@@ -52,7 +52,7 @@ public class SettingListController extends HttpServlet {
         request.setAttribute("order", order);
 
         // Forward the request to the JSP page
-        request.getRequestDispatcher("/settings-list.jsp").forward(request, response);
+        request.getRequestDispatcher("/setting-list.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

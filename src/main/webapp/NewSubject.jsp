@@ -77,7 +77,7 @@
                     <div class="row">
                         <div class="card">
                             <div class="card-body">
-                                <form action="new-subject" method="post" enctype="multipart/form-data" >
+                                <form action="NewSubject" method="post" enctype="multipart/form-data" >
                                     <div class="row form-row">
                                         <!-- Course Name -->
                                         <div class="col-12 col-md-12">

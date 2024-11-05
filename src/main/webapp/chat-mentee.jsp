@@ -28,7 +28,7 @@
 
         <div class="main-wrapper">
 
-            <jsp:include page="layout-header.jsp"/>
+            <jsp:include page="layout_header.jsp"/>
 
 
             <div class="content">

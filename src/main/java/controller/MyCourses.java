@@ -16,7 +16,7 @@ import model.User;
 import view.CourseDAO;
 import view.UserCourseDAO;
 
-@WebServlet(name = "MyCourses", urlPatterns = {"/my-courses"})
+@WebServlet(name = "MyCourses", urlPatterns = {"/MyCourses"})
 public class MyCourses extends HttpServlet {
 
     @Override
@@ -97,6 +97,6 @@ public class MyCourses extends HttpServlet {
         request.setAttribute("showCategory", showCategory);
 
         // Forward to JSP
-        request.getRequestDispatcher("my-courses.jsp").forward(request, response);
+        request.getRequestDispatcher("myCourses.jsp").forward(request, response);
     }
 }

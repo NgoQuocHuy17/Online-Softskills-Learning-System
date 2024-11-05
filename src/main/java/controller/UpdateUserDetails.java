@@ -15,7 +15,7 @@ import model.UserVideo;
 import view.UserContactDAO;
 import view.UserVideoDAO;
 
-@WebServlet(name = "UpdateUserDetails", urlPatterns = {"/user-details-update"})
+@WebServlet(name = "UpdateUserDetails", urlPatterns = {"/UpdateUserDetails"})
 public class UpdateUserDetails extends HttpServlet {
 
     @Override

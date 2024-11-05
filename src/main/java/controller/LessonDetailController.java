@@ -21,7 +21,7 @@ import view.LessonDAO;
  *
  * @author ngoqu
  */
-@WebServlet(name = "LessonDetailController", urlPatterns = {"/lesson-details"})
+@WebServlet(name = "LessonDetailController", urlPatterns = {"/LessonDetailController"})
 public class LessonDetailController extends HttpServlet {
 
     /**
@@ -46,7 +46,7 @@ public class LessonDetailController extends HttpServlet {
         List<LessonContent> list = lcontent.getAllContentByLessonId(lessonid);
         request.setAttribute("content", list);  // Use lowercase here for attribute consistency
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("lesson-details.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("LessonDetail.jsp");
         dispatcher.forward(request, response);  // Forward to JSP
     }
 

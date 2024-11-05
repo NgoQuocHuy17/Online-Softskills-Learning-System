@@ -13,7 +13,7 @@ import view.CourseDAO;
 import view.PackageDAO;
 import model.Package;
 
-@WebServlet(name = "CourseRegister", urlPatterns = {"/course-register"})
+@WebServlet(name = "CourseRegister", urlPatterns = {"/CourseRegister"})
 public class CourseRegister extends HttpServlet {
 
     private final CourseDAO courseDAO = new CourseDAO();
@@ -38,10 +38,10 @@ public class CourseRegister extends HttpServlet {
                 request.setAttribute("selectedPackagePrice", price);
             }
 
-            request.getRequestDispatcher("course-register.jsp").forward(request, response);
+            request.getRequestDispatcher("CourseRegister.jsp").forward(request, response);
         } else {
             request.setAttribute("message", "Course không được tìm thấy");
-            request.getRequestDispatcher("/course-register.jsp").forward(request, response);
+            request.getRequestDispatcher("/CourseRegister.jsp").forward(request, response);
         }
     }
 }

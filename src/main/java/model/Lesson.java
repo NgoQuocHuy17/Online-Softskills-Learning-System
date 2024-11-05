@@ -81,8 +81,5 @@ public class Lesson {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "Lesson{" + "id=" + id + ", courseID=" + courseID + ", title=" + title + ", description=" + description + ", createdDate=" + createdDate + ", lastUpdatedDate=" + lastUpdatedDate + ", status=" + status + '}';
-    }
+    
 }

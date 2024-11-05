@@ -26,7 +26,7 @@
 
             <!-- Create New Button -->
             <div class="mb-4 text-right">
-                <a href="new-subject.jsp" class="btn btn-success">Create New Course</a>
+                <a href="NewSubject.jsp" class="btn btn-success">Create New Course</a>
             </div>
 
             <!-- Search Box -->
@@ -69,13 +69,13 @@
                             <c:choose>
                                 <c:when test="${loggedInUser.role == 'Admin'}">
                                     <a href="course-details?courseId=${course.id}" class="btn btn-primary">View</a>
-                                    <a href="subject-details?action=edit&courseId=${course.id}" class="btn btn-outline-success">Edit</a>
+                                    <a href="subjectDetail?action=edit&courseId=${course.id}" class="btn btn-outline-success">Edit</a>
                                 </c:when>
                                 <c:when test="${loggedInUser.role == 'Teacher'}">
                                     <c:choose>
                                         <c:when test="${loggedInUser.id == course.ownerId}">
                                             <a href="course-details?courseId=${course.id}" class="btn btn-primary">View</a>
-                                            <a href="subject-details?action=edit&courseId=${course.id}" class="btn btn-outline-success">Edit</a>
+                                            <a href="subjectDetail?action=edit&courseId=${course.id}" class="btn btn-outline-success">Edit</a>
                                         </c:when>
                                         <c:otherwise>
                                             <a href="course-details?courseId=${course.id}" class="btn btn-primary">View</a>

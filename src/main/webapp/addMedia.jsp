@@ -22,7 +22,7 @@
 
         <!-- Nút quay lại trang chi tiết khóa học -->
         <div class="container my-4">
-            <a href="subject-details?action=edit&courseId=${course.id}" class="btn btn-secondary mb-3">
+            <a href="subjectDetail?action=edit&courseId=${course.id}" class="btn btn-secondary mb-3">
                 <i class="fas fa-arrow-left"></i> Back to Course
             </a>
 
@@ -37,7 +37,7 @@
 
             <!-- Form upload file -->
             <div class="card shadow-sm p-4">
-                <form action="add-media" method="post" enctype="multipart/form-data">
+                <form action="addMedia" method="post" enctype="multipart/form-data">
                     <!-- Trường ẩn để gửi courseId -->
                     <input type="hidden" name="courseId" value="${course.id}">
 

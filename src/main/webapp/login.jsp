@@ -44,7 +44,7 @@
                                         </div>
                                     </div>
                                     <div class="text-end">
-                                        <a class="forgot-link" href="forgot-password.jsp">Forgot Password?</a>
+                                        <a class="forgot-link" href="forgotPassword.jsp">Forgot Password?</a>
                                     </div>
                                     <button class="btn btn-primary login-btn" type="submit">Sign In</button>
                                     <div class="text-center dont-have">Don’t have an account? <a href="register.jsp">Register</a></div>

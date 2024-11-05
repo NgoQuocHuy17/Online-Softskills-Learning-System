@@ -47,7 +47,7 @@
                                 
                                     %>
                                 </h3>
-                                <form action="forgot-password" method="post">
+                                <form action="forgotPassword" method="post">
                                     <div class="form-group">
                                         <label class="form-control-label">Email Address or username</label>
                                         <input type="text" class="form-control" name="input"placeholder="Enter your email or username" required>

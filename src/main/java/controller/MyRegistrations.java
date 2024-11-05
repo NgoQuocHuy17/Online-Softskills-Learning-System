@@ -19,7 +19,7 @@ import view.RegistrationDAO;
 import view.CourseDAO;
 import view.PackageDAO;
 
-@WebServlet(name = "MyRegistrations", urlPatterns = {"/my-registrations"})
+@WebServlet(name = "MyRegistrations", urlPatterns = {"/MyRegistrations"})
 public class MyRegistrations extends HttpServlet {
 
     @Override
@@ -109,6 +109,6 @@ public class MyRegistrations extends HttpServlet {
         request.setAttribute("showValid", showValid);
 
         // Forward to JSP
-        request.getRequestDispatcher("/my-registrations.jsp").forward(request, response);
+        request.getRequestDispatcher("/myRegistrations.jsp").forward(request, response);
     }
 }

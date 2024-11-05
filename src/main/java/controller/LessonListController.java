@@ -16,7 +16,7 @@ import view.LessonDAO;
  *
  * @author ngoqu
  */
-@WebServlet(name = "LessonListController", urlPatterns = {"/lesson-list"})
+@WebServlet(name = "LessonListController", urlPatterns = {"/LessonListController"})
 public class LessonListController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -86,7 +86,7 @@ public class LessonListController extends HttpServlet {
             request.setAttribute("status", status); // Pass the status back to JSP
         }
          }
-        RequestDispatcher dispatcher = request.getRequestDispatcher("lesson-list.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("LessonList.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -122,7 +122,7 @@ public class LessonListController extends HttpServlet {
             }
 
             // Redirect back to the lesson list after status change
-            response.sendRedirect("lesson-list?courseId=" + courseId
+            response.sendRedirect("LessonListController?courseId=" + courseId
                     + "&itemsPerPage=" + request.getParameter("itemsPerPage")
                     + "&page=" + request.getParameter("page") + "&status=" +status
             );

@@ -15,17 +15,12 @@ import model.User;
 import view.CourseDAO;
 import view.UserDAO;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import model.CourseContent;
 import model.CourseMedia;
-import model.Lesson;
-import model.LessonContent;
 import view.CourseContentDAO;
 import view.CourseMediaDAO;
-import view.LessonContentDAO;
-import view.LessonDAO;
 
 /**
  *
@@ -66,16 +61,6 @@ public class CourseDetailsController extends HttpServlet {
         String formattedCreatedAt = course.getCreatedAt().toLocalDateTime().format(dtf);
         String formattedUpdatedAt = course.getUpdatedAt().toLocalDateTime().format(dtf);
         
-        LessonDAO lessonDAO = new LessonDAO();
-        var lessons = lessonDAO.getLessonsByCourseId(id);
-        var allLessonContent = new ArrayList<List<LessonContent>>();
-        for (Lesson lesson : lessons) {
-            var lessonContents = new LessonContentDAO().getAllContentByLessonId(lesson.getId());
-            allLessonContent.add(lessonContents);
-        }
-        
-        request.setAttribute("allLessonContent", allLessonContent);
-        request.setAttribute("lessons", lessons);
         request.setAttribute("courses", courses);
         request.setAttribute("courseDetail", course);
         request.setAttribute("courseContent", courseContent);

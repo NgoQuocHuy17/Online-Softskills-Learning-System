@@ -21,7 +21,7 @@ import jakarta.servlet.http.Part;
 import java.io.File;
 import model.User;
 
-@WebServlet("/add-media")
+@WebServlet("/addMedia")
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024, // 1MB
         maxFileSize = 1024 * 1024 * 5, // 5MB
@@ -71,7 +71,7 @@ public class AddMediaServlet extends HttpServlet {
         Course course = courseDAO.getCourseById(courseId);
         request.setAttribute("course", course);
 
-        request.getRequestDispatcher("/add-media.jsp").forward(request, response);
+        request.getRequestDispatcher("/addMedia.jsp").forward(request, response);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class AddMediaServlet extends HttpServlet {
         if (!isValidFileType(fileName, mediaType)) {
             request.setAttribute("error", "File không đúng định dạng với loại media đã chọn.");
             request.setAttribute("course", new CourseDAO().getCourseById(courseId)); // Cập nhật course
-            request.getRequestDispatcher("/add-media.jsp").forward(request, response);
+            request.getRequestDispatcher("/addMedia.jsp").forward(request, response);
             return;
         }
 
@@ -122,7 +122,7 @@ public class AddMediaServlet extends HttpServlet {
         mediaDAO.insert(media);
 
         // Chuyển hướng về trang chi tiết khóa học
-        response.sendRedirect("subject-details?action=edit&courseId=" + courseId);
+        response.sendRedirect("subjectDetail?action=edit&courseId=" + courseId);
     }
 
 // Phương thức lấy tên file upload từ Part

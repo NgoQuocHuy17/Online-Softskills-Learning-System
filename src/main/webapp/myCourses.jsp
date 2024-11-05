@@ -79,7 +79,7 @@
                 <div class="container-fluid">
                     <div class="row align-items-center">
                         <div class="col-md-12 col-12">
-                            <form action="my-courses" method="get">
+                            <form action="MyCourses" method="get">
                                 <div class="row">
                                     <!-- Page Size Dropdown -->
                                     <div class="col-md-6">
@@ -176,7 +176,7 @@
                                 <c:forEach var="i" begin="1" end="${totalPages}">
                                     <li class="page-item ${currentPage == i ? 'active' : ''}">
                                         <a class="page-link" 
-                                           href="my-courses?page=${i}&pageSize=${param.pageSize}&showTitle=${param.showTitle}&showTagline=${param.showTagline}&showDescription=${param.showDescription}&showCategory=${param.showCategory}">
+                                           href="MyCourses?page=${i}&pageSize=${param.pageSize}&showTitle=${param.showTitle}&showTagline=${param.showTagline}&showDescription=${param.showDescription}&showCategory=${param.showCategory}">
                                             ${i}
                                         </a>
                                     </li>

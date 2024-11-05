@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import model.User;
 import view.UserDAO;
 
-@WebServlet("/change-pass")
+@WebServlet("/changepass")
 public class ChangePasswordController extends HttpServlet {
 
     @Override
@@ -39,7 +39,7 @@ public class ChangePasswordController extends HttpServlet {
             } else {
                request.setAttribute("message1","NEW PASSWORD AND CONFIRM PASSWORD ARE NOT MATCH");
 			
-		   dispatcher=request.getRequestDispatcher("new-password.jsp");
+		   dispatcher=request.getRequestDispatcher("newPassword.jsp");
             }
             dispatcher.forward(request, response);
         } catch (Exception e) {

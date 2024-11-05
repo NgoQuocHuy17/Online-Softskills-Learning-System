@@ -65,7 +65,7 @@
                                 
                                     %>
                                 </h3>
-                                <form action="change-pass" method="POST">
+                                <form action="changepass" method="POST">
                                     <div class="form-group"style="margin-bottom: 10px">
                                         <input type="password" name="password" placeholder="&#xf084; &nbsp; New Password"
                                                class="form-control border-info placeicon">

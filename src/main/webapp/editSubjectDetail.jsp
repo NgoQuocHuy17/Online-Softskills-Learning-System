@@ -24,9 +24,9 @@
         <div class="container mt-5 p-4 bg-white rounded shadow">
             <h1 class="mb-4 text-center text-primary">Edit Subject Detail</h1>
             <div class="mb-4">
-                <a href="lesson-list?courseId=${course.id}" class="btn btn-primary">Go to Lesson List</a>
+                <a href="LessonListController?courseId=${course.id}" class="btn btn-primary">Go to Lesson List</a>
             </div>
-            <form action="subject-details" method="post">
+            <form action="subjectDetail" method="post">
                 <input type="hidden" name="action" value="update">
                 <input type="hidden" name="courseId" value="${course.id}">
 
@@ -107,19 +107,19 @@
                                     <div class="mt-2 fw-bold">${media.title}</div>
                                 </td>
                                 <td>
-                                    <form action="subject-details" method="post" style="display: inline;">
+                                    <form action="subjectDetail" method="post" style="display: inline;">
                                         <input type="hidden" name="action" value="moveUp">
                                         <input type="hidden" name="mediaId" value="${media.id}">
                                         <input type="hidden" name="courseId" value="${course.id}">
                                         <button type="submit" class="btn btn-link p-0" ${media.displayOrder <= 1 ? 'disabled' : ''}>▲</button>
                                     </form>
-                                    <form action="subject-details" method="post" style="display: inline;">
+                                    <form action="subjectDetail" method="post" style="display: inline;">
                                         <input type="hidden" name="action" value="moveDown">
                                         <input type="hidden" name="mediaId" value="${media.id}">
                                         <input type="hidden" name="courseId" value="${course.id}">
                                         <button type="submit" class="btn btn-link p-0" ${media.displayOrder >= maxOrder ? 'disabled' : ''}>▼</button>
                                     </form>
-                                    <a href="subject-details?action=remove&mediaId=${media.id}&courseId=${course.id}" 
+                                    <a href="subjectDetail?action=remove&mediaId=${media.id}&courseId=${course.id}" 
                                        onclick="return confirm('Are you sure you want to delete this media?');" 
                                        class="btn btn-danger btn-sm">Remove</a>
                                 </td>
@@ -128,7 +128,7 @@
                     </tbody>
                 </table>
 
-                <a href="add-media?courseId=${course.id}" class="btn btn-outline-secondary mb-4">Add Media</a>
+                <a href="addMedia?courseId=${course.id}" class="btn btn-outline-secondary mb-4">Add Media</a>
 
                 <button type="submit" class="btn btn-success w-100">Save Changes</button>
             </form>
