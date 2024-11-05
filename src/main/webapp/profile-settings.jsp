@@ -1,8 +1,3 @@
-<%-- 
-    Document   : profile-settings-mentee
-    Created on : May 26, 2024, 5:20:36 PM
-    Author     : asus
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -19,8 +14,6 @@
 %>
 
 <html lang="en">
-
-    <!-- Mirrored from mentoring.dreamguystech.com/html/template/profile-settings.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 May 2023 10:32:21 GMT -->
 
     <head>
         <meta charset="utf-8">
@@ -171,16 +164,17 @@
                                         <a href="change-password.jsp" class="btn btn-primary submit-btn">Change Password</a>
                                     </div>
                                 </form>
-                                
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <footer class="footer">
+                <jsp:include page="footer.jsp" />
+            </footer>
+        </div>
 
-            <jsp:include page="footer.jsp" />
 
             <script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
             <script src="assets/js/jquery-3.6.0.min.js"></script>

@@ -15,6 +15,18 @@ import java.util.List;
 
 public class RegistrationDAO extends DBContext<Registration> {
 
+    public boolean deleteRegistrationById(int registrationId) {
+        String query = "DELETE FROM registrations WHERE id = ?";
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, registrationId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0; // Return true if a record was deleted
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Return false if there was an error
+        }
+    }
+
     public List<Registration> getRegistrationsByUserIdWithPagination(int userId, int page, int pageSize, String category, String searchTerm) {
         List<Registration> registrations = new ArrayList<>();
         StringBuilder query = new StringBuilder("SELECT r.* FROM registrations r "
@@ -125,6 +137,37 @@ public class RegistrationDAO extends DBContext<Registration> {
 
         try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                // Tạo đối tượng Registration từ kết quả truy vấn
+                Registration registration = new Registration();
+                registration.setId(rs.getInt("id"));
+                registration.setUserId(rs.getInt("user_id"));
+                registration.setPackageId(rs.getInt("package_id"));
+                registration.setCourseId(rs.getInt("course_id"));
+                registration.setCreatedBy(rs.getInt("created_by"));
+                registration.setTotalCost(rs.getDouble("total_cost"));
+                registration.setStatus(rs.getString("status"));
+                registration.setValidFrom(rs.getTimestamp("valid_from"));
+                registration.setValidTo(rs.getTimestamp("valid_to"));
+                registration.setNotes(rs.getString("notes"));
+
+                // Thêm đối tượng vào danh sách
+                registrations.add(registration);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return registrations;
+    }
+
+    public List<Registration> getAllRegistrations() {
+        List<Registration> registrations = new ArrayList<>();
+        String query = "SELECT * FROM registrations";
+
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {

@@ -1,8 +1,3 @@
-<%-- 
-    Document   : UserList
-    Created on : 7 thg 10, 2024, 16:09:16
-    Author     : hung6
---%>
 
 <%@page import="model.UserContact"%>
 <%@page import="java.util.List"%>
@@ -23,7 +18,6 @@
         <link rel="stylesheet" href="assets/css/style.css">
     </head>
     <body>
-
         <div class="main-wrapper">
             <header class="header">
                 <div class="header-fixed">
@@ -48,16 +42,14 @@
                             </div>
                             <ul class="main-nav">
                                 <li class="has-submenu">
-                                    <a href="home">Home</a>   
+                                    <a href="home">Home</a>
                                 </li>
-
                                 <li class="login-link">
                                     <a href="login.html">Login / Signup</a>
                                 </li>
                             </ul>
                         </div>
                         <ul class="nav header-navbar-rht">
-
                             <li class="nav-item dropdown has-arrow logged-item">
                                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                                     <span class="user-img">
@@ -79,7 +71,6 @@
                                     <a class="dropdown-item" href="login.html">Logout</a>
                                 </div>
                             </li>
-
                         </ul>
                     </nav>
                 </div>
@@ -88,24 +79,13 @@
             <div class="breadcrumb-bar">
                 <div class="container-fluid">
                     <div class="row align-items-center">
-
-                        <div class="col-md-4 col-12">
-                            <form class="search-form custom-search-form" action="UserList" method="get">
+                        <div class="col-md-12 col-12">
+                            <form class="search-filter-form" action="UserList" method="get">
                                 <div class="input-group">
+                                    <!-- Search Input -->
                                     <input type="text" name="searchTerm" placeholder="Search user..." class="form-control" value="${param.searchTerm}">
-                                    <input type="hidden" name="gender" value="${param.gender}"/>
-                                    <input type="hidden" name="role" value="${param.role}"/>
-                                    <input type="hidden" name="status" value="${param.status}"/>
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                                </div>
-                            </form>
 
-                        </div>
-
-                        <div class="col-md-4 col-12">
-                            <form class="filter-form" action="UserList" method="get">
-                                <div class="input-group">
-                                    <input type="hidden" name="searchTerm" value="${param.searchTerm}"/>
+                                    <!--Filter -->
                                     <select name="gender" class="form-control">
                                         <option value="">All Genders</option>
                                         <option value="Male" ${param.gender == 'Male' ? 'selected' : ''}>Male</option>
@@ -115,20 +95,32 @@
                                         <option value="">All Roles</option>
                                         <option value="Admin" ${param.role == 'Admin' ? 'selected' : ''}>Admin</option>
                                         <option value="User" ${param.role == 'User' ? 'selected' : ''}>User</option>
+                                        <option value="Teacher" ${param.role == 'Teacher' ? 'selected' : ''}>Teacher</option>
                                     </select>
                                     <select name="status" class="form-control">
                                         <option value="">All Statuses</option>
-                                        <option value="Valid" ${param.status == 'Valid' ? 'selected' : ''}>Valid</option>
-                                        <option value="Invalid" ${param.status == 'Invalid' ? 'selected' : ''}>Invalid</option>
+                                        <option value="Valid" ${param.status == 'Valid' ? 'selected' : ''}>Active</option>
+                                        <option value="Invalid" ${param.status == 'Invalid' ? 'selected' : ''}>Inactive</option>
                                     </select>
-                                    <button type="submit" class="btn btn-primary">Filter</button>
+
+                                    <!-- Page Size -->
+                                    <input type="number" name="pageSize" placeholder="Page Size" class="form-control" min="1" value="${param.pageSize}"/>
+
+                                    <!-- Submit -->
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Search & Filter</button>
+                                </div>
+
+                                <!-- HideField Checkboxes -->
+                                <div class="form-group mt-3">
+                                    <label class="mr-2">Hide Columns: </label>
+                                    <label><input type="checkbox" name="hideFullName" value="true" ${param.hideFullName == 'true' ? 'checked' : ''}> Full Name</label>
+                                    <label><input type="checkbox" name="hideGender" value="true" ${param.hideGender == 'true' ? 'checked' : ''}> Gender</label>
+                                    <label><input type="checkbox" name="hideEmail" value="true" ${param.hideEmail == 'true' ? 'checked' : ''}> Email</label>
+                                    <label><input type="checkbox" name="hideMobile" value="true" ${param.hideMobile == 'true' ? 'checked' : ''}> Mobile</label>
+                                    <label><input type="checkbox" name="hideRole" value="true" ${param.hideRole == 'true' ? 'checked' : ''}> Role</label>
+                                    <label><input type="checkbox" name="hideStatus" value="true" ${param.hideStatus == 'true' ? 'checked' : ''}> Status</label>
                                 </div>
                             </form>
-
-                        </div>
-
-                        <div class="col-md-4 col-12 text-right">
-                            <a href="AddUser.jsp" class="btn btn-success">Add User</a>
                         </div>
                     </div>
                 </div>
@@ -137,7 +129,9 @@
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
-                        <!-- Table for displaying user information -->
+                        <div class="col-md-4 col-12 text-right">
+                            <a href="AddUser.jsp" class="btn btn-success">Add User</a>
+                        </div>
                         <h2 class="mt-4">User List</h2>
                         <c:if test="${empty userList}">
                             <div class="alert alert-warning">
@@ -150,101 +144,127 @@
                                     <tr>
                                         <th>
                                             User ID
-                                            <a href="?sort=id&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
+                                            <a href="?sort=id&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}">
                                                 <i class="fas fa-arrow-up"></i>
                                             </a>
-                                            <a href="?sort=id&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
+                                            <a href="?sort=id&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}">
                                                 <i class="fas fa-arrow-down"></i>
                                             </a>
                                         </th>
-                                        <th>
-                                            Full Name  
-                                            <a href="?sort=full_name&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
-                                                <i class="fas fa-arrow-up"></i>
-                                            </a>
-                                            <a href="?sort=full_name&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
-                                                <i class="fas fa-arrow-down"></i>
-                                            </a>
-                                        </th>
-                                        <th>
-                                            Gender 
-                                            <a href="?sort=gender&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
-                                                <i class="fas fa-arrow-up"></i>
-                                            </a>
-                                            <a href="?sort=gender&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
-                                                <i class="fas fa-arrow-down"></i>
-                                            </a>
-                                        </th>
-                                        <th>
-                                            Email 
-                                            <a href="?sort=email&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
-                                                <i class="fas fa-arrow-up"></i>
-                                            </a>
-                                            <a href="?sort=email&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
-                                                <i class="fas fa-arrow-down"></i>
-                                            </a>
-                                        </th>
-                                        <th>
-                                            Mobile 
-                                            <a href="?sort=mobile&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
-                                                <i class="fas fa-arrow-up"></i>
-                                            </a>
-                                            <a href="?sort=mobile&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
-                                                <i class="fas fa-arrow-down"></i>
-                                            </a>
-                                        </th>
-                                        <th>
-                                            Role 
-                                            <a href="?sort=role&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
-                                                <i class="fas fa-arrow-up"></i>
-                                            </a>
-                                            <a href="?sort=role&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
-                                                <i class="fas fa-arrow-down"></i>
-                                            </a>
-                                        </th>
-                                        <th>
-                                            Status 
-                                            <a href="?sort=isValid&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
-                                                <i class="fas fa-arrow-up"></i>
-                                            </a>
-                                            <a href="?sort=status&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
-                                                <i class="fas fa-arrow-down"></i>
-                                            </a>
-                                        </th>
+                                        <c:if test="${!hideFullName}">
+                                            <th>
+                                                Full Name
+                                                <a href="?sort=full_name&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-up"></i>
+                                                </a>
+                                                <a href="?sort=full_name&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-down"></i>
+                                                </a>
+                                            </th>
+                                        </c:if>
+                                        <c:if test="${!hideGender}">
+                                            <th>
+                                                Gender
+                                                <a href="?sort=gender&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-up"></i>
+                                                </a>
+                                                <a href="?sort=gender&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-down"></i>
+                                                </a>
+                                            </th>
+                                        </c:if>
+                                        <c:if test="${!hideEmail}">
+                                            <th>
+                                                Email
+                                                <a href="?sort=email&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-up"></i>
+                                                </a>
+                                                <a href="?sort=email&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-down"></i>
+                                                </a>
+                                            </th>
+                                        </c:if>
+                                        <c:if test="${!hideMobile}">
+                                            <th>
+                                                Mobile
+                                                <a href="?sort=mobile&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-up"></i>
+                                                </a>
+                                                <a href="?sort=mobile&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-down"></i>
+                                                </a>
+                                            </th>
+                                        </c:if>
+                                        <c:if test="${!hideRole}">
+                                            <th>
+                                                Role
+                                                <a href="?sort=role&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-up"></i>
+                                                </a>
+                                                <a href="?sort=role&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-down"></i>
+                                                </a>
+                                            </th>
+                                        </c:if>
+                                        <c:if test="${!hideStatus}">
+                                            <th>
+                                                Status
+                                                <a href="?sort=isValid&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-up"></i>
+                                                </a>
+                                                <a href="?sort=isValid&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}>
+                                                   <i class="fas fa-arrow-down"></i>
+                                                </a>
+                                            </th>
+                                        </c:if>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <c:forEach var="user" items="${userList}">
                                         <tr>
-                                            <td>${user.id}</td>
-                                            <td>${user.fullName}</td>
-                                            <td>${user.gender}</td>
-                                            <td>
-                                                <strong>${user.email}</strong> <br/>
-                                                <c:set var="emailKey" value="emails_${user.id}" />
-                                                <c:set var="userEmails" value="${requestScope[emailKey]}" />
-                                                <c:forEach var="email" items="${userEmails}">
-                                                    ${email.contactValue} <br/>
-                                                </c:forEach>
-                                            </td>
-                                            <td>
-                                                <c:set var="phoneKey" value="phones_${user.id}" />
-                                                <c:set var="userPhones" value="${requestScope[phoneKey]}" />
-                                                <c:forEach var="phone" items="${userPhones}">
-                                                    ${phone.contactValue} <br/>
-                                                </c:forEach>
-                                            </td>
-                                            <td>${user.role}</td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${user.isValid == 1}">
-                                                        Active
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        Inactive
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
+                                            <c:if test="${!hideId}">
+                                                <td>${user.id}</td>
+                                            </c:if>
+                                            <c:if test="${!hideFullName}">
+                                                <td>${user.fullName}</td>
+                                            </c:if>
+                                            <c:if test="${!hideGender}">
+                                                <td>${user.gender}</td>
+                                            </c:if>
+                                            <c:if test="${!hideEmail}">
+                                                <td>
+                                                    <strong>${user.email}</strong> <br/>
+                                                    <c:set var="emailKey" value="emails_${user.id}" />
+                                                    <c:set var="userEmails" value="${requestScope[emailKey]}" />
+                                                    <c:forEach var="email" items="${userEmails}">
+                                                        ${email.contactValue} <br/>
+                                                    </c:forEach>
+                                                </td>
+                                            </c:if>
+                                            <c:if test="${!hideMobile}">
+                                                <td>
+                                                    <c:set var="phoneKey" value="phones_${user.id}" />
+                                                    <c:set var="userPhones" value="${requestScope[phoneKey]}" />
+                                                    <c:forEach var="phone" items="${userPhones}">
+                                                        ${phone.contactValue} <br/>
+                                                    </c:forEach>
+                                                </td>
+                                            </c:if>
+                                            <c:if test="${!hideRole}">
+                                                <td>${user.role}</td>
+                                            </c:if>
+                                            <c:if test="${!hideStatus}">
+                                                <td>
+                                                    <c:choose>
+                                                        <c:when test="${user.isValid == 1}">
+                                                            Active
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            Inactive
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+                                            </c:if>
                                             <td>
                                                 <form action="UserDetails" method="get">
                                                     <input type="hidden" name="userId" value="${user.id}"/>
@@ -259,23 +279,22 @@
                     </div>
 
                     <div class="row">
-                        <!-- Phân trang -->
                         <c:if test="${totalPages > 1 && not empty userList}">
                             <div class="blog-pagination mt-4">
                                 <nav>
                                     <ul class="pagination justify-content-center">
                                         <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                            <a class="page-link" href="?page=${currentPage - 1}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&sort=${param.sort}&sortOrder=${param.sortOrder}" tabindex="-1">
+                                            <a class="page-link" href="?page=${currentPage - 1}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&sort=${param.sort}&sortOrder=${param.sortOrder}&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}" tabindex="-1">
                                                 <i class="fas fa-angle-double-left"></i>
                                             </a>
                                         </li>
                                         <c:forEach var="i" begin="1" end="${totalPages}">
                                             <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                                <a class="page-link" href="?page=${i}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&sort=${param.sort}&sortOrder=${param.sortOrder}">${i}</a>
+                                                <a class="page-link" href="?page=${i}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&sort=${param.sort}&sortOrder=${param.sortOrder}&hideField=&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}">${i}</a>
                                             </li>
                                         </c:forEach>
                                         <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                            <a class="page-link" href="?page=${currentPage + 1}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&sort=${param.sort}&sortOrder=${param.sortOrder}">
+                                            <a class="page-link" href="?page=${currentPage + 1}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}&sort=${param.sort}&sortOrder=${param.sortOrder}&hideField=&hideFullName=${hideFullName}&hideGender=${hideGender}&hideEmail=${hideEmail}&hideMobile=${hideMobile}&hideRole=${hideRole}&hideStatus=${hideStatus}&pageSize=${pageSize}">
                                                 <i class="fas fa-angle-double-right"></i>
                                             </a>
                                         </li>
@@ -284,7 +303,6 @@
                             </div>
                         </c:if>
                     </div>
-
                 </div>
             </div>
 
@@ -299,6 +317,4 @@
         <script src="assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js"></script>
         <script src="assets/js/script.js"></script>
     </body>
-
-    <!-- Mirrored from mentoring.dreamguystech.com/html/template/mentee-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 May 2023 10:32:09 GMT -->
 </html>

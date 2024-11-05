@@ -21,10 +21,11 @@ CREATE TABLE users (
 	isValid bit DEFAULT 1
 );
 
-CREATE TABLE user_videos (
+CREATE TABLE user_media (
     id INT IDENTITY(1,1) PRIMARY KEY,
     user_id INT NOT NULL,
-    video_url VARCHAR(255) NOT NULL,
+    media_type NVARCHAR(50) NOT NULL,
+    media_data VARBINARY(MAX) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
@@ -37,7 +38,6 @@ CREATE TABLE user_contacts (
     is_preferred bit DEFAULT 0,
     CONSTRAINT FK_UserContacts_Users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
-
 
 -- Table: login_history
 CREATE TABLE login_history (
@@ -174,6 +174,14 @@ CREATE TABLE registrations (
     CONSTRAINT FK_Registrations_Course FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE NO ACTION
 );
 
+-- Table: registration_media
+CREATE TABLE registration_media (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    registration_id INT NOT NULL,
+    media_type NVARCHAR(50) NOT NULL,
+    media_data VARBINARY(MAX) NOT NULL,
+    FOREIGN KEY (registration_id) REFERENCES registrations(id)
+);
 
 -- Table: user_courses
 CREATE TABLE user_courses (

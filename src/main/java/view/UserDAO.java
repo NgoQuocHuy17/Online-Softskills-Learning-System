@@ -1,7 +1,6 @@
 package view;
 
 import controller.SendMailActivateAcc;
-import controller.RegisterBean;
 import java.sql.Connection;
 import model.User;
 import java.util.List;
@@ -47,6 +46,21 @@ public class UserDAO extends DBContext<User> {
         return user;
     }
 
+    public int getUserIdByEmail(String email) {
+        int userId = -1;
+        String query = "SELECT id FROM users WHERE email = ?";
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                userId = rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userId;
+    }
+
     public boolean addUser(User user) {
         String sql = "INSERT INTO users (full_name, gender, email, password, role, isValid) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -86,42 +100,9 @@ public class UserDAO extends DBContext<User> {
         return false;
     }
 
-//    public String register(RegisterBean rb) {
-//        String fullName = rb.getFullName();
-//        String email = rb.getEmail();
-//        String mobile = rb.getMobile();
-//        String gender = rb.getGender();
-//        String password = rb.getPassword();
-//        String myHash = rb.getMyHash();
-//
-//        try {
-//            String sqlQuery = "INSERT INTO users (full_name, gender, email, password, mobile, hash) values (?, ?, ?, ?, ?, ?)";
-//            PreparedStatement ps = super.getConn().prepareStatement(sqlQuery);
-//            ps.setString(1, fullName);
-//            ps.setString(2, gender);
-//            ps.setString(3, email);
-//            ps.setString(4, password);
-//            ps.setString(5, mobile);
-//            ps.setString(6, myHash);
-//
-//            int i = ps.executeUpdate();
-//            if (i != 0) {
-//                SendingEmail se = new SendingEmail(email, myHash);
-//                se.sendMail();
-//                return "SUCCESS";
-//            }
-//
-//        } catch (Exception e) {
-//
-//            System.out.println("RegisterDAO error!");
-//        }
-//        return "ERROR";
-//
-//    }
     public User login(String email, String password) {
         User user = null;
         String query = "SELECT * FROM users WHERE email = ? AND password = ?";
-//        String isValid = "SELECT isValid FROM users WHERE email = ? AND password = ?";
         boolean isValid = false;
 
         try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement("SELECT isValid FROM users WHERE email = ? AND password = ?")) {
@@ -166,6 +147,56 @@ public class UserDAO extends DBContext<User> {
             e.printStackTrace();
         }
         return user;
+    }
+
+    public boolean registerUser(String fullName, String gender, String email, String password, String hash) {
+        String query = "INSERT INTO users (full_name, gender, email, password, hash, isValid) VALUES (?, ?, ?, ?, ?, 0)";
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, fullName);
+            ps.setString(2, gender);
+            ps.setString(3, email);
+            ps.setString(4, password);
+            ps.setString(5, hash);
+
+            int rowsInserted = ps.executeUpdate();
+            return rowsInserted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean checkEmailExist(String email) {
+        boolean exists = false;
+        String query = "SELECT COUNT(*) FROM users WHERE email = ?";
+
+        try (Connection conn = getConn(); PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                exists = rs.getInt(1) > 0;  // Nếu số lượng > 0, nghĩa là email đã tồn tại
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return exists;
+    }
+
+    public boolean activateUser(String email, String hash) {
+        // SQL câu lệnh để cập nhật isValid của người dùng
+        String sql = "UPDATE users SET isValid = 1 WHERE email = ? AND hash = ?";
+        try (Connection conn = getConn(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            stmt.setString(2, hash); // Thêm tham số hash vào câu lệnh
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0; // Trả về true nếu có ít nhất 1 hàng được cập nhật
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Trả về false nếu có lỗi xảy ra
+        }
     }
 
     @Override
