@@ -57,6 +57,7 @@ public class UpdateUserDetails extends HttpServlet {
 
             // Ghi dữ liệu vào database
             userMediaDAO.insertMedia(userId, imageType, imageData, imageNote);
+            request.setAttribute("message", "Cập nhật media của người dùng thành công.");
         }
 
         // Xử lý cập nhật video
@@ -73,6 +74,7 @@ public class UpdateUserDetails extends HttpServlet {
 
             // Ghi dữ liệu vào database
             userMediaDAO.insertMedia(userId, videoType, videoData, videoNote);
+            request.setAttribute("message", "Cập nhật media của người dùng thành công.");
         }
 
         // Lấy thông tin user và các danh sách cần thiết để hiển thị trên JSP
