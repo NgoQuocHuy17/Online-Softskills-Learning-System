@@ -1,6 +1,5 @@
 package view;
 
-import controller.SendMailActivateAcc;
 import java.sql.Connection;
 import model.User;
 import java.util.List;
@@ -31,11 +30,9 @@ public class UserDAO extends DBContext<User> {
                             rs.getString("email"),
                             rs.getString("password"),
                             rs.getString("role"),
-                            rs.getString("avatar_url"),
-                            rs.getDate("created_at"),
-                            rs.getDate("updated_at"),
+                            rs.getString("address"),
                             rs.getString("hash"),
-                            rs.getInt("isValid")
+                            rs.getInt("status")
                     );
                 }
             }
@@ -62,20 +59,19 @@ public class UserDAO extends DBContext<User> {
     }
 
     public boolean addUser(User user) {
-        String sql = "INSERT INTO users (full_name, gender, email, password, role, isValid) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (full_name, gender, email, password, role, address, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = getConn(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setString(1, user.getFullName());
             stmt.setString(2, user.getGender());
             stmt.setString(3, user.getEmail());
             stmt.setString(4, user.getPassword());
             stmt.setString(5, user.getRole());
-            stmt.setInt(6, user.getIsValid());
+            stmt.setString(6, user.getAddress());
+            stmt.setInt(7, user.getStatus());
 
             int rowsInserted = stmt.executeUpdate();
             return rowsInserted > 0;
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -103,21 +99,21 @@ public class UserDAO extends DBContext<User> {
     public User login(String email, String password) {
         User user = null;
         String query = "SELECT * FROM users WHERE email = ? AND password = ?";
-        boolean isValid = false;
+        boolean status = false;
 
-        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement("SELECT isValid FROM users WHERE email = ? AND password = ?")) {
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement("SELECT status FROM users WHERE email = ? AND password = ?")) {
             ps.setString(1, email);
             ps.setString(2, password);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    isValid = rs.getBoolean("isValid"); // Lấy giá trị cột isValid
+                    status = rs.getBoolean("status"); // Lấy giá trị cột status
                 }
             }
         } catch (Exception e) {
 
         }
 
-        if (isValid == false) {
+        if (status == false) {
             return null;
         }
 
@@ -134,11 +130,9 @@ public class UserDAO extends DBContext<User> {
                             rs.getString("email"),
                             rs.getString("password"),
                             rs.getString("role"),
-                            rs.getString("avatar_url"),
-                            rs.getDate("created_at"),
-                            rs.getDate("updated_at"),
+                            rs.getString("address"),
                             rs.getString("hash"),
-                            rs.getInt("isValid")
+                            rs.getInt("status")
                     );
                 }
             }
@@ -150,7 +144,7 @@ public class UserDAO extends DBContext<User> {
     }
 
     public boolean registerUser(String fullName, String gender, String email, String password, String hash) {
-        String query = "INSERT INTO users (full_name, gender, email, password, hash, isValid) VALUES (?, ?, ?, ?, ?, 0)";
+        String query = "INSERT INTO users (full_name, gender, email, password, hash, status) VALUES (?, ?, ?, ?, ?, 0)";
         try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, fullName);
             ps.setString(2, gender);
@@ -186,8 +180,8 @@ public class UserDAO extends DBContext<User> {
     }
 
     public boolean activateUser(String email, String hash) {
-        // SQL câu lệnh để cập nhật isValid của người dùng
-        String sql = "UPDATE users SET isValid = 1 WHERE email = ? AND hash = ?";
+        // SQL câu lệnh để cập nhật status của người dùng
+        String sql = "UPDATE users SET status = 1 WHERE email = ? AND hash = ?";
         try (Connection conn = getConn(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, email);
             stmt.setString(2, hash); // Thêm tham số hash vào câu lệnh
@@ -213,11 +207,9 @@ public class UserDAO extends DBContext<User> {
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("role"),
-                        rs.getString("avatar_url"),
-                        rs.getDate("created_at"),
-                        rs.getDate("updated_at"),
+                        rs.getString("address"),
                         rs.getString("hash"),
-                        rs.getInt("isValid")
+                        rs.getInt("status")
                 );
                 users.add(user);
             }
@@ -243,11 +235,9 @@ public class UserDAO extends DBContext<User> {
                             rs.getString("email"),
                             rs.getString("password"),
                             rs.getString("role"),
-                            rs.getString("avatar_url"),
-                            rs.getDate("created_at"),
-                            rs.getDate("updated_at"),
+                            rs.getString("address"),
                             rs.getString("hash"),
-                            rs.getInt("isValid")
+                            rs.getInt("status")
                     );
                 }
             }
@@ -255,28 +245,6 @@ public class UserDAO extends DBContext<User> {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return user;
-    }
-
-    @Override
-    public int insert(User user) {
-        String sql = "INSERT INTO users (full_name, gender, email, password, role, avatar_url, created_at, updated_at, hash, isValid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        int result = 0;
-        try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
-            pre.setString(1, user.getFullName());
-            pre.setString(2, user.getGender());
-            pre.setString(3, user.getEmail());
-            pre.setString(4, user.getPassword());
-            pre.setString(5, user.getRole());
-            pre.setString(6, user.getAvatarUrl());
-            pre.setDate(7, new java.sql.Date(user.getCreatedAt().getTime()));
-            pre.setDate(8, new java.sql.Date(user.getUpdatedAt().getTime()));
-            pre.setString(9, user.getHash());
-            pre.setInt(10, user.getIsValid());
-            result = pre.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return result;
     }
 
     public int getIDByUser(String name) throws SQLException {
@@ -292,45 +260,9 @@ public class UserDAO extends DBContext<User> {
         return 0;
     }
 
-    @Override
-    public int update(User user) {
-        String sql = "UPDATE users SET full_name = ?, gender = ?, email = ?, password = ?, role = ?, avatar_url = ?, created_at = ?, updated_at = ?, hash = ?, isValid = ? WHERE id = ?";
-        int result = 0;
-        try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
-            pre.setString(1, user.getFullName());
-            pre.setString(2, user.getGender());
-            pre.setString(3, user.getEmail());
-            pre.setString(4, user.getPassword());
-            pre.setString(5, user.getRole());
-            pre.setString(6, user.getAvatarUrl());
-            pre.setDate(7, new java.sql.Date(user.getCreatedAt().getTime()));
-            pre.setDate(8, new java.sql.Date(user.getUpdatedAt().getTime()));
-            pre.setString(9, user.getHash());
-            pre.setInt(10, user.getIsValid());
-            pre.setInt(11, user.getId());
-            result = pre.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return result;
-    }
-
-    @Override
-    public int delete(int... id) {
-        String sql = "DELETE FROM users WHERE id = ?";
-        int result = 0;
-        try (PreparedStatement pre = super.getConn().prepareStatement(sql)) {
-            pre.setInt(1, id[0]);
-            result = pre.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return result;
-    }
-
     public String getEmailByUser(String user) throws SQLException {
         String sql = "Select email from users where name = ?";
-        String email = "";
+        String email;
         PreparedStatement ps = super.getConn().prepareStatement(sql);
         ps.setString(1, user);
         ResultSet rs = ps.executeQuery();
@@ -376,7 +308,7 @@ public class UserDAO extends DBContext<User> {
             query.append(" AND role = ?");
         }
         if (statusFilter != null && !statusFilter.isEmpty()) {
-            query.append(" AND isValid = ?");
+            query.append(" AND status = ?");
         }
         if (searchTerm != null && !searchTerm.isEmpty()) {
             query.append(" AND (full_name LIKE ? OR email LIKE ? OR id IN (SELECT user_id FROM user_contacts WHERE contact_value LIKE ?))");
@@ -427,11 +359,9 @@ public class UserDAO extends DBContext<User> {
                             rs.getString("email"),
                             rs.getString("password"),
                             rs.getString("role"),
-                            rs.getString("avatar_url"),
-                            rs.getDate("created_at"),
-                            rs.getDate("updated_at"),
+                            rs.getString("address"),
                             rs.getString("hash"),
-                            rs.getInt("isValid")
+                            rs.getInt("status")
                     );
                     list.add(user);
                 }
@@ -455,7 +385,7 @@ public class UserDAO extends DBContext<User> {
             query.append(" AND role = ?");
         }
         if (statusFilter != null) {
-            query.append(" AND isValid = ?");
+            query.append(" AND status = ?");
         }
         if (searchTerm != null && !searchTerm.isEmpty()) {
             query.append(" AND (full_name LIKE ? OR email LIKE ? OR id IN (SELECT user_id FROM user_contacts WHERE contact_value LIKE ?))");
@@ -492,11 +422,11 @@ public class UserDAO extends DBContext<User> {
         return totalUsers;
     }
 
-    public boolean updateUserRoleAndStatus(int userId, String role, int isValid) {
-        String query = "UPDATE users SET role = ?, isValid = ? WHERE id = ?";
+    public boolean updateUserRoleAndStatus(int userId, String role, int status) {
+        String query = "UPDATE users SET role = ?, status = ? WHERE id = ?";
         try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, role);
-            ps.setInt(2, isValid);
+            ps.setInt(2, status);
             ps.setInt(3, userId);
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
@@ -504,6 +434,21 @@ public class UserDAO extends DBContext<User> {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public int insert(User obj) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public int update(User obj) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public int delete(int... id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

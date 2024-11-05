@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Date;
-
 public class User {
 
     private int id;
@@ -10,27 +8,23 @@ public class User {
     private String email;
     private String password;
     private String role;
-    private String avatarUrl;
-    private Date createdAt;
-    private Date updatedAt;
+    private String address;
     private String hash;
-    private int isValid;
+    private int status;
 
     public User() {
     }
 
-    public User(int id, String fullName, String gender, String email, String password, String role, String avatarUrl, Date createdAt, Date updatedAt, String hash, int isValid) {
+    public User(int id, String fullName, String gender, String email, String password, String role, String address, String hash, int status) {
         this.id = id;
         this.fullName = fullName;
         this.gender = gender;
         this.email = email;
         this.password = password;
         this.role = role;
-        this.avatarUrl = avatarUrl;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.address = address;
         this.hash = hash;
-        this.isValid = isValid;
+        this.status = status;
     }
 
     public int getId() {
@@ -81,28 +75,12 @@ public class User {
         this.role = role;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getHash() {
@@ -113,12 +91,13 @@ public class User {
         this.hash = hash;
     }
 
-    public int getIsValid() {
-        return isValid;
+    public int getStatus() {
+        return status;
     }
 
-    public void setIsValid(int isValid) {
-        this.isValid = isValid;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
 }
+

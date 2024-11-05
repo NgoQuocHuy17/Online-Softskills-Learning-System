@@ -1,34 +1,20 @@
 ﻿-- Insert users
-INSERT INTO users (full_name, gender, email, password, role, avatar_url, created_at, updated_at, hash, isValid) 
+INSERT INTO users (full_name, gender, email, password, role, address, hash, isValid) 
 VALUES 
-('Nguyen Van A', 'Male', 'nguyenvana@example.com', 'password123', 'Admin', 'assets/img/user/user1.jpg', GETDATE(), GETDATE(), 'hash1', 1),
-('Tran Thi B', 'Female', 'tranthib@example.com', 'password456', 'Student', 'assets/img/user/user2.jpg', GETDATE(), GETDATE(), 'hash2', 1),
-('Le Van C', 'Male', 'levanc@example.com', 'password789', 'Student', 'assets/img/user/user3.jpg', GETDATE(), GETDATE(), 'hash3', 1),
-('Pham Minh D', 'Male', 'phamind@example.com', 'password321', 'Teacher', 'assets/img/user/user4.jpg', GETDATE(), GETDATE(), 'hash4', 1),
-('Vo Thi E', 'Female', 'vothie@example.com', 'password654', 'Teacher', 'assets/img/user/user5.jpg', GETDATE(), GETDATE(), 'hash5', 1),
-('Nguyen Van F', 'Male', 'nguyenf@example.com', 'password987', 'Admin', 'assets/img/user/user6.jpg', GETDATE(), GETDATE(), 'hash6', 1),
-('Tran Thi G', 'Female', 'trang@example.com', 'password159', 'Student', 'assets/img/user/user7.jpg', GETDATE(), GETDATE(), 'hash7', 1),
-('Le Van H', 'Male', 'levanh@example.com', 'password753', 'Teacher', 'assets/img/user/user8.jpg', GETDATE(), GETDATE(), 'hash8', 1),
-('Pham Minh I', 'Male', 'phami@example.com', 'password852', 'Teacher', 'assets/img/user/user9.jpg', GETDATE(), GETDATE(), 'hash9', 1),
-('Vo Thi J', 'Female', 'voj@example.com', 'password246', 'Student', 'assets/img/user/user10.jpg', GETDATE(), GETDATE(), 'hash10', 1),
-('Nguyen Van K', 'Male', 'nguyenk@example.com', 'password369', 'Admin', 'assets/img/user/user11.jpg', GETDATE(), GETDATE(), 'hash11', 1),
-('Tran Thi L', 'Female', 'tranl@example.com', 'password147', 'Teacher', 'assets/img/user/user12.jpg', GETDATE(), GETDATE(), 'hash12', 1);
+('Nguyen Van A', 'Male', 'nguyenvana@example.com', 'password123', 'Admin', NULL, 'hash1', 1),
+('Tran Thi B', 'Female', 'tranthib@example.com', 'password456', 'Student', NULL, 'hash2', 1),
+('Le Van C', 'Male', 'levanc@example.com', 'password789', 'Student', NULL, 'hash3', 1),
+('Pham Minh D', 'Male', 'phamind@example.com', 'password321', 'Teacher', NULL, 'hash4', 1),
+('Vo Thi E', 'Female', 'vothie@example.com', 'password654', 'Teacher', NULL, 'hash5', 1),
+('Nguyen Van F', 'Male', 'nguyenf@example.com', 'password987', 'Admin', NULL, 'hash6', 1),
+('Tran Thi G', 'Female', 'trang@example.com', 'password159', 'Student', NULL, 'hash7', 1),
+('Le Van H', 'Male', 'levanh@example.com', 'password753', 'Teacher', NULL, 'hash8', 1),
+('Pham Minh I', 'Male', 'phami@example.com', 'password852', 'Teacher', NULL, 'hash9', 1),
+('Vo Thi J', 'Female', 'voj@example.com', 'password246', 'Student', NULL, 'hash10', 1),
+('Nguyen Van K', 'Male', 'nguyenk@example.com', 'password369', 'Admin', NULL, 'hash11', 1),
+('Tran Thi L', 'Female', 'tranl@example.com', 'password147', 'Teacher', NULL, 'hash12', 1);
 GO
 
-INSERT INTO user_videos (user_id, video_url) 
-VALUES 
-(1, 'assets/video/Video1.mp4'),
-(2, 'assets/video/Video2.mp4'),
-(3, 'assets/video/Video3.mp4'),
-(4, 'assets/video/Video4.mp4'),
-(5, 'assets/video/Video5.mp4'),
-(6, 'assets/video/Video6.mp4'),
-(7, 'assets/video/Video1.mp4'),
-(8, 'assets/video/Video2.mp4'),
-(9, 'assets/video/Video3.mp4'),
-(10, 'assets/video/Video4.mp4'),
-(11, 'assets/video/Video5.mp4'),
-(12, 'assets/video/Video6.mp4')
 
 -- Insert user_contacts
 INSERT INTO user_contacts (user_id, contact_type, contact_value, is_preferred) 
@@ -62,17 +48,6 @@ VALUES
 (11, 'Email', 'nguyenk_email@example.com', 1),  
 (12, 'Phone', '0229876543', 1),  
 (12, 'Email', 'tranl_email@example.com', 0);
-GO
-
--- 3. Insert data into the login_history table
-INSERT INTO login_history (user_id, ip_address)
-VALUES 
-(1, '192.168.1.1'),
-(2, '192.168.1.2'),
-(3, '192.168.1.3'),
-(4, '192.168.1.4'),
-(5, '192.168.1.5'),
-(6, '192.168.1.6');
 GO
 
 -- 4. Insert data into the courses table
@@ -144,29 +119,28 @@ VALUES
 (10, 'Basic Package', 64.00, 51.20, 30), 
 (10, 'Premium Package', 91.00, 72.80, 90);
 
-INSERT INTO registrations (user_id, package_id, course_id, total_cost)
+INSERT INTO registrations (user_id, package_id, course_id, total_cost, update_by)
 VALUES
-(1, 1, 1, 65.00),   -- Basic Package cho course_id 1
-(1, 2, 1, 95.00),   -- Premium Package cho course_id 1
-(1, 3, 2, 60.00),   -- Basic Package cho course_id 2
-(1, 4, 2, 99.00),   -- Premium Package cho course_id 2
-(1, 5, 3, 70.00),   -- Basic Package cho course_id 3
-(1, 6, 3, 90.00),   -- Premium Package cho course_id 3
-(1, 7, 4, 62.00),   -- Basic Package cho course_id 4
-(1, 8, 4, 92.00),   -- Premium Package cho course_id 4
-(1, 9, 5, 67.00),   -- Basic Package cho course_id 5
-(1, 10, 5, 94.00),  -- Premium Package cho course_id 5
-(1, 11, 6, 68.00),  -- Basic Package cho course_id 6
-(1, 12, 6, 98.00),  -- Premium Package cho course_id 6
-(1, 13, 7, 63.00),  -- Basic Package cho course_id 7
-(1, 14, 7, 93.00),  -- Premium Package cho course_id 7
-(1, 15, 8, 66.00),  -- Basic Package cho course_id 8
-(1, 16, 8, 96.00),  -- Premium Package cho course_id 8
-(1, 17, 9, 61.00),  -- Basic Package cho course_id 9
-(1, 18, 9, 97.00),  -- Premium Package cho course_id 9
-(1, 19, 10, 64.00), -- Basic Package cho course_id 10
-(1, 20, 10, 91.00); -- Premium Package cho course_id 10
-
+(1, 1, 1, 65.00, 1),   -- Basic Package cho course_id 1
+(1, 2, 1, 95.00, 1),   -- Premium Package cho course_id 1
+(1, 3, 2, 60.00, 1),   -- Basic Package cho course_id 2
+(1, 4, 2, 99.00, 1),   -- Premium Package cho course_id 2
+(1, 5, 3, 70.00, 1),   -- Basic Package cho course_id 3
+(1, 6, 3, 90.00, 1),   -- Premium Package cho course_id 3
+(1, 7, 4, 62.00, 1),   -- Basic Package cho course_id 4
+(1, 8, 4, 92.00, 1),   -- Premium Package cho course_id 4
+(1, 9, 5, 67.00, 1),   -- Basic Package cho course_id 5
+(1, 10, 5, 94.00, 1),  -- Premium Package cho course_id 5
+(1, 11, 6, 68.00, 1),  -- Basic Package cho course_id 6
+(1, 12, 6, 98.00, 1),  -- Premium Package cho course_id 6
+(1, 13, 7, 63.00, 1),  -- Basic Package cho course_id 7
+(1, 14, 7, 93.00, 1),  -- Premium Package cho course_id 7
+(1, 15, 8, 66.00, 1),  -- Basic Package cho course_id 8
+(1, 16, 8, 96.00, 1),  -- Premium Package cho course_id 8
+(1, 17, 9, 61.00, 1),  -- Basic Package cho course_id 9
+(1, 18, 9, 97.00, 1),  -- Premium Package cho course_id 9
+(1, 19, 10, 64.00, 1), -- Basic Package cho course_id 10
+(1, 20, 10, 91.00, 1); -- Premium Package cho course_id 10
 
 -- 6. Insert data into the course_details table
 INSERT INTO course_details (course_id, section_title, content, image_path, video_url)
@@ -187,11 +161,6 @@ VALUES
 (4, 'fr', 'Résolution de conflits', 'Techniques pour résoudre des conflits de manière efficace.'),
 (5, 'de', 'Zeitmanagement', 'Lernen Sie Zeitmanagement-Techniken für eine höhere Produktivität.');
 GO
-
--- 8. Insert data into the registrations table
---INSERT INTO registrations (user_id, course_id, package_name, total_cost, valid_from, valid_to)
---VALUES 
---GO
 
 -- 9. Insert data into the user_courses table
 INSERT INTO user_courses (user_id, course_id)

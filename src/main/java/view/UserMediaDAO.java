@@ -78,6 +78,29 @@ public class UserMediaDAO extends DBContext<UserVideo> {
         return images;
     }
 
+    public List<UserMedia> getAvatarsByUserId(int userId) {
+        List<UserMedia> avatars = new ArrayList<>();
+        String query = "SELECT * FROM user_media WHERE user_id = ? AND media_type = 'avatar'";
+
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                UserMedia media = new UserMedia();
+                media.setId(rs.getInt("id"));
+                media.setUserId(rs.getInt("user_id"));
+                media.setMediaType(rs.getString("media_type"));
+                media.setMediaData(Base64.getEncoder().encodeToString(rs.getBytes("media_data"))); // Mã hóa dữ liệu thành Base64
+                avatars.add(media);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return avatars;
+    }
+
     public List<UserMedia> getVideosByUserId(int userId) {
         List<UserMedia> videos = new ArrayList<>();
         String query = "SELECT * FROM user_media WHERE user_id = ? AND media_type LIKE 'video/%'";
