@@ -59,6 +59,19 @@ public class UserMediaDAO extends DBContext<UserVideo> {
         }
     }
 
+    public boolean deleteMediaById(int mediaId) {
+        String query = "DELETE FROM user_media WHERE id = ?";
+
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, mediaId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     // Method to get images by user ID
     public List<UserMedia> getImagesByUserId(int userId) {
         List<UserMedia> images = new ArrayList<>();

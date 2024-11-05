@@ -223,50 +223,48 @@
 
                     <br>
                     <!-- Form xóa ảnh và video -->
-                    <form action="DeleteUserMedia" method="post">
-                        <div class="row form-row">
-                            <div class="col-12">
-                                <h4>Uploaded Images</h4>
-                                <div class="image-gallery">
-                                    <c:forEach var="image" items="${images}">
-                                        <div class="image-item d-flex align-items-center">
-                                            <div>
-                                                <img width="160" src="data:image/jpeg;base64,${image.mediaData}" alt="User Image" class="img-thumbnail limited-size">
-                                                <p>Note: ${image.note}</p>
-                                            </div>
-                                            <div class="ml-auto">
-                                                <input type="hidden" name="mediaId" value="${image.id}">
-                                                <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px;">Delete</button>
-                                            </div>
+                    <div class="row form-row">
+                        <div class="col-12">
+                            <h4>Uploaded Images</h4>
+                            <div class="image-gallery">
+                                <c:forEach var="image" items="${images}">
+                                    <form action="DeleteUserMedia" method="post" class="d-flex align-items-center">
+                                        <input type="hidden" name="userId" value="${user.id}">
+                                        <input type="hidden" name="mediaId" value="${image.id}">
+                                        <div>
+                                            <img width="160" src="data:image/jpeg;base64,${image.mediaData}" alt="User Image" class="img-thumbnail limited-size">
+                                            <p>Note: ${image.note}</p>
                                         </div>
-                                        <br>
-                                    </c:forEach>
-                                </div>
-                                <br>
-                            </div>
-                            <div class="col-12">
-                                <h4>Uploaded Videos</h4>
-                                <div class="video-gallery">
-                                    <c:forEach var="video" items="${videos}">
-                                        <div class="video-item d-flex align-items-center">
-                                            <div>
-                                                <video width="320" height="240" controls>
-                                                    <source src="data:image/jpeg;base64,${video.mediaData}" type="video/mp4">
-                                                </video>
-                                                <p>Note: ${video.note}</p>
-                                            </div>
-                                            <div class="ml-auto">
-                                                <input type="hidden" name="mediaId" value="${video.id}">
-                                                <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 15px;">Delete</button>
-                                            </div>
+                                        <div class="ml-auto">
+                                            <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 10px;">Delete</button>
                                         </div>
-                                        <br>
-                                    </c:forEach>
-                                </div>
+                                    </form>
+                                    <br>
+                                </c:forEach>
                             </div>
                         </div>
-                    </form>
-                    <br>
+                        <div class="col-12">
+                            <h4>Uploaded Videos</h4>
+                            <div class="video-gallery">
+                                <c:forEach var="video" items="${videos}">
+                                    <form action="DeleteUserMedia" method="post" class="d-flex align-items-center">
+                                        <input type="hidden" name="userId" value="${user.id}">
+                                        <input type="hidden" name="mediaId" value="${video.id}">
+                                        <div>
+                                            <video width="320" height="240" controls>
+                                                <source src="data:image/jpeg;base64,${video.mediaData}" type="video/mp4">
+                                            </video>
+                                            <p>Note: ${video.note}</p>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 15px;">Delete</button>
+                                        </div>
+                                    </form>
+                                    <br>
+                                </c:forEach>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
