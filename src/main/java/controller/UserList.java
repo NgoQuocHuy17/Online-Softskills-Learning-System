@@ -108,6 +108,6 @@ public class UserList extends HttpServlet {
         request.setAttribute("sort", sortBy);
         request.setAttribute("sortOrder", sortOrder);
 
-        request.getRequestDispatcher("/UserList.jsp").forward(request, response);
+        request.getRequestDispatcher("/user-list.jsp").forward(request, response);
     }
 }

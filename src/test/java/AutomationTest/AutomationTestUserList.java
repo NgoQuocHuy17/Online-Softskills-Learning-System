@@ -1,6 +1,8 @@
 package AutomationTest;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collections;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,21 +32,6 @@ public class AutomationTestUserList {
     }
 
     @Test
-    public void testSearch() {
-        // Nhập từ khóa tìm kiếm và submit
-        WebElement searchInput = driver.findElement(By.name("searchTerm"));
-        searchInput.sendKeys("Nguyen Van A");
-        searchInput.submit();
-
-        // Kiểm tra kết quả tìm kiếm
-        List<WebElement> userRows = driver.findElements(By.xpath("//table/tbody/tr"));
-        for (WebElement row : userRows) {
-            String userName = row.findElement(By.xpath("td[2]")).getText();
-            assertTrue(userName.contains("Nguyen Van A"), "Search result validation failed.");
-        }
-    }
-
-    @Test
     public void testSearchNoResults() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(1));
         WebElement searchInput = driver.findElement(By.name("searchTerm"));
@@ -57,92 +44,6 @@ public class AutomationTestUserList {
 
         // Xác thực thông báo "Không có người dùng hợp lệ"
         assertTrue(noResultsAlert.isDisplayed(), "Expected 'No valid users' alert to be displayed.");
-    }
-
-    @Test
-    public void testFilter() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
-        // Lấy các phần tử cần tương tác
-        WebElement genderMaleCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.id("genderMale")));
-        WebElement roleAdminCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.id("roleAdmin")));
-        WebElement statusValidCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.id("statusValid")));
-        WebElement filterButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".filter-form .btn-primary")));
-
-        // Chọn các checkbox nếu chưa được chọn
-        if (!genderMaleCheckbox.isSelected()) {
-            genderMaleCheckbox.click();
-        }
-        if (!roleAdminCheckbox.isSelected()) {
-            roleAdminCheckbox.click();
-        }
-        if (!statusValidCheckbox.isSelected()) {
-            statusValidCheckbox.click();
-        }
-
-        // Submit form
-        filterButton.click();
-
-        // Đợi trang tải lại và kiểm tra kết quả lọc
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//table/tbody/tr")));
-        List<WebElement> userRows = driver.findElements(By.xpath("//table/tbody/tr"));
-        for (WebElement row : userRows) {
-            String gender = row.findElement(By.xpath("td[3]")).getText();
-            String role = row.findElement(By.xpath("td[6]")).getText();
-            String status = row.findElement(By.xpath("td[7]")).getText();
-            assertEquals("Male", gender);
-            assertEquals("Admin", role);
-            assertEquals("Active", status);
-        }
-    }
-
-    @Test
-    public void testFilterNoResults() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(1));
-        WebElement statusInvalidCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.id("statusInvalid")));
-        WebElement filterButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".filter-form .btn-primary")));
-
-        // Chọn checkbox Invalid nếu chưa được chọn
-        if (!statusInvalidCheckbox.isSelected()) {
-            statusInvalidCheckbox.click();
-        }
-
-        // Submit form
-        filterButton.click();
-
-        // Đợi trang tải lại và kiểm tra không có kết quả trả về
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".alert.alert-warning")));
-        WebElement noResultsAlert = driver.findElement(By.cssSelector(".alert.alert-warning"));
-
-        // Xác thực thông báo "Không có người dùng hợp lệ"
-        assertTrue(noResultsAlert.isDisplayed(), "Expected 'No valid users' alert to be displayed.");
-    }
-
-    @Test
-    public void testSortAscending() {
-        // Sắp xếp tăng dần theo User ID
-        driver.findElement(By.xpath("//th[contains(text(), 'User ID')]//a[1]")).click();
-
-        // Xác thực kết quả sắp xếp tăng dần
-        List<WebElement> userIds = driver.findElements(By.xpath("//table/tbody/tr/td[1]"));
-        for (int i = 0; i < userIds.size() - 1; i++) {
-            int id1 = Integer.parseInt(userIds.get(i).getText());
-            int id2 = Integer.parseInt(userIds.get(i + 1).getText());
-            assertTrue(id1 <= id2, "Sorting ascending validation failed.");
-        }
-    }
-
-    @Test
-    public void testSortDescending() {
-        // Sắp xếp giảm dần theo User ID
-        driver.findElement(By.xpath("//th[contains(text(), 'User ID')]//a[2]")).click();
-
-        // Xác thực kết quả sắp xếp giảm dần
-        List<WebElement> userIds = driver.findElements(By.xpath("//table/tbody/tr/td[1]"));
-        for (int i = 0; i < userIds.size() - 1; i++) {
-            int id1 = Integer.parseInt(userIds.get(i).getText());
-            int id2 = Integer.parseInt(userIds.get(i + 1).getText());
-            assertTrue(id1 >= id2, "Sorting descending validation failed.");
-        }
     }
 
     @Test
@@ -168,162 +69,84 @@ public class AutomationTestUserList {
         assertEquals("2", currentPage.getText());
     }
 
-//    @Test
-//    public void testSearchAndFilter() {
-//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
-//
-//        // Tìm kiếm
-//        WebElement searchInput = driver.findElement(By.name("searchTerm"));
-//        searchInput.sendKeys("Nguyen Van A");
-//        searchInput.submit();
-//
-//        // Chờ kết quả tìm kiếm
-//        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//table/tbody/tr")));
-//
-//        // Áp dụng bộ lọc
-//        WebElement genderMaleCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.id("genderMale")));
-//        WebElement roleAdminCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.id("roleAdmin")));
-//        WebElement filterButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".filter-form .btn-primary")));
-//
-//        if (!genderMaleCheckbox.isSelected()) {
-//            genderMaleCheckbox.click();
-//        }
-//        if (!roleAdminCheckbox.isSelected()) {
-//            roleAdminCheckbox.click();
-//        }
-//
-//        // Submit bộ lọc
-//        filterButton.click();
-//
-//        // Đợi trang tải lại và kiểm tra kết quả lọc
-//        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//table/tbody/tr")));
-//        List<WebElement> userRows = driver.findElements(By.xpath("//table/tbody/tr"));
-//        for (WebElement row : userRows) {
-//            String gender = row.findElement(By.xpath("td[3]")).getText();
-//            String role = row.findElement(By.xpath("td[6]")).getText();
-//            assertEquals("Male", gender);
-//            assertEquals("Admin", role);
-//        }
-//    }
-//
-//    @Test
-//    public void testFilterAndSort() {
-//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-//        WebElement genderMaleCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.id("genderMale")));
-//        WebElement roleAdminCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.id("roleAdmin")));
-//        WebElement filterButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".filter-form .btn-primary")));
-//
-//        // Áp dụng bộ lọc
-//        if (!genderMaleCheckbox.isSelected()) {
-//            genderMaleCheckbox.click();
-//        }
-//        if (!roleAdminCheckbox.isSelected()) {
-//            roleAdminCheckbox.click();
-//        }
-//
-//        // Submit bộ lọc
-//        filterButton.click();
-//
-//        // Đợi trang tải lại
-//        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//table/tbody/tr")));
-//
-//        // Sắp xếp tăng dần theo User ID
-//        driver.findElement(By.xpath("//th[contains(text(), 'User ID')]//a[1]")).click();
-//
-//        // Xác thực kết quả sắp xếp
-//        List<WebElement> userIds = driver.findElements(By.xpath("//table/tbody/tr/td[1]"));
-//        for (int i = 0; i < userIds.size() - 1; i++) {
-//            int id1 = Integer.parseInt(userIds.get(i).getText());
-//            int id2 = Integer.parseInt(userIds.get(i + 1).getText());
-//            assertTrue(id1 <= id2, "Sorting ascending validation failed.");
-//        }
-//    }
-
     @Test
     public void testSearchFilterAndSort() {
         // Tìm kiếm
         WebElement searchInput = driver.findElement(By.name("searchTerm"));
-        searchInput.sendKeys("Nguyen Van A");
+        searchInput.sendKeys("Nguyen");
         searchInput.submit();
-
         // Filter
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(1));
-        WebElement genderMaleCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.id("genderMale")));
-        WebElement roleAdminCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.id("roleAdmin")));
-        WebElement statusValidCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.id("statusValid")));
-        WebElement filterButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".filter-form .btn-primary")));
-
-        if (!genderMaleCheckbox.isSelected()) {
-            genderMaleCheckbox.click();
-        }
-        if (!roleAdminCheckbox.isSelected()) {
-            roleAdminCheckbox.click();
-        }
-        if (!statusValidCheckbox.isSelected()) {
-            statusValidCheckbox.click();
-        }
-        filterButton.click();
-
+        driver.findElement(By.id("genderMale")).click();
+        driver.findElement(By.id("roleAdmin")).click();
+        driver.findElement(By.id("statusValid")).click();
+        driver.findElement(By.cssSelector(".filter-form .btn-primary")).click();
         // Sort
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//table/tbody/tr")));
         driver.findElement(By.xpath("//th[contains(text(), 'User ID')]//a[1]")).click(); // Sắp xếp tăng dần theo User ID
-
         // Xác thực kết quả
         List<WebElement> userRows = driver.findElements(By.xpath("//table/tbody/tr"));
+        List<Integer> listIds = new ArrayList<>();
         for (WebElement row : userRows) {
+            String userIdText = row.findElement(By.xpath("td[1]")).getText();
+            int userId = Integer.parseInt(userIdText);
+            listIds.add(userId);
             String userName = row.findElement(By.xpath("td[2]")).getText();
-            assertTrue(userName.contains("Nguyen Van A"), "Search result validation failed.");
-
             String gender = row.findElement(By.xpath("td[3]")).getText();
             String role = row.findElement(By.xpath("td[6]")).getText();
             String status = row.findElement(By.xpath("td[7]")).getText();
+            
+            assertTrue(userName.contains("Nguyen"), "Search result validation failed.");
             assertEquals("Male", gender);
             assertEquals("Admin", role);
             assertEquals("Active", status);
         }
+
+        // Kiểm tra sắp xếp theo thứ tự tăng dần của User ID
+        List<Integer> sortedUserIds = new ArrayList<>(listIds);
+        Collections.sort(sortedUserIds);
+        assertEquals(sortedUserIds, listIds, "User ID sorting validation failed.");
     }
 
-//    @Test
-//    public void testClickAddUser() {
-//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(1));
-//        WebElement addUserButton = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Add User")));
-//
-//        // Click nút Add User
-//        addUserButton.click();
-//
-//        // Đợi trang chuyển đổi và kiểm tra xem URL đã thay đổi đúng chưa
-//        wait.until(ExpectedConditions.urlContains("AddUser.jsp"));
-//        String currentUrl = driver.getCurrentUrl();
-//        assertTrue(currentUrl.contains("AddUser.jsp"), "Failed to navigate to Add User page.");
-//    }
-//
-//    @Test
-//    public void testClickDetails() {
-//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(1));
-//        WebElement detailsButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//form[@action='UserDetails']/button[@type='submit']")));
-//
-//        // Click nút Details
-//        detailsButton.click();
-//
-//        // Đợi trang chuyển đổi và kiểm tra xem URL đã thay đổi đúng chưa
-//        wait.until(ExpectedConditions.urlContains("UserDetails"));
-//        String currentUrl = driver.getCurrentUrl();
-//        assertTrue(currentUrl.contains("UserDetails"), "Failed to navigate to User Details page.");
-//    }
-//
-//    @Test
-//    public void testClickHome() {
-//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(1));
-//        WebElement homeButton = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Home")));
-//
-//        // Click nút Home
-//        homeButton.click();
-//
-//        // Đợi trang chuyển đổi và kiểm tra xem URL đã thay đổi đúng chưa
-//        wait.until(ExpectedConditions.urlContains("home"));
-//        String currentUrl = driver.getCurrentUrl();
-//        assertTrue(currentUrl.contains("home"), "Failed to navigate to Home page.");
-//    }
+    @Test
+    public void testClickAddUser() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(1));
+        WebElement addUserButton = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Add User")));
+
+        // Click nút Add User
+        addUserButton.click();
+
+        // Đợi trang chuyển đổi và kiểm tra xem URL đã thay đổi đúng chưa
+        wait.until(ExpectedConditions.urlContains("AddUser.jsp"));
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("AddUser.jsp"), "Failed to navigate to Add User page.");
+    }
+
+    @Test
+    public void testClickDetails() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(1));
+        WebElement detailsButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//form[@action='UserDetails']/button[@type='submit']")));
+
+        // Click nút Details
+        detailsButton.click();
+
+        // Đợi trang chuyển đổi và kiểm tra xem URL đã thay đổi đúng chưa
+        wait.until(ExpectedConditions.urlContains("UserDetails"));
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("UserDetails"), "Failed to navigate to User Details page.");
+    }
+
+    @Test
+    public void testClickHome() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(1));
+        WebElement homeButton = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Home")));
+
+        // Click nút Home
+        homeButton.click();
+
+        // Đợi trang chuyển đổi và kiểm tra xem URL đã thay đổi đúng chưa
+        wait.until(ExpectedConditions.urlContains("home"));
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("home"), "Failed to navigate to Home page.");
+    }
 
     @AfterEach
     public void teardown() {

@@ -24,6 +24,7 @@ CREATE TABLE user_media (
     user_id INT NOT NULL,
     media_type NVARCHAR(50) NOT NULL,
     media_data VARBINARY(MAX) NOT NULL,
+    note NVARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
@@ -99,7 +100,7 @@ CREATE TABLE packages (
     sale_end DATETIME DEFAULT DATEADD(DAY, 7, GETDATE()),
     access_duration INT NOT NULL,
     CONSTRAINT FK_CourseSale_Courses FOREIGN KEY (course_id) 
-        REFERENCES courses(id) ON DELETE CASCADE
+        REFERENCES courses(id) ON DELETE NO ACTION
 );
 
 -- Table: thumbnails
@@ -146,11 +147,12 @@ CREATE TABLE registrations (
     status NVARCHAR(50) DEFAULT 'Submitted',
     valid_from DATETIME DEFAULT GETDATE(),
     valid_to DATETIME DEFAULT DATEADD(WEEK, 1, GETDATE()), -- Current time +1 week
-    update_by INT,
+    created_by INT,
+    notes NVARCHAR(255),
     CONSTRAINT FK_Registrations_User FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE NO ACTION,
     CONSTRAINT FK_Registrations_Package FOREIGN KEY (package_id) REFERENCES packages(id) ON DELETE NO ACTION,
     CONSTRAINT FK_Registrations_Course FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE NO ACTION,
-    CONSTRAINT FK_Registrations_UpdateBy FOREIGN KEY (update_by) REFERENCES users(id) ON DELETE NO ACTION
+    CONSTRAINT FK_Registrations_CreatedBy FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE NO ACTION
 );
 
 -- Table: registration_media
@@ -159,6 +161,7 @@ CREATE TABLE registration_media (
     registration_id INT NOT NULL,
     media_type NVARCHAR(50) NOT NULL,
     media_data VARBINARY(MAX) NOT NULL,
+    note NVARCHAR(255),
     FOREIGN KEY (registration_id) REFERENCES registrations(id)
 );
 

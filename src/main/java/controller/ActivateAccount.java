@@ -29,11 +29,11 @@ public class ActivateAccount extends HttpServlet {
 
         if (isActivated) {
             // Nếu kích hoạt thành công, chuyển đến trang thành công
-            response.sendRedirect("RegisterSuccess.jsp");
+            response.sendRedirect("activate-success.jsp");
         } else {
             // Nếu kích hoạt không thành công, có thể xử lý thêm
             request.setAttribute("message", "Account activation failed. Please try again.");
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            request.getRequestDispatcher("activate-fail.jsp").forward(request, response);
         }
     }
 }

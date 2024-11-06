@@ -422,7 +422,7 @@ public class UserDAO extends DBContext<User> {
         return totalUsers;
     }
 
-    public boolean updateUserRoleAndStatus(int userId, String role, int status) {
+    public boolean updateUserDetails(int userId, String role, int status) {
         String query = "UPDATE users SET role = ?, status = ? WHERE id = ?";
         try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, role);

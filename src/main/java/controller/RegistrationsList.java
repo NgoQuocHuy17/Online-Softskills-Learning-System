@@ -37,6 +37,6 @@ public class RegistrationsList extends HttpServlet {
         request.setAttribute("registrations", registrations);
         
         // Chuyển hướng đến trang JSP
-        request.getRequestDispatcher("RegistrationsList.jsp").forward(request, response);
+        request.getRequestDispatcher("registrations-list.jsp").forward(request, response);
     }
 }

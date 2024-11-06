@@ -11,7 +11,7 @@ import model.User;
 import view.UserDAO;
 
 @WebServlet(name = "Login", urlPatterns = "/Login")
-public class LoginController extends HttpServlet {
+public class Login extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

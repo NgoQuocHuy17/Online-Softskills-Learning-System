@@ -18,21 +18,24 @@ import model.UserVideo;
 
 public class UserMediaDAO extends DBContext<UserVideo> {
 
-    public void insertMedia(int userId, String mediaType, byte[] mediaData) {
-        String query = "INSERT INTO user_media (user_id, media_type, media_data) VALUES (?, ?, ?)";
+    // Method to insert media
+    public void insertMedia(int userId, String mediaType, byte[] mediaData, String note) {
+        String query = "INSERT INTO user_media (user_id, media_type, media_data, note) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, userId);
             ps.setString(2, mediaType);
             ps.setBytes(3, mediaData);
+            ps.setString(4, note);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    // Method to insert avatar
     public void insertAvatar(int userId, byte[] avatarData) {
-        String query = "INSERT INTO user_media (user_id, media_type, media_data) VALUES (?, 'avatar', ?)";
+        String query = "INSERT INTO user_media (user_id, media_type, media_data, note) VALUES (?, 'avatar', ?, 'Avatar')";
 
         try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, userId);
@@ -43,6 +46,7 @@ public class UserMediaDAO extends DBContext<UserVideo> {
         }
     }
 
+    // Method to update avatar
     public void updateAvatar(int userId, byte[] avatarData) {
         String query = "UPDATE user_media SET media_data = ? WHERE user_id = ? AND media_type = 'avatar'";
 
@@ -55,6 +59,20 @@ public class UserMediaDAO extends DBContext<UserVideo> {
         }
     }
 
+    public boolean deleteMediaById(int mediaId) {
+        String query = "DELETE FROM user_media WHERE id = ?";
+
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, mediaId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Method to get images by user ID
     public List<UserMedia> getImagesByUserId(int userId) {
         List<UserMedia> images = new ArrayList<>();
         String query = "SELECT * FROM user_media WHERE user_id = ? AND media_type LIKE 'image/%'";
@@ -69,6 +87,7 @@ public class UserMediaDAO extends DBContext<UserVideo> {
                 media.setUserId(rs.getInt("user_id"));
                 media.setMediaType(rs.getString("media_type"));
                 media.setMediaData(Base64.getEncoder().encodeToString(rs.getBytes("media_data"))); // Mã hóa dữ liệu thành Base64
+                media.setNote(rs.getString("note"));
                 images.add(media);
             }
         } catch (SQLException e) {
@@ -78,29 +97,31 @@ public class UserMediaDAO extends DBContext<UserVideo> {
         return images;
     }
 
-    public List<UserMedia> getAvatarsByUserId(int userId) {
-        List<UserMedia> avatars = new ArrayList<>();
+    // Method to get avatar by user ID
+    public UserMedia getAvatarByUserId(int userId) {
+        UserMedia avatar = null;
         String query = "SELECT * FROM user_media WHERE user_id = ? AND media_type = 'avatar'";
 
         try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                UserMedia media = new UserMedia();
-                media.setId(rs.getInt("id"));
-                media.setUserId(rs.getInt("user_id"));
-                media.setMediaType(rs.getString("media_type"));
-                media.setMediaData(Base64.getEncoder().encodeToString(rs.getBytes("media_data"))); // Mã hóa dữ liệu thành Base64
-                avatars.add(media);
+            if (rs.next()) {
+                avatar = new UserMedia();
+                avatar.setId(rs.getInt("id"));
+                avatar.setUserId(rs.getInt("user_id"));
+                avatar.setMediaType(rs.getString("media_type"));
+                avatar.setMediaData(Base64.getEncoder().encodeToString(rs.getBytes("media_data"))); // Mã hóa dữ liệu thành Base64
+                avatar.setNote(rs.getString("note"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return avatars;
+        return avatar;
     }
 
+    // Method to get videos by user ID
     public List<UserMedia> getVideosByUserId(int userId) {
         List<UserMedia> videos = new ArrayList<>();
         String query = "SELECT * FROM user_media WHERE user_id = ? AND media_type LIKE 'video/%'";
@@ -115,6 +136,7 @@ public class UserMediaDAO extends DBContext<UserVideo> {
                 media.setUserId(rs.getInt("user_id"));
                 media.setMediaType(rs.getString("media_type"));
                 media.setMediaData(Base64.getEncoder().encodeToString(rs.getBytes("media_data"))); // Mã hóa dữ liệu thành Base64
+                media.setNote(rs.getString("note"));
                 videos.add(media);
             }
         } catch (SQLException e) {

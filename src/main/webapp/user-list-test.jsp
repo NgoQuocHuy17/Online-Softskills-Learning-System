@@ -91,7 +91,7 @@
                             </form>
                         </div>
                         <div class="col-md-4 col-12">
-                            <form class="filter-form" action="UserList" method="get">
+                            <form class="filter-form" action="UserListTest" method="get">
                                 <div class="container">
                                     <input type="hidden" name="searchTerm" value="${param.searchTerm}"/>
                                     <div class="row">
@@ -215,7 +215,7 @@
                                         </th>
                                         <th>
                                             Status 
-                                            <a href="?sort=isValid&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
+                                            <a href="?sort=status&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
                                                 <i class="fas fa-arrow-up"></i>
                                             </a>
                                             <a href="?sort=status&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&gender=${param.gender}&role=${param.role}&status=${param.status}">
@@ -248,7 +248,7 @@
                                             <td>${user.role}</td>
                                             <td>
                                                 <c:choose>
-                                                    <c:when test="${user.isValid == 1}">
+                                                    <c:when test="${user.status == 1}">
                                                         Active
                                                     </c:when>
                                                     <c:otherwise>

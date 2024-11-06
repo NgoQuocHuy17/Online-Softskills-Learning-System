@@ -3,6 +3,7 @@ package model;
 import java.util.Date;
 
 public class Registration {
+
     private int id;
     private int userId;
     private int packageId;
@@ -18,7 +19,7 @@ public class Registration {
     }
 
     public Registration(int id, int userId, int packageId, int courseId, int createdBy, double totalCost,
-                        String status, Date validFrom, Date validTo, String notes) {
+            String status, Date validFrom, Date validTo, String notes) {
         this.id = id;
         this.userId = userId;
         this.packageId = packageId;
@@ -31,6 +32,7 @@ public class Registration {
         this.notes = notes;
     }
 
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -113,7 +115,17 @@ public class Registration {
 
     @Override
     public String toString() {
-        return "Registration{" + "id=" + id + ", userId=" + userId + ", packageId=" + packageId + ", courseId=" + courseId + ", createdBy=" + createdBy + ", totalCost=" + totalCost + ", status=" + status + ", validFrom=" + validFrom + ", validTo=" + validTo + ", notes=" + notes + '}';
+        return "Registration{"
+                + "id=" + id
+                + ", userId=" + userId
+                + ", packageId=" + packageId
+                + ", courseId=" + courseId
+                + ", createdBy=" + createdBy
+                + ", totalCost=" + totalCost
+                + ", status='" + status + '\''
+                + ", validFrom=" + validFrom
+                + ", validTo=" + validTo
+                + ", notes='" + notes + '\''
+                + '}';
     }
-    
 }

@@ -20,60 +20,7 @@
     <body>
         <div class="main-wrapper">
             <header class="header">
-                <div class="header-fixed">
-                    <nav class="navbar navbar-expand-lg header-nav">
-                        <div class="navbar-header">
-                            <a id="mobile_btn" href="javascript:void(0);">
-                                <span class="bar-icon">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                </span>
-                            </a>
-                        </div>
-                        <div class="main-menu-wrapper">
-                            <div class="menu-header">
-                                <a href="index.html" class="menu-logo">
-                                    <img src="assets/img/logo.png" class="img-fluid" alt="Logo">
-                                </a>
-                                <a id="menu_close" class="menu-close" href="javascript:void(0);">
-                                    <i class="fas fa-times"></i>
-                                </a>
-                            </div>
-                            <ul class="main-nav">
-                                <li class="has-submenu">
-                                    <a href="home">Home</a>
-                                </li>
-                                <li class="login-link">
-                                    <a href="login.html">Login / Signup</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <ul class="nav header-navbar-rht">
-                            <li class="nav-item dropdown has-arrow logged-item">
-                                <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                                    <span class="user-img">
-                                        <img class="rounded-circle" src="assets/img/user/user.jpg" width="31" alt="Darren Elder">
-                                    </span>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <div class="user-header">
-                                        <div class="avatar avatar-sm">
-                                            <img src="assets/img/user/user.jpg" alt="User Image" class="avatar-img rounded-circle">
-                                        </div>
-                                        <div class="user-text">
-                                            <h6>Jonathan Doe</h6>
-                                            <p class="text-muted mb-0">Mentor</p>
-                                        </div>
-                                    </div>
-                                    <a class="dropdown-item" href="dashboard.html">Dashboard</a>
-                                    <a class="dropdown-item" href="profile-settings.html">Profile Settings</a>
-                                    <a class="dropdown-item" href="login.html">Logout</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+                <jsp:include page="header-admin.jsp" />
             </header>
 
             <div class="breadcrumb-bar">
@@ -94,7 +41,7 @@
                                     <select name="role" class="form-control">
                                         <option value="">All Roles</option>
                                         <option value="Admin" ${param.role == 'Admin' ? 'selected' : ''}>Admin</option>
-                                        <option value="User" ${param.role == 'User' ? 'selected' : ''}>User</option>
+                                        <option value="Student" ${param.role == 'Student' ? 'selected' : ''}>Student</option>
                                         <option value="Teacher" ${param.role == 'Teacher' ? 'selected' : ''}>Teacher</option>
                                     </select>
                                     <select name="status" class="form-control">
@@ -130,7 +77,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-4 col-12 text-right">
-                            <a href="AddUser.jsp" class="btn btn-success">Add User</a>
+                            <a href="add-user.jsp" class="btn btn-success">Add User</a>
                         </div>
                         <h2 class="mt-4">User List</h2>
                         <c:if test="${empty userList}">
