@@ -122,7 +122,8 @@
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <li><a class="dropdown-item" href="MyRegistrations">My Registrations</a></li>
                             <li><a class="dropdown-item" href="profile-settings.jsp">Profile Settings</a></li>
-                            <li><a class="dropdown-item" href="logout.jsp">Logout</a></li>
+                            <li><a class="dropdown-item" href="UserProfile">Profile Settings</a></li>
+                            <li><a class="dropdown-item" href="Logout">Logout</a></li>
                         </ul>
                     </li>
                     <% } else { %>
@@ -131,7 +132,7 @@
                         <a class="nav-link header-login-two" href="login.jsp">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link header-login" href="register.html">Sign up</a>
+                        <a class="nav-link header-login" href="register.jsp">Sign up</a>
                     </li>
                     <% }%>
                 </ul>

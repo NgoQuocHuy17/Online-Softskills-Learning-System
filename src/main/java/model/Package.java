@@ -1,7 +1,9 @@
 package model;
+
 import java.util.Date;
 
 public class Package {
+
     private int id;
     private int courseId;
     private String packageName;
@@ -9,10 +11,12 @@ public class Package {
     private double salePrice;
     private Date saleStart;
     private Date saleEnd;
+    private int accessDuration;
 
-    public Package() {}
+    public Package() {
+    }
 
-    public Package(int id, int courseId, String packageName, double price, double salePrice, Date saleStart, Date saleEnd) {
+    public Package(int id, int courseId, String packageName, double price, double salePrice, Date saleStart, Date saleEnd, int accessDuration) {
         this.id = id;
         this.courseId = courseId;
         this.packageName = packageName;
@@ -20,6 +24,7 @@ public class Package {
         this.salePrice = salePrice;
         this.saleStart = saleStart;
         this.saleEnd = saleEnd;
+        this.accessDuration = accessDuration;
     }
 
     public int getId() {
@@ -78,17 +83,26 @@ public class Package {
         this.saleEnd = saleEnd;
     }
 
+    public int getAccessDuration() {
+        return accessDuration;
+    }
+
+    public void setAccessDuration(int accessDuration) {
+        this.accessDuration = accessDuration;
+    }
+
     // toString method
     @Override
     public String toString() {
-        return "Package{" +
-                "id=" + id +
-                ", courseId=" + courseId +
-                ", packageName='" + packageName + '\'' +
-                ", price=" + price +
-                ", salePrice=" + salePrice +
-                ", saleStart=" + saleStart +
-                ", saleEnd=" + saleEnd +
-                '}';
+        return "Package{"
+                + "id=" + id
+                + ", courseId=" + courseId
+                + ", packageName='" + packageName + '\''
+                + ", price=" + price
+                + ", salePrice=" + salePrice
+                + ", saleStart=" + saleStart
+                + ", saleEnd=" + saleEnd
+                + ", accessDuration=" + accessDuration
+                + '}';
     }
 }
