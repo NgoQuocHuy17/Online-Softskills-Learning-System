@@ -92,6 +92,13 @@
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
+                        <c:if test="${not empty sessionScope.message}">
+                            <div class="alert alert-info" role="alert">
+                                ${sessionScope.message}
+                            </div>
+                            <c:set var="message" value="${sessionScope.message}" />
+                            <c:remove var="message" />
+                        </c:if>
                         <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
                             <div class="profile-sidebar">
                                 <div class="sidebar">
@@ -209,9 +216,7 @@
                                                     <h5><i class="far fa-clock"></i> Valid From: ${registration.validFrom}</h5>
                                                     <h5><i class="far fa-clock"></i> Valid To: ${registration.validTo}</h5>
                                                 </c:if>
-
                                             </div>
-
                                         </div>
                                         <div class="appointment-action">
                                             <!-- Only show Edit and Cancel buttons if status is "Submitted" -->
@@ -219,12 +224,11 @@
                                                 <a href="" class="btn btn-sm bg-success-light">
                                                     <i class=""></i> Edit
                                                 </a>
-                                                <a href="CancelRegistration" class="btn btn-sm bg-danger-light">
+                                                <a href="CancelRegistration?id=${registration.id}" class="btn btn-sm bg-danger-light">
                                                     <i class="fas fa-times"></i> Cancel
                                                 </a>
                                             </c:if>
                                         </div>
-
                                     </div>
                                 </c:forEach>
                             </div>
@@ -246,7 +250,6 @@
                     </div>
                 </div>
             </div>
-
 
             <footer class="footer">
                 <jsp:include page="footer.jsp" />

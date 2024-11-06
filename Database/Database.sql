@@ -14,17 +14,16 @@ CREATE TABLE users (
     email VARCHAR(255) UNIQUE NOT NULL,        
     password VARCHAR(255) NOT NULL,
     role NVARCHAR(50) DEFAULT 'Student',         
-    avatar_url VARCHAR(255),                   
-    created_at DATETIME DEFAULT GETDATE(),     
-    updated_at DATETIME DEFAULT GETDATE(),
+	address VARCHAR(255),
 	hash VARCHAR(255),
-	isValid bit DEFAULT 1
+	status bit DEFAULT 1
 );
 
-CREATE TABLE user_videos (
+CREATE TABLE user_media (
     id INT IDENTITY(1,1) PRIMARY KEY,
     user_id INT NOT NULL,
-    video_url VARCHAR(255) NOT NULL,
+    media_type NVARCHAR(50) NOT NULL,
+    media_data VARBINARY(MAX) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
@@ -36,26 +35,6 @@ CREATE TABLE user_contacts (
     contact_value VARCHAR(255) NOT NULL,        
     is_preferred bit DEFAULT 0,
     CONSTRAINT FK_UserContacts_Users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
-
--- Table: login_history
-CREATE TABLE login_history (
-    id INT IDENTITY(1,1) PRIMARY KEY,           
-    user_id INT NOT NULL,                       
-    login_time DATETIME DEFAULT GETDATE(),      
-    ip_address VARCHAR(50),                     
-    CONSTRAINT FK_LoginHistory_Users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
--- Table: activity_log
-CREATE TABLE activity_log (
-    id INT IDENTITY(1,1) PRIMARY KEY,           
-    user_id INT NOT NULL,                       
-    activity_type NVARCHAR(255) NOT NULL,       
-    activity_data NVARCHAR(MAX),                
-    created_at DATETIME DEFAULT GETDATE(),      
-    CONSTRAINT FK_ActivityLog_Users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Table: courses
@@ -147,8 +126,6 @@ CREATE TABLE course_details (
 );
 DROP TABLE [SoftSkillsOnlineLearningSystem].[dbo].[course_details];
 
-
-
 -- Table: course_translations
 CREATE TABLE course_translations (
     id INT IDENTITY(1,1) PRIMARY KEY,           
@@ -162,18 +139,28 @@ CREATE TABLE course_translations (
 -- Table: registrations
 CREATE TABLE registrations (
     id INT IDENTITY(1,1) PRIMARY KEY,
-    user_id INT,
-    package_id INT,
-    course_id INT,
+    user_id INT NOT NULL,
+    package_id INT NOT NULL,
+    course_id INT NOT NULL,
     total_cost DECIMAL(10, 2),
     status NVARCHAR(50) DEFAULT 'Submitted',
     valid_from DATETIME DEFAULT GETDATE(),
     valid_to DATETIME DEFAULT DATEADD(WEEK, 1, GETDATE()), -- Current time +1 week
+    update_by INT,
     CONSTRAINT FK_Registrations_User FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE NO ACTION,
     CONSTRAINT FK_Registrations_Package FOREIGN KEY (package_id) REFERENCES packages(id) ON DELETE NO ACTION,
-    CONSTRAINT FK_Registrations_Course FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE NO ACTION
+    CONSTRAINT FK_Registrations_Course FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE NO ACTION,
+    CONSTRAINT FK_Registrations_UpdateBy FOREIGN KEY (update_by) REFERENCES users(id) ON DELETE NO ACTION
 );
 
+-- Table: registration_media
+CREATE TABLE registration_media (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    registration_id INT NOT NULL,
+    media_type NVARCHAR(50) NOT NULL,
+    media_data VARBINARY(MAX) NOT NULL,
+    FOREIGN KEY (registration_id) REFERENCES registrations(id)
+);
 
 -- Table: user_courses
 CREATE TABLE user_courses (

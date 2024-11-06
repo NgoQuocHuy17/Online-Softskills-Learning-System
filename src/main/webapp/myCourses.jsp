@@ -102,22 +102,23 @@
                                         <div class="display-options mt-3">
                                             <label>Show Fields:</label>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="showTitle" value="true" ${param.showTitle == 'true' ? 'checked' : ''}>
+                                                <input class="form-check-input" type="checkbox" id="showTitle" name="showTitle" value="true" ${param.showTitle == 'true' ? 'checked' : ''}>
                                                 <label class="form-check-label" for="showTitle">Title</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="showTagline" value="true" ${param.showTagline == 'true' ? 'checked' : ''}>
+                                                <input class="form-check-input" type="checkbox" id="showTagline" name="showTagline" value="true" ${param.showTagline == 'true' ? 'checked' : ''}>
                                                 <label class="form-check-label" for="showTagline">Tagline</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="showDescription" value="true" ${param.showDescription == 'true' ? 'checked' : ''}>
+                                                <input class="form-check-input" type="checkbox" id="showDescription" name="showDescription" value="true" ${param.showDescription == 'true' ? 'checked' : ''}>
                                                 <label class="form-check-label" for="showDescription">Description</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="showCategory" value="true" ${param.showCategory == 'true' ? 'checked' : ''}>
+                                                <input class="form-check-input" type="checkbox" id="showCategory" name="showCategory" value="true" ${param.showCategory == 'true' ? 'checked' : ''}>
                                                 <label class="form-check-label" for="showCategory">Category</label>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
 

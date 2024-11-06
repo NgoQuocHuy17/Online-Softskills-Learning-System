@@ -1,4 +1,3 @@
-package controller;
 
 import view.UserDAO;
 import model.User;
@@ -12,8 +11,8 @@ import java.util.List;
 import model.UserContact;
 import view.UserContactDAO;
 
-@WebServlet(name = "UserList", urlPatterns = {"/UserList"})
-public class UserList extends HttpServlet {
+@WebServlet(name = "UserListTest", urlPatterns = {"/UserListTest"})
+public class UserListTest extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -25,12 +24,6 @@ public class UserList extends HttpServlet {
         int pageSize = 5; // Số lượng users mỗi trang
         if (request.getParameter("page") != null) {
             page = Integer.parseInt(request.getParameter("page"));
-        }
-
-        // Lấy pageSize từ request (có thể chỉnh sửa theo yêu cầu)
-        String pageSizeParam = request.getParameter("pageSize");
-        if (pageSizeParam != null && !pageSizeParam.isEmpty()) {
-            pageSize = Integer.parseInt(pageSizeParam);
         }
 
         // Lấy các tham số lọc và tìm kiếm từ request
@@ -81,25 +74,9 @@ public class UserList extends HttpServlet {
             request.setAttribute("emails_" + user.getId(), emails);
         }
 
-        // Lấy các tham số 'HideField' từ request
-        String hideFullName = request.getParameter("hideFullName");
-        String hideGender = request.getParameter("hideGender");
-        String hideEmail = request.getParameter("hideEmail");
-        String hideMobile = request.getParameter("hideMobile");
-        String hideRole = request.getParameter("hideRole");
-        String hideStatus = request.getParameter("hideStatus");
-
-        request.setAttribute("hideFullName", hideFullName);
-        request.setAttribute("hideGender", hideGender);
-        request.setAttribute("hideEmail", hideEmail);
-        request.setAttribute("hideMobile", hideMobile);
-        request.setAttribute("hideRole", hideRole);
-        request.setAttribute("hideStatus", hideStatus);
-
         // Gửi danh sách users và các thông tin phân trang đến trang JSP
         request.setAttribute("userList", userList);
         request.setAttribute("currentPage", page);
-        request.setAttribute("pageSize", pageSize);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("genderFilter", genderFilter);
         request.setAttribute("roleFilter", roleFilter);
@@ -108,6 +85,6 @@ public class UserList extends HttpServlet {
         request.setAttribute("sort", sortBy);
         request.setAttribute("sortOrder", sortOrder);
 
-        request.getRequestDispatcher("/UserList.jsp").forward(request, response);
+        request.getRequestDispatcher("/UserListTest.jsp").forward(request, response);
     }
 }

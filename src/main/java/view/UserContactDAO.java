@@ -1,5 +1,6 @@
 package view;
 
+import java.sql.Connection;
 import model.UserContact;
 import java.util.List;
 import java.util.Vector;
@@ -12,13 +13,30 @@ import java.util.logging.Level;
 
 public class UserContactDAO extends DBContext<UserContact> {
 
+    public boolean insertContact(int userId, String contactType, String contactValue, boolean isPreferred) {
+        String sql = "INSERT INTO user_contacts (user_id, contact_type, contact_value, is_preferred) VALUES (?, ?, ?, ?)";
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ps.setString(2, contactType);
+            ps.setString(3, contactValue);
+            ps.setBoolean(4, isPreferred);
+
+            int rowsInserted = ps.executeUpdate();
+            return rowsInserted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public List<UserContact> getUserPhones(int userId) {
         List<UserContact> phones = new ArrayList<>();
         String query = "SELECT * FROM user_contacts WHERE user_id = ? AND contact_type = 'Phone'";
 
-        try (PreparedStatement pre = super.getConn().prepareStatement(query)) {
-            pre.setInt(1, userId);
-            try (ResultSet rs = pre.executeQuery()) {
+        try (PreparedStatement ps = super.getConn().prepareStatement(query)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     UserContact contact = new UserContact(
                             rs.getInt("id"),
@@ -41,9 +59,9 @@ public class UserContactDAO extends DBContext<UserContact> {
         List<UserContact> emails = new ArrayList<>();
         String query = "SELECT * FROM user_contacts WHERE user_id = ? AND contact_type = 'Email'";
 
-        try (PreparedStatement pre = super.getConn().prepareStatement(query)) {
-            pre.setInt(1, userId);
-            try (ResultSet rs = pre.executeQuery()) {
+        try (PreparedStatement ps = super.getConn().prepareStatement(query)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     UserContact contact = new UserContact(
                             rs.getInt("id"),

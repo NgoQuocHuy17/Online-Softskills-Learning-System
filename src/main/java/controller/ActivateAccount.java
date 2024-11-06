@@ -10,91 +10,30 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.*;
+import view.UserDAO;
 
 @WebServlet(name = "ActivateAccount", urlPatterns = "/ActivateAccount")
 public class ActivateAccount extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        UserDAO userDAO = new UserDAO();
 
+        // Lấy các tham số từ URL
         String email = request.getParameter("key1");
         String hash = request.getParameter("key2");
 
-        try {
-            Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=SoftSkillsOnlineLearningSystem;trustServerCertificate=true",
-                    "sa",
-                    "88888888");
+        // Kích hoạt tài khoản cho người dùng
+        boolean isActivated = userDAO.activateUser(email, hash);
 
-            PreparedStatement ps = conn.prepareStatement("Select email, hash, isValid FROM users WHERE email=? AND hash=? AND isValid='0'");
-            ps.setString(1, email);
-            ps.setString(2, hash);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                PreparedStatement pst = conn.prepareStatement("UPDATE users SET isValid='1' WHERE email=? AND hash=?");
-                pst.setString(1, email);
-                pst.setString(2, hash);
-                int i = pst.executeUpdate();
-                if (i == 1) {
-                    response.sendRedirect("login.jsp");
-                } else {
-                    response.sendRedirect("home");
-                }
-            }
-
-        } catch (SQLException ex) {
-            System.out.println("ActivateAccount Servlet File!");
+        if (isActivated) {
+            // Nếu kích hoạt thành công, chuyển đến trang thành công
+            response.sendRedirect("RegisterSuccess.jsp");
+        } else {
+            // Nếu kích hoạt không thành công, có thể xử lý thêm
+            request.setAttribute("message", "Account activation failed. Please try again.");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
         }
-
     }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }
