@@ -31,11 +31,18 @@ public class LessonListController extends HttpServlet {
             List<Lesson> filteredLessons = new ArrayList<>();
 
             // Set visibility preferences as attributes, defaulting to true
-            request.setAttribute("showLessonNumber", request.getParameter("showLessonNumber") != null);
-            request.setAttribute("showLessonName", request.getParameter("showLessonName") != null);
-            request.setAttribute("showDescription", request.getParameter("showDescription") != null);
-            request.setAttribute("showStatus", request.getParameter("showStatus") != null);
-            request.setAttribute("showActions", request.getParameter("showActions") != null);
+            boolean showLessonNumber = Boolean.parseBoolean(request.getParameter("showLessonNumber"));
+            boolean showLessonName = Boolean.parseBoolean(request.getParameter("showLessonName"));
+            boolean showDescription = Boolean.parseBoolean(request.getParameter("showDescription"));
+            boolean showStatus = Boolean.parseBoolean(request.getParameter("showStatus"));
+            boolean showActions = Boolean.parseBoolean(request.getParameter("showActions"));
+
+// Set as request attributes to retain selections
+            request.setAttribute("showLessonNumber", showLessonNumber);
+            request.setAttribute("showLessonName", showLessonName);
+            request.setAttribute("showDescription", showDescription);
+            request.setAttribute("showStatus", showStatus);
+            request.setAttribute("showActions", showActions);
 
             // Filtering lessons based on status
             if (status.equalsIgnoreCase("") || status == null || status.equalsIgnoreCase("All")) {
@@ -82,12 +89,6 @@ public class LessonListController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
         int courseId = Integer.parseInt(request.getParameter("courseId"));
         String toggleStatus = request.getParameter("toggleStatus");
         String lessonIdParam = request.getParameter("lessonId");
@@ -104,6 +105,13 @@ public class LessonListController extends HttpServlet {
             }
 
         }
+        processRequest(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
         processRequest(request, response);
 
     }

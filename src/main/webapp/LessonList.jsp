@@ -41,35 +41,34 @@
                             <div class="col-md-3">
 
                                 <input type="hidden" name="courseId" value="${courseId}"/>
-                                <input type="hidden" name="page" value="${currentPage}"/>
                                 <!-- Sidebar for column visibility selection on the left side -->
 
 
                                 <h4>Choose Columns</h4>
-                                
-                                    <!-- Column Visibility Selection Checkboxes -->
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="showLessonNumber" name="showLessonNumber" value="true" ${showLessonNumber == 'true' ? 'checked' : ''}>
-                                        <label class="form-check-label" for="showLessonNumber">Lesson Number</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="showLessonName" name="showLessonName" value="true" ${showLessonName == 'true' ? 'checked' : ''}>
-                                        <label class="form-check-label" for="showLessonName">Lesson Name</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="showDescription" name="showDescription" value="true" ${showDescription == 'true' ? 'checked' : ''}>
-                                        <label class="form-check-label" for="showDescription">Description</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="showStatus" name="showStatus" value="true" ${showStatus == 'true' ? 'checked' : ''}>
-                                        <label class="form-check-label" for="showStatus">Status</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="showActions" name="showActions" value="true" ${showActions == 'true' ? 'checked' : ''}>
-                                        <label class="form-check-label" for="showActions">Actions</label>
-                                    </div>
+
+                                <!-- Column Visibility Selection Checkboxes -->
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="showLessonNumber" name="showLessonNumber" value="true" ${showLessonNumber == 'true' ? 'checked' : ''}>
+                                    <label class="form-check-label" for="showLessonNumber">Lesson Number</label>
                                 </div>
-                           
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="showLessonName" name="showLessonName" value="true" ${showLessonName == 'true' ? 'checked' : ''}>
+                                    <label class="form-check-label" for="showLessonName">Lesson Name</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="showDescription" name="showDescription" value="true" ${showDescription == 'true' ? 'checked' : ''}>
+                                    <label class="form-check-label" for="showDescription">Description</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="showStatus" name="showStatus" value="true" ${showStatus == 'true' ? 'checked' : ''}>
+                                    <label class="form-check-label" for="showStatus">Status</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="showActions" name="showActions" value="true" ${showActions == 'true' ? 'checked' : ''}>
+                                    <label class="form-check-label" for="showActions">Actions</label>
+                                </div>
+                            </div>
+
 
 
                             <!-- Main content area for lesson list filters -->
@@ -97,6 +96,27 @@
                             </div>
                         </div>
                     </c:if>
+                    <nav>
+                        <ul class="pagination justify-content-center">
+                            <!-- Previous Button -->
+                            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                <button type="submit" name="page" value="${currentPage - 1}" class="page-link">Previous</button>
+                            </li>
+
+                            <!-- Page Number Buttons -->
+                            <c:forEach var="i" begin="1" end="${totalPages}">
+                                <li class="page-item ${currentPage == i ? 'active' : ''}">
+                                    <button type="submit" name="page" value="${i}" class="page-link">${i}</button>
+                                </li>
+                            </c:forEach>
+
+                            <!-- Next Button -->
+                            <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                <button type="submit" name="page" value="${currentPage + 1}" class="page-link">Next</button>
+                            </li>
+                        </ul>
+                    </nav>
+
                 </form>        
                 <table class="table table-striped table-bordered mt-3">
                     <thead>
@@ -150,7 +170,7 @@
                                 <c:if test="${showActions}">
                                     <td>
                                         <!-- Activate/Deactivate Button -->
-                                        <form action="LessonListController" method="post" class="d-inline">
+                                        <form action="LessonListController" method="get" class="d-inline">
                                             <input type="hidden" name="courseId" value="${courseId}"/>
                                             <input type="hidden" name="lessonId" value="${lesson.id}">
                                             <input type="hidden" name="page" value="${currentPage}"/>
@@ -158,11 +178,11 @@
                                             <input type="hidden" name="itemsPerPage" value="${itemsPerPage}"/>
                                             <input type="hidden" name="toggleStatus" value="${lesson.status ? 'deactivate' : 'activate'}"> 
 
-                                            <input type="hidden" name="showLessonNumber" value="${showLessonNumber}"/>
-                                            <input type="hidden" name="showLessonName" value="${showLessonName}"/>
-                                            <input type="hidden" name="showDescription" value="${showDescription}"/>
-                                            <input type="hidden" name="showStatus" value="${showStatus}"/>
-                                            <input type="hidden" name="showActions" value="${showActions}"/>
+                                            <input type="hidden" name="showLessonNumber" value="${param.showLessonNumber}"/>
+                                            <input type="hidden" name="showLessonName" value="${param.showLessonName}"/>
+                                            <input type="hidden" name="showDescription" value="${param.showDescription}"/>
+                                            <input type="hidden" name="showStatus" value="${param.showStatus}"/>
+                                            <input type="hidden" name="showActions" value="${param.showActions}"/>
                                             <button type="submit" class="btnbtn-sm">
                                                 <c:choose>
                                                     <c:when test="${lesson.status == true}">Deactivate</c:when>
@@ -179,29 +199,17 @@
                         </c:forEach>
                     </tbody>
                 </table>
+                <div class="text-end">
+                    <a href="LessonDetails" class="btn btn-success">Add New Lesson</a>
+                </div>
             </div>
         </div>
         <!-- Pagination controls -->
-        <nav>
-            <ul class="pagination justify-content-center">
-                <c:forEach var="page" begin="1" end="${totalPages}">
-                    <li class="page-item ${page == currentPage ? 'active' : ''}">
-                        <a class="page-link" href="?page=${page}&courseId=${courseId}&itemsPerPage=${itemsPerPage}&status=${status}
-                           &showLessonNumber=${showLessonNumber}&showLessonName=${showLessonName}&showDescription=${showDescription}
-                           &showStatus=${showStatus}&showActions=${showActions}">
-                            ${page}
-                        </a>
-                    </li>
-                </c:forEach>
 
-            </ul>
-        </nav>
 
 
         <!-- Button to add a new lesson -->
-        <div class="text-end">
-            <a href="LessonDetails" class="btn btn-success">Add New Lesson</a>
-        </div>
+
     </div>
     <jsp:include page="footer.jsp" />
 
