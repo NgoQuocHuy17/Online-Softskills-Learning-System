@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.List;
 
 // File: CourseListServlet.java
-
 @WebServlet("/course")
 public class CourseListServlet extends HttpServlet {
 
@@ -37,11 +36,21 @@ public class CourseListServlet extends HttpServlet {
         int page = 1;
         int pageSize = 5;
         String pageParam = request.getParameter("page");
-        if (pageParam != null) {
+        String pageSizeParam = request.getParameter("pageSize");
+
+        if (pageParam != null && !pageParam.isEmpty()) {
             try {
                 page = Integer.parseInt(pageParam);
             } catch (NumberFormatException e) {
-                page = 1; // Default to page 1 if invalid page number
+                page = 1; // Fallback to default if parsing fails
+            }
+        }
+
+        if (pageSizeParam != null && !pageSizeParam.isEmpty()) {
+            try {
+                pageSize = Integer.parseInt(pageSizeParam);
+            } catch (NumberFormatException e) {
+                pageSize = 5; // Fallback to default if parsing fails
             }
         }
 
@@ -62,12 +71,29 @@ public class CourseListServlet extends HttpServlet {
             courses = courseDAO.getCoursesByCategory(category, page, pageSize);
             totalCourses = courseDAO.getTotalCoursesByCategory(category);
         }
-        
+
         // Tính toán số trang
         int totalPages = (int) Math.ceil((double) totalCourses / pageSize);
         if (totalPages < 1) {
             totalPages = 1;
         }
+
+        // Retrieve show field parameters with default values
+        boolean showTitle = true;
+        boolean showTagline = true;
+        boolean showDescription = true;
+        boolean showCategory = true;
+
+        showTitle = request.getParameter("showTitle") != null;
+        showTagline = request.getParameter("showTagline") != null;
+        showDescription = request.getParameter("showDescription") != null;
+        showCategory = request.getParameter("showCategory") != null;
+
+        // Set show field parameters as attributes
+        request.setAttribute("showTitle", showTitle);
+        request.setAttribute("showTagline", showTagline);
+        request.setAttribute("showDescription", showDescription);
+        request.setAttribute("showCategory", showCategory);
 
         // Set attributes
         request.setAttribute("courses", courses);

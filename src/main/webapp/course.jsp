@@ -25,6 +25,65 @@
     <body>
         <jsp:include page="header.jsp" />
 
+        <div class="breadcrumb-bar">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-md-12 col-12">
+                        <form action="course" method="get">
+                            <div class="row">
+                                <!-- Page Size Dropdown -->
+                                <div class="col-md-6">
+                                    <div class="page-size-dropdown mt-3">
+                                        <label for="pageSize">Page Size:</label>
+                                        <select id="pageSize" name="pageSize" class="form-control">
+                                            <c:forEach var="size" items="${[5, 10, 15, 20, 25]}">
+                                                <option 
+                                                    value="${size}" 
+                                                    ${size == param.pageSize ? "selected" : ""}>
+                                                    ${size}
+                                                </option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Show Fields Checkboxes -->
+                                <div class="col-md-6">
+                                    <div class="display-options mt-3">
+                                        <label>Show Fields:</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="showTitle" name="showTitle" value="true" ${param.showTitle == 'true' ? 'checked' : ''}>
+                                            <label class="form-check-label" for="showTitle">Title</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="showTagline" name="showTagline" value="true" ${param.showTagline == 'true' ? 'checked' : ''}>
+                                            <label class="form-check-label" for="showTagline">Tagline</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="showDescription" name="showDescription" value="true" ${param.showDescription == 'true' ? 'checked' : ''}>
+                                            <label class="form-check-label" for="showDescription">Description</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="showCategory" name="showCategory" value="true" ${param.showCategory == 'true' ? 'checked' : ''}>
+                                            <label class="form-check-label" for="showCategory">Category</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <input type="hidden" name="searchTitle" value="${param.searchTitle}">
+                            <input type="hidden" name="category" value="${param.category}">
+
+                            <!-- Submit Button -->
+                            <div class="mt-3">
+                                <button type="submit" class="btn btn-primary w-100">Apply</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="container mt-5">
             <h1 class="text-center mb-4">Available Courses</h1>
 
@@ -35,6 +94,13 @@
                            placeholder="Search by course title..." value="${param.searchTitle}">
                     <!-- Hidden input để giữ category hiện tại -->
                     <input type="hidden" name="category" value="${param.category}">
+
+                    <!-- Keep pageSize and show fields -->
+                    <input type="hidden" name="pageSize" value="${param.pageSize}">
+                    <input type="hidden" name="showTitle" value="${param.showTitle}">
+                    <input type="hidden" name="showTagline" value="${param.showTagline}">
+                    <input type="hidden" name="showDescription" value="${param.showDescription}">
+                    <input type="hidden" name="showCategory" value="${param.showCategory}">
 
                     <button class="btn btn-primary" type="submit">
                         <i class="fa fa-search"></i>
@@ -55,6 +121,11 @@
                     </select>
                     <!-- Hidden input để giữ searchTitle hiện tại -->
                     <input type="hidden" name="searchTitle" value="${param.searchTitle}">
+                    <input type="hidden" name="pageSize" value="${param.pageSize}">
+                    <input type="hidden" name="showTitle" value="${param.showTitle}">
+                    <input type="hidden" name="showTagline" value="${param.showTagline}">
+                    <input type="hidden" name="showDescription" value="${param.showDescription}">
+                    <input type="hidden" name="showCategory" value="${param.showCategory}">
                     <noscript><input type="submit" value="Filter"></noscript>
                 </div>
             </form>
@@ -71,17 +142,23 @@
                                         <span class="hot-icon" title="Hot Course">🔥</span>
                                     </c:if>
                                 </h2>
-                                <p class="card-text"><strong>Tagline:</strong> ${course.tagLine}</p>
-                                <p class="card-text"><strong>Category:</strong> ${course.category}</p>
-                                <p class="card-text"><strong>Basic Package Price:</strong> ${course.basicPackagePrice}</p>
-                                <p class="card-text"><strong>Advanced Package Price:</strong> ${course.advancedPackagePrice}</p>
-
+                                <c:if test="${showTitle}">
+                                    <h4 class="card-title">Title: ${course.title}</h4>
+                                </c:if>
+                                <c:if test="${showTagline}">
+                                    <p class="card-subtitle mb-2"><strong>Tagline: </strong>${course.tagLine}</p>
+                                </c:if>
+                                <c:if test="${showDescription}">
+                                    <p class="card-text"><strong>Description: </strong>${course.description}</p>
+                                </c:if>
+                                <c:if test="${showCategory}">
+                                    <p class="card-text"><strong>Category: </strong>${course.category}</p>
+                                </c:if>
                                 <!-- Format updatedAt to dd/MM/yyyy -->
                                 <p class="card-text">
                                     <strong>Update at:</strong> 
                                     <fmt:formatDate value="${course.updatedAt}" pattern="dd/MM/yyyy" />
                                 </p>
-
                                 <!-- View Details Button -->
                                 <a href="course-details?courseId=${course.id}" class="btn btn-primary">View Details</a>
 
@@ -106,7 +183,7 @@
                         <!-- Previous Button -->
                         <c:if test="${currentPage > 1}">
                             <li class="page-item">
-                                <a class="page-link" href="course?page=${currentPage - 1}&category=${category}"
+                                <a class="page-link" href="course?page=${currentPage - 1}&pageSize=${param.pageSize}&showTitle=${param.showTitle}&showTagline=${param.showTagline}&showDescription=${param.showDescription}&showCategory=${param.showCategory}&searchTitle=${param.searchTitle}&category=${param.category}"
                                    aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
@@ -116,14 +193,16 @@
                         <!-- Page Numbers -->
                         <c:forEach var="i" begin="1" end="${totalPages}">
                             <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                <a class="page-link" href="course?page=${i}&category=${category}">${i}</a>
+                                <a class="page-link" href="course?page=${i}&pageSize=${param.pageSize}&showTitle=${param.showTitle}&showTagline=${param.showTagline}&showDescription=${param.showDescription}&showCategory=${param.showCategory}&searchTitle=${param.searchTitle}&category=${param.category}">
+                                    ${i}
+                                </a>                            
                             </li>
                         </c:forEach>
 
                         <!-- Next Button -->
                         <c:if test="${currentPage < totalPages}">
                             <li class="page-item">
-                                <a class="page-link" href="course?page=${currentPage + 1}&category=${category}"
+                                <a class="page-link" href="course?page=${currentPage + 1}&pageSize=${param.pageSize}&showTitle=${param.showTitle}&showTagline=${param.showTagline}&showDescription=${param.showDescription}&showCategory=${param.showCategory}&searchTitle=${param.searchTitle}&category=${param.category}"
                                    aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
