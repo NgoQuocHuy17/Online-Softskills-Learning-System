@@ -37,10 +37,19 @@ public class SubjectList extends HttpServlet {
         String searchTitle = request.getParameter("searchTitle");
         String status = request.getParameter("status");
         String pageStr = request.getParameter("page");
+        //visibility section
+        request.setAttribute("showId", request.getParameter("showId") != null);
+        request.setAttribute("showTitle", request.getParameter("showTitle") != null);
+        request.setAttribute("showCategory", request.getParameter("showCategory") != null);
+        request.setAttribute("showLessonName", request.getParameter("showLessonName") != null);
+        request.setAttribute("showOwner", request.getParameter("showOwner") != null);
+        request.setAttribute("showStatus", request.getParameter("showStatus") != null);
+        request.setAttribute("showTagLine", request.getParameter("showTagLine") != null);
+        request.setAttribute("showDescription", request.getParameter("showDescription") != null);
 
         // Default values for pagination and filters
         int page = (pageStr == null || pageStr.isEmpty()) ? 1 : Integer.parseInt(pageStr);
-        int pageSize = 5;
+        int pageSize = request.getParameter("itemsPerPage") != null ? Integer.parseInt(request.getParameter("itemsPerPage")) : 5;
 
         // Retrieve list of statuses
         List<String> statuses = courseDAO.getAllStatuses();
@@ -48,13 +57,21 @@ public class SubjectList extends HttpServlet {
 
         // Retrieve courses and filter based on search title and status
         List<Course> allCourses = courseDAO.getAllCourses();
+        if (loggedInUser.getRole().equalsIgnoreCase("Teacher")) {
+            allCourses = courseDAO.selectAllById(loggedInUser.getId());
+        }
+
         if (searchTitle != null && !searchTitle.isEmpty()) {
             allCourses = courseDAO.getSubjectByTitle(searchTitle);
         }
-
+        if (searchTitle != null && !searchTitle.isEmpty() && loggedInUser.getRole().equalsIgnoreCase("Teacher")) {
+            allCourses = courseDAO.getCourseByTitleAndOwnerId(searchTitle, loggedInUser.getId());
+        }
         if (status == null || status.isEmpty()) {
             status = "All";
         }
+        boolean hide = allCourses.isEmpty();
+        request.setAttribute("hide", hide);
         final String filterStatus = status;
         if (!filterStatus.equals("All")) {
             allCourses = allCourses.stream()
@@ -95,6 +112,7 @@ public class SubjectList extends HttpServlet {
         request.setAttribute("courses", paginatedCourses);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("itemsPerPage", pageSize);
         request.setAttribute("searchTitle", searchTitle);
         request.setAttribute("status", filterStatus);
 
