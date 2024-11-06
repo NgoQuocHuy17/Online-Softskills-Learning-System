@@ -15,24 +15,32 @@ import java.util.List;
 public class CourseListServlet extends HttpServlet {
 
     @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         CourseDAO courseDAO = new CourseDAO();
 
-        // Fetch all categories
         List<String> categories = courseDAO.getAllCategories();
         request.setAttribute("categories", categories);
 
-        // Get searchTitle and category from request
         String searchTitle = request.getParameter("searchTitle");
         String category = request.getParameter("category");
 
         if (category == null || category.isEmpty()) {
-            category = "All"; // Default category is 'All'
+            category = "All";
         }
 
-        // Handle pagination
         int page = 1;
         int pageSize = 5;
         String pageParam = request.getParameter("page");
@@ -42,7 +50,7 @@ public class CourseListServlet extends HttpServlet {
             try {
                 page = Integer.parseInt(pageParam);
             } catch (NumberFormatException e) {
-                page = 1; // Fallback to default if parsing fails
+                page = 1;
             }
         }
 
@@ -50,59 +58,46 @@ public class CourseListServlet extends HttpServlet {
             try {
                 pageSize = Integer.parseInt(pageSizeParam);
             } catch (NumberFormatException e) {
-                pageSize = 5; // Fallback to default if parsing fails
+                pageSize = 5;
             }
         }
 
         List<Course> courses;
         int totalCourses;
 
-        // Nếu cả searchTitle và category đều tồn tại
         if ((searchTitle != null && !searchTitle.isEmpty()) && !"All".equals(category)) {
-            // Lọc theo tiêu đề và category
             courses = courseDAO.getCoursesByTitleAndCategory(searchTitle, category, page, pageSize);
             totalCourses = courseDAO.getTotalCoursesByTitleAndCategory(searchTitle, category);
         } else if (searchTitle != null && !searchTitle.isEmpty()) {
-            // Nếu chỉ tìm kiếm theo tiêu đề
             courses = courseDAO.getCoursesByTitle(searchTitle);
-            totalCourses = courses.size(); // Kết quả tìm kiếm không cần phân trang
+            totalCourses = courses.size();
         } else {
-            // Nếu chỉ lọc theo category
             courses = courseDAO.getCoursesByCategory(category, page, pageSize);
             totalCourses = courseDAO.getTotalCoursesByCategory(category);
         }
 
-        // Tính toán số trang
         int totalPages = (int) Math.ceil((double) totalCourses / pageSize);
         if (totalPages < 1) {
             totalPages = 1;
         }
 
-        // Retrieve show field parameters with default values
-        boolean showTitle = true;
-        boolean showTagline = true;
-        boolean showDescription = true;
-        boolean showCategory = true;
+        boolean showTagline = request.getParameter("showTagline") != null;
+        boolean showCategory = request.getParameter("showCategory") != null;
+        boolean showBasicPrice = request.getParameter("showBasicPrice") != null;
+        boolean showAdvancedPrice = request.getParameter("showAdvancedPrice") != null;
 
-        showTitle = request.getParameter("showTitle") != null;
-        showTagline = request.getParameter("showTagline") != null;
-        showDescription = request.getParameter("showDescription") != null;
-        showCategory = request.getParameter("showCategory") != null;
-
-        // Set show field parameters as attributes
-        request.setAttribute("showTitle", showTitle);
         request.setAttribute("showTagline", showTagline);
-        request.setAttribute("showDescription", showDescription);
         request.setAttribute("showCategory", showCategory);
+        request.setAttribute("showBasicPrice", showBasicPrice);
+        request.setAttribute("showAdvancedPrice", showAdvancedPrice);
 
-        // Set attributes
         request.setAttribute("courses", courses);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("category", category);
         request.setAttribute("searchTitle", searchTitle);
 
-        // Forward to JSP
         request.getRequestDispatcher("/course.jsp").forward(request, response);
     }
+
 }
