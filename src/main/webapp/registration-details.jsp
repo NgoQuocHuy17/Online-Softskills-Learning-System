@@ -20,6 +20,7 @@
         <link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
         <link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
         <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     </head>
 
     <body>
@@ -54,6 +55,10 @@
                                 <div class="alert alert-warning">${message}</div>
                             </c:if>
                             <input type="hidden" name="registrationId" value="${registration.id}">
+                            <input type="hidden" name="userId" value="${user.id}">
+                            <input type="hidden" name="packageId" value="${pkg.id}">
+                            <input type="hidden" name="courseId" value="${course.id}">
+
 
                             <!-- Thông tin đăng ký -->
                             <div class="col-12">
@@ -99,7 +104,7 @@
                             <div class="col-12 col-md-6">
                                 <div class="form-group">
                                     <label>Package Price / Sale Price</label>
-                                    <input type="text" class="form-control" id="packagePrice" name="price" value="${pkg.price} / ${pkg.salePrice}" readonly>
+                                    <input type="text" class="form-control" id="packagePrice" name="price" value="${pkg.price} $ / ${pkg.salePrice} $" readonly>
                                 </div>
                             </div>
 
@@ -115,10 +120,10 @@
                                     <label>Registration Valid From</label>
                                     <c:choose>
                                         <c:when test="${sessionScope.user.id == registration.createdBy}">
-                                            <input type="text" class="form-control" name="validFrom" value="${registration.getValidFrom()}">
+                                            <input type="date" class="form-control" name="validFrom" value="${validFrom}">
                                         </c:when>
                                         <c:otherwise>
-                                            <input type="text" class="form-control" name="validFrom" value="${registration.getValidFrom()}" readonly>
+                                            <input type="text" class="form-control" name="validFrom" value="${validFrom}" readonly>
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
@@ -129,10 +134,10 @@
                                     <label>Registration Valid To</label>
                                     <c:choose>
                                         <c:when test="${sessionScope.user.id == registration.createdBy}">
-                                            <input type="text" class="form-control" name="validTo" value="${registration.getValidTo()}">
+                                            <input type="date" class="form-control" name="validTo" value="${validTo}">
                                         </c:when>
                                         <c:otherwise>
-                                            <input type="text" class="form-control" name="validTo" value="${registration.getValidTo()}" readonly>
+                                            <input type="text" class="form-control" name="validTo" value="${validTo}" readonly>
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
@@ -206,8 +211,11 @@
                     <div class="row form-row">
                         <div class="col-12">
                             <h4>Upload More Media</h4>
-                            <form action="AddRegistrationMedia" method="post" enctype="multipart/form-data">
-                                <input type="hidden" name="registrationId" value="<%= registration.getId()%>">
+                            <form action="UpdateRegistrationDetails" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="registrationId" value="${registration.id}">
+                                <input type="hidden" name="userId" value="${user.id}">
+                                <input type="hidden" name="packageId" value="${pkg.id}">
+                                <input type="hidden" name="courseId" value="${course.id}">
 
                                 <div class="form-group">
                                     <label for="newImages">Upload Images</label>
@@ -238,8 +246,9 @@
                             <div class="image-gallery">
                                 <c:forEach var="image" items="${images}">
                                     <form action="DeleteRegistrationMedia" method="post" class="d-flex align-items-center">
-                                        <input type="hidden" name="registrationId" value="${registration.getId()}">
                                         <input type="hidden" name="mediaId" value="${image.id}">
+                                        <input type="hidden" name="registrationId" value="${registration.id}">
+                                        <input type="hidden" name="userId" value="${user.id}">
                                         <div>
                                             <img width="160" src="data:image/jpeg;base64,${image.mediaData}" alt="User Image" class="img-thumbnail limited-size">
                                             <p>Note: ${image.note}</p>
@@ -258,7 +267,8 @@
                             <div class="video-gallery">
                                 <c:forEach var="video" items="${videos}">
                                     <form action="DeleteRegistrationMedia" method="post" class="d-flex align-items-center">
-                                        <input type="hidden" name="registrationId" value="${registration.getId()}">
+                                        <input type="hidden" name="registrationId" value="${registration.id}">
+                                        <input type="hidden" name="userId" value="${user.id}">
                                         <input type="hidden" name="mediaId" value="${video.id}">
                                         <div>
                                             <video width="320" height="240" controls>
@@ -319,12 +329,12 @@
                 var $selectedPackage = $('#packageSelect').find('option:selected');
                 var price = $selectedPackage.data('price');
                 var salePrice = $selectedPackage.data('salePrice');
-                $('#packagePrice').val(price + ' / ' + salePrice);
+                $('#packagePrice').val(price + ' $ / ' + salePrice + ' $');
             }
-
-            // Gọi hàm updatePackages khi trang tải để thiết lập các gói ban đầu
-            $(document).ready(function () {
-                updatePackages();
+            $(function () {
+                $("#validFrom, #validTo").datepicker({
+                    dateFormat: 'yy-mm-dd' // Định dạng ngày tháng năm
+                });
             });
         </script>
 
@@ -337,6 +347,7 @@
         <script src="assets/plugins/theia-sticky-sidebar/ResizeSensor.js"></script>
         <script src="assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js"></script>
         <script src="assets/js/script.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     </body>
 </html>
 

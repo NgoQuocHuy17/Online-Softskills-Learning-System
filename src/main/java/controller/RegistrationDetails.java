@@ -6,6 +6,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import model.Course;
 import model.Registration;
@@ -31,6 +34,14 @@ public class RegistrationDetails extends HttpServlet {
         // Lấy thông tin registration từ RegistrationDAO
         RegistrationDAO registrationDAO = new RegistrationDAO();
         Registration registration = registrationDAO.getRegistrationById(registrationId);
+
+        //Format định dạng thời gian của valid from và valid to
+        LocalDate validFrom = registration.getValidFrom().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate validTo = registration.getValidTo().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String validFromStr = validFrom.format(formatter);
+        String validToStr = validTo.format(formatter);
 
         // Lấy thông tin người dùng từ UserDAO
         UserDAO userDAO = new UserDAO();
@@ -66,9 +77,11 @@ public class RegistrationDetails extends HttpServlet {
         request.setAttribute("emails", emails);
         request.setAttribute("phones", phones);
         request.setAttribute("course", course);
-        request.setAttribute("courses", courses); // Thêm attribute "courses"
+        request.setAttribute("courses", courses);
         request.setAttribute("pkg", pkg);
-        request.setAttribute("packages", packages); // Thêm attribute "packages" của khóa học hiện tại
+        request.setAttribute("packages", packages);
+        request.setAttribute("validFrom", validFromStr);
+        request.setAttribute("validTo", validToStr);
         request.setAttribute("images", images);
         request.setAttribute("videos", videos);
 
