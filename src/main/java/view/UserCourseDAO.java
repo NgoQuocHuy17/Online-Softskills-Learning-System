@@ -44,6 +44,21 @@ public class UserCourseDAO extends DBContext<UserCourse> {
         return totalCourses;
     }
 
+    public boolean addUserCourse(int userId, int courseId) {
+        String query = "INSERT INTO user_courses (user_id, course_id) VALUES (?, ?)";
+
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, courseId);
+
+            int rowsInserted = ps.executeUpdate();
+            return rowsInserted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @Override
     public List<UserCourse> select() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

@@ -35,7 +35,7 @@ public class RegistrationDetails extends HttpServlet {
         RegistrationDAO registrationDAO = new RegistrationDAO();
         Registration registration = registrationDAO.getRegistrationById(registrationId);
 
-        //Format định dạng thời gian của valid from và valid to
+        // Format định dạng thời gian của valid from và valid to
         LocalDate validFrom = registration.getValidFrom().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate validTo = registration.getValidTo().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
@@ -43,14 +43,24 @@ public class RegistrationDetails extends HttpServlet {
         String validFromStr = validFrom.format(formatter);
         String validToStr = validTo.format(formatter);
 
-        // Lấy thông tin người dùng từ UserDAO
-        UserDAO userDAO = new UserDAO();
-        User user = userDAO.getUserById(registration.getUserId());
+        // Thiết lập attribute cho user
+        User userParam = null;
+        List<UserContact> emails = null;
+        List<UserContact> phones = null;
 
-        // Lấy email và số điện thoại của người dùng từ UserContactDAO
-        UserContactDAO userContactDAO = new UserContactDAO();
-        List<UserContact> emails = userContactDAO.getUserEmails(user.getId());
-        List<UserContact> phones = userContactDAO.getUserPhones(user.getId());
+        Integer userId = registration.getUserId();
+        if (userId != null && userId != 0) {
+            // Lấy thông tin người dùng từ UserDAO
+            UserDAO userDAO = new UserDAO();
+            userParam = userDAO.getUserById(userId);
+
+            if (userParam != null) {
+                // Lấy email và số điện thoại của người dùng từ UserContactDAO
+                UserContactDAO userContactDAO = new UserContactDAO();
+                emails = userContactDAO.getUserEmails(userParam.getId());
+                phones = userContactDAO.getUserPhones(userParam.getId());
+            }
+        }
 
         // Lấy thông tin khóa học từ CourseDAO
         CourseDAO courseDAO = new CourseDAO();
@@ -73,9 +83,13 @@ public class RegistrationDetails extends HttpServlet {
 
         // Thiết lập các attribute để gửi tới JSP
         request.setAttribute("registration", registration);
-        request.setAttribute("user", user);
-        request.setAttribute("emails", emails);
-        request.setAttribute("phones", phones);
+        request.setAttribute("userParam", userParam);
+        if (emails != null) {
+            request.setAttribute("emails", emails);
+        }
+        if (phones != null) {
+            request.setAttribute("phones", phones);
+        }
         request.setAttribute("course", course);
         request.setAttribute("courses", courses);
         request.setAttribute("pkg", pkg);

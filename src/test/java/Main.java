@@ -5,28 +5,33 @@ import model.User;
 import model.UserMedia;
 import view.UserMediaDAO;
 import view.UserDAO;
+import java.sql.Date;
+import view.RegistrationDAO;
 
 
 public class Main {
 
-    public static void main(String[] args) {
-        // Khởi tạo DAO
-        UserDAO userDao = new UserDAO();
 
-        // Thiết lập các tham số thử nghiệm
-        int pageNumber = 1;
-        int pageSize = 10;
-        String genderFilter = ""; // Ví dụ: Lọc theo giới tính
-        String roleFilter = ""; // Không lọc theo vai trò
-        String statusFilter = ""; // Ví dụ: Lọc theo trạng thái
-        String searchTerm = ""; // Không có từ khóa tìm kiếm
-        String sortBy = ""; // Sắp xếp theo tên đầy đủ
-        String sortOrder = ""; // Thứ tự sắp xếp tăng dần
-        // Gọi hàm getUsersByPage và in kết quả
-        List<User> users = userDao.getUsersByPage(pageNumber, pageSize, genderFilter, roleFilter, statusFilter, searchTerm, sortBy, sortOrder);
-        for (User user : users) {
-            System.out.println(user);
+    public static void main(String[] args) {
+        RegistrationDAO registrationDAO = new RegistrationDAO();
+
+        // Các tham số để kiểm tra
+        int registrationId = 1; // Giá trị thử nghiệm
+        int userId = 0; // Kiểm tra trường hợp userId là 0
+        int packageId = 1; // Giá trị thử nghiệm
+        int courseId = 1; // Giá trị thử nghiệm
+        String status = "Active"; // Giá trị thử nghiệm
+        Date validFrom = Date.valueOf("2023-01-01"); // Giá trị thử nghiệm
+        Date validTo = Date.valueOf("2023-12-31"); // Giá trị thử nghiệm
+        String notes = "Updated1"; // Giá trị thử nghiệm
+
+        boolean isUpdated = registrationDAO.updateRegistrationDetails(registrationId, userId, packageId, courseId, status, validFrom, validTo, notes);
+        if (isUpdated) {
+            System.out.println("Cập nhật thông tin đăng ký thành công.");
+        } else {
+            System.out.println("Cập nhật thông tin đăng ký thất bại.");
         }
     }
-
 }
+
+

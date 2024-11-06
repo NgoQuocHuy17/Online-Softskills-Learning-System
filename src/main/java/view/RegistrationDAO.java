@@ -244,11 +244,15 @@ public class RegistrationDAO extends DBContext<Registration> {
         return registration;
     }
 
-    public boolean updateRegistrationDetails(int registrationId, int userId, int packageId, int courseId, String status, Date validFrom, Date validTo, String notes) {
+    public boolean updateRegistrationDetails(int registrationId, Integer userId, int packageId, int courseId, String status, Date validFrom, Date validTo, String notes) {
         String query = "UPDATE registrations SET user_id = ?, package_id = ?, course_id = ?, status = ?, valid_from = ?, valid_to = ?, notes = ? WHERE id = ?";
 
         try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, userId);
+            if (userId == null || userId == 0) {
+                ps.setNull(1, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(1, userId);
+            }
             ps.setInt(2, packageId);
             ps.setInt(3, courseId);
             ps.setString(4, status);

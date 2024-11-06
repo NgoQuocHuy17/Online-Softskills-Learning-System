@@ -40,13 +40,14 @@
             </div>
             <%
                 Registration registration = (Registration) request.getAttribute("registration");
-                User user = (User) request.getAttribute("user");
+                User userParam = (User) request.getAttribute("userParam");
+
             %>
             <div class="content">
                 <div class="container-fluid">
                     <!-- Form chi tiết đăng ký -->
                     <div class="col-md-4 col-12 text-right">
-                        <a href="add-registration.jsp" class="btn btn-success">Add New Registration</a>
+                        <a href="AddRegistration" class="btn btn-success">Add New Registration</a>
                     </div>
                     <br>
                     <form action="UpdateRegistrationDetails" method="post" enctype="multipart/form-data">
@@ -55,7 +56,9 @@
                                 <div class="alert alert-warning">${message}</div>
                             </c:if>
                             <input type="hidden" name="registrationId" value="${registration.id}">
-                            <input type="hidden" name="userId" value="${user.id}">
+                            <c:if test="${userParam != null}">
+                                <input type="hidden" name="userId" value="${userParam.id}">
+                            </c:if>
                             <input type="hidden" name="packageId" value="${pkg.id}">
                             <input type="hidden" name="courseId" value="${course.id}">
 
@@ -162,43 +165,70 @@
                             </div>
 
                             <!-- Thông tin người đăng ký -->
-                            <div class="col-12 col-md-6">
-                                <div class="form-group">
-                                    <label>Full Name</label>
-                                    <input type="text" class="form-control" name="fullName" value="${user.getFullName()}" readonly>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6">
-                                <div class="form-group">
-                                    <label>Gender</label>
-                                    <select class="form-control" name="gender" disabled>
-                                        <option value="Male" <%= "Male".equals(user.getGender()) ? "selected" : ""%>>Male</option>
-                                        <option value="Female" <%= "Female".equals(user.getGender()) ? "selected" : ""%>>Female</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6">
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <input type="text" class="form-control mb-2" value="${user.getEmail()}" readonly>
-                                    <c:forEach var="email" items="${emails}">
-                                        <input type="text" class="form-control mb-2" value="${email.contactValue}" readonly>
-                                    </c:forEach>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6">
-                                <div class="form-group">
-                                    <label>Phone Numbers</label>
-                                    <div class="form-group">
-                                        <c:forEach var="phone" items="${phones}">
-                                            <input type="text" class="form-control mb-2" value="${phone.contactValue}" readonly>
-                                        </c:forEach>
+                            <c:choose>
+                                <c:when test="${userParam != null}">
+                                    <!-- User is not null, display read-only fields -->
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label>Full Name</label>
+                                            <input type="text" class="form-control" name="fullName" value="${userParam.getFullName()}" readonly>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label>Gender</label>
+                                            <select class="form-control" name="gender" disabled>
+                                                <option value="Male" ${param.gender == 'Male' ? 'selected' : ''}>Male</option>
+                                                <option value="Female" ${param.gender == 'Female' ? 'selected' : ''}>Female</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input type="text" class="form-control mb-2" value="${userParam.getEmail()}" readonly>
+                                            <c:forEach var="email" items="${emails}">
+                                                <input type="text" class="form-control mb-2" value="${email.contactValue}" readonly>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label>Phone Numbers</label>
+                                            <div class="form-group">
+                                                <c:forEach var="phone" items="${phones}">
+                                                    <input type="text" class="form-control mb-2" value="${phone.contactValue}" readonly>
+                                                </c:forEach>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <!-- User is null, display editable fields -->
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label>Full Name</label>
+                                            <input type="text" class="form-control" name="fullName">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label>Gender</label>
+                                            <select class="form-control" name="gender">
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input type="text" class="form-control mb-2" name="email">
+                                        </div>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
 
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
@@ -213,7 +243,9 @@
                             <h4>Upload More Media</h4>
                             <form action="UpdateRegistrationDetails" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="registrationId" value="${registration.id}">
-                                <input type="hidden" name="userId" value="${user.id}">
+                                <c:if test="${userParam != null}">
+                                    <input type="hidden" name="userId" value="${userParam.id}">
+                                </c:if>
                                 <input type="hidden" name="packageId" value="${pkg.id}">
                                 <input type="hidden" name="courseId" value="${course.id}">
 
@@ -248,7 +280,9 @@
                                     <form action="DeleteRegistrationMedia" method="post" class="d-flex align-items-center">
                                         <input type="hidden" name="mediaId" value="${image.id}">
                                         <input type="hidden" name="registrationId" value="${registration.id}">
-                                        <input type="hidden" name="userId" value="${user.id}">
+                                        <c:if test="${userParam != null}">
+                                            <input type="hidden" name="userId" value="${userParam.id}">
+                                        </c:if>
                                         <div>
                                             <img width="160" src="data:image/jpeg;base64,${image.mediaData}" alt="User Image" class="img-thumbnail limited-size">
                                             <p>Note: ${image.note}</p>
@@ -268,7 +302,9 @@
                                 <c:forEach var="video" items="${videos}">
                                     <form action="DeleteRegistrationMedia" method="post" class="d-flex align-items-center">
                                         <input type="hidden" name="registrationId" value="${registration.id}">
-                                        <input type="hidden" name="userId" value="${user.id}">
+                                        <c:if test="${userParam != null}">
+                                            <input type="hidden" name="userId" value="${userParam.id}">
+                                        </c:if>
                                         <input type="hidden" name="mediaId" value="${video.id}">
                                         <div>
                                             <video width="320" height="240" controls>

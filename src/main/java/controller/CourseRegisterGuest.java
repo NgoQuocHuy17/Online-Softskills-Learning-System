@@ -44,7 +44,7 @@ public class CourseRegisterGuest extends HttpServlet {
         // Tạo mật khẩu ngẫu nhiên
         String password = generateRandomPassword(10);
 
-        // Tạo mã hash từ password
+        // Tạo mã hash ngẫu nhiên
         String myHash;
         Random random = new Random();
         random.nextInt(999999);

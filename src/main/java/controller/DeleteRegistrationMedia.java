@@ -30,7 +30,7 @@ public class DeleteRegistrationMedia extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int mediaId = Integer.parseInt(request.getParameter("mediaId"));
         int registrationId = Integer.parseInt(request.getParameter("registrationId"));
-        int userId = Integer.parseInt(request.getParameter("userId"));
+        String userIdStr = request.getParameter("userId");
 
         RegistrationDAO registrationDAO = new RegistrationDAO();
         RegistrationMediaDAO registrationMediaDAO = new RegistrationMediaDAO();
@@ -45,14 +45,26 @@ public class DeleteRegistrationMedia extends HttpServlet {
 
         // Lấy thông tin đăng ký và các danh sách cần thiết để hiển thị trên JSP
         Registration registration = registrationDAO.getRegistrationById(registrationId);
-        UserDAO userDAO = new UserDAO();
-        User user = userDAO.getUserById(userId);
-        UserContactDAO userContactDAO = new UserContactDAO();
+        User user = null;
+        List<UserContact> emails = null;
+        List<UserContact> phones = null;
+
+        // Kiểm tra userId và lấy thông tin người dùng nếu userId không null
+        if (userIdStr != null && !userIdStr.isEmpty()) {
+            int userId = Integer.parseInt(userIdStr);
+            UserDAO userDAO = new UserDAO();
+            user = userDAO.getUserById(userId);
+
+            if (user != null) {
+                UserContactDAO userContactDAO = new UserContactDAO();
+                emails = userContactDAO.getUserEmails(userId);
+                phones = userContactDAO.getUserPhones(userId);
+            }
+        }
+
         CourseDAO courseDAO = new CourseDAO();
         PackageDAO packageDAO = new PackageDAO();
 
-        List<UserContact> phones = userContactDAO.getUserPhones(userId);
-        List<UserContact> emails = userContactDAO.getUserEmails(userId);
         List<Course> courses = courseDAO.getAllCourses();
         Course course = courseDAO.getCourseById(registration.getCourseId());
         Package pkg = packageDAO.getPackageById(registration.getPackageId());
@@ -68,8 +80,12 @@ public class DeleteRegistrationMedia extends HttpServlet {
         // Gửi danh sách video, hình ảnh, số điện thoại và email đến JSP
         request.setAttribute("registration", registration);
         request.setAttribute("user", user);
-        request.setAttribute("emails", emails);
-        request.setAttribute("phones", phones);
+        if (emails != null) {
+            request.setAttribute("emails", emails);
+        }
+        if (phones != null) {
+            request.setAttribute("phones", phones);
+        }
         request.setAttribute("course", course);
         request.setAttribute("courses", courses);
         request.setAttribute("pkg", pkg);
@@ -82,3 +98,4 @@ public class DeleteRegistrationMedia extends HttpServlet {
         request.getRequestDispatcher("/registration-details.jsp").forward(request, response);
     }
 }
+
