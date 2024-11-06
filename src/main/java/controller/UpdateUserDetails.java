@@ -95,6 +95,6 @@ public class UpdateUserDetails extends HttpServlet {
         request.setAttribute("user", user);
         request.setAttribute("avatar", avatar);
 
-        request.getRequestDispatcher("/UserDetails.jsp").forward(request, response);
+        request.getRequestDispatcher("/user-details.jsp").forward(request, response);
     }
 }

@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -31,13 +30,13 @@ public class AddUser extends HttpServlet {
         try {
             if (userDAO.isEmailExist(email)) {
                 request.setAttribute("alertMessage", "Email already exists. Please use a different email.");
-                request.getRequestDispatcher("AddUser.jsp").forward(request, response);
+                request.getRequestDispatcher("add-user.jsp").forward(request, response);
                 return;
             }
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("alertMessage", "An error occurred while checking email.");
-            request.getRequestDispatcher("AddUser.jsp").forward(request, response);
+            request.getRequestDispatcher("add-user.jsp").forward(request, response);
             return;
         }
 
@@ -70,7 +69,7 @@ public class AddUser extends HttpServlet {
             request.setAttribute("alertMessage", "Failed to add user.");
         }
 
-        request.getRequestDispatcher("AddUser.jsp").forward(request, response);
+        request.getRequestDispatcher("add-user.jsp").forward(request, response);
     }
 
     private String generateRandomPassword(int length) {
