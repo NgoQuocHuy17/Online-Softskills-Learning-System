@@ -16,7 +16,7 @@ import model.User;
  *
  * @author Minh
  */
-@WebFilter({"/login.jsp", "/logout.jsp", "/register.jsp", "/forgot-password.jsp", "/new-password.jsp"})
+@WebFilter({"/ValidateOtp", "/Register", "/Login", "/forgotPassword", "/ActivateAccount", "/ActivateSucess.jsp", "/EnterOtp.jsp", "/forgotPassword.jsp", "/login.jsp", "/newPassword.jsp", "/Register.jsp", "/RegisterSuccess.jsp", "/success.jsp"})
 public class FilterLoggedIn implements Filter {
 
     @Override

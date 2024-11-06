@@ -83,7 +83,7 @@ public class UserContactDAO extends DBContext<UserContact> {
     @Override
     public List<UserContact> select() {
         String sql = "SELECT [id], [user_id], [contact_type], [contact_value] FROM [dbo].[user_contacts]";
-        List<UserContact> userContacts = new Vector();
+        List<UserContact> userContacts = new Vector<>();
         try (PreparedStatement pre = super.getConn().prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
             while (rs.next()) {
                 UserContact userContact = new UserContact();

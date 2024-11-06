@@ -18,7 +18,7 @@ public class CategoryDAO extends DBContext<Category> {
     @Override
     public List<Category> select() {
         String sql = "SELECT [id], [name] FROM [dbo].[categories]";
-        List<Category> categories = new Vector();
+        List<Category> categories = new Vector<>();
         try (PreparedStatement pre = super.getConn().prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
             while (rs.next()) {
                 Category category = new Category();

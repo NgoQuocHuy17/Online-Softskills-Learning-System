@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Base64;
-
 public class UserMedia {
 
     private int id;

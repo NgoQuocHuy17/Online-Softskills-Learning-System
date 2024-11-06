@@ -20,7 +20,7 @@ import model.User;
  *
  * @author Minh
  */
-@WebFilter({"/RegistrationDetails.jsp", "/UsersList.jsp", "/UserDetails.jsp", "/settings-list.jsp"})
+@WebFilter({"/UserList", "/UserDetails", "/UpdateUserDetails", "/SettingListController", "/RegistrationsList", "/RegistrationDetails", "/AddUser", "/AddUser.jsp", "/registrationDetails.jsp", "/RegistrationsList.jsp", "/setting-list.jsp", "/UserDetails.jsp", "/UserDetailsTest.jsp", "/UsersList.jsp", "/UserListTest.jsp"})
 public class FilterAdmin implements Filter {
 
     @Override
@@ -32,9 +32,6 @@ public class FilterAdmin implements Filter {
         HttpSession session = httpRequest.getSession(false);
         User user = (session != null) ? (User) session.getAttribute("user") : null;
 
-        // Extract the requested URI path
-        String path = httpRequest.getRequestURI();
-
         // Check if user is logged in
         if (user == null) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
@@ -43,13 +40,6 @@ public class FilterAdmin implements Filter {
 
         // Ensure role is non-null to avoid NullPointerException
         if (user.getRole() == null) {
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/home");
-            return;
-        }
-
-        // Custom logic for specific pages
-        if (path.endsWith("/RegistrationDetails.jsp")
-                && (!user.getRole().equalsIgnoreCase("admin") && !user.getRole().equalsIgnoreCase("saler"))) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/home");
             return;
         }

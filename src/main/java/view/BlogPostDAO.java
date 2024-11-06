@@ -3,6 +3,7 @@ package view;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.*;
@@ -170,7 +171,7 @@ public class BlogPostDAO extends DBContext<BlogPost> {
     @Override
     public List<BlogPost> select() {
         String sql = "SELECT [id], [title], [thumbnail_url], [category_id], [content], [author_id], [status], [created_at], [updated_at] FROM [dbo].[blog_posts]";
-        List<BlogPost> blogPosts = new ArrayList();
+        List<BlogPost> blogPosts = new Vector<>();
         try (PreparedStatement pre = super.getConn().prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
             while (rs.next()) {
                 BlogPost blogPost = new BlogPost();

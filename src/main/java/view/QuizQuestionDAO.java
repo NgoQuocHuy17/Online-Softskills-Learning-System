@@ -18,7 +18,7 @@ public class QuizQuestionDAO extends DBContext<QuizQuestion> {
     @Override
     public List<QuizQuestion> select() {
         String sql = "SELECT [quiz_id], [question_id] FROM [dbo].[quiz_questions]";
-        List<QuizQuestion> quizQuestions = new Vector();
+        List<QuizQuestion> quizQuestions = new Vector<>();
         try (PreparedStatement pre = super.getConn().prepareStatement(sql); 
              ResultSet rs = pre.executeQuery()) {
             while (rs.next()) {

@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import model.BlogPost;
+import java.util.Vector;
 
 public class PostDAO extends DBContext<Post> {
 
@@ -38,7 +38,7 @@ public class PostDAO extends DBContext<Post> {
     public List<Post> select() {
         String sql = "Select * from blog_posts";
         
-        List<Post> posts = new ArrayList();
+        List<Post> posts = new Vector<>();
         
         try (Connection conn = getConn();
              PreparedStatement stmt = conn.prepareStatement(sql);

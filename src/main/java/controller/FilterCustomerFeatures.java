@@ -20,8 +20,8 @@ import model.User;
  *
  * @author Minh
  */
-@WebFilter({"/profile-settings.jsp", "/my-registrations.jsp", "/my-courses.jsp", "/subject-list.jsp", "/subject-details.jsp", "blog-list.jsp"})
-public class FilterGuest implements Filter {
+@WebFilter({"/updateProfile", "/newPassword", "/MyRegistrations", "/MyCourses", "/changepass", "/CancelRegistration", "/change-password.jsp", "/changepass.jsp", "/chat-mentee.jsp", "/logout.jsp", "/myCourses.jsp", "/myRegistrations.jsp", "/profile-settings.jsp", "/profile.jsp"})
+public class FilterCustomerFeatures implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

@@ -28,8 +28,6 @@ import view.UserDAO;
 @WebServlet("/forgotPassword")
 public class ForgotPasswordController extends HttpServlet {
 
-    private static final long OTP_VALIDITY_PERIOD = 15 * 60 * 1000;
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         long generationTime = System.currentTimeMillis();

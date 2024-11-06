@@ -20,7 +20,8 @@ import model.User;
  *
  * @author Minh
  */
-@WebFilter ({"/post-details.jsp", "/slider-list.jsp", "/slider-details.jsp", "/subject-list.jsp", "/subject-details.jsp"})
+@WebFilter ({"/SubjectList", "/subjectDetail", "/sliderlist", "/sliderdetails", "/post-details", "/NewSubject", "/LessonListController", "/LessonDetailController", "/LessonActionController", "/blog-create", "/blog-update", "/blog-delete", "/addMedia", "/add-course-media.jsp", "/blog-create.jsp", "/blog-update.jsp", "/editSubjectDetails.jsp", "/LessonDetail.jsp", "/LessonList.jsp", "/newSubject.jsp", "/post-details.jsp", 
+    "/subjectList.jsp", "/uploadResult.jsp"})
 public class FilterTeacher implements Filter {
 
     @Override

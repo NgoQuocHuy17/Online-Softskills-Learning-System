@@ -1,6 +1,5 @@
 package view;
 
-import controller.SendMailActivateAcc;
 import java.sql.Connection;
 import model.User;
 import java.util.List;

@@ -84,7 +84,6 @@ public class BlogUpdateController extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         String title = request.getParameter("title");
         String content = request.getParameter("content");
-        String raw = request.getParameter("categoryId");
         int categoryId = Integer.parseInt(request.getParameter("categoryId"));
         String existingThumbnail = request.getParameter("existingThumbnail"); // Existing thumbnail option
         Part newThumbnailPart = request.getPart("thumbnail"); // New thumbnail upload
