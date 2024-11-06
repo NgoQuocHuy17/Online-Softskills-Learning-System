@@ -37,16 +37,25 @@ public class SliderListController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Lấy các tham số 'show' từ request
+        String showId = request.getParameter("showId");
+        String showTitle = request.getParameter("showTitle");
+        String showImage = request.getParameter("showImage");
+        String showBacklink = request.getParameter("showBacklink");
+        String showStatus = request.getParameter("showStatus");
+        String showCreatedAt = request.getParameter("showCreatedAt");
+        String showUpdatedAt = request.getParameter("showUpdatedAt");
+        
         SliderDAO sliderDAO = new SliderDAO();
 
         // Lấy số trang từ request (mặc định là 1 nếu không có tham số)
         int page = 1;
-        int pageSize = 5; // Số lượng users mỗi trang
         if (request.getParameter("page") != null) {
             page = Integer.parseInt(request.getParameter("page"));
         }
 
-        // Lấy pageSize từ request (có thể chỉnh sửa theo yêu cầu)
+        // Lấy pageSize từ request (mặc định là 5)
+        int pageSize = 5;
         String pageSizeParam = request.getParameter("pageSize");
         if (pageSizeParam != null && !pageSizeParam.isEmpty()) {
             pageSize = Integer.parseInt(pageSizeParam);
@@ -80,16 +89,6 @@ public class SliderListController extends HttpServlet {
             request.setAttribute("message", "Không có slider hợp lệ");
         }
 
-        // Lấy các tham số 'show' từ request
-        String showId = request.getParameter("showId");
-        String showTitle = request.getParameter("showTitle");
-        String showImage = request.getParameter("showImage");
-        String showBacklink = request.getParameter("showBacklink");
-        String showStatus = request.getParameter("showStatus");
-        String showCreatedAt = request.getParameter("showCreatedAt");
-        String showUpdatedAt = request.getParameter("showUpdatedAt");
-
-        
         request.setAttribute("showId", showId);
         request.setAttribute("showTitle", showTitle);
         request.setAttribute("showImage", showImage);

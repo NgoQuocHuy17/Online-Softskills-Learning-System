@@ -60,7 +60,9 @@ public class SliderDAO extends DBContext<Slider> {
                             rs.getString("title"),
                             imageBytes,
                             rs.getString("backlink"),
-                            rs.getString("status")
+                            rs.getString("status"),
+                            rs.getTimestamp("created_at").toLocalDateTime(),
+                            rs.getTimestamp("updated_at").toLocalDateTime()                            
                     );
                     sliders.add(slider);
                 }

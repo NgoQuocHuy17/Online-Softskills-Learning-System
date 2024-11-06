@@ -22,15 +22,15 @@
                         <div class="col-md-12 col-12">
                             <form class="search-filter-form" action="slider-list" method="get">
                                 <div class="input-group">
-                                    
+
                                     <!-- Search Input -->
                                     <input type="text" name="searchTerm" placeholder="Search slider..." class="form-control" value="${param.searchTerm}">
 
                                     <!--Filter -->
                                     <select name="status" class="form-control">
                                         <option value="">All Statuses</option>
-                                        <option value="Male" ${param.status == 'Active' ? 'selected' : ''}>Active</option>
-                                        <option value="Female" ${param.status == 'Inactive' ? 'selected' : ''}>Inactive</option>
+                                        <option value="Active" ${param.status == 'Active' ? 'selected' : ''}>Active</option>
+                                        <option value="Inactive" ${param.status == 'Inactive' ? 'selected' : ''}>Inactive</option>
                                     </select>
                                     <!-- Page Size -->
                                     <input type="number" name="pageSize" placeholder="Page Size" class="form-control" min="1" value="${param.pageSize}"/>
@@ -40,15 +40,13 @@
                                 </div>
 
                                 <!-- ShowField Checkboxes -->
-                                <div class="form-group mt-3">
+                                <div class="form-group mt-3" style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
                                     <label class="mr-2">Show Columns: </label>
-                                    <label><input type="checkbox" name="showId" value="true" ${param.showId == 'true' ? 'checked' : ''}>Id</label>
-                                    <label><input type="checkbox" name="showTitle" value="true" ${param.showTitle == 'true' ? 'checked' : ''}>Title</label>
-                                    <label><input type="checkbox" name="showImage" value="true" ${param.showImage == 'true' ? 'checked' : ''}>Image</label>
-                                    <label><input type="checkbox" name="showBacklink" value="true" ${param.showBacklink == 'true' ? 'checked' : ''}>Backlink</label>
-                                    <label><input type="checkbox" name="showStatus" value="true" ${param.showStatus == 'true' ? 'checked' : ''}>Status</label>
-                                    <label><input type="checkbox" name="showCreatedAt" value="true" ${param.showCreatedAt == 'true' ? 'checked' : ''}>Created At</label>
-                                    <label><input type="checkbox" name="showUpdatedAt" value="true" ${param.showUpdatedAt == 'true' ? 'checked' : ''}>Updated At</label>
+                                    <label><input type="checkbox" name="showId" value="true" ${param.showId != null || empty param.showId ? 'checked' : ''}>Id</label>
+                                    <label><input type="checkbox" name="showTitle" value="true" ${param.showTitle != null || empty param.showTitle ? 'checked' : ''}>Title</label>
+                                    <label><input type="checkbox" name="showImage" value="true" ${param.showImage != null || empty param.showImage ? 'checked' : ''}>Image</label>
+                                    <label><input type="checkbox" name="showBacklink" value="true" ${param.showBacklink != null || empty param.showBacklink ? 'checked' : ''}>Back Link</label>
+                                    <label><input type="checkbox" name="showStatus" value="true" ${param.showStatus != null || empty param.showStatus ? 'checked' : ''}>Status</label>
                                 </div>
                             </form>
                         </div>
@@ -59,9 +57,9 @@
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
-<!--                        <div class="col-md-4 col-12 text-right">
-                            <a href="AddUser.jsp" class="btn btn-success">Add Slider</a>
-                        </div>-->
+                        <!--                        <div class="col-md-4 col-12 text-right">
+                                                    <a href="AddUser.jsp" class="btn btn-success">Add Slider</a>
+                                                </div>-->
                         <h2 class="mt-4">Slider List</h2>
                         <c:if test="${empty sliders}">
                             <div class="alert alert-warning">
@@ -73,23 +71,23 @@
                                 <thead class="thead-dark">
                                     <tr>
                                         <c:if test="${showId}">
-                                        <th>
-                                            Id
-                                            <a href="?sort=id&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&showCreatedAt=${showCreatedAt}&showUpdateddAt=${showUpdateddAt}&pageSize=${pageSize}">
-                                                <i class="fas fa-arrow-up"></i>
-                                            </a>
-                                            <a href="?sort=id&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&showCreatedAt=${showCreatedAt}&showUpdateddAt=${showUpdateddAt}&pageSize=${pageSize}">
-                                                <i class="fas fa-arrow-down"></i>
-                                            </a>
-                                        </th>
+                                            <th>
+                                                Id
+                                                <a href="?sort=id&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-up"></i>
+                                                </a>
+                                                <a href="?sort=id&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-down"></i>
+                                                </a>
+                                            </th>
                                         </c:if>
                                         <c:if test="${showTitle}">
                                             <th>
                                                 Title
-                                                <a href="?sort=full_name&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&showCreatedAt=${showCreatedAt}&showUpdateddAt=${showUpdateddAt}&pageSize=${pageSize}">
+                                                <a href="?sort=title&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
                                                     <i class="fas fa-arrow-up"></i>
                                                 </a>
-                                                <a href="?sort=full_name&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&showCreatedAt=${showCreatedAt}&showUpdateddAt=${showUpdateddAt}&pageSize=${pageSize}">
+                                                <a href="?sort=title&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
                                                     <i class="fas fa-arrow-down"></i>
                                                 </a>
                                             </th>
@@ -97,55 +95,33 @@
                                         <c:if test="${showImage}">
                                             <th>
                                                 Image
-                                                <a href="?sort=gender&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&showCreatedAt=${showCreatedAt}&showUpdateddAt=${showUpdateddAt}&pageSize=${pageSize}">
+                                                <a href="?sort=image_url&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
                                                     <i class="fas fa-arrow-up"></i>
                                                 </a>
-                                                <a href="?sort=gender&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&showCreatedAt=${showCreatedAt}&showUpdateddAt=${showUpdateddAt}&pageSize=${pageSize}">
+                                                <a href="?sort=image_url&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
                                                     <i class="fas fa-arrow-down"></i>
                                                 </a>
                                             </th>
                                         </c:if>
                                         <c:if test="${showBacklink}">
                                             <th>
-                                                Email
-                                                <a href="?sort=email&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&showCreatedAt=${showCreatedAt}&showUpdateddAt=${showUpdateddAt}&pageSize=${pageSize}">
+                                                Back Link
+                                                <a href="?sort=backlink&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
                                                     <i class="fas fa-arrow-up"></i>
                                                 </a>
-                                                <a href="?sort=email&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&showCreatedAt=${showCreatedAt}&showUpdateddAt=${showUpdateddAt}&pageSize=${pageSize}">
+                                                <a href="?sort=backlink&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
                                                     <i class="fas fa-arrow-down"></i>
                                                 </a>
                                             </th>
                                         </c:if>
                                         <c:if test="${showStatus}">
                                             <th>
-                                                Mobile
-                                                <a href="?sort=mobile&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&showCreatedAt=${showCreatedAt}&showUpdateddAt=${showUpdateddAt}&pageSize=${pageSize}">
-                                                    <i class="fas fa-arrow-up"></i>
-                                                </a>
-                                                <a href="?sort=mobile&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&showCreatedAt=${showCreatedAt}&showUpdateddAt=${showUpdateddAt}&pageSize=${pageSize}">
-                                                    <i class="fas fa-arrow-down"></i>
-                                                </a>
-                                            </th>
-                                        </c:if>
-                                        <c:if test="${showCreatedAt}">
-                                            <th>
-                                                Role
-                                                <a href="?sort=role&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&showCreatedAt=${showCreatedAt}&showUpdateddAt=${showUpdateddAt}&pageSize=${pageSize}">
-                                                    <i class="fas fa-arrow-up"></i>
-                                                </a>
-                                                <a href="?sort=role&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&showCreatedAt=${showCreatedAt}&showUpdateddAt=${showUpdateddAt}&pageSize=${pageSize}">
-                                                    <i class="fas fa-arrow-down"></i>
-                                                </a>
-                                            </th>
-                                        </c:if>
-                                        <c:if test="${showUpdatedAt}">
-                                            <th>
                                                 Status
-                                                <a href="?sort=isValid&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&showCreatedAt=${showCreatedAt}&showUpdateddAt=${showUpdateddAt}&pageSize=${pageSize}">
+                                                <a href="?sort=status&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
                                                     <i class="fas fa-arrow-up"></i>
                                                 </a>
-                                                <a href="?sort=isValid&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&showCreatedAt=${showCreatedAt}&showUpdateddAt=${showUpdateddAt}&pageSize=${pageSize}>
-                                                   <i class="fas fa-arrow-down"></i>
+                                                <a href="?sort=status&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-down"></i>
                                                 </a>
                                             </th>
                                         </c:if>
@@ -154,25 +130,20 @@
                                 <tbody>
                                     <c:forEach var="slider" items="${sliders}">
                                         <tr>
-                                            <c:if test="${!showId}">
+                                            <c:if test="${showId}">
                                                 <td>${slider.id}</td>
                                             </c:if>
-                                            <c:if test="${!showTitle}">
+                                            <c:if test="${showTitle}">
                                                 <td>${slider.title}</td>
                                             </c:if>
-                                            <c:if test="${!showImage}">
+                                            <c:if test="${showImage}">
                                                 <td><img src="data:image/png;base64,${slider.imageUrlAsBase64}" width="100px"/></td>
-                                            </c:if>
-                                            <c:if test="${!showBacklink}">
+                                                </c:if>
+                                                <c:if test="${showBacklink}">
                                                 <td>${slider.backlink}</td>
                                             </c:if>
-                                            <c:if test="${!showStatus}">
+                                            <c:if test="${showStatus}">
                                                 <td>${slider.status}</td>
-                                            </c:if>
-                                            <c:if test="${!showCreatedAt}" >
-                                                <c:if test="${slider.createdAt != null}">
-                                                    <td>${slider.createdAt}</td>
-                                                </c:if>
                                             </c:if>
                                             <td>
                                                 <form action="slider-details" method="post">
@@ -193,17 +164,17 @@
                                 <nav>
                                     <ul class="pagination justify-content-center">
                                         <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                            <a class="page-link" href="?page=${currentPage - 1}&searchTerm=${param.searchTerm}&status=${param.status}&sort=${param.sort}&sortOrder=${param.sortOrder}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&showCreatedAt=${showCreatedAt}&showUpdateddAt=${showUpdateddAt}&pageSize=${pageSize}" tabindex="-1">
+                                            <a class="page-link" href="?page=${currentPage - 1}&searchTerm=${param.searchTerm}&status=${param.status}&pageSize=${pageSize}&sort=${param.sort}&sortOrder=${param.sortOrder}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}" tabindex="-1">
                                                 <i class="fas fa-angle-double-left"></i>
                                             </a>
                                         </li>
                                         <c:forEach var="i" begin="1" end="${totalPages}">
                                             <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                                <a class="page-link" href="?page=${i}&searchTerm=${param.searchTerm}&status=${param.status}&sort=${param.sort}&sortOrder=${param.sortOrder}&hideField=&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&showCreatedAt=${showCreatedAt}&showUpdateddAt=${showUpdateddAt}&pageSize=${pageSize}">${i}</a>
+                                                <a class="page-link" href="?page=${i}&searchTerm=${param.searchTerm}&status=${param.status}&pageSize=${pageSize}&sort=${param.sort}&sortOrder=${param.sortOrder}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}">${i}</a>
                                             </li>
                                         </c:forEach>
                                         <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                            <a class="page-link" href="?page=${currentPage + 1}&searchTerm=${param.searchTerm}&status=${param.status}&sort=${param.sort}&sortOrder=${param.sortOrder}&hideField=&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&showCreatedAt=${showCreatedAt}&showUpdateddAt=${showUpdateddAt}&pageSize=${pageSize}">
+                                            <a class="page-link" href="?page=${currentPage + 1}&searchTerm=${param.searchTerm}&status=${param.status}&pageSize=${pageSize}&sort=${param.sort}&sortOrder=${param.sortOrder}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}">
                                                 <i class="fas fa-angle-double-right"></i>
                                             </a>
                                         </li>
