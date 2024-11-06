@@ -16,16 +16,19 @@ import model.User;
  *
  * @author Minh
  */
-@WebFilter({"/ValidateOtp", "/Register", "/Login", "/forgotPassword", "/ActivateAccount", "/ActivateSucess.jsp", "/EnterOtp.jsp", "/forgotPassword.jsp", "/login.jsp", "/newPassword.jsp", "/Register.jsp", "/RegisterSuccess.jsp", "/success.jsp"})
+@WebFilter({"/ValidateOtp", "/Register", "/Login", "/forgotPassword", "/ActivateAccount", "/ActivateSucess.jsp", "/EnterOtp.jsp", "/forgotPassword.jsp", "/login.jsp", "/newPassword.jsp", 
+    "/Register.jsp", "/RegisterSuccess.jsp", "/success.jsp"})
 public class FilterUsers implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
+        // Cast to http servlet
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+        // Get session
         HttpSession session = httpRequest.getSession(false);
         User user = null;
 
@@ -36,7 +39,7 @@ public class FilterUsers implements Filter {
 
         //if user is logged in redirect to home
         if (user != null) {
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/home");
+            httpResponse.sendRedirect("home");
             return;
         }
 

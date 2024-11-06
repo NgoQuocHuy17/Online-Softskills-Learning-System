@@ -20,33 +20,29 @@ import model.User;
  *
  * @author Minh
  */
-@WebFilter({"/UserList", "/UserDetails", "/UpdateUserDetails", "/SettingListController", "/RegistrationsList", "/RegistrationDetails", "/AddUser", "/AddUser.jsp", "/registrationDetails.jsp", "/RegistrationsList.jsp", "/setting-list.jsp", "/UserDetails.jsp", "/UserDetailsTest.jsp", "/UsersList.jsp", "/UserListTest.jsp"})
+@WebFilter({"/UserList", "/UserDetails", "/UpdateUserDetails", "/SettingListController", "/AddUser", "/AddUser.jsp", "/setting-list.jsp", "/UserDetails.jsp", "/UserDetailsTest.jsp", 
+    "/UsersList.jsp", "/UserListTest.jsp"})
 public class FilterAdmins implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
+        // Cast to http servlet
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+        // Get session
         HttpSession session = httpRequest.getSession(false);
-        User user = (session != null) ? (User) session.getAttribute("user") : null;
-
-        // Check if user is logged in
-        if (user == null) {
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
-            return;
+        User user = null;
+        
+        // Check if session exists
+        if (session != null){
+            user = (User) session.getAttribute("user");
         }
 
-        // Ensure role is non-null to avoid NullPointerException
-        if (user.getRole() == null) {
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/home");
-            return;
-        }
-
-        // Check if the user is an admin for general protected pages
-        if (!"admin".equalsIgnoreCase(user.getRole())) {
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/home");
+        // Check if user has logged in and has a role and is it admin
+        if (user == null || !"admin".equalsIgnoreCase(user.getRole())) {
+            httpResponse.sendRedirect("home");
             return;
         }
 

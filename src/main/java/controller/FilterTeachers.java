@@ -20,16 +20,19 @@ import model.User;
  *
  * @author Minh
  */
-@WebFilter ({"/SubjectList", "/subjectDetail", "/sliderlist", "/sliderdetails", "/post-details", "/NewSubject", "/LessonListController", "/LessonDetailController", "/LessonActionController", "/blog-create", "/blog-update", "/blog-delete", "/addMedia", "/add-course-media.jsp", "/blog-create.jsp", "/blog-update.jsp", "/editSubjectDetails.jsp", "/LessonDetail.jsp", "/LessonList.jsp", "/newSubject.jsp", "/post-details.jsp", 
-    "/subjectList.jsp", "/uploadResult.jsp"})
+@WebFilter ({"/SubjectList", "/subjectDetail", "/sliderlist", "/sliderdetails", "/post-details", "/NewSubject", "/LessonListController", "/LessonDetailController", 
+    "/LessonActionController", "/blog-create", "/blog-update", "/blog-delete", "/addMedia", "/add-course-media.jsp", "/blog-create.jsp", "/blog-update.jsp", 
+    "/editSubjectDetails.jsp", "/LessonDetail.jsp", "/LessonList.jsp", "/newSubject.jsp", "/post-details.jsp", "/subjectList.jsp", "/uploadResult.jsp"})
 public class FilterTeachers implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         
+        // Cast to http servlet
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+        // Get session
         HttpSession session = httpRequest.getSession(false);
         User user = null;
 
@@ -38,17 +41,10 @@ public class FilterTeachers implements Filter {
             user = (User) session.getAttribute("user");
         }
 
-        // If user is not logged in
-        if (user == null) {
-            // Redirect to login page
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
-            return;
-        }
-        
-        //if user is not teacher or admin return home
-        if (!user.getRole().equalsIgnoreCase("teacher")
+        // If user is not logged in or teacher or admin return home
+        if (user == null || !user.getRole().equalsIgnoreCase("teacher")
                 && !user.getRole().equalsIgnoreCase("admin")){
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/home");
+            httpResponse.sendRedirect("home");
             return;
         }
         

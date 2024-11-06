@@ -20,13 +20,12 @@ import model.User;
  *
  * @author Minh
  */
-@WebFilter({"/updateProfile", "/newPassword", "/MyRegistrations", "/MyCourses", "/changepass", "/CancelRegistration", "/change-password.jsp", "/changepass.jsp", "/chat-mentee.jsp", 
-    "/logout.jsp", "/myCourses.jsp", "/myRegistrations.jsp", "/profile-settings.jsp", "/profile.jsp"})
-public class FilterGuests implements Filter {
+@WebFilter ({"/RegistrationsList", "/RegistrationDetails", "/registrationDetails.jsp", "/RegistrationsList.jsp"})
+public class FilterSalers implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
+        
         // Cast to http servlet
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
@@ -39,15 +38,16 @@ public class FilterGuests implements Filter {
         if (session != null) {
             user = (User) session.getAttribute("user");
         }
-
-        // If user is not logged in
-        if (user == null) {
+        
+        // If user is not logged in or teacher or admin return home
+        if (user == null || !user.getRole().equalsIgnoreCase("saler")
+                && !user.getRole().equalsIgnoreCase("admin")){
             httpResponse.sendRedirect("home");
             return;
         }
-
+        
         // Allow access to other pages
         chain.doFilter(request, response);
     }
-
+    
 }
