@@ -29,7 +29,7 @@
                 <div class="container-fluid">
                     <div class="row align-items-center">
                         <div class="col-md-12 col-12">
-                            <h2 class="breadcrumb-title">Add New User</h2>
+                            <h2 class="breadcrumb-title">Add New Registration</h2>
                         </div>
 
                     </div>
@@ -50,7 +50,7 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>User ID</label>
-                                                <input type="number" class="form-control" name="userId" required>
+                                                <input type="number" class="form-control" name="userId">
                                             </div>
                                         </div>
 

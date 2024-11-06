@@ -193,12 +193,16 @@ public class RegistrationDAO extends DBContext<Registration> {
     }
 
     // Phương thức để thêm đăng ký vào cơ sở dữ liệu
-    public boolean addRegistration(int userId, int packageId, int courseId, double totalCost, int createdBy, String notes) {
+    public boolean addRegistration(Integer userId, int packageId, int courseId, double totalCost, int createdBy, String notes) {
         String query = "INSERT INTO registrations (user_id, package_id, course_id, total_cost, created_by, notes) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, userId);
+            if (userId == null || userId == 0) {
+                ps.setNull(1, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(1, userId);
+            }
             ps.setInt(2, packageId);
             ps.setInt(3, courseId);
             ps.setDouble(4, totalCost);
