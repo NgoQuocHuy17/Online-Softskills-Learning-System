@@ -6,42 +6,41 @@ public class LessonContent {
     private int id;
     private int lessonId;
     private String contentURL;
-    private String contentType; // New field
+    private String contentType;
     private String contentDescription;
-    private String imageURL; // New field
-    private String videoURL; // New field
-    private String textContent; // New field
-    private int orderInLesson; // New field
-    private Date createdDate; // New field
+    private String textContent;
+    private int orderInLesson;
+    private byte[] mediaData; // For storing binary data (e.g., images, PDFs)
+    private Date createdDate;
 
-    public LessonContent(int id, int lessonId, String contentURL, String contentType, String contentDescription, 
-                         String imageURL, String videoURL, String textContent, int orderInLesson, Date createdDate) {
+    // Full constructor
+    public LessonContent(int id, int lessonId, String contentURL, String contentType, String contentDescription,
+                         String textContent, int orderInLesson, byte[] mediaData, Date createdDate) {
         this.id = id;
         this.lessonId = lessonId;
         this.contentURL = contentURL;
         this.contentType = contentType;
         this.contentDescription = contentDescription;
-        this.imageURL = imageURL;
-        this.videoURL = videoURL;
         this.textContent = textContent;
         this.orderInLesson = orderInLesson;
+        this.mediaData = mediaData;
         this.createdDate = createdDate;
     }
 
-    public LessonContent(int lessonId, String contentURL, String contentType, String contentDescription, String imageURL, String videoURL, String textContent, int orderInLesson) {
+    // Constructor without ID and createdDate (e.g., for new records)
+    public LessonContent(int lessonId, String contentURL, String contentType, String contentDescription,
+                         String textContent, int orderInLesson, byte[] mediaData) {
         this.lessonId = lessonId;
         this.contentURL = contentURL;
         this.contentType = contentType;
         this.contentDescription = contentDescription;
-        this.imageURL = imageURL;
-        this.videoURL = videoURL;
         this.textContent = textContent;
         this.orderInLesson = orderInLesson;
+        this.mediaData = mediaData;
     }
 
-    
-
-   
+    public LessonContent() {
+    }
 
     // Getters and Setters
     public int getId() {
@@ -84,22 +83,6 @@ public class LessonContent {
         this.contentDescription = contentDescription;
     }
 
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
-    }
-
-    public String getVideoURL() {
-        return videoURL;
-    }
-
-    public void setVideoURL(String videoURL) {
-        this.videoURL = videoURL;
-    }
-
     public String getTextContent() {
         return textContent;
     }
@@ -114,6 +97,14 @@ public class LessonContent {
 
     public void setOrderInLesson(int orderInLesson) {
         this.orderInLesson = orderInLesson;
+    }
+
+    public byte[] getMediaData() {
+        return mediaData;
+    }
+
+    public void setMediaData(byte[] mediaData) {
+        this.mediaData = mediaData;
     }
 
     public Date getCreatedDate() {

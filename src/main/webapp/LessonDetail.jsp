@@ -30,7 +30,6 @@
                 <input type="hidden" name="lessonId" value="${lesson.id}"/>
                 <input type="hidden" name="courseId" value="${lesson.courseID}"/>
 
-
                 <div class="card mb-3">
                     <div class="card-body">
                         <h3 class="card-title">Lesson Title:</h3>
@@ -63,11 +62,10 @@
                             <input type="hidden" name="lessonId" value="${lesson.id}"/>
 
                             <c:choose>
-
                                 <c:when test="${content.contentType == 'image'}">
                                     <p><strong>Current Image:</strong></p>
-                                    <c:if test="${content.contentURL != null}">
-                                        <img src="assets/img/${content.contentURL}" alt="Image" style="max-width: 100%; height: auto;" />
+                                    <c:if test="${content.id != null}">
+                                        <img src="LessonActionController?action=getContent&id=${content.id}" alt="Image" style="max-width: 100%; height: auto;" />
                                     </c:if>
                                     <input type="file" name="file" class="form-control" accept="image/*" />
                                     <textarea name="contentdes" class="form-control">${content.contentDescription}</textarea>
@@ -75,18 +73,27 @@
 
                                 <c:when test="${content.contentType == 'pdf'}">
                                     <p><strong>Current PDF:</strong></p>
-                                    <c:if test="${content.contentURL != null}">
-                                        <a href="assets/img/${content.contentURL}" target="_blank">View Current PDF</a>
+                                    <c:if test="${content.id != null}">
+                                        <a href="LessonActionController?action=getContent&id=${content.id}" target="_blank">Download PDF</a>
                                     </c:if>
                                     <input type="file" name="file" class="form-control" accept=".pdf" />
                                     <textarea name="contentdes" class="form-control">${content.contentDescription}</textarea>
                                 </c:when>
+
+
                                 <c:when test="${content.contentType == 'video'}">
-                                    <p><strong>Content URL:</strong> 
-                                        <input type="text" name="contentURL" class="form-control" value="${content.contentURL}" required />
-                                        <textarea name="contentdes" class="form-control">${content.contentDescription}</textarea>
-                                    </p>
+                                    <p><strong>Current Video:</strong></p>
+                                    <c:if test="${content.id != null}">
+                                        <video controls style="max-width: 100%; height: auto;">
+                                            <source src="LessonActionController?action=getContent&id=${content.id}" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </c:if>
+                                    <input type="file" name="file" class="form-control" accept="video/*" />
+                                    <textarea name="contentdes" class="form-control">${content.contentDescription}</textarea>
                                 </c:when>
+
+
                                 <c:when test="${content.contentType == 'quiz'}">
                                     <p><strong>Current Quiz URL:</strong></p>
                                     <c:if test="${content.contentURL != null}">
@@ -102,12 +109,7 @@
                                 </c:when>
                             </c:choose>
 
-
-
-
-
                             <!-- Read-only Order input -->
-
                             <input type="hidden" name="save" value="save"/>
                             <button type="submit" class="btn btn-primary submit-btn">Update Lesson</button>
                         </form>
@@ -157,7 +159,8 @@
                         <!-- File Upload / URL / Text Input -->
                         <div class="mb-3">
                             <label for="file" class="form-label">File/URL/Text</label>
-                            <input type="file" name="file" class="form-control" id="file" accept="image/*,.pdf"/>
+                            <input type="file" name="file" class="form-control" id="file" accept="image/*,.pdf,video/*" />
+
                             <input type="text" name="contentURL" class="form-control mt-2" placeholder="Enter URL (for video/quiz)" />
                             <textarea name="textContent" class="form-control mt-2" rows="4" placeholder="Enter text content"></textarea>
                         </div>
@@ -171,7 +174,6 @@
 
         </div>
 
-        
         <script src="assets/js/jquery-3.6.0.min.js"></script>
         <script src="assets/js/bootstrap.bundle.min.js"></script>
         <script src="assets/js/owl.carousel.min.js"></script>

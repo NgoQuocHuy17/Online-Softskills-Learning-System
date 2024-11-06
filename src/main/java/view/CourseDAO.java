@@ -224,6 +224,40 @@ public class CourseDAO extends DBContext<Course> {
         return courses;
     }
 
+    public List<Course> getCourseByTitleAndOwnerId(String title, int ownerId) {
+        List<Course> courses = new ArrayList<>();
+        String sql = "SELECT id, title, tag_line, description, category, basic_package_price, advanced_package_price, owner_id, is_sponsored, status, created_at, updated_at "
+                + "FROM courses WHERE title LIKE ? AND owner_id = ? "
+                + "ORDER BY is_sponsored DESC, updated_at DESC";
+
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setString(1, "%" + title + "%");  // Set the title parameter with LIKE
+            pst.setInt(2, ownerId);  // Set the owner_id parameter
+
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Course course = new Course();
+                    course.setId(rs.getInt("id"));
+                    course.setTitle(rs.getString("title"));
+                    course.setTagLine(rs.getString("tag_line"));
+                    course.setDescription(rs.getString("description"));
+                    course.setCategory(rs.getString("category"));
+                    course.setBasicPackagePrice(rs.getBigDecimal("basic_package_price"));
+                    course.setAdvancedPackagePrice(rs.getBigDecimal("advanced_package_price"));
+                    course.setOwnerId(rs.getInt("owner_id"));
+                    course.setSponsored(rs.getBoolean("is_sponsored"));
+                    course.setStatus(rs.getString("status"));
+                    course.setCreatedAt(rs.getTimestamp("created_at"));
+                    course.setUpdatedAt(rs.getTimestamp("updated_at"));
+                    courses.add(course);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return courses;
+    }
+
     // Phương thức trả về danh sách tiêu đề khóa học cho autocomplete
     public List<String> getCourseTitlesByTerm(String term) {
         List<String> titles = new ArrayList<>();
@@ -352,6 +386,38 @@ public class CourseDAO extends DBContext<Course> {
         return select(ids);
     }
 
+    public List<Course> selectAllById(int id) {
+        List<Course> courses = new ArrayList<>();
+        String sql = "SELECT * FROM courses WHERE owner_id = ?";
+
+        try (Connection conn = getConn(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);  // Set the parameter for owner_id
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Course course = new Course();
+                    course.setId(rs.getInt("id"));
+                    course.setTitle(rs.getString("title"));
+                    course.setTagLine(rs.getString("tag_line"));
+                    course.setDescription(rs.getString("description"));
+                    course.setCategory(rs.getString("category"));
+                    course.setBasicPackagePrice(rs.getBigDecimal("basic_package_price"));
+                    course.setAdvancedPackagePrice(rs.getBigDecimal("advanced_package_price"));
+                    course.setOwnerId(rs.getInt("owner_id"));
+                    course.setSponsored(rs.getBoolean("is_sponsored"));
+                    course.setStatus(rs.getString("status"));
+                    course.setCreatedAt(rs.getTimestamp("created_at"));
+                    course.setUpdatedAt(rs.getTimestamp("updated_at"));
+                    courses.add(course);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return courses;
+    }
+
     public List<Course> selectAll() {
         return select();
     }
@@ -457,7 +523,7 @@ public class CourseDAO extends DBContext<Course> {
         }
         return i;
     }
-    
+
     @Override
     public int delete(int... id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
