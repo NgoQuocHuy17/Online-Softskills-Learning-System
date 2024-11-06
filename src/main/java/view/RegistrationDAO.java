@@ -73,6 +73,7 @@ public class RegistrationDAO extends DBContext<Registration> {
                 registration.setUserId(rs.getInt("user_id"));
                 registration.setPackageId(rs.getInt("package_id"));
                 registration.setCourseId(rs.getInt("course_id"));
+                registration.setCreatedBy(rs.getInt("created_by"));
                 registration.setTotalCost(rs.getDouble("total_cost"));
                 registration.setStatus(rs.getString("status"));
                 registration.setValidFrom(rs.getTimestamp("valid_from"));
@@ -192,6 +193,28 @@ public class RegistrationDAO extends DBContext<Registration> {
         }
 
         return registrations;
+    }
+
+    // Phương thức để thêm đăng ký vào cơ sở dữ liệu
+    public boolean addRegistration(int userId, int packageId, int courseId, double totalCost, int createdBy, String notes) {
+        String query = "INSERT INTO registrations (user_id, package_id, course_id, total_cost, created_by, notes) " +
+                       "VALUES (?, ?, ?, ?, ?, ?)";
+        
+        try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, packageId);
+            ps.setInt(3, courseId);
+            ps.setDouble(4, totalCost);
+            ps.setInt(5, createdBy); // truyền created_by từ servlet
+            ps.setString(6, notes);
+            
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

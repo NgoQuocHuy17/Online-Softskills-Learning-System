@@ -32,6 +32,9 @@
                     <li>
                         <a href="home">Home</a>
                     </li>
+                    <li>
+                        <a href="course">Course list</a>
+                    </li>
                 </ul>
             </div>
             <ul class="nav header-navbar-rht">

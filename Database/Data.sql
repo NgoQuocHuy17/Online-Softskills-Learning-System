@@ -1,5 +1,5 @@
 ﻿-- Insert users
-INSERT INTO users (full_name, gender, email, password, role, address, hash, isValid) 
+INSERT INTO users (full_name, gender, email, password, role, address, hash, status) 
 VALUES 
 ('Nguyen Van A', 'Male', 'nguyenvana@example.com', 'password123', 'Admin', NULL, 'hash1', 1),
 ('Tran Thi B', 'Female', 'tranthib@example.com', 'password456', 'Student', NULL, 'hash2', 1),
@@ -98,28 +98,28 @@ GO
 -- 5. Insert data into the packages table
 INSERT INTO packages (course_id, package_name, price, sale_price, access_duration) 
 VALUES 
-(1, 'Basic Package', 65.00, 52.00, 30), 
-(1, 'Premium Package', 95.00, 76.00, 90),
-(2, 'Basic Package', 60.00, 48.00, 30), 
-(2, 'Premium Package', 99.00, 79.20, 90),
-(3, 'Basic Package', 70.00, 56.00, 30), 
-(3, 'Premium Package', 90.00, 72.00, 90),
-(4, 'Basic Package', 62.00, 49.60, 30), 
-(4, 'Premium Package', 92.00, 73.60, 90),
-(5, 'Basic Package', 67.00, 53.60, 30), 
-(5, 'Premium Package', 94.00, 75.20, 90),
-(6, 'Basic Package', 68.00, 54.40, 30), 
-(6, 'Premium Package', 98.00, 78.40, 90),
-(7, 'Basic Package', 63.00, 50.40, 30), 
-(7, 'Premium Package', 93.00, 74.40, 90),
-(8, 'Basic Package', 66.00, 52.80, 30), 
-(8, 'Premium Package', 96.00, 76.80, 90),
-(9, 'Basic Package', 61.00, 48.80, 30), 
-(9, 'Premium Package', 97.00, 77.60, 90),
-(10, 'Basic Package', 64.00, 51.20, 30), 
-(10, 'Premium Package', 91.00, 72.80, 90);
+(1, '3 months', 65.00, 52.00, 90), 
+(1, '9 months', 95.00, 76.00, 270),
+(2, '3 months', 60.00, 48.00, 90), 
+(2, '9 months', 99.00, 79.20, 270),
+(3, '3 months', 70.00, 56.00, 90), 
+(3, '9 months', 90.00, 72.00, 270),
+(4, '3 months', 62.00, 49.60, 90), 
+(4, '9 months', 92.00, 73.60, 270),
+(5, '3 months', 67.00, 53.60, 90), 
+(5, '9 months', 94.00, 75.20, 270),
+(6, '3 months', 68.00, 54.40, 90), 
+(6, '9 months', 98.00, 78.40, 270),
+(7, '3 months', 63.00, 50.40, 90), 
+(7, '9 months', 93.00, 74.40, 270),
+(8, '3 months', 66.00, 52.80, 90), 
+(8, '9 months', 96.00, 76.80, 270),
+(9, '3 months', 61.00, 48.80, 90), 
+(9, '9 months', 97.00, 77.60, 270),
+(10, '3 months', 64.00, 51.20, 90), 
+(10, '9 months', 91.00, 72.80, 270);
 
-INSERT INTO registrations (user_id, package_id, course_id, total_cost, update_by)
+INSERT INTO registrations (user_id, package_id, course_id, total_cost, created_by)
 VALUES
 (1, 1, 1, 65.00, 1),   -- Basic Package cho course_id 1
 (1, 2, 1, 95.00, 1),   -- Premium Package cho course_id 1

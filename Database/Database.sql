@@ -100,7 +100,7 @@ CREATE TABLE packages (
     sale_end DATETIME DEFAULT DATEADD(DAY, 7, GETDATE()),
     access_duration INT NOT NULL,
     CONSTRAINT FK_CourseSale_Courses FOREIGN KEY (course_id) 
-        REFERENCES courses(id) ON DELETE CASCADE
+        REFERENCES courses(id) ON DELETE NO ACTION
 );
 
 -- Table: thumbnails

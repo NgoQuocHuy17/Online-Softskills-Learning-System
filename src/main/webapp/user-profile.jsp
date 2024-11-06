@@ -103,7 +103,7 @@
                                         <% String message = (String) request.getAttribute("message");
                                             if (message != null) {
                                         %>
-                                        <div class="alert ">
+                                        <div class="alert aler-warning">
                                             <%= message%>
                                         </div>
                                         <% }%>

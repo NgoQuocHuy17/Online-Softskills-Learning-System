@@ -59,9 +59,9 @@ public class Register extends HttpServlet {
             int userId = userDAO.getUserIdByEmail(email);
 
             // Thêm số điện thoại vào bảng user_contacts với is_preferred là true
-            boolean isContactInserted = userContactDAO.insertContact(userId, "Phone", phoneNumber, true);
+            boolean isPhoneContactInserted = userContactDAO.insertContact(userId, "Phone", phoneNumber, true);
 
-            if (!isContactInserted) {
+            if (!isPhoneContactInserted) {
                 // Nếu thêm số điện thoại không thành công, gửi thông báo lỗi và quay lại trang đăng ký
                 request.setAttribute("message", "Failed to save contact information. Please try again.");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
