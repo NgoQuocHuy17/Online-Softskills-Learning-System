@@ -1,14 +1,11 @@
 package view;
 
 import java.sql.Connection;
+import java.sql.Date;
 import model.Registration;
-import java.util.List;
-import java.util.Vector;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -196,12 +193,16 @@ public class RegistrationDAO extends DBContext<Registration> {
     }
 
     // Phương thức để thêm đăng ký vào cơ sở dữ liệu
-    public boolean addRegistration(int userId, int packageId, int courseId, double totalCost, int createdBy, String notes) {
+    public boolean addRegistration(Integer userId, int packageId, int courseId, double totalCost, int createdBy, String notes) {
         String query = "INSERT INTO registrations (user_id, package_id, course_id, total_cost, created_by, notes) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = getConn(); PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, userId);
+            if (userId == null || userId == 0) {
+                ps.setNull(1, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(1, userId);
+            }
             ps.setInt(2, packageId);
             ps.setInt(3, courseId);
             ps.setDouble(4, totalCost);
@@ -245,6 +246,31 @@ public class RegistrationDAO extends DBContext<Registration> {
         }
 
         return registration;
+    }
+
+    public boolean updateRegistrationDetails(int registrationId, Integer userId, int packageId, int courseId, String status, Date validFrom, Date validTo, String notes) {
+        String query = "UPDATE registrations SET user_id = ?, package_id = ?, course_id = ?, status = ?, valid_from = ?, valid_to = ?, notes = ? WHERE id = ?";
+
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(query)) {
+            if (userId == null || userId == 0) {
+                ps.setNull(1, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(1, userId);
+            }
+            ps.setInt(2, packageId);
+            ps.setInt(3, courseId);
+            ps.setString(4, status);
+            ps.setDate(5, validFrom);
+            ps.setDate(6, validTo);
+            ps.setString(7, notes);
+            ps.setInt(8, registrationId);
+
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
