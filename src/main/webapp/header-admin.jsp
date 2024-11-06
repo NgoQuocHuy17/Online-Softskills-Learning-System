@@ -62,7 +62,7 @@
                             </div>
                         </div>
                         <a class="dropdown-item" href="UserProfile">Profile Settings</a>
-                        <a class="dropdown-item" href="login.jsp">Logout</a>
+                        <a class="dropdown-item" href="Logout">Logout</a>
                     </div>
                 </li>
             </ul>

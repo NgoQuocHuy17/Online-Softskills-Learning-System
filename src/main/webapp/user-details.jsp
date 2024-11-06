@@ -45,15 +45,10 @@
                     <!-- Form lưu thông tin người dùng -->
                     <form action="UpdateUserDetails" method="post" enctype="multipart/form-data">
                         <div class="row form-row">
+                            <c:if test="${not empty message}">
+                                <div class="alert alert-warning">${message}</div>
+                            </c:if>
                             <%
-                                String message = (String) request.getAttribute("message");
-                                if (message != null) {
-                            %>
-                            <div class="alert alert-success">
-                                <%= message%>
-                            </div>
-                            <%
-                                }
                                 User user = (User) request.getAttribute("user");
                             %>
                             <input type="hidden" name="userId" value="<%= user.getId()%>">
