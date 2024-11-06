@@ -97,4 +97,25 @@ public class CourseContentDAO extends DBContext<CourseContent> {
         }
         return content;
     }
+
+    // Select 1 content by course_id
+    public CourseContent getCourseContentById(int courseId) {
+        CourseContent content = null;
+        String sql = "SELECT course_id, content, created_at, updated_at FROM course_content WHERE course_id = ?";
+        try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, courseId);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                content = new CourseContent();
+                content.setCourseId(rs.getInt("course_id"));
+                content.setContent(rs.getString("content"));
+                content.setCreatedAt(rs.getTimestamp("created_at"));
+                content.setUpdatedAt(rs.getTimestamp("updated_at"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseContentDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return content;
+    }
+
 }
