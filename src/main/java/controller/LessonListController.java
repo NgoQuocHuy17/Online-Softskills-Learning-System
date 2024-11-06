@@ -37,7 +37,7 @@ public class LessonListController extends HttpServlet {
             boolean showStatus = Boolean.parseBoolean(request.getParameter("showStatus"));
             boolean showActions = Boolean.parseBoolean(request.getParameter("showActions"));
 
-// Set as request attributes to retain selections
+            // Set as request attributes to retain selections
             request.setAttribute("showLessonNumber", showLessonNumber);
             request.setAttribute("showLessonName", showLessonName);
             request.setAttribute("showDescription", showDescription);

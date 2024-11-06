@@ -38,14 +38,28 @@ public class SubjectList extends HttpServlet {
         String status = request.getParameter("status");
         String pageStr = request.getParameter("page");
         //visibility section
-        request.setAttribute("showId", request.getParameter("showId") != null);
-        request.setAttribute("showTitle", request.getParameter("showTitle") != null);
-        request.setAttribute("showCategory", request.getParameter("showCategory") != null);
-        request.setAttribute("showLessonName", request.getParameter("showLessonName") != null);
-        request.setAttribute("showOwner", request.getParameter("showOwner") != null);
-        request.setAttribute("showStatus", request.getParameter("showStatus") != null);
-        request.setAttribute("showTagLine", request.getParameter("showTagLine") != null);
-        request.setAttribute("showDescription", request.getParameter("showDescription") != null);
+        
+        boolean showId = Boolean.parseBoolean(request.getParameter("showId"));
+        boolean showTitle = Boolean.parseBoolean(request.getParameter("showTitle"));
+        boolean showCategory = Boolean.parseBoolean(request.getParameter("showCategory"));
+        boolean showLessonNumber = Boolean.parseBoolean(request.getParameter("showLessonNumber"));
+        boolean showLessonName = Boolean.parseBoolean(request.getParameter("showLessonName"));
+        boolean showOwner = Boolean.parseBoolean(request.getParameter("showOwner"));
+        boolean showStatus = Boolean.parseBoolean(request.getParameter("showStatus"));
+        boolean showTagLine = Boolean.parseBoolean(request.getParameter("showTagLine"));
+        boolean showDescription = Boolean.parseBoolean(request.getParameter("showDescription"));
+        boolean showActions = Boolean.parseBoolean(request.getParameter("showActions"));
+
+        request.setAttribute("showId", showId);
+        request.setAttribute("showTitle", showTitle);
+        request.setAttribute("showCategory", showCategory);
+        request.setAttribute("showLessonNumber", showLessonNumber);
+        request.setAttribute("showLessonName", showLessonName);
+        request.setAttribute("showOwner", showOwner);
+        request.setAttribute("showStatus", showStatus);
+        request.setAttribute("showTagLine", showTagLine);
+        request.setAttribute("showDescription", showDescription);
+        request.setAttribute("showActions", showActions);
 
         // Default values for pagination and filters
         int page = (pageStr == null || pageStr.isEmpty()) ? 1 : Integer.parseInt(pageStr);
