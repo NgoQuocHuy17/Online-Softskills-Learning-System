@@ -168,30 +168,34 @@
                 <div class="mb-4 text-right">
                     <a href="NewSubject.jsp" class="btn btn-success">Create New Course</a>
                 </div>
-                <!-- Pagination controls -->
-                <c:if test="${!hide}"> 
-                    <div class="pagination justify-content-center">
-                        <ul class="pagination">
-                            <!-- Previous button -->
-                            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                <a class="page-link" href="SubjectList?page=${currentPage - 1}&searchTitle=${searchTitle}&status=${status}&itemsPerPage=${itemsPerPage}">Previous</a>
-                            </li>
-
-                            <!-- Page numbers -->
-                            <c:forEach var="i" begin="1" end="${totalPages}">
-                                <li class="page-item ${currentPage == i ? 'active' : ''}">
-                                    <a class="page-link" href="SubjectList?page=${i}&searchTitle=${searchTitle}&status=${status}&itemsPerPage=${itemsPerPage}">${i}</a>
+                <form action="SubjectList" method="get">
+                    <!-- Pagination controls -->
+                    <c:if test="${!hide}"> 
+                        <div class="pagination justify-content-center">
+                            <ul class="pagination">
+                                <!-- Previous button -->
+                               <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                    <a class="page-link" href="SubjectList?page=${currentPage - 1}&searchTitle=${searchTitle}&status=${status}&itemsPerPage=${itemsPerPage}&showId=${showId}&showTitle=${showTitle}&showCategory=${showCategory}&showOwner=${showOwner}
+                                       &showStatus=${showStatus}&showTagLine=${showTagLine}&showDescription=${showDescription}">Previous</a>
                                 </li>
-                            </c:forEach>
 
-                            <!-- Next button -->
-                            <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                <a class="page-link" href="SubjectList?page=${currentPage + 1}&searchTitle=${searchTitle}&status=${status}&itemsPerPage=${itemsPerPage}">Next</a>
-                            </li>
-                        </ul>
-                    </div>
-                </c:if>
+                                <!-- Page numbers -->
+                                <c:forEach var="i" begin="1" end="${totalPages}">
+                                    <li class="page-item ${currentPage == i ? 'active' : ''}">
+                                        <a class="page-link" href="SubjectList?page=${i}&searchTitle=${searchTitle}&status=${status}&itemsPerPage=${itemsPerPage}&showId=${showId}&showTitle=${showTitle}&showCategory=${showCategory}&showOwner=${showOwner}
+                                           &showStatus=${showStatus}&showTagLine=${showTagLine}&showDescription=${showDescription}">${i}</a>
+                                    </li>
+                                </c:forEach>
 
+                                <!-- Next button -->
+                                <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                    <a class="page-link" href="SubjectList?page=${currentPage + 1}&searchTitle=${searchTitle}&status=${status}&itemsPerPage=${itemsPerPage}&showId=${showId}&showTitle=${showTitle}&showCategory=${showCategory}&showOwner=${showOwner}
+                                       &showStatus=${showStatus}&showTagLine=${showTagLine}&showDescription=${showDescription}">Next</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </c:if>
+                </form>
             </div>
         </div>
 

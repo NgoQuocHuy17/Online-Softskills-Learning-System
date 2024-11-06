@@ -46,7 +46,7 @@
 
 
                                 <h4>Choose Columns</h4>
-                                <c:if test="${!showEmpty}">
+                                
                                     <!-- Column Visibility Selection Checkboxes -->
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="showLessonNumber" name="showLessonNumber" value="true" ${showLessonNumber == 'true' ? 'checked' : ''}>
@@ -69,7 +69,7 @@
                                         <label class="form-check-label" for="showActions">Actions</label>
                                     </div>
                                 </div>
-                            </c:if>
+                           
 
 
                             <!-- Main content area for lesson list filters -->
