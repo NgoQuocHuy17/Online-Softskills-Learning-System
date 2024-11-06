@@ -58,24 +58,27 @@
                                     <strong>Change Password</strong>
                                 </h1>
                                 <h3 class="text-center" style="margin-bottom: 10px"><%
-                                if(request.getAttribute("message1")!=null)
-                                {
-                                out.print("<p class='text-danger ml-1'>"+request.getAttribute("message1")+"</p>");
-                                }
-                                
+                                    if (request.getAttribute("message1") != null) {
+                                        out.print("<p class='text-danger ml-1'>" + request.getAttribute("message1") + "</p>");
+                                    }
+
                                     %>
                                 </h3>
                                 <form action="changepass" method="POST">
                                     <div class="form-group"style="margin-bottom: 10px">
+                                        <input type="password" name="oldpassword" placeholder="&#xf084; &nbsp; Old Password"
+                                               class="form-control border-info placeicon" required>
+                                    </div>
+                                    <div class="form-group"style="margin-bottom: 10px">
                                         <input type="password" name="password" placeholder="&#xf084; &nbsp; New Password"
-                                               class="form-control border-info placeicon">
+                                               class="form-control border-info placeicon"required>
                                     </div>
                                     <div class="form-group">
                                         <input type="password" name="confPassword"
                                                placeholder="&#xf084; &nbsp; Confirm New Password"
-                                               class="form-control border-info placeicon">
+                                               class="form-control border-info placeicon"required>
                                     </div>
-                                   
+
                                     <!-- Log in Button -->
                                     <button class="btn btn-primary login-btn" type="submit">Change Password</button>
                                 </form>
