@@ -54,7 +54,7 @@
                             <h5>Sliders</h5>
 
                             <!-- Filter Form -->
-                            <form method="GET" action="SliderListController">
+                            <form action="sliderlist" method="get">
                                 <input type="text" name="searchQuery" placeholder="Search by title or backlink" value="${param.searchQuery}">
                                 <select name="status">
                                     <option value="">All</option>

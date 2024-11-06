@@ -1,11 +1,12 @@
 package model;
 
+import java.sql.Blob;
 import java.time.LocalDateTime;
 
 public class Slider {
     private int id;
     private String title;
-    private String imageUrl;
+    private Blob imageUrl;
     private String backlink;
     private String status;
     private LocalDateTime createdAt;
@@ -15,7 +16,7 @@ public class Slider {
     // Constructors
     public Slider() {}
 
-    public Slider(int id, String title, String imageUrl, String backlink, String status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Slider(int id, String title, Blob imageUrl, String backlink, String status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
         this.imageUrl = imageUrl;
@@ -25,7 +26,7 @@ public class Slider {
         this.updatedAt = updatedAt;
     }
     
-    public Slider(int id, String title, String imageUrl, String backlink, String status) {
+    public Slider(int id, String title, Blob imageUrl, String backlink, String status) {
         this.id = id;
         this.title = title;
         this.imageUrl = imageUrl;
@@ -66,11 +67,11 @@ public class Slider {
         this.title = title;
     }
 
-    public String getImageUrl() {
+    public Blob getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(Blob imageUrl) {
         this.imageUrl = imageUrl;
     }
 
@@ -88,5 +89,10 @@ public class Slider {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Slider{" + "id=" + id + ", title=" + title + ", imageUrl=" + imageUrl + ", backlink=" + backlink + ", status=" + status + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + '}';
     }
 }

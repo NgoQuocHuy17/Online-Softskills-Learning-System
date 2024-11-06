@@ -4,11 +4,12 @@ import model.Slider;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class SliderDAO extends DBContext<Slider> {
     
     public List<Slider> select(int page, int slidersPerPage, String statusFilter, String searchQuery) {
-        List<Slider> sliders = new ArrayList<>();
+        List<Slider> sliders = new Vector<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM sliders WHERE 1=1");
 
         // Append conditions based on filters
@@ -47,7 +48,7 @@ public class SliderDAO extends DBContext<Slider> {
                     Slider slider = new Slider();
                     slider.setId(rs.getInt("id"));
                     slider.setTitle(rs.getString("title"));
-                    slider.setImageUrl(rs.getString("image_url"));
+                    slider.setImageUrl(rs.getBlob("image_url"));
                     slider.setBacklink(rs.getString("backlink"));
                     slider.setStatus(rs.getString("status"));
                     slider.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
@@ -123,7 +124,7 @@ public class SliderDAO extends DBContext<Slider> {
                 Slider slider = new Slider(
                         rs.getInt("id"),
                         rs.getString("title"),
-                        rs.getString("image_url"),
+                        rs.getBlob("image_url"),
                         rs.getString("backlink"),
                         rs.getString("status")
                 );
@@ -149,7 +150,7 @@ public class SliderDAO extends DBContext<Slider> {
                 Slider slider = new Slider(
                         rs.getInt("id"),
                         rs.getString("title"),
-                        rs.getString("image_url"),
+                        rs.getBlob("image_url"),
                         rs.getString("backlink"),
                         rs.getString("status")
                 );
@@ -176,7 +177,7 @@ public class SliderDAO extends DBContext<Slider> {
                     slider = new Slider(
                             rs.getInt("id"),
                             rs.getString("title"),
-                            rs.getString("image_url"),
+                            rs.getBlob("image_url"),
                             rs.getString("backlink"),
                             rs.getString("status")
                     );
@@ -198,7 +199,7 @@ public class SliderDAO extends DBContext<Slider> {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, slider.getTitle());
-            ps.setString(2, slider.getImageUrl());
+            ps.setBlob(2, slider.getImageUrl());
             ps.setString(3, slider.getBacklink());
             ps.setString(4, slider.getStatus());
 
@@ -219,7 +220,7 @@ public class SliderDAO extends DBContext<Slider> {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, slider.getTitle());
-            ps.setString(2, slider.getImageUrl());
+            ps.setBlob(2, slider.getImageUrl());
             ps.setString(3, slider.getBacklink());
             ps.setString(4, slider.getStatus());
             ps.setInt(5, slider.getId());
