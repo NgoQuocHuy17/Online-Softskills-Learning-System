@@ -13,7 +13,7 @@ public abstract class DBContext<E> {
 
     public DBContext() {
         this("jdbc:sqlserver://localhost:1433;databaseName=SoftSkillsOnlineLearningSystem;encrypt=false",
-                "sa", "123456");
+                "sa", "123");
 //            this("jdbc:sqlserver://localhost:1433;databaseName=OnlineSoftskillsLearningSystem;encrypt=false",
 //                  "sa", "123");
     }
