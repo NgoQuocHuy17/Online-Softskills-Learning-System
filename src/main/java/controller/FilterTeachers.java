@@ -20,12 +20,13 @@ import model.User;
  *
  * @author Minh
  */
-@WebFilter({"/updateProfile", "/newPassword", "/MyRegistrations", "/MyCourses", "/changepass", "/CancelRegistration", "/change-password.jsp", "/changepass.jsp", "/chat-mentee.jsp", "/logout.jsp", "/myCourses.jsp", "/myRegistrations.jsp", "/profile-settings.jsp", "/profile.jsp"})
-public class FilterCustomerFeatures implements Filter {
+@WebFilter ({"/SubjectList", "/subjectDetail", "/sliderlist", "/sliderdetails", "/post-details", "/NewSubject", "/LessonListController", "/LessonDetailController", "/LessonActionController", "/blog-create", "/blog-update", "/blog-delete", "/addMedia", "/add-course-media.jsp", "/blog-create.jsp", "/blog-update.jsp", "/editSubjectDetails.jsp", "/LessonDetail.jsp", "/LessonList.jsp", "/newSubject.jsp", "/post-details.jsp", 
+    "/subjectList.jsp", "/uploadResult.jsp"})
+public class FilterTeachers implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
+        
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
@@ -43,9 +44,16 @@ public class FilterCustomerFeatures implements Filter {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
             return;
         }
-
+        
+        //if user is not teacher or admin return home
+        if (!user.getRole().equalsIgnoreCase("teacher")
+                && !user.getRole().equalsIgnoreCase("admin")){
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "/home");
+            return;
+        }
+        
         // Allow access to other pages
         chain.doFilter(request, response);
     }
-
+    
 }

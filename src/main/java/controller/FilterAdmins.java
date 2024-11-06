@@ -20,40 +20,37 @@ import model.User;
  *
  * @author Minh
  */
-@WebFilter ({"/SubjectList", "/subjectDetail", "/sliderlist", "/sliderdetails", "/post-details", "/NewSubject", "/LessonListController", "/LessonDetailController", "/LessonActionController", "/blog-create", "/blog-update", "/blog-delete", "/addMedia", "/add-course-media.jsp", "/blog-create.jsp", "/blog-update.jsp", "/editSubjectDetails.jsp", "/LessonDetail.jsp", "/LessonList.jsp", "/newSubject.jsp", "/post-details.jsp", 
-    "/subjectList.jsp", "/uploadResult.jsp"})
-public class FilterTeacher implements Filter {
+@WebFilter({"/UserList", "/UserDetails", "/UpdateUserDetails", "/SettingListController", "/RegistrationsList", "/RegistrationDetails", "/AddUser", "/AddUser.jsp", "/registrationDetails.jsp", "/RegistrationsList.jsp", "/setting-list.jsp", "/UserDetails.jsp", "/UserDetailsTest.jsp", "/UsersList.jsp", "/UserListTest.jsp"})
+public class FilterAdmins implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        
+
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         HttpSession session = httpRequest.getSession(false);
-        User user = null;
+        User user = (session != null) ? (User) session.getAttribute("user") : null;
 
-        // Check if session exists and user is logged in
-        if (session != null) {
-            user = (User) session.getAttribute("user");
-        }
-
-        // If user is not logged in
+        // Check if user is logged in
         if (user == null) {
-            // Redirect to login page
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
             return;
         }
-        
-        //if user is not teacher or admin return home
-        if (!user.getRole().equalsIgnoreCase("teacher")
-                && !user.getRole().equalsIgnoreCase("admin")){
+
+        // Ensure role is non-null to avoid NullPointerException
+        if (user.getRole() == null) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/home");
             return;
         }
-        
-        // Allow access to other pages
+
+        // Check if the user is an admin for general protected pages
+        if (!"admin".equalsIgnoreCase(user.getRole())) {
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "/home");
+            return;
+        }
+
+        // Allow access if all checks are passed
         chain.doFilter(request, response);
     }
-    
 }

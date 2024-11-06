@@ -20,8 +20,8 @@ import model.User;
  *
  * @author Minh
  */
-@WebFilter({"/UserList", "/UserDetails", "/UpdateUserDetails", "/SettingListController", "/RegistrationsList", "/RegistrationDetails", "/AddUser", "/AddUser.jsp", "/registrationDetails.jsp", "/RegistrationsList.jsp", "/setting-list.jsp", "/UserDetails.jsp", "/UserDetailsTest.jsp", "/UsersList.jsp", "/UserListTest.jsp"})
-public class FilterAdmin implements Filter {
+@WebFilter({"/updateProfile", "/newPassword", "/MyRegistrations", "/MyCourses", "/changepass", "/CancelRegistration", "/change-password.jsp", "/changepass.jsp", "/chat-mentee.jsp", "/logout.jsp", "/myCourses.jsp", "/myRegistrations.jsp", "/profile-settings.jsp", "/profile.jsp"})
+public class FilterGuests implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -30,27 +30,22 @@ public class FilterAdmin implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         HttpSession session = httpRequest.getSession(false);
-        User user = (session != null) ? (User) session.getAttribute("user") : null;
+        User user = null;
 
-        // Check if user is logged in
+        // Check if session exists and user is logged in
+        if (session != null) {
+            user = (User) session.getAttribute("user");
+        }
+
+        // If user is not logged in
         if (user == null) {
+            // Redirect to login page
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
             return;
         }
 
-        // Ensure role is non-null to avoid NullPointerException
-        if (user.getRole() == null) {
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/home");
-            return;
-        }
-
-        // Check if the user is an admin for general protected pages
-        if (!"admin".equalsIgnoreCase(user.getRole())) {
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/home");
-            return;
-        }
-
-        // Allow access if all checks are passed
+        // Allow access to other pages
         chain.doFilter(request, response);
     }
+
 }
