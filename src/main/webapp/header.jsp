@@ -83,6 +83,8 @@
                             <a href="admin/index.html">Admin<i class="fas fa-chevron-down"></i></a>
                             <ul class="submenu">
                                 <li><a href="UserList">User List</a></li>
+                                <li><a href="RegistrationList">Registration List</a></li>
+
                             </ul>
                         </li>
                         <% } %>
@@ -97,7 +99,10 @@
                                 <% } %>
 
                             <ul class="submenu">
+                                <li><a href="course">Course List</a></li>
                                 <li><a href="MyCourses">My Courses</a></li>
+                                <li><a href="SubjectList">Subject List</a></li>
+
                             </ul>
                         </li>
 
@@ -121,7 +126,6 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <li><a class="dropdown-item" href="MyRegistrations">My Registrations</a></li>
-                            <li><a class="dropdown-item" href="profile-settings.jsp">Profile Settings</a></li>
                             <li><a class="dropdown-item" href="UserProfile">Profile Settings</a></li>
                             <li><a class="dropdown-item" href="Logout">Logout</a></li>
                         </ul>

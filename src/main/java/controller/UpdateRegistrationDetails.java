@@ -51,7 +51,7 @@ public class UpdateRegistrationDetails extends HttpServlet {
 
         Integer userId = 0;
         if (userIdStr != null && !userIdStr.isEmpty()) {
-            userId = Integer.parseInt(userIdStr);
+            userId = Integer.valueOf(userIdStr);
         }
 
         if (userId != 0 && "Paid".equals(status) && !"Paid".equals(registration.getStatus())) {

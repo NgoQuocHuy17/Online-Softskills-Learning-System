@@ -35,7 +35,13 @@ public class AddRegistration extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Lấy các tham số từ form
         String userIdStr = request.getParameter("userId");
-        int userId = (userIdStr != null && !userIdStr.isEmpty()) ? Integer.parseInt(userIdStr) : 0;
+        Integer userId = null;
+        if (userIdStr != null && !userIdStr.isEmpty()) {
+            int tempUserId = Integer.parseInt(userIdStr);
+            if (tempUserId != 0) {
+                userId = tempUserId;
+            }
+        }
         int packageId = Integer.parseInt(request.getParameter("packageId"));
         int courseId = Integer.parseInt(request.getParameter("courseId"));
         String notes = request.getParameter("notes");
@@ -47,6 +53,11 @@ public class AddRegistration extends HttpServlet {
         // Lấy id của user từ session
         HttpSession session = request.getSession();
         User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            request.setAttribute("message", "Bạn cần đăng nhập để thực hiện thao tác này.");
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            return;
+        }
         int createdBy = currentUser.getId();
 
         // Thêm registration vào cơ sở dữ liệu

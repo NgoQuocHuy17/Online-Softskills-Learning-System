@@ -140,7 +140,7 @@ CREATE TABLE course_translations (
 -- Table: registrations
 CREATE TABLE registrations (
     id INT IDENTITY(1,1) PRIMARY KEY,
-    user_id INT NOT NULL,
+    user_id INT NULL,
     package_id INT NOT NULL,
     course_id INT NOT NULL,
     total_cost DECIMAL(10, 2),

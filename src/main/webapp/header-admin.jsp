@@ -38,7 +38,7 @@
                         <a href="UserList">User List</a>
                     </li>
                     <li>
-                        <a href="RegistrationsList">Registrations List</a>
+                        <a href="RegistrationList">Registration List</a>
                     </li>
                 </ul>
             </div>

@@ -97,6 +97,6 @@ public class MyCourses extends HttpServlet {
         request.setAttribute("showCategory", showCategory);
 
         // Forward to JSP
-        request.getRequestDispatcher("myCourses.jsp").forward(request, response);
+        request.getRequestDispatcher("my-courses.jsp").forward(request, response);
     }
 }

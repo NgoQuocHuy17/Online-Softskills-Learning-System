@@ -15,8 +15,9 @@ import java.util.List;
 import model.Registration;
 import view.RegistrationDAO;
 
-@WebServlet(name = "RegistrationsList", urlPatterns = {"/RegistrationsList"})
-public class RegistrationsList extends HttpServlet {
+@WebServlet(name = "RegistrationList", urlPatterns = {"/RegistrationList"})
+public class RegistrationList extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
 
     private RegistrationDAO registrationDAO;
@@ -28,15 +29,15 @@ public class RegistrationsList extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Lấy tất cả đăng ký từ DAO
         List<Registration> registrations = registrationDAO.getAllRegistrations();
 
         // Gửi danh sách đăng ký đến JSP
         request.setAttribute("registrations", registrations);
-        
+
         // Chuyển hướng đến trang JSP
-        request.getRequestDispatcher("registrations-list.jsp").forward(request, response);
+        request.getRequestDispatcher("registration-list.jsp").forward(request, response);
     }
 }
