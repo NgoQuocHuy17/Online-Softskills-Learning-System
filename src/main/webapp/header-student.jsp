@@ -3,9 +3,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-
 <!DOCTYPE html>
-
 <header class="header">
     <%
         User user = (User) session.getAttribute("user");
@@ -33,12 +31,6 @@
                 <ul class="main-nav">
                     <li>
                         <a href="home">Home</a>
-                    </li>
-                    <li>
-                        <a href="UserList">User List</a>
-                    </li>
-                    <li>
-                        <a href="RegistrationsList">Registrations List</a>
                     </li>
                 </ul>
             </div>

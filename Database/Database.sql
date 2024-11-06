@@ -147,12 +147,12 @@ CREATE TABLE registrations (
     status NVARCHAR(50) DEFAULT 'Submitted',
     valid_from DATETIME DEFAULT GETDATE(),
     valid_to DATETIME DEFAULT DATEADD(WEEK, 1, GETDATE()), -- Current time +1 week
-    update_by INT,
-    notes NVARCHAR(255), -- Trường ghi chú mới
+    created_by INT,
+    notes NVARCHAR(255),
     CONSTRAINT FK_Registrations_User FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE NO ACTION,
     CONSTRAINT FK_Registrations_Package FOREIGN KEY (package_id) REFERENCES packages(id) ON DELETE NO ACTION,
     CONSTRAINT FK_Registrations_Course FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE NO ACTION,
-    CONSTRAINT FK_Registrations_UpdateBy FOREIGN KEY (update_by) REFERENCES users(id) ON DELETE NO ACTION
+    CONSTRAINT FK_Registrations_CreatedBy FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE NO ACTION
 );
 
 -- Table: registration_media

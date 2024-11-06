@@ -86,7 +86,7 @@
                             <h2 class="breadcrumb-title">User Details</h2>
                         </div>
                         <div class="col-md-4 col-12 text-right">
-                            <a href="AddUser.jsp" class="btn btn-success">Add New User</a>
+                            <a href="add-user.jsp" class="btn btn-success">Add New User</a>
                         </div>
                     </div>
                 </div>

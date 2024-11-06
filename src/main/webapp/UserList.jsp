@@ -77,7 +77,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-4 col-12 text-right">
-                            <a href="AddUser.jsp" class="btn btn-success">Add User</a>
+                            <a href="add-user.jsp" class="btn btn-success">Add User</a>
                         </div>
                         <h2 class="mt-4">User List</h2>
                         <c:if test="${empty userList}">
