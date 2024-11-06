@@ -148,6 +148,7 @@ CREATE TABLE registrations (
     valid_from DATETIME DEFAULT GETDATE(),
     valid_to DATETIME DEFAULT DATEADD(WEEK, 1, GETDATE()), -- Current time +1 week
     update_by INT,
+    notes NVARCHAR(255), -- Trường ghi chú mới
     CONSTRAINT FK_Registrations_User FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE NO ACTION,
     CONSTRAINT FK_Registrations_Package FOREIGN KEY (package_id) REFERENCES packages(id) ON DELETE NO ACTION,
     CONSTRAINT FK_Registrations_Course FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE NO ACTION,

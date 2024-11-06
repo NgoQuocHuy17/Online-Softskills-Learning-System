@@ -120,8 +120,8 @@
                             <span><%= loggedInUser.getFullName()%></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="profile-settings.jsp">Profile Settings</a></li>
-                            <li><a class="dropdown-item" href="logout.jsp">Logout</a></li>
+                            <li><a class="dropdown-item" href="UserProfile">Profile Settings</a></li>
+                            <li><a class="dropdown-item" href="Logout">Logout</a></li>
                         </ul>
                     </li>
                     <% } else { %>

@@ -78,13 +78,13 @@ public class UserListTest extends HttpServlet {
         request.setAttribute("userList", userList);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
-        request.setAttribute("gender", genderFilter);
-        request.setAttribute("role", roleFilter);
-        request.setAttribute("status", statusFilter);
+        request.setAttribute("genderFilter", genderFilter);
+        request.setAttribute("roleFilter", roleFilter);
+        request.setAttribute("statusFilter", statusFilter);
         request.setAttribute("searchTerm", searchTerm);
         request.setAttribute("sort", sortBy);
         request.setAttribute("sortOrder", sortOrder);
 
-        request.getRequestDispatcher("/UserListTest.jsp").forward(request, response);
+        request.getRequestDispatcher("/user-list-test.jsp").forward(request, response);
     }
 }

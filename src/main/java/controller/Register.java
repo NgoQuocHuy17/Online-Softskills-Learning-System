@@ -34,7 +34,7 @@ public class Register extends HttpServlet {
         if (!password.equals(passwordConfirmation)) {
             // Nếu mật khẩu không khớp, gửi thông báo lỗi và quay lại trang đăng ký
             request.setAttribute("message", "Confirm Password do not match!");
-            request.getRequestDispatcher("Register.jsp").forward(request, response);
+            request.getRequestDispatcher("register.jsp").forward(request, response);
             return; // Kết thúc phương thức nếu mật khẩu không khớp
         }
 
@@ -42,7 +42,7 @@ public class Register extends HttpServlet {
         if (userDAO.checkEmailExist(email)) {
             // Nếu email đã tồn tại, gửi thông báo lỗi và quay lại trang đăng ký
             request.setAttribute("message", "Email existed, try another email!");
-            request.getRequestDispatcher("Register.jsp").forward(request, response);
+            request.getRequestDispatcher("register.jsp").forward(request, response);
             return;  // Kết thúc phương thức nếu email đã tồn tại
         }
 
@@ -64,7 +64,7 @@ public class Register extends HttpServlet {
             if (!isContactInserted) {
                 // Nếu thêm số điện thoại không thành công, gửi thông báo lỗi và quay lại trang đăng ký
                 request.setAttribute("message", "Failed to save contact information. Please try again.");
-                request.getRequestDispatcher("Register.jsp").forward(request, response);
+                request.getRequestDispatcher("register.jsp").forward(request, response);
                 return;
             }
 
@@ -77,11 +77,11 @@ public class Register extends HttpServlet {
             se.sendEmail(email, subject, body);
 
             // Điều hướng người dùng đến trang xác minh
-            response.sendRedirect("RegisterSuccess.jsp");
+            response.sendRedirect("register-success.jsp");
         } else {
             // Xử lý nếu có lỗi khi đăng ký
             request.setAttribute("message", "Registration failed. Please try again later!");
-            request.getRequestDispatcher("Register.jsp").forward(request, response);
+            request.getRequestDispatcher("register.jsp").forward(request, response);
         }
     }
 
