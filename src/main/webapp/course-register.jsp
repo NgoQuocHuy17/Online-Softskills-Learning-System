@@ -121,6 +121,7 @@
                                                     <div class="input-group-text">
                                                         <input type="radio" name="preferredContact" id="email0" value="email0" checked> Prefer
                                                     </div>
+                                                    <button type="button" class="btn btn-danger btn-remove" onclick="removeInput(this)">×</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -136,11 +137,13 @@
                                                     <div class="input-group-text">
                                                         <input type="radio" name="preferredContact" id="phone0" value="phone0"> Prefer
                                                     </div>
+                                                    <button type="button" class="btn btn-danger btn-remove" onclick="removeInput(this)">×</button>
                                                 </div>
                                             </div>
                                         </div>
                                         <button type="button" class="btn btn-secondary" id="addPhone">+ More Phone Number</button>
                                     </div>
+
                                     <c:if test="${choosingPackageId != null}">
                                         <button type="submit" class="btn btn-primary">Register this course</button>
                                     </c:if>
@@ -167,6 +170,7 @@
                 <div class="input-group-text">
                     <input type="radio" name="preferredContact" id="email${emailIndex}" value="email${emailIndex}"> Prefer
                 </div>
+                <button type="button" class="btn btn-danger btn-remove" onclick="removeInput(this)">×</button>
             </div>
         `;
                             emailInputs.appendChild(newEmailInputGroup);
@@ -183,12 +187,18 @@
                 <div class="input-group-text">
                     <input type="radio" name="preferredContact" id="phone${phoneIndex}" value="phone${phoneIndex}"> Prefer
                 </div>
+                <button type="button" class="btn btn-danger btn-remove" onclick="removeInput(this)">×</button>
             </div>
         `;
                             phoneInputs.appendChild(newPhoneInputGroup);
                             phoneIndex++;
                         });
+
+                        function removeInput(element) {
+                            element.closest('.input-group').remove();
+                        }
                     </script>
+
                 </div>
             </div>
 
