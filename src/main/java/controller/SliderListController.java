@@ -12,13 +12,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.Slider;
+import model.User;
+import model.UserContact;
 import view.SliderDAO;
+import view.UserContactDAO;
+import view.UserDAO;
 
 /**
  *
  * @author Minh
  */
-@WebServlet(name = "SliderListController", urlPatterns = {"/sliderlist"})
+@WebServlet(name = "SliderListController", urlPatterns = {"/slider-list"})
 public class SliderListController extends HttpServlet {
 
     /**
@@ -32,21 +36,80 @@ public class SliderListController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        SliderDAO sliderDao = new SliderDAO();
+
+        SliderDAO sliderDAO = new SliderDAO();
+
+        // Lấy số trang từ request (mặc định là 1 nếu không có tham số)
+        int page = 1;
+        int pageSize = 5; // Số lượng users mỗi trang
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+
+        // Lấy pageSize từ request (có thể chỉnh sửa theo yêu cầu)
+        String pageSizeParam = request.getParameter("pageSize");
+        if (pageSizeParam != null && !pageSizeParam.isEmpty()) {
+            pageSize = Integer.parseInt(pageSizeParam);
+        }
 
         String statusFilter = request.getParameter("status");
-        String searchQuery = request.getParameter("searchQuery");
-        int currentPage = Integer.parseInt(request.getParameter("page") != null ? request.getParameter("page") : "1");
-        int slidersPerPage = 5; // Change as needed
+        if (statusFilter == null || statusFilter.isEmpty()) {
+            statusFilter = null;
+        }
 
-        List<Slider> sliders = sliderDao.select(currentPage, slidersPerPage, statusFilter, searchQuery);
-        int totalSliders = sliderDao.getTotalSliders(statusFilter, searchQuery);
+        String searchTerm = request.getParameter("searchTerm");
+        if (searchTerm == null || searchTerm.isEmpty()) {
+            searchTerm = null;
+        }
 
+        String sortBy = request.getParameter("sort");
+        String sortOrder = request.getParameter("sortOrder");
+
+        // In ra các giá trị lọc để kiểm tra
+        System.out.println("Status Filter: " + statusFilter);
+
+        // Lấy danh sách slider theo trang với các tham số lọc và tìm kiếm
+        List<Slider> sliders = sliderDAO.getSlidersByPage(page, pageSize, statusFilter, searchTerm, sortBy, sortOrder);
+        
+        // Tính tổng số slider và số trang
+        int totalSlider = sliderDAO.getTotalSliders(statusFilter, searchTerm);
+
+        int totalPages = (int) Math.ceil(totalSlider / (double) pageSize);
+
+        if (sliders.isEmpty()) {
+            request.setAttribute("message", "Không có slider hợp lệ");
+        }
+
+        // Lấy các tham số 'show' từ request
+        String showId = request.getParameter("showId");
+        String showTitle = request.getParameter("showTitle");
+        String showImage = request.getParameter("showImage");
+        String showBacklink = request.getParameter("showBacklink");
+        String showStatus = request.getParameter("showStatus");
+        String showCreatedAt = request.getParameter("showCreatedAt");
+        String showUpdatedAt = request.getParameter("showUpdatedAt");
+
+        
+        request.setAttribute("showId", showId);
+        request.setAttribute("showTitle", showTitle);
+        request.setAttribute("showImage", showImage);
+        request.setAttribute("showBacklink", showBacklink);
+        request.setAttribute("showStatus", showStatus);
+        request.setAttribute("showCreatedAt", showCreatedAt);
+        request.setAttribute("showUpdatedAt", showUpdatedAt);
+        
+
+        // Gửi danh sách users và các thông tin phân trang đến trang JSP
         request.setAttribute("sliders", sliders);
-        request.setAttribute("totalSliders", totalSliders);
-        request.setAttribute("currentPage", currentPage);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("pageSize", pageSize);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("statusFilter", statusFilter);
+        request.setAttribute("searchTerm", searchTerm);
+        request.setAttribute("sort", sortBy);
+        request.setAttribute("sortOrder", sortOrder);
 
-        request.getRequestDispatcher("slider-list.jsp").forward(request, response);
+        request.getRequestDispatcher("/slider-list.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

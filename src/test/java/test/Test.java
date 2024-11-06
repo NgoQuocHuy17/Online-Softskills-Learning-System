@@ -39,28 +39,28 @@ public class Test {
         return Base64.getEncoder().encodeToString(blobBytes);
     }
 
-    public static void main(String[] args) {
-        // Replace with your actual relative image path
-        String imagePath = "src/main/webapp/assets/img/blog/blog-10.jpg";
-
-        try {
-            // Convert file to Blob
-            Blob blob = fileToBlob(imagePath);
-
-            SliderDAO sliderDAO = new SliderDAO();
-            Slider slider = sliderDAO.select(10);
-            System.out.println(slider);
-            slider.setImageUrl(blob);
-            sliderDAO.update(slider);
-            System.out.println(slider);
-            
-//            // Convert Blob to Base64 string and print
-//            String base64Data = blobToBase64(blob);
-//            System.out.println("Base64 Blob Content: ");
-//            System.out.println(base64Data); // This is your Blob content in Base64
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void main(String[] args) {
+//        // Replace with your actual relative image path
+//        String imagePath = "src/main/webapp/assets/img/blog/blog-10.jpg";
+//
+//        try {
+//            // Convert file to Blob
+//            Blob blob = fileToBlob(imagePath);
+//
+//            SliderDAO sliderDAO = new SliderDAO();
+//            Slider slider = sliderDAO.select(10);
+//            System.out.println(slider);
+//            slider.setImageUrl(blob);
+//            sliderDAO.update(slider);
+//            System.out.println(slider);
+//            
+////            // Convert Blob to Base64 string and print
+////            String base64Data = blobToBase64(blob);
+////            System.out.println("Base64 Blob Content: ");
+////            System.out.println(base64Data); // This is your Blob content in Base64
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

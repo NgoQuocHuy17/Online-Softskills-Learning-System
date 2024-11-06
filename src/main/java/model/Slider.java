@@ -1,22 +1,22 @@
 package model;
 
-import java.sql.Blob;
 import java.time.LocalDateTime;
+import java.util.Base64;
 
 public class Slider {
+    
     private int id;
     private String title;
-    private Blob imageUrl;
+    private byte[] imageUrl;
     private String backlink;
     private String status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-
     // Constructors
     public Slider() {}
 
-    public Slider(int id, String title, Blob imageUrl, String backlink, String status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Slider(int id, String title, byte[] imageUrl, String backlink, String status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
         this.imageUrl = imageUrl;
@@ -26,7 +26,7 @@ public class Slider {
         this.updatedAt = updatedAt;
     }
     
-    public Slider(int id, String title, Blob imageUrl, String backlink, String status) {
+    public Slider(int id, String title, byte[] imageUrl, String backlink, String status) {
         this.id = id;
         this.title = title;
         this.imageUrl = imageUrl;
@@ -67,11 +67,11 @@ public class Slider {
         this.title = title;
     }
 
-    public Blob getImageUrl() {
+    public byte[] getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(Blob imageUrl) {
+    public void setImageUrl(byte[] imageUrl) {
         this.imageUrl = imageUrl;
     }
 
@@ -94,5 +94,12 @@ public class Slider {
     @Override
     public String toString() {
         return "Slider{" + "id=" + id + ", title=" + title + ", imageUrl=" + imageUrl + ", backlink=" + backlink + ", status=" + status + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + '}';
+    }
+    
+    public String getImageUrlAsBase64() {
+        if (imageUrl != null) {
+            return Base64.getEncoder().encodeToString(imageUrl);
+        }
+        return null;
     }
 }

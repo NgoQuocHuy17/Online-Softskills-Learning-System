@@ -18,7 +18,7 @@ import view.SliderDAO;
  *
  * @author Minh
  */
-@WebServlet(name = "SliderDetailsController", urlPatterns = {"/sliderdetails"})
+@WebServlet(name = "SliderDetailsController", urlPatterns = {"/slider-details"})
 public class SliderDetailsController extends HttpServlet {
 
     /**
