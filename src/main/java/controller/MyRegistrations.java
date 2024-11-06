@@ -1,16 +1,13 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
-
 import model.Course;
 import model.Registration;
 import model.User;
@@ -24,46 +21,53 @@ public class MyRegistrations extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Khởi tạo các DAO để xử lý dữ liệu từ database
         RegistrationDAO registrationDAO = new RegistrationDAO();
         CourseDAO courseDAO = new CourseDAO();
         PackageDAO packageDAO = new PackageDAO();
 
+        // Lấy session hiện tại và kiểm tra xem người dùng đã đăng nhập chưa
         HttpSession session = request.getSession();
         if (session == null || session.getAttribute("user") == null) {
+            // Nếu chưa đăng nhập, chuyển hướng về trang đăng nhập
             response.sendRedirect("login.jsp");
             return;
         }
+
+        // Lấy đối tượng User từ session và xác định ID của người dùng
         User user = (User) session.getAttribute("user");
         int userId = user.getId();
+
+        // Lấy các tham số lọc từ yêu cầu người dùng, bao gồm category và searchTerm
         String category = request.getParameter("category");
         String searchTerm = request.getParameter("searchTerm");
 
-        // Get pageSize from request, default to 5 if not provided or invalid
-        int pageSize = 5; // Default pageSize
+        // Xác định pageSize (số bản ghi hiển thị mỗi trang), mặc định là 5
+        int pageSize = 5;
         String pageSizeParam = request.getParameter("pageSize");
         if (pageSizeParam != null && !pageSizeParam.isEmpty()) {
             try {
                 pageSize = Integer.parseInt(pageSizeParam);
             } catch (NumberFormatException e) {
-                pageSize = 5; // Fallback to default if parsing fails
+                pageSize = 5; // Nếu có lỗi, quay về mặc định là 5
             }
         }
 
-        // Get page from request, default to 1 if not provided
-        int page = 1; // Default page
+        // Xác định trang hiện tại (page), mặc định là 1
+        int page = 1;
         String pageParam = request.getParameter("page");
         if (pageParam != null && !pageParam.isEmpty()) {
             try {
                 page = Integer.parseInt(pageParam);
             } catch (NumberFormatException e) {
-                page = 1; // Fallback to default if parsing fails
+                page = 1; // Nếu có lỗi, quay về mặc định là 1
             }
         }
 
-        // Fetch registrations with pagination
+        // Lấy danh sách các bản ghi đăng ký của người dùng với tính năng phân trang
         List<Registration> registrations = registrationDAO.getRegistrationsByUserIdWithPagination(userId, page, pageSize, category, searchTerm);
 
-        // Retrieve course and package details for each registration
+        // Duyệt qua từng đăng ký và lấy chi tiết của khóa học và gói đăng ký tương ứng
         for (Registration registration : registrations) {
             Course course = courseDAO.getCourseById(registration.getCourseId());
             request.setAttribute("course_" + registration.getId(), course);
@@ -72,35 +76,27 @@ public class MyRegistrations extends HttpServlet {
             request.setAttribute("package_" + registration.getId(), pkg);
         }
 
-        // Calculate total pages
+        // Tính toán tổng số trang dựa trên tổng số bản ghi và pageSize
         int totalRegistrations = registrationDAO.getTotalRegistrations(userId, category, searchTerm);
         int totalPages = (int) Math.ceil((double) totalRegistrations / pageSize);
 
-        // Set attributes for JSP
+        // Đặt các thuộc tính để truyền dữ liệu sang JSP
         request.setAttribute("registrations", registrations);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("currentPage", page);
         request.setAttribute("pageSize", pageSize);
         request.setAttribute("categories", courseDAO.getAllCategories());
 
-        // Retrieve "show fields" parameters
-        // Set default values to true
-        boolean showTitle = true;
-        boolean showCategory = true;
-        boolean showPackage = true;
-        boolean showCost = true;
-        boolean showStatus = true;
-        boolean showValid = true;
+        // Lấy các tham số hiển thị từng trường dữ liệu từ yêu cầu người dùng
+        // Mặc định tất cả các trường đều hiển thị
+        boolean showTitle = request.getParameter("showTitle") != null;
+        boolean showCategory = request.getParameter("showCategory") != null;
+        boolean showPackage = request.getParameter("showPackage") != null;
+        boolean showCost = request.getParameter("showCost") != null;
+        boolean showStatus = request.getParameter("showStatus") != null;
+        boolean showValid = request.getParameter("showValid") != null;
 
-        // Override defaults if parameters are present
-        showTitle = request.getParameter("showTitle") != null;
-        showCategory = request.getParameter("showCategory") != null;
-        showPackage = request.getParameter("showPackage") != null;
-        showCost = request.getParameter("showCost") != null;
-        showStatus = request.getParameter("showStatus") != null;
-        showValid = request.getParameter("showValid") != null;
-
-        // Set attributes to pass to JSP
+        // Đặt các thuộc tính để truyền cấu hình hiển thị các trường sang JSP
         request.setAttribute("showTitle", showTitle);
         request.setAttribute("showCategory", showCategory);
         request.setAttribute("showPackage", showPackage);
@@ -108,7 +104,7 @@ public class MyRegistrations extends HttpServlet {
         request.setAttribute("showStatus", showStatus);
         request.setAttribute("showValid", showValid);
 
-        // Forward to JSP
+        // Chuyển tiếp yêu cầu đến trang JSP hiển thị danh sách đăng ký của người dùng
         request.getRequestDispatcher("/my-registrations.jsp").forward(request, response);
     }
 }

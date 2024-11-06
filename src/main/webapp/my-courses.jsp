@@ -83,17 +83,9 @@
                                 <div class="row">
                                     <!-- Page Size Dropdown -->
                                     <div class="col-md-6">
-                                        <div class="page-size-dropdown mt-3">
+                                        <div class="page-size-input mt-3">
                                             <label for="pageSize">Page Size:</label>
-                                            <select id="pageSize" name="pageSize" class="form-control">
-                                                <c:forEach var="size" items="${[5, 10, 15, 20, 25]}">
-                                                    <option 
-                                                        value="${size}" 
-                                                        ${size == param.pageSize ? "selected" : ""}>
-                                                        ${size}
-                                                    </option>
-                                                </c:forEach>
-                                            </select>
+                                            <input type="number" id="pageSize" name="pageSize" class="form-control" value="${param.pageSize}" min="1" max="100" step="1">
                                         </div>
                                     </div>
 
