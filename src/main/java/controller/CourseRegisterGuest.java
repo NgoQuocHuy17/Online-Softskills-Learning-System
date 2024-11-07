@@ -63,18 +63,33 @@ public class CourseRegisterGuest extends HttpServlet {
 
         // Thêm các địa chỉ email liên lạc và số điện thoại
         UserContactDAO userContactDAO = new UserContactDAO();
-        String[] emails = request.getParameterValues("emails[]");
-        String[] phones = request.getParameterValues("phones[]");
-        String preferredContact = request.getParameter("preferredContact");
+        String[] emails = null;
+        String[] phones = null;
 
-        for (int i = 0; i < emails.length; i++) {
-            boolean isPreferred = ("email" + i).equals(preferredContact);
-            userContactDAO.insertContact(userId, "Email", emails[i], isPreferred);
+        // Kiểm tra và lấy giá trị emails
+        if (request.getParameterValues("emails[]") != null) {
+            emails = request.getParameterValues("emails[]");
         }
 
-        for (int i = 0; i < phones.length; i++) {
-            boolean isPreferred = ("phone" + i).equals(preferredContact);
-            userContactDAO.insertContact(userId, "Phone", phones[i], isPreferred);
+        // Kiểm tra và lấy giá trị phones
+        if (request.getParameterValues("phones[]") != null) {
+            phones = request.getParameterValues("phones[]");
+        }
+
+        String preferredContact = request.getParameter("preferredContact");
+
+        if (emails != null) {
+            for (int i = 0; i < emails.length; i++) {
+                boolean isPreferred = ("email" + i).equals(preferredContact);
+                userContactDAO.insertContact(userId, "Email", emails[i], isPreferred);
+            }
+        }
+
+        if (phones != null) {
+            for (int i = 0; i < phones.length; i++) {
+                boolean isPreferred = ("phone" + i).equals(preferredContact);
+                userContactDAO.insertContact(userId, "Phone", phones[i], isPreferred);
+            }
         }
 
         // Lấy tổng chi phí từ PackageDAO
