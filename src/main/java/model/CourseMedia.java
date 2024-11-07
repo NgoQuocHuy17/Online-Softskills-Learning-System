@@ -80,7 +80,7 @@ public class CourseMedia {
         this.displayOrder = displayOrder;
     }
 
-    public String getImageUrlAsBase64() {
+    public String getFileNameBase64() {
         if (fileName != null) {
             return Base64.getEncoder().encodeToString(fileName);
         }

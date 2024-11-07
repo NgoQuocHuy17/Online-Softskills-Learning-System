@@ -66,7 +66,7 @@
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-lg-8 col-md-12">
+                        <div class="col-lg-12 col-md-12">
                             <div class="blog-view">
                                 <div class="blog blog-single-post">
                                     <h3 class="blog-title">${courseDetail.title}</h3>
@@ -119,104 +119,21 @@
                                                 </li>
                                             </ul>
                                         </div>
-
-                                        <!-- Media Slider -->
-                                        <div class="media-slider">
-                                            <div id="mediaContainer">
-                                                <c:forEach var="courseMedia" items="${courseMedias}" varStatus="status">
-                                                    <div class="media-item" style="display: ${status.index == 0 ? 'block' : 'none'};">
-                                                        <c:if test="${courseMedia.mediaType == 'Image'}">
-                                                            <img src="${courseMedia.fileName}" alt="${courseMedia.title}" class="img-fluid"/>
-                                                        </c:if>
-                                                        <c:if test="${courseMedia.mediaType == 'Video'}">
-                                                            <video src="${courseMedia.fileName}" alt="${courseMedia.title}" controls="true" class="img-fluid"/>
-                                                        </c:if>
-                                                    </div>
-                                                </c:forEach>
-                                            </div>
-                                            <!-- Navigation Arrows -->
-                                            <button id="prevBtn" onclick="showMedia(-1)">&#10094;</button>
-                                            <button id="nextBtn" onclick="showMedia(1)">&#10095;</button>
-                                        </div>
-
-                                        <!-- Course Content -->
                                         <div class="course-content">
-                                            <p>
-                                                <c:out value="${courseContent.content}"/>
-                                            </p>
+                                            <c:out value="${courseContent.content}"/>
                                         </div>
+                                        <br>
+                                        <div>
+                                            <c:forEach var="courseMedia" items="${courseMedias}">
+                                                <img width="800px" src="data:image/jpeg;base64,${courseMedia.fileNameBase64}" alt="${courseMedia.title}"/><br><br>
+                                            </c:forEach>
+                                        </div>                     
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Sidebar Section -->
-                        <div class="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
-                            <div class="card search-widget">
-                                <div class="card-body">
-                                    <form class="search-form">
-                                        <div class="input-group">
-                                            <input type="text" placeholder="Search..." class="form-control">
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="card post-widget">
-                                <div class="card-header">
-                                    <h4 class="card-title">Latest Courses</h4>
-                                </div>
-                                <div class="card-body">
-                                    <c:forEach var="blogPost" items="${blogPosts}" end="4">
-                                        <li>
-                                            <div class="post-thumb">
-                                                <a href="blog-details.html?bloglistid=${blogPost.id}">
-                                                    <img class="img-fluid" src="${blogPost.thumbnailUrl}" alt="">
-                                                </a>
-                                            </div>
-                                            <div class="post-info">
-                                                <h4>
-                                                    <a href="BlogDetailsController?bloglistid=${blogPost.id}">
-                                                        <c:out value="${blogPost.title}"/>
-                                                    </a>
-                                                </h4>
-                                                <p>
-                                                    <c:out value="${formattedUpdatedAt}"/>
-                                                </p>
-                                            </div>
-                                        </li>
-                                    </c:forEach>
-                                </div>
-                            </div>
-                            <div class="card category-widget">
-                                <div class="card-header">
-                                    <h4 class="card-title">Course Categories</h4>
-                                </div>
-                                <div class="card-body">
-                                    <ul class="categories">
-                                        <c:if test="${categories != null}">
-                                            <c:forEach var="category" items="${categories}">
-                                                <li><a href="#">HTML <span>(62)</span></a></li>
-                                                </c:forEach>
-                                            </c:if>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="card tags-widget">
-                                <div class="card-header">
-                                    <h4 class="card-title">Tags</h4>
-                                </div>
-                                <div class="card-body">
-                                    <ul class="tags">
-                                        <c:if test="${tags != null}">
-                                            <c:forEach var="tag" items="${tags}">
-                                                <li><a href="#" class="tag">HTML</a></li>
-                                                </c:forEach>
-                                            </c:if>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>

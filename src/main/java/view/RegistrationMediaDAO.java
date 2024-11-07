@@ -2,6 +2,7 @@ package view;
 
 import model.Registration;
 import java.util.List;
+import model.RegistrationMedia;
 
 public class RegistrationMediaDAO extends DBContext<Registration> {
 
@@ -29,6 +30,22 @@ public class RegistrationMediaDAO extends DBContext<Registration> {
 
     @Override
     public int delete(int... id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public boolean deleteMediaById(int mediaId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public List<RegistrationMedia> getImagesByRegistrationId(int registrationId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public List<RegistrationMedia> getVideosByRegistrationId(int registrationId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void insertMedia(int registrationId, String videoType, byte[] videoData, String videoNote) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

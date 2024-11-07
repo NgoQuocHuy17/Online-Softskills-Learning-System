@@ -1,6 +1,7 @@
 package view;
 
 import java.sql.Connection;
+import java.sql.Date;
 import model.Registration;
 import java.util.List;
 import java.sql.PreparedStatement;
@@ -211,6 +212,18 @@ public class RegistrationDAO extends DBContext<Registration> {
 
     @Override
     public int delete(int... id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public boolean addRegistration(Integer userId, int packageId, int courseId, double totalCost, int createdBy, String notes) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public Registration getRegistrationById(int registrationId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public boolean updateRegistrationDetails(int registrationId, Integer userId, int packageId, int courseId, String status, Date validFrom, Date validTo, String notes) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
