@@ -284,7 +284,7 @@
                                             <input type="hidden" name="userId" value="${userParam.id}">
                                         </c:if>
                                         <div>
-                                            <img width="160" src="data:image/jpeg;base64,${image.mediaData}" alt="User Image" class="img-thumbnail limited-size">
+                                            <img width="160" src="data:image/*;base64,${image.mediaData}" alt="User Image" class="img-thumbnail limited-size">
                                             <p>Note: ${image.note}</p>
                                         </div>
                                         <div class="ml-auto">

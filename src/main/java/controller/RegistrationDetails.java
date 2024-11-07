@@ -7,21 +7,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import model.Course;
-import model.Registration;
-import model.RegistrationMedia;
-import model.User;
+import model.*;
 import model.Package;
-import model.UserContact;
-import view.CourseDAO;
-import view.PackageDAO;
-import view.RegistrationDAO;
-import view.RegistrationMediaDAO;
-import view.UserContactDAO;
-import view.UserDAO;
+import view.*;
 
 @WebServlet(name = "RegistrationDetails", urlPatterns = {"/RegistrationDetails"})
 public class RegistrationDetails extends HttpServlet {
@@ -35,9 +25,9 @@ public class RegistrationDetails extends HttpServlet {
         RegistrationDAO registrationDAO = new RegistrationDAO();
         Registration registration = registrationDAO.getRegistrationById(registrationId);
 
-        // Định dạng lại thời gian validFrom và validTo thành kiểu LocalDate để hiển thị dễ đọc hơn
-        LocalDate validFrom = registration.getValidFrom().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate validTo = registration.getValidTo().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        // Chuyển đổi java.sql.Date thành java.time.LocalDate
+        LocalDate validFrom = registration.getValidFrom().toLocalDate();
+        LocalDate validTo = registration.getValidTo().toLocalDate();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Định dạng ngày tháng theo mẫu yyyy-MM-dd
         String validFromStr = validFrom.format(formatter); // Định dạng thời gian validFrom

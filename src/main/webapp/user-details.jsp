@@ -56,7 +56,15 @@
                                 <div class="form-group">
                                     <div class="change-avatar">
                                         <div class="profile-img">
-                                            <img src="data:image/jpeg;base64,${avatar.mediaData}" alt="User Image">
+                                            <div class="col-12 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="change-avatar">
+                                                        <div class="profile-img">
+                                                            <img src="data:image/*;base64,${avatar.mediaData}" alt="User Avatar">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -175,7 +183,7 @@
                                         <input type="hidden" name="userId" value="${user.id}">
                                         <input type="hidden" name="mediaId" value="${image.id}">
                                         <div>
-                                            <img width="160" src="data:image/jpeg;base64,${image.mediaData}" alt="User Image" class="img-thumbnail limited-size">
+                                            <img width="160" src="data:image/*;base64,${image.mediaData}" alt="User Image" class="img-thumbnail limited-size">
                                             <p>Note: ${image.note}</p>
                                         </div>
                                         <div class="ml-auto">
@@ -195,7 +203,7 @@
                                         <input type="hidden" name="mediaId" value="${video.id}">
                                         <div>
                                             <video width="320" height="240" controls>
-                                                <source src="data:image/jpeg;base64,${video.mediaData}" type="video/mp4">
+                                                <source src="data:video/mp4;base64,${video.mediaData}" type="video/mp4">
                                             </video>
                                             <p>Note: ${video.note}</p>
                                         </div>

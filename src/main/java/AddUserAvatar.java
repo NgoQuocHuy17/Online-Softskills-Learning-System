@@ -7,12 +7,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 import model.UserMedia;
 import view.UserMediaDAO;
 
-@WebServlet(name = "UserDetailsTest", urlPatterns = {"/UserDetailsTest"})
-public class UserDetailsTest extends HttpServlet {
+@WebServlet(name = "AddUserAvatar", urlPatterns = {"/AddUserAvatar"})
+public class AddUserAvatar extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,15 +38,13 @@ public class UserDetailsTest extends HttpServlet {
 
         // Tạo đối tượng UserMediaDAO và lấy ảnh và video của người dùng
         UserMediaDAO userMediaDAO = new UserMediaDAO();
-        List<UserMedia> images = userMediaDAO.getImagesByUserId(userId);
-        List<UserMedia> videos = userMediaDAO.getVideosByUserId(userId);
+        UserMedia avatar = userMediaDAO.getAvatarByUserId(userId);
 
         // Đặt thông tin người dùng và danh sách ảnh và video vào request
         request.setAttribute("user", user);
-        request.setAttribute("images", images);
-        request.setAttribute("videos", videos);
+        request.setAttribute("avatar", avatar);
 
         // Chuyển hướng đến JSP để hiển thị thông tin người dùng và media
-        request.getRequestDispatcher("/UserDetailsTest.jsp").forward(request, response);
+        request.getRequestDispatcher("/add-user-avatar.jsp").forward(request, response);
     }
 }

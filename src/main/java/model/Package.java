@@ -28,10 +28,6 @@ public class Package {
         this.accessDuration = accessDuration;
     }
 
-    public Package(int aInt, int aInt0, String string, double aDouble, double aDouble0, Timestamp timestamp, Timestamp timestamp0) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
     public int getId() {
         return id;
     }

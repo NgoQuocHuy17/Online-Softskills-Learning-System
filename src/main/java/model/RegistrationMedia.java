@@ -6,7 +6,7 @@ public class RegistrationMedia {
     private int registrationId;
     private String mediaType;
     private String mediaData;
-    private String note;  // Thêm thuộc tính note
+    private String note;
 
     public RegistrationMedia() {
     }

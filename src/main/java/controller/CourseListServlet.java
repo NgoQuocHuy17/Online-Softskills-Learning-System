@@ -81,15 +81,17 @@ public class CourseListServlet extends HttpServlet {
             totalPages = 1;
         }
 
-        boolean showTagline = request.getParameter("showTagline") != null;
-        boolean showCategory = request.getParameter("showCategory") != null;
-        boolean showBasicPrice = request.getParameter("showBasicPrice") != null;
-        boolean showAdvancedPrice = request.getParameter("showAdvancedPrice") != null;
+        boolean showTagline = request.getParameter("showTagline") != null ? true : (request.getParameter("initial") == null); // Mặc định là true nếu lần đầu
+        boolean showCategory = request.getParameter("showCategory") != null ? true : (request.getParameter("initial") == null); // Mặc định là true
+        boolean showBasicPrice = request.getParameter("showBasicPrice") != null ? true : (request.getParameter("initial") == null); // Mặc định là true
+        boolean showAdvancedPrice = request.getParameter("showAdvancedPrice") != null ? true : (request.getParameter("initial") == null); // Mặc định là true
+        boolean showUpdatedAt = request.getParameter("showUpdatedAt") != null ? true : (request.getParameter("initial") == null); // Mặc định là true
 
         request.setAttribute("showTagline", showTagline);
         request.setAttribute("showCategory", showCategory);
         request.setAttribute("showBasicPrice", showBasicPrice);
         request.setAttribute("showAdvancedPrice", showAdvancedPrice);
+        request.setAttribute("showUpdatedAt", showUpdatedAt);
 
         request.setAttribute("courses", courses);
         request.setAttribute("currentPage", page);

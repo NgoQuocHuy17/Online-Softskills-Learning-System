@@ -27,7 +27,8 @@ public class PackageDAO extends DBContext<Package> {
                             rs.getDouble("price"),
                             rs.getDouble("sale_price"),
                             rs.getTimestamp("sale_start"),
-                            rs.getTimestamp("sale_end")
+                            rs.getTimestamp("sale_end"),
+                            rs.getInt("access_duration")
                     );
                 }
             }
@@ -52,7 +53,8 @@ public class PackageDAO extends DBContext<Package> {
                             rs.getDouble("price"),
                             rs.getDouble("sale_price"),
                             rs.getTimestamp("sale_start"),
-                            rs.getTimestamp("sale_end")
+                            rs.getTimestamp("sale_end"),
+                            rs.getInt("access_duration")
                     );
                     packages.add(pkg);
                 }

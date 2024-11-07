@@ -15,20 +15,10 @@ import java.security.SecureRandom;
 import java.sql.Date;
 import java.util.List;
 import java.util.Random;
-import model.Course;
-import model.Registration;
-import model.RegistrationMedia;
-import model.User;
-import model.UserContact;
+import model.*;
 import model.Package;
 import org.apache.commons.codec.digest.DigestUtils;
-import view.CourseDAO;
-import view.PackageDAO;
-import view.RegistrationDAO;
-import view.RegistrationMediaDAO;
-import view.UserContactDAO;
-import view.UserDAO;
-import view.UserCourseDAO;
+import view.*;
 
 @WebServlet(name = "UpdateRegistrationDetails", urlPatterns = {"/UpdateRegistrationDetails"})
 @MultipartConfig
@@ -118,7 +108,7 @@ public class UpdateRegistrationDetails extends HttpServlet {
 
                 // Ghi dữ liệu vào database
                 registrationMediaDAO.insertMedia(registrationId, imageType, imageData, imageNote);
-                request.setAttribute("message", "Cập nhật hình ảnh thành công.");
+                request.setAttribute("message", "Cập nhật media thành công.");
             }
 
             // Xử lý cập nhật video
@@ -134,7 +124,7 @@ public class UpdateRegistrationDetails extends HttpServlet {
 
                 // Ghi dữ liệu vào database
                 registrationMediaDAO.insertMedia(registrationId, videoType, videoData, videoNote);
-                request.setAttribute("message", "Cập nhật video thành công.");
+                request.setAttribute("message", "Cập nhật media thành công.");
             }
         } else {
             // Không có tệp hình ảnh hoặc video, chỉ cập nhật thông tin đăng ký
@@ -188,8 +178,8 @@ public class UpdateRegistrationDetails extends HttpServlet {
 
         // Định dạng ngày tháng
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String validFromStr = registration.getValidFrom().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(formatter);
-        String validToStr = registration.getValidTo().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(formatter);
+        String validFromStr = registration.getValidFrom().toLocalDate().format(formatter);
+        String validToStr = registration.getValidTo().toLocalDate().format(formatter);
 
         // Gửi danh sách video, hình ảnh, số điện thoại và email đến JSP
         request.setAttribute("registration", registration);

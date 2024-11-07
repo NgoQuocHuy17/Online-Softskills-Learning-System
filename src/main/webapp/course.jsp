@@ -1,5 +1,3 @@
-<!-- File: course.jsp -->
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -30,6 +28,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-12 col-12">
                         <form action="course" method="post">
+                            <input type="hidden" name="initial" value="false">
                             <div class="row">
                                 <!-- Page Size Dropdown -->
                                 <div class="col-md-6">
@@ -66,6 +65,10 @@
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="showAdvancedPrice" name="showAdvancedPrice" value="true" ${param.showAdvancedPrice == 'true' ? 'checked' : ''}>
                                             <label class="form-check-label" for="showAdvancedPrice">Advanced Package Price</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="showUpdatedAt" name="showUpdatedAt" value="true" ${param.showUpdatedAt == 'true' ? 'checked' : ''}>
+                                            <label class="form-check-label" for="showUpdatedAt">Update At</label>
                                         </div>
                                     </div>
                                 </div>
@@ -153,6 +156,12 @@
                                 <c:if test="${showAdvancedPrice}">
                                     <p class="card-text"><strong>Advanced Package Price:</strong> ${course.advancedPackagePrice}</p>
                                 </c:if>
+                                <c:if test="${showUpdatedAt}">
+                                    <p class="card-text">
+                                        <strong>Update at:</strong> 
+                                        <fmt:formatDate value="${course.updatedAt}" pattern="dd/MM/yyyy" />
+                                    </p>
+                                </c:if>
                                 <!-- Format updatedAt to dd/MM/yyyy -->
                                 <p class="card-text">
                                     <strong>Update at:</strong> 
@@ -182,7 +191,7 @@
                         <!-- Previous Button -->
                         <c:if test="${currentPage > 1}">
                             <li class="page-item">
-                                <a class="page-link" href="course?page=${currentPage - 1}&pageSize=${param.pageSize}&showTagline=${param.showTagline}&showCategory=${param.showCategory}&showBasicPrice=${param.showBasicPrice}&showAdvancedPrice=${param.showAdvancedPrice}&searchTitle=${param.searchTitle}&category=${param.category}"
+                                <a class="page-link" href="course?page=${currentPage - 1}&pageSize=${param.pageSize}&showTagline=${param.showTagline}&showCategory=${param.showCategory}&showBasicPrice=${param.showBasicPrice}&showAdvancedPrice=${param.showAdvancedPrice}&showUpdatedAt=${param.showUpdatedAt}&searchTitle=${param.searchTitle}&category=${param.category}"
                                    aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
@@ -192,7 +201,7 @@
                         <!-- Page Numbers -->
                         <c:forEach var="i" begin="1" end="${totalPages}">
                             <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                <a class="page-link" href="course?page=${i}&pageSize=${param.pageSize}&showTagline=${param.showTagline}&showCategory=${param.showCategory}&showBasicPrice=${param.showBasicPrice}&showAdvancedPrice=${param.showAdvancedPrice}&searchTitle=${param.searchTitle}&category=${param.category}">
+                                <a class="page-link" href="course?page=${i}&pageSize=${param.pageSize}&showTagline=${param.showTagline}&showCategory=${param.showCategory}&showBasicPrice=${param.showBasicPrice}&showAdvancedPrice=${param.showAdvancedPrice}&showUpdatedAt=${param.showUpdatedAt}&searchTitle=${param.searchTitle}&category=${param.category}">
                                     ${i}
                                 </a>                            
                             </li>
@@ -201,7 +210,7 @@
                         <!-- Next Button -->
                         <c:if test="${currentPage < totalPages}">
                             <li class="page-item">
-                                <a class="page-link" href="course?page=${currentPage + 1}&pageSize=${param.pageSize}&showTagline=${param.showTagline}&showCategory=${param.showCategory}&showBasicPrice=${param.showBasicPrice}&showAdvancedPrice=${param.showAdvancedPrice}&searchTitle=${param.searchTitle}&category=${param.category}"
+                                <a class="page-link" href="course?page=${currentPage + 1}&pageSize=${param.pageSize}&showTagline=${param.showTagline}&showCategory=${param.showCategory}&showBasicPrice=${param.showBasicPrice}&showAdvancedPrice=${param.showAdvancedPrice}&showUpdatedAt=${param.showUpdatedAt}&searchTitle=${param.searchTitle}&category=${param.category}"
                                    aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>

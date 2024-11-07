@@ -71,8 +71,8 @@ public class RegistrationDAO extends DBContext<Registration> {
                 registration.setCourseId(rs.getInt("course_id"));
                 registration.setTotalCost(rs.getDouble("total_cost"));
                 registration.setStatus(rs.getString("status"));
-                registration.setValidFrom(rs.getTimestamp("valid_from"));
-                registration.setValidTo(rs.getTimestamp("valid_to"));
+                registration.setValidFrom(rs.getDate("valid_from"));
+                registration.setValidTo(rs.getDate("valid_to"));
                 registration.setNotes(rs.getString("notes"));
 
                 registrations.add(registration);
@@ -145,8 +145,8 @@ public class RegistrationDAO extends DBContext<Registration> {
                 registration.setCreatedBy(rs.getInt("created_by"));
                 registration.setTotalCost(rs.getDouble("total_cost"));
                 registration.setStatus(rs.getString("status"));
-                registration.setValidFrom(rs.getTimestamp("valid_from"));
-                registration.setValidTo(rs.getTimestamp("valid_to"));
+                registration.setValidFrom(rs.getDate("valid_from"));
+                registration.setValidTo(rs.getDate("valid_to"));
                 registration.setNotes(rs.getString("notes"));
 
                 // Thêm đối tượng vào danh sách
@@ -176,8 +176,8 @@ public class RegistrationDAO extends DBContext<Registration> {
                 registration.setCreatedBy(rs.getInt("created_by"));
                 registration.setTotalCost(rs.getDouble("total_cost"));
                 registration.setStatus(rs.getString("status"));
-                registration.setValidFrom(rs.getTimestamp("valid_from"));
-                registration.setValidTo(rs.getTimestamp("valid_to"));
+                registration.setValidFrom(rs.getDate("valid_from"));
+                registration.setValidTo(rs.getDate("valid_to"));
                 registration.setNotes(rs.getString("notes"));
 
                 // Thêm đối tượng vào danh sách
@@ -188,6 +188,83 @@ public class RegistrationDAO extends DBContext<Registration> {
         }
 
         return registrations;
+    }
+
+    public boolean addRegistration(Integer userId, int packageId, int courseId, double totalCost, int createdBy, String notes) {
+        String query = "INSERT INTO registrations (user_id, package_id, course_id, total_cost, created_by, notes) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(query)) {
+            if (userId == null || userId == 0) {
+                ps.setNull(1, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(1, userId);
+            }
+            ps.setInt(2, packageId);
+            ps.setInt(3, courseId);
+            ps.setDouble(4, totalCost);
+            ps.setInt(5, createdBy);
+            ps.setString(6, notes);
+
+            int rowsInserted = ps.executeUpdate();
+            return rowsInserted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Registration getRegistrationById(int registrationId) {
+        String query = "SELECT * FROM registrations WHERE id = ?";
+
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, registrationId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Registration registration = new Registration();
+                registration.setId(rs.getInt("id"));
+                registration.setUserId(rs.getInt("user_id"));
+                registration.setPackageId(rs.getInt("package_id"));
+                registration.setCourseId(rs.getInt("course_id"));
+                registration.setTotalCost(rs.getDouble("total_cost"));
+                registration.setStatus(rs.getString("status"));
+                registration.setValidFrom(rs.getDate("valid_from"));
+                registration.setValidTo(rs.getDate("valid_to"));
+                registration.setCreatedBy(rs.getInt("created_by"));
+                registration.setNotes(rs.getString("notes"));
+
+                return registration;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public boolean updateRegistrationDetails(int registrationId, Integer userId, int packageId, int courseId, String status, Date validFrom, Date validTo, String notes) {
+        String query = "UPDATE registrations SET user_id = ?, package_id = ?, course_id = ?, status = ?, valid_from = ?, valid_to = ?, notes = ? WHERE id = ?";
+
+        try (Connection conn = getConn(); PreparedStatement ps = conn.prepareStatement(query)) {
+            if (userId == null || userId == 0) {
+                ps.setNull(1, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(1, userId);
+            }
+            ps.setInt(2, packageId);
+            ps.setInt(3, courseId);
+            ps.setString(4, status);
+            ps.setDate(5, validFrom);
+            ps.setDate(6, validTo);
+            ps.setString(7, notes);
+            ps.setInt(8, registrationId);
+
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -212,18 +289,6 @@ public class RegistrationDAO extends DBContext<Registration> {
 
     @Override
     public int delete(int... id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    public boolean addRegistration(Integer userId, int packageId, int courseId, double totalCost, int createdBy, String notes) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    public Registration getRegistrationById(int registrationId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    public boolean updateRegistrationDetails(int registrationId, Integer userId, int packageId, int courseId, String status, Date validFrom, Date validTo, String notes) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
