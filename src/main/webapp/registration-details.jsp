@@ -56,12 +56,7 @@
                                 <div class="alert alert-warning">${message}</div>
                             </c:if>
                             <input type="hidden" name="registrationId" value="${registration.id}">
-                            <c:if test="${userParam != null}">
-                                <input type="hidden" name="userId" value="${userParam.id}">
-                            </c:if>
-                            <input type="hidden" name="packageId" value="${pkg.id}">
-                            <input type="hidden" name="courseId" value="${course.id}">
-
+                            <input type="hidden" name="userId" value="${userParam.id}">
 
                             <!-- Thông tin đăng ký -->
                             <div class="col-12">
@@ -149,7 +144,7 @@
                             <div class="col-12 col-md-6">
                                 <div class="form-group">
                                     <label>Status</label>
-                                    <select class="form-control" name="status">
+                                    <select class="form-control" name="status" <%= "Paid".equals(registration.getStatus()) ? "disabled" : ""%>>
                                         <option value="Submitted" <%= "Submitted".equals(registration.getStatus()) ? "selected" : ""%>>Submitted</option>
                                         <option value="Paid" <%= "Paid".equals(registration.getStatus()) ? "selected" : ""%>>Paid</option>
                                         <option value="Cancelled" <%= "Cancelled".equals(registration.getStatus()) ? "selected" : ""%>>Cancelled</option>
@@ -243,9 +238,7 @@
                             <h4>Upload More Media</h4>
                             <form action="UpdateRegistrationDetails" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="registrationId" value="${registration.id}">
-                                <c:if test="${userParam != null}">
-                                    <input type="hidden" name="userId" value="${userParam.id}">
-                                </c:if>
+                                <input type="hidden" name="userId" value="${userParam.id}">
                                 <input type="hidden" name="packageId" value="${pkg.id}">
                                 <input type="hidden" name="courseId" value="${course.id}">
 
@@ -280,9 +273,7 @@
                                     <form action="DeleteRegistrationMedia" method="post" class="d-flex align-items-center">
                                         <input type="hidden" name="mediaId" value="${image.id}">
                                         <input type="hidden" name="registrationId" value="${registration.id}">
-                                        <c:if test="${userParam != null}">
-                                            <input type="hidden" name="userId" value="${userParam.id}">
-                                        </c:if>
+                                        <input type="hidden" name="userId" value="${userParam.id}">
                                         <div>
                                             <img width="160" src="data:image/*;base64,${image.mediaData}" alt="User Image" class="img-thumbnail limited-size">
                                             <p>Note: ${image.note}</p>
@@ -302,9 +293,7 @@
                                 <c:forEach var="video" items="${videos}">
                                     <form action="DeleteRegistrationMedia" method="post" class="d-flex align-items-center">
                                         <input type="hidden" name="registrationId" value="${registration.id}">
-                                        <c:if test="${userParam != null}">
-                                            <input type="hidden" name="userId" value="${userParam.id}">
-                                        </c:if>
+                                        <input type="hidden" name="userId" value="${userParam.id}">
                                         <input type="hidden" name="mediaId" value="${video.id}">
                                         <div>
                                             <video width="320" height="240" controls>

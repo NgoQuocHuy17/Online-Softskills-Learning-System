@@ -1,6 +1,5 @@
 package controller;
 
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -34,10 +33,10 @@ public class UpdateRegistrationDetails extends HttpServlet {
         int packageId = Integer.parseInt(request.getParameter("packageId"));
         int courseId = Integer.parseInt(request.getParameter("courseId"));
         int registrationId = Integer.parseInt(request.getParameter("registrationId"));
+        Registration registration = registrationDAO.getRegistrationById(registrationId);
 
         String status = request.getParameter("status");
         String userIdStr = request.getParameter("userId");
-        Registration registration = registrationDAO.getRegistrationById(registrationId);
 
         Integer userId = 0;
         if (userIdStr != null && !userIdStr.isEmpty()) {
@@ -156,6 +155,7 @@ public class UpdateRegistrationDetails extends HttpServlet {
             // Cập nhật thông tin đăng ký
             boolean isUpdated = registrationDAO.updateRegistrationDetails(registrationId, userId, packageId, courseId, status, validFrom, validTo, notes);
             if (isUpdated) {
+                registration = registrationDAO.getRegistrationById(registrationId);
                 request.setAttribute("message", "Cập nhật thông tin đăng ký thành công.");
             } else {
                 request.setAttribute("message", "Cập nhật thông tin đăng ký thất bại.");
@@ -170,9 +170,9 @@ public class UpdateRegistrationDetails extends HttpServlet {
         List<UserContact> phones = userContactDAO.getUserPhones(userId);
         List<UserContact> emails = userContactDAO.getUserEmails(userId);
         List<Course> courses = courseDAO.getAllCourses();
-        Course course = courseDAO.getCourseById(courseId);
-        Package pkg = packageDAO.getPackageById(packageId);
-        List<Package> packages = packageDAO.getPackagesByCourseId(courseId);
+        Course course = courseDAO.getCourseById(registration.getCourseId());
+        Package pkg = packageDAO.getPackageById(registration.getPackageId());
+        List<Package> packages = packageDAO.getPackagesByCourseId(course.getId());
         List<RegistrationMedia> images = registrationMediaDAO.getImagesByRegistrationId(registrationId);
         List<RegistrationMedia> videos = registrationMediaDAO.getVideosByRegistrationId(registrationId);
 
@@ -183,7 +183,7 @@ public class UpdateRegistrationDetails extends HttpServlet {
 
         // Gửi danh sách video, hình ảnh, số điện thoại và email đến JSP
         request.setAttribute("registration", registration);
-        request.setAttribute("user", user);
+        request.setAttribute("userParam", user);
         request.setAttribute("emails", emails);
         request.setAttribute("phones", phones);
         request.setAttribute("course", course);
