@@ -6,7 +6,6 @@ import java.util.Vector;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 /**
@@ -35,7 +34,7 @@ public class SettingDAO extends DBContext<Setting> {
             sql.append(" ORDER BY ").append(sort).append(" ").append(order != null && order.equalsIgnoreCase("desc") ? "DESC" : "ASC");
         }
 
-        List<Setting> settings = new ArrayList();
+        List<Setting> settings = new Vector<>();
         try (PreparedStatement pre = super.getConn().prepareStatement(sql.toString())) {
             int index = 1;
 
@@ -70,7 +69,7 @@ public class SettingDAO extends DBContext<Setting> {
     @Override
     public List<Setting> select() {
         String sql = "SELECT [id], [setting_type], [value], [order_num], [status] FROM [dbo].[settings]";
-        List<Setting> settings = new Vector();
+        List<Setting> settings = new Vector<>();
         try (PreparedStatement pre = super.getConn().prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
             while (rs.next()) {
                 Setting setting = new Setting();

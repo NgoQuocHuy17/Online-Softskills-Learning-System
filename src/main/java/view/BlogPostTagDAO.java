@@ -18,7 +18,7 @@ public class BlogPostTagDAO extends DBContext<BlogPostTag> {
     @Override
     public List<BlogPostTag> select() {
         String sql = "SELECT [blog_post_id], [tag_id] FROM [dbo].[blog_post_tags]";
-        List<BlogPostTag> blogPostTags = new Vector();
+        List<BlogPostTag> blogPostTags = new Vector<>();
         try (PreparedStatement pre = super.getConn().prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
             while (rs.next()) {
                 BlogPostTag blogPostTag = new BlogPostTag();

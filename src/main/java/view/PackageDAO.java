@@ -3,14 +3,12 @@ package view;
 import model.Package;
 
 import java.util.List;
-import view.DBContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 public class PackageDAO extends DBContext<Package> {
 
@@ -29,8 +27,7 @@ public class PackageDAO extends DBContext<Package> {
                             rs.getDouble("price"),
                             rs.getDouble("sale_price"),
                             rs.getTimestamp("sale_start"),
-                            rs.getTimestamp("sale_end"),
-                            rs.getInt("access_duration") // Thêm trường mới
+                            rs.getTimestamp("sale_end")
                     );
                 }
             }
@@ -55,8 +52,7 @@ public class PackageDAO extends DBContext<Package> {
                             rs.getDouble("price"),
                             rs.getDouble("sale_price"),
                             rs.getTimestamp("sale_start"),
-                            rs.getTimestamp("sale_end"),
-                            rs.getInt("access_duration") // Thêm trường mới
+                            rs.getTimestamp("sale_end")
                     );
                     packages.add(pkg);
                 }

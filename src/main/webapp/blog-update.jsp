@@ -1,9 +1,4 @@
 <%-- 
-    Document   : blog-update
-    Created on : Nov 1, 2024, 8:22:43 AM
-    Author     : Minh
---%>
-<%-- 
     Document   : blog-create
     Created on : Nov 1, 2024, 8:22:43 AM
     Author     : Minh
@@ -11,7 +6,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>

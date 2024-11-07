@@ -19,7 +19,7 @@ public class TagDAO extends DBContext<Tag> {
     @Override
     public List<Tag> select() {
         String sql = "SELECT [id], [name] FROM [dbo].[tags]";
-        List<Tag> tags = new Vector();
+        List<Tag> tags = new Vector<>();
         try (PreparedStatement pre = super.getConn().prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
             while (rs.next()) {
                 Tag tag = new Tag();

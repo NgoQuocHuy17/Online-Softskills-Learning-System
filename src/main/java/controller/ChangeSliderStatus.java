@@ -10,7 +10,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.time.format.DateTimeFormatter;
+import java.io.PrintWriter;
+import java.util.List;
 import model.Slider;
 import view.SliderDAO;
 
@@ -18,8 +19,8 @@ import view.SliderDAO;
  *
  * @author Minh
  */
-@WebServlet(name = "SliderDetailsController", urlPatterns = {"/slider-details"})
-public class SliderDetailsController extends HttpServlet {
+@WebServlet(name = "ChangeSliderStatus", urlPatterns = {"/ChangeSliderStatus"})
+public class ChangeSliderStatus extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,39 +33,19 @@ public class SliderDetailsController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String idParam = request.getParameter("id");
-        if (idParam != null && !idParam.isEmpty()) {
-            try {
-                int id = Integer.parseInt(idParam);
-                SliderDAO sliderDao = new SliderDAO();
-                Slider slider = sliderDao.select(id);
 
-                if (slider != null) {
-                    if (slider.getCreatedAt() != null && slider.getUpdatedAt() != null) {
-                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                        String formattedCreatedAt = slider.getCreatedAt().format(dtf);
-                        String formattedUpdatedAt = slider.getUpdatedAt().format(dtf);
+        String rawId = request.getParameter("id");
+        if (rawId != null) {
+            int id = Integer.parseInt(rawId);
+            String status = request.getParameter("slider-status").equalsIgnoreCase("active") ? "Inactive" : "Active";
 
-                        request.setAttribute("formattedCreatedAt", formattedCreatedAt);
-                        request.setAttribute("formattedUpdatedAt", formattedUpdatedAt);
-                    }
-                    request.setAttribute("slider", slider);
-                    request.getRequestDispatcher("slider-details.jsp").forward(request, response);
-                } else {
-                    response.sendRedirect("SliderListController");
-                    request.setAttribute("errorMessage", "Slider not found.");
-                    request.getRequestDispatcher("error.jsp").forward(request, response);
-                }
-            } catch (NumberFormatException e) {
-                response.sendRedirect("SliderListController");
-                request.setAttribute("errorMessage", "Invalid slider ID.");
-                request.getRequestDispatcher("error.jsp").forward(request, response);
-            }
-        } else {
-            response.sendRedirect("SliderListController");
-            request.setAttribute("errorMessage", "No slider ID provided.");
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            SliderDAO sliderDAO = new SliderDAO();
+
+            Slider slider = sliderDAO.select(id);
+            slider.setStatus(status);
+            sliderDAO.update(slider);
         }
+        request.getRequestDispatcher("change-slider-status-success.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

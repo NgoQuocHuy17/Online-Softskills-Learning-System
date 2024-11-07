@@ -1,5 +1,6 @@
 package view;
 
+import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,7 +26,7 @@ public class CourseMediaDAO extends DBContext<CourseMedia> {
                 media.setId(rs.getInt("id"));
                 media.setCourseId(rs.getInt("course_id"));
                 media.setMediaType(rs.getString("media_type"));
-                media.setFileName(rs.getString("file_name"));
+                media.setFileName(rs.getBlob("file_name").getBytes(1, (int) rs.getBlob("file_name").length()));
                 media.setTitle(rs.getString("title"));
                 media.setDisplayOrder(rs.getInt("display_order"));
                 medias.add(media);
@@ -44,7 +45,12 @@ public class CourseMediaDAO extends DBContext<CourseMedia> {
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, media.getCourseId());
             pst.setString(2, media.getMediaType());
-            pst.setString(3, media.getFileName());
+            byte[] imageBytes = media.getFileName();
+            if (imageBytes != null) {
+                pst.setBlob(3, new ByteArrayInputStream(imageBytes)); // Use ByteArrayInputStream for BLOB
+            } else {
+                pst.setNull(3, java.sql.Types.BLOB); // If image is null, set it as NULL in database
+            }
             pst.setString(4, media.getTitle());
             pst.setInt(5, media.getDisplayOrder());
             return pst.executeUpdate();
@@ -61,7 +67,12 @@ public class CourseMediaDAO extends DBContext<CourseMedia> {
                 + "WHERE id = ?";
         try (Connection conn = getConn(); PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setString(1, media.getMediaType());
-            pst.setString(2, media.getFileName());
+            byte[] imageBytes = media.getFileName();
+            if (imageBytes != null) {
+                pst.setBlob(2, new ByteArrayInputStream(imageBytes)); // Use ByteArrayInputStream for BLOB
+            } else {
+                pst.setNull(2, java.sql.Types.BLOB); // If image is null, set it as NULL in database
+            }
             pst.setString(3, media.getTitle());
             pst.setInt(4, media.getDisplayOrder());
             pst.setInt(5, media.getId());
@@ -184,7 +195,7 @@ public class CourseMediaDAO extends DBContext<CourseMedia> {
                 media.setId(rs.getInt("id"));
                 media.setCourseId(rs.getInt("course_id"));
                 media.setMediaType(rs.getString("media_type"));
-                media.setFileName(rs.getString("file_name"));
+                media.setFileName(rs.getBlob("file_name").getBytes(1, (int) rs.getBlob("file_name").length()));
                 media.setTitle(rs.getString("title"));
                 media.setDisplayOrder(rs.getInt("display_order"));
                 return media;

@@ -1,23 +1,8 @@
-<%-- 
-    Document   : slider-list
-    Created on : Oct 11, 2024, 12:29:29?PM
-    Author     : Minh
---%>
-<%--<%@ page contentType="text/html;charset=UTF-8" language="java" %>--%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="model.Slider" %>
-<%@ page import="java.util.List" %>
-<%
-    List<Slider> sliders = (List<Slider>) request.getAttribute("sliders");
-    int totalSliders = (Integer) request.getAttribute("totalSliders");
-    int currentPage = (Integer) request.getAttribute("currentPage");
-    String statusFilter = request.getParameter("status");
-    String searchQuery = request.getParameter("searchQuery");
-    int slidersPerPage = 5; // Adjust as necessary
-    int totalPages = (int) Math.ceil((double) totalSliders / slidersPerPage);
-%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
         <meta charset="utf-8">
         <title>Slider List</title>
@@ -29,19 +14,41 @@
         <link rel="stylesheet" href="assets/css/style.css">
     </head>
     <body>
-        <%@ include file="header.jsp"%>
         <div class="main-wrapper">
+            <jsp:include page="header.jsp"/>
             <div class="breadcrumb-bar">
                 <div class="container-fluid">
                     <div class="row align-items-center">
                         <div class="col-md-12 col-12">
-                            <nav aria-label="breadcrumb" class="page-breadcrumb">
-                                <!--<ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Slider List</li>
-                                </ol>-->
-                            </nav>
-                            <h2 class="breadcrumb-title">Slider List</h2>
+                            <form class="search-filter-form" action="slider-list" method="get">
+                                <div class="input-group">
+
+                                    <!-- Search Input -->
+                                    <input type="text" name="searchTerm" placeholder="Search slider..." class="form-control" value="${param.searchTerm}">
+
+                                    <!--Filter -->
+                                    <select name="status" class="form-control">
+                                        <option value="">All Statuses</option>
+                                        <option value="Active" ${param.status == 'Active' ? 'selected' : ''}>Active</option>
+                                        <option value="Inactive" ${param.status == 'Inactive' ? 'selected' : ''}>Inactive</option>
+                                    </select>
+                                    <!-- Page Size -->
+                                    <input type="number" name="pageSize" placeholder="Page Size" class="form-control" min="1" value="${param.pageSize}"/>
+
+                                    <!-- Submit -->
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Search & Filter</button>
+                                </div>
+
+                                <!-- ShowField Checkboxes -->
+                                <div class="form-group mt-3" style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
+                                    <label class="mr-2">Show Columns: </label>
+                                    <label><input type="checkbox" name="showId" value="true" ${param.showId != null || empty param.showId ? 'checked' : ''}>Id</label>
+                                    <label><input type="checkbox" name="showTitle" value="true" ${param.showTitle != null || empty param.showTitle ? 'checked' : ''}>Title</label>
+                                    <label><input type="checkbox" name="showImage" value="true" ${param.showImage != null || empty param.showImage ? 'checked' : ''}>Image</label>
+                                    <label><input type="checkbox" name="showBacklink" value="true" ${param.showBacklink != null || empty param.showBacklink ? 'checked' : ''}>Back Link</label>
+                                    <label><input type="checkbox" name="showStatus" value="true" ${param.showStatus != null || empty param.showStatus ? 'checked' : ''}>Status</label>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -50,78 +57,155 @@
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-12">
-                            <h5>Sliders</h5>
-
-                            <!-- Filter Form -->
-                            <form method="GET" action="SliderListController">
-                                <input type="text" name="searchQuery" placeholder="Search by title or backlink" value="${param.searchQuery}">
-                                <select name="status">
-                                    <option value="">All</option>
-                                    <option value="active" <c:if test="${'active' == param.status}">selected</c:if>>Active</option>
-                                    <option value="inactive" <c:if test="${'inactive' == param.status}">selected</c:if>>Inactive</option>
-                                    </select>
-                                    <input type="submit" value="Filter" class="btn btn-primary">
-                                </form>
-
-                                <!-- Sliders Table -->
-                            <c:if test="${not empty sliders}">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Title</th>
-                                            <th>Image</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach var="slider" items="${sliders}">
-                                            <tr>
-                                                <td>${slider.id}</td>
-                                                <td>
-                                                    <a href="sliderdetails?id=${slider.id}">${slider.title}</a>
-                                                </td>
-                                                <td><img src="${slider.imageUrl}" alt="${slider.title}" style="max-width: 100px;"></td>
-                                                <td>${slider.status}</td>
-                                                <td>
-                                                    <a href="editSlider.jsp?id=${slider.id}" class="btn btn-warning">Edit</a>
-                                                    <a href="SliderToggleServlet?id=${slider.id}&status=${slider.status == 'active' ? 'inactive' : 'active'}" class="btn btn-danger">Hide</a>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
-                            </c:if>
-                            <c:if test="${empty sliders}">
-                                <p>No sliders found.</p>
-                            </c:if>
-
-                            <!-- Pagination -->
-                            <div class="pagination">
-                                <c:if test="${currentPage > 1}">
-                                    <a href="?currentPage=${currentPage - 1}&status=${statusFilter}&searchQuery=${searchQuery}">Previous</a>
-                                </c:if>
-                                <c:forEach begin="1" end="${totalPages}" var="i">
-                                    <a href="?currentPage=${i}&status=${statusFilter}&searchQuery=${searchQuery}" class="<c:if test='${i == currentPage}'>active</c:if>">${i}</a>
-                                </c:forEach>
-                                <c:if test="${currentPage < totalPages}">
-                                    <a href="?currentPage=${currentPage + 1}&status=${statusFilter}&searchQuery=${searchQuery}">Next</a>
-                                </c:if>
+                        <!--                        <div class="col-md-4 col-12 text-right">
+                                                    <a href="AddUser.jsp" class="btn btn-success">Add Slider</a>
+                                                </div>-->
+                        <h2 class="mt-4">Slider List</h2>
+                        <c:if test="${empty sliders}">
+                            <div class="alert alert-warning">
+                                No valid slider.
                             </div>
-                        </div>
+                        </c:if>
+                        <c:if test="${not empty sliders}">
+                            <table class="table table-bordered table-hover">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <c:if test="${showId}">
+                                            <th>
+                                                Id
+                                                <a href="?sort=id&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-up"></i>
+                                                </a>
+                                                <a href="?sort=id&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-down"></i>
+                                                </a>
+                                            </th>
+                                        </c:if>
+                                        <c:if test="${showTitle}">
+                                            <th>
+                                                Title
+                                                <a href="?sort=title&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-up"></i>
+                                                </a>
+                                                <a href="?sort=title&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-down"></i>
+                                                </a>
+                                            </th>
+                                        </c:if>
+                                        <c:if test="${showImage}">
+                                            <th>
+                                                Image
+                                                <a href="?sort=image_url&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-up"></i>
+                                                </a>
+                                                <a href="?sort=image_url&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-down"></i>
+                                                </a>
+                                            </th>
+                                        </c:if>
+                                        <c:if test="${showBacklink}">
+                                            <th>
+                                                Back Link
+                                                <a href="?sort=backlink&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-up"></i>
+                                                </a>
+                                                <a href="?sort=backlink&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-down"></i>
+                                                </a>
+                                            </th>
+                                        </c:if>
+                                        <c:if test="${showStatus}">
+                                            <th>
+                                                Status
+                                                <a href="?sort=status&sortOrder=asc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-up"></i>
+                                                </a>
+                                                <a href="?sort=status&sortOrder=desc&page=${currentPage}&searchTerm=${param.searchTerm}&status=${param.status}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&pageSize=${pageSize}">
+                                                    <i class="fas fa-arrow-down"></i>
+                                                </a>
+                                            </th>
+                                        </c:if>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="slider" items="${sliders}">
+                                        <tr>
+                                            <c:if test="${showId}">
+                                                <td>${slider.id}</td>
+                                            </c:if>
+                                            <c:if test="${showTitle}">
+                                                <td>${slider.title}</td>
+                                            </c:if>
+                                            <c:if test="${showImage}">
+                                                <td><img src="data:image/png;base64,${slider.imageUrlAsBase64}" width="100px"/></td>
+                                                </c:if>
+                                                <c:if test="${showBacklink}">
+                                                <td>${slider.backlink}</td>
+                                            </c:if>
+                                            <c:if test="${showStatus}">
+                                                <td>${slider.status}</td>
+                                            </c:if>
+                                            <td>
+                                                <form action="ChangeSliderStatus" method="get">
+
+                                                    <input type="hidden" name="searchTerm" value="${searchTerm}"/>
+                                                    <input type="hidden" name="status" value="${status}"/>
+                                                    <input type="hidden" name="pageSize" value="${pageSize}"/>
+                                                    <input type="hidden" name="showId" value="${showId}"/>
+                                                    <input type="hidden" name="showTitle" value="${showTitle}"/>
+                                                    <input type="hidden" name="showImage" value="${showImage}"/>
+                                                    <input type="hidden" name="showBacklink" value="${showBacklink}"/>
+                                                    <input type="hidden" name="showStatus" value="${showStatus}"/>
+                                                    <input type="hidden" name="currentPage" value="${currentPage}"/>
+                                                    <input type="hidden" name="sort" value="${sort}"/>
+                                                    <input type="hidden" name="sortOrder" value="${sortOrder}"/>
+
+                                                    <input type="hidden" name="id" value="${slider.id}"/>
+                                                    <input type="hidden" name="slider-status" value="${slider.status}"/>
+
+                                                    <button type="submit" class="btn btn-primary">Change Status</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </c:if>
+                    </div>
+
+                    <div class="row">
+                        <c:if test="${totalPages > 1 && not empty sliders}">
+                            <div class="blog-pagination mt-4">
+                                <nav>
+                                    <ul class="pagination justify-content-center">
+                                        <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                            <a class="page-link" href="slider-list?page=${currentPage - 1}&searchTerm=${param.searchTerm}&status=${param.status}&pageSize=${pageSize}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&sort=${param.sort}&sortOrder=${param.sortOrder}" tabindex="-1">
+                                                <i class="fas fa-angle-double-left"></i>
+                                            </a>
+                                        </li>
+                                        <c:forEach var="i" begin="1" end="${totalPages}">
+                                            <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                                <a class="page-link" href="slider-list?page=${i}&searchTerm=${param.searchTerm}&status=${param.status}&pageSize=${pageSize}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}">${i}</a>
+                                            </li>
+                                        </c:forEach>
+                                        <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                            <a class="page-link" href="slider-list?page=${currentPage + 1}&searchTerm=${param.searchTerm}&status=${param.status}&pageSize=${pageSize}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&sort=${param.sort}&sortOrder=${param.sortOrder}">
+                                                <i class="fas fa-angle-double-right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </c:if>
                     </div>
                 </div>
             </div>
+            <jsp:include page="footer.jsp" />
         </div>
-        <%@ include file="footer.jsp" %>
-        <script src="assets/js/jquery-3.6.0.min.js"></script>
+        <script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="assets/js/jquery-3.6.0.min.js"></script>
         <script src="assets/js/bootstrap.bundle.min.js"></script>
-        <script src="assets/js/owl.carousel.min.js"></script>
-        <script src="assets/plugins/slick/slick.js"></script>
-        <script src="assets/plugins/aos/aos.js"></script>
+        <script src="assets/plugins/theia-sticky-sidebar/ResizeSensor.js"></script>
+        <script src="assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js"></script>
         <script src="assets/js/script.js"></script>
     </body>
 </html>
-

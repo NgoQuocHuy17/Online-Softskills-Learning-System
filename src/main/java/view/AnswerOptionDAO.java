@@ -18,7 +18,7 @@ public class AnswerOptionDAO extends DBContext<AnswerOption> {
     @Override
     public List<AnswerOption> select() {
         String sql = "SELECT [id], [question_id], [option_text], [is_correct] FROM [dbo].[answer_options]";
-        List<AnswerOption> answerOptions = new Vector();
+        List<AnswerOption> answerOptions = new Vector<>();
         try (PreparedStatement pre = super.getConn().prepareStatement(sql);
              ResultSet rs = pre.executeQuery()) {
             while (rs.next()) {

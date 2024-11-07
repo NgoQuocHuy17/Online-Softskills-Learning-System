@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.util.Base64;
+
 /**
  *
  * @author daihi
@@ -13,7 +15,7 @@ public class CourseMedia {
     private int id;
     private int courseId;
     private String mediaType;
-    private String fileName;
+    private byte[] fileName;
     private String title;
     private int displayOrder;
 
@@ -21,7 +23,7 @@ public class CourseMedia {
 
     }
 
-    public CourseMedia(int id, int courseId, String mediaType, String fileName, String title, int displayOrder) {
+    public CourseMedia(int id, int courseId, String mediaType, byte[] fileName, String title, int displayOrder) {
         this.id = id;
         this.courseId = courseId;
         this.mediaType = mediaType;
@@ -42,7 +44,7 @@ public class CourseMedia {
         return mediaType;
     }
 
-    public String getFileName() {
+    public byte[] getFileName() {
         return fileName;
     }
 
@@ -66,7 +68,7 @@ public class CourseMedia {
         this.mediaType = mediaType;
     }
 
-    public void setFileName(String fileName) {
+    public void setFileName(byte[] fileName) {
         this.fileName = fileName;
     }
 
@@ -78,4 +80,10 @@ public class CourseMedia {
         this.displayOrder = displayOrder;
     }
 
+    public String getImageUrlAsBase64() {
+        if (fileName != null) {
+            return Base64.getEncoder().encodeToString(fileName);
+        }
+        return null;
+    }
 }

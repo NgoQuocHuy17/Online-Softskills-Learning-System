@@ -18,7 +18,7 @@ public class ActivityLogDAO extends DBContext<ActivityLog> {
     @Override
     public List<ActivityLog> select() {
         String sql = "SELECT * FROM [dbo].[activity_log]";
-        List<ActivityLog> activityLogs = new Vector();
+        List<ActivityLog> activityLogs = new Vector<>();
         try (PreparedStatement pre = super.getConn().prepareStatement(sql); ResultSet rs = pre.executeQuery()) {
             while (rs.next()) {
                 ActivityLog activityLog = new ActivityLog();

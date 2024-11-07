@@ -115,7 +115,7 @@ public class AddMediaServlet extends HttpServlet {
         CourseMedia media = new CourseMedia();
         media.setCourseId(courseId);
         media.setMediaType(mediaType);
-        media.setFileName(fileName); // Tên file đã lưu
+//        media.setFileName(fileName); // Tên file đã lưu
         media.setTitle(title);
         media.setDisplayOrder(maxDisplayOrder + 1); // Tự động thiết lập displayOrder
 
