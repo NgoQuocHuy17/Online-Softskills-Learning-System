@@ -146,9 +146,24 @@
                                                 <td>${slider.status}</td>
                                             </c:if>
                                             <td>
-                                                <form action="slider-details" method="post">
+                                                <form action="ChangeSliderStatus" method="get">
+
+                                                    <input type="hidden" name="searchTerm" value="${searchTerm}"/>
+                                                    <input type="hidden" name="status" value="${status}"/>
+                                                    <input type="hidden" name="pageSize" value="${pageSize}"/>
+                                                    <input type="hidden" name="showId" value="${showId}"/>
+                                                    <input type="hidden" name="showTitle" value="${showTitle}"/>
+                                                    <input type="hidden" name="showImage" value="${showImage}"/>
+                                                    <input type="hidden" name="showBacklink" value="${showBacklink}"/>
+                                                    <input type="hidden" name="showStatus" value="${showStatus}"/>
+                                                    <input type="hidden" name="currentPage" value="${currentPage}"/>
+                                                    <input type="hidden" name="sort" value="${sort}"/>
+                                                    <input type="hidden" name="sortOrder" value="${sortOrder}"/>
+
                                                     <input type="hidden" name="id" value="${slider.id}"/>
-                                                    <button type="submit" class="btn btn-primary">Hide</button>
+                                                    <input type="hidden" name="slider-status" value="${slider.status}"/>
+
+                                                    <button type="submit" class="btn btn-primary">Change Status</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -164,17 +179,17 @@
                                 <nav>
                                     <ul class="pagination justify-content-center">
                                         <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                            <a class="page-link" href="?page=${currentPage - 1}&searchTerm=${param.searchTerm}&status=${param.status}&pageSize=${pageSize}&sort=${param.sort}&sortOrder=${param.sortOrder}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}" tabindex="-1">
+                                            <a class="page-link" href="slider-list?page=${currentPage - 1}&searchTerm=${param.searchTerm}&status=${param.status}&pageSize=${pageSize}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&sort=${param.sort}&sortOrder=${param.sortOrder}" tabindex="-1">
                                                 <i class="fas fa-angle-double-left"></i>
                                             </a>
                                         </li>
                                         <c:forEach var="i" begin="1" end="${totalPages}">
                                             <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                                <a class="page-link" href="?page=${i}&searchTerm=${param.searchTerm}&status=${param.status}&pageSize=${pageSize}&sort=${param.sort}&sortOrder=${param.sortOrder}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}">${i}</a>
+                                                <a class="page-link" href="slider-list?page=${i}&searchTerm=${param.searchTerm}&status=${param.status}&pageSize=${pageSize}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}">${i}</a>
                                             </li>
                                         </c:forEach>
                                         <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                            <a class="page-link" href="?page=${currentPage + 1}&searchTerm=${param.searchTerm}&status=${param.status}&pageSize=${pageSize}&sort=${param.sort}&sortOrder=${param.sortOrder}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}">
+                                            <a class="page-link" href="slider-list?page=${currentPage + 1}&searchTerm=${param.searchTerm}&status=${param.status}&pageSize=${pageSize}&showId=${showId}&showTitle=${showTitle}&showImage=${showImage}&showBacklink=${showBacklink}&showStatus=${showStatus}&sort=${param.sort}&sortOrder=${param.sortOrder}">
                                                 <i class="fas fa-angle-double-right"></i>
                                             </a>
                                         </li>

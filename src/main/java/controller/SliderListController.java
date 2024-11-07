@@ -12,11 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.Slider;
-import model.User;
-import model.UserContact;
 import view.SliderDAO;
-import view.UserContactDAO;
-import view.UserDAO;
 
 /**
  *
@@ -26,15 +22,15 @@ import view.UserDAO;
 public class SliderListController extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         // Lấy các tham số 'show' từ request
@@ -43,9 +39,7 @@ public class SliderListController extends HttpServlet {
         String showImage = request.getParameter("showImage");
         String showBacklink = request.getParameter("showBacklink");
         String showStatus = request.getParameter("showStatus");
-        String showCreatedAt = request.getParameter("showCreatedAt");
-        String showUpdatedAt = request.getParameter("showUpdatedAt");
-        
+
         SliderDAO sliderDAO = new SliderDAO();
 
         // Lấy số trang từ request (mặc định là 1 nếu không có tham số)
@@ -58,7 +52,11 @@ public class SliderListController extends HttpServlet {
         int pageSize = 5;
         String pageSizeParam = request.getParameter("pageSize");
         if (pageSizeParam != null && !pageSizeParam.isEmpty()) {
-            pageSize = Integer.parseInt(pageSizeParam);
+            try {
+                pageSize = Integer.parseInt(pageSizeParam);
+            } catch (Exception e) {
+                pageSize = 5;
+            }
         }
 
         String statusFilter = request.getParameter("status");
@@ -79,12 +77,16 @@ public class SliderListController extends HttpServlet {
 
         // Lấy danh sách slider theo trang với các tham số lọc và tìm kiếm
         List<Slider> sliders = sliderDAO.getSlidersByPage(page, pageSize, statusFilter, searchTerm, sortBy, sortOrder);
-        
+
         // Tính tổng số slider và số trang
         int totalSlider = sliderDAO.getTotalSliders(statusFilter, searchTerm);
 
         int totalPages = (int) Math.ceil(totalSlider / (double) pageSize);
 
+        if (page > totalPages){
+            page = totalPages;
+        }
+        
         if (sliders.isEmpty()) {
             request.setAttribute("message", "Không có slider hợp lệ");
         }
@@ -94,36 +96,17 @@ public class SliderListController extends HttpServlet {
         request.setAttribute("showImage", showImage);
         request.setAttribute("showBacklink", showBacklink);
         request.setAttribute("showStatus", showStatus);
-        request.setAttribute("showCreatedAt", showCreatedAt);
-        request.setAttribute("showUpdatedAt", showUpdatedAt);
-        
 
         // Gửi danh sách users và các thông tin phân trang đến trang JSP
         request.setAttribute("sliders", sliders);
         request.setAttribute("currentPage", page);
         request.setAttribute("pageSize", pageSize);
         request.setAttribute("totalPages", totalPages);
-        request.setAttribute("statusFilter", statusFilter);
+        request.setAttribute("status", statusFilter);
         request.setAttribute("searchTerm", searchTerm);
         request.setAttribute("sort", sortBy);
         request.setAttribute("sortOrder", sortOrder);
-
         request.getRequestDispatcher("/slider-list.jsp").forward(request, response);
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**
@@ -137,7 +120,6 @@ public class SliderListController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**
@@ -148,6 +130,5 @@ public class SliderListController extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }
