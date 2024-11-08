@@ -6,21 +6,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.time.ZoneId;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import model.Course;
-import model.Registration;
-import model.User;
-import model.UserContact;
+import model.*;
 import model.Package;
-import model.RegistrationMedia;
-import view.CourseDAO;
-import view.PackageDAO;
-import view.RegistrationDAO;
-import view.RegistrationMediaDAO;
-import view.UserContactDAO;
-import view.UserDAO;
+import view.*;
 
 @WebServlet(name = "DeleteRegistrationMedia", urlPatterns = {"/DeleteRegistrationMedia"})
 public class DeleteRegistrationMedia extends HttpServlet {
@@ -72,9 +63,12 @@ public class DeleteRegistrationMedia extends HttpServlet {
         List<RegistrationMedia> videos = registrationMediaDAO.getVideosByRegistrationId(registrationId);
 
         // Định dạng ngày tháng
+        LocalDate validFrom = registration.getValidFrom().toLocalDate();
+        LocalDate validTo = registration.getValidTo().toLocalDate();
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String validFromStr = registration.getValidFrom().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(formatter);
-        String validToStr = registration.getValidTo().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(formatter);
+        String validFromStr = validFrom.format(formatter); // Định dạng thời gian validFrom
+        String validToStr = validTo.format(formatter); // Định dạng thời gian validTo
 
         // Gửi danh sách video, hình ảnh, số điện thoại và email đến JSP
         request.setAttribute("registration", registration);
@@ -97,4 +91,3 @@ public class DeleteRegistrationMedia extends HttpServlet {
         request.getRequestDispatcher("/registration-details.jsp").forward(request, response);
     }
 }
-
