@@ -20,12 +20,7 @@ public class LessonListController extends HttpServlet {
 
         
             // Set visibility preferences as attributes, defaulting to true
-            boolean showLessonNumber = Boolean.parseBoolean(request.getParameter("showLessonNumber"));
-            boolean showLessonName = Boolean.parseBoolean(request.getParameter("showLessonName"));
-            boolean showDescription = Boolean.parseBoolean(request.getParameter("showDescription"));
-            boolean showStatus = Boolean.parseBoolean(request.getParameter("showStatus"));
-            boolean showActions = Boolean.parseBoolean(request.getParameter("showActions"));
-
+            b
           dafdafs  
             request.setAttribute("showLessonNumber", showLessonNumber);
             request.setAttribute("showLessonName", showLessonName);
