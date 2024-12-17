@@ -18,18 +18,7 @@ public class LessonListController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        int courseId = Integer.parseInt(request.getParameter("courseId"));
-        int page = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
-        int pageSize = request.getParameter("itemsPerPage") != null ? Integer.parseInt(request.getParameter("itemsPerPage")) : 10;
-        String status = request.getParameter("status") != null ? request.getParameter("status") : "All";
-
-        LessonDAO lessonDAO = new LessonDAO();
-        List<Lesson> allLessons = lessonDAO.getLessonsByCourseId(courseId);
-        request.setAttribute("ListEmpty", allLessons.isEmpty());
-
-        if (!allLessons.isEmpty()) {
-            List<Lesson> filteredLessons = new ArrayList<>();
-
+        
             // Set visibility preferences as attributes, defaulting to true
             boolean showLessonNumber = Boolean.parseBoolean(request.getParameter("showLessonNumber"));
             boolean showLessonName = Boolean.parseBoolean(request.getParameter("showLessonName"));
