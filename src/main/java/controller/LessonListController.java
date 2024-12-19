@@ -20,13 +20,12 @@ public class LessonListController extends HttpServlet {
 
         
             // Set visibility preferences as attributes, defaulting to true
-            b
-          dafdafs  
-            request.setAttribute("showLessonNumber", showLessonNumber);
-            request.setAttribute("showLessonName", showLessonName);
-            request.setAttribute("showDescription", showDescription);
-            request.setAttribute("showStatus", showStatus);
-            request.setAttribute("showActions", showActions);
+           
+                          request.setAttribute("showLessonNumber", showLessonNumber);
+                          request.setAttribute("showLessonName", showLessonName);
+                         request.setAttribute("showDescription", showDescription);
+                       request.setAttribute("showStatus", showStatus);
+                              request.setAttribute("showActions", showActions);
 
             // Filtering lessons based on status
             if (status.equalsIgnoreCase("") || status == null || status.equalsIgnoreCase("All")) {
